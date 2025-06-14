@@ -87,10 +87,10 @@ export default function Hero() {
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
-                alt=""
-                src="/medcon-logo.png"
-                className="h-8 w-auto"
-              />
+  alt="MEDCON'25 Logo"
+  src="/medcon-logo.png"
+  className="h-14 w-auto max-w-[160px] object-contain"
+/>
             </a>
           </div>
           <div className="flex lg:hidden">
