@@ -10,7 +10,7 @@ const ticketTiers = [
     name: "Standard Ticket",
     id: "tier-standard",
     href: "/individual-ticket",
-    price: "$199",
+    price: "",
     description: "Available for GIMSOC members and non-GIMSOC participants.",
     features: [
       "Access to all keynote sessions",
@@ -28,7 +28,7 @@ const ticketTiers = [
     name: "Standard TSU Ticket",
     id: "tier-tsu",
     href: "/tsu-ticket",
-    price: "$149",
+    price: "",
     description: "Special discounted rate for TSU students.",
     features: [
       "Access to all keynote sessions",
@@ -46,7 +46,7 @@ const ticketTiers = [
     name: "Group Ticket",
     id: "tier-group",
     href: "/group-ticket",
-    price: "$349",
+    price: "",
     description: "For groups of 2–3 registering under Standard Ticket.",
     features: [
       "All Standard Ticket benefits",
@@ -62,7 +62,7 @@ const ticketTiers = [
     name: "All-Inclusive Ticket",
     id: "tier-allinclusive",
     href: "/allinclusive-ticket",
-    price: "$299",
+    price: "",
     description: "Includes everything in the Standard Ticket, plus exclusive gala access.",
     features: [
       "All Standard Ticket benefits",
@@ -79,7 +79,7 @@ const ticketTiers = [
     name: "TSU All-Inclusive Ticket",
     id: "tier-tsuallinclusive",
     href: "/tsuallinclusive-ticket",
-    price: "$249",
+    price: "",
     description: "Discounted All-Inclusive package for TSU students.",
     features: [
       "All Standard benefits",
@@ -96,10 +96,29 @@ const ticketTiers = [
     name: "International 3-Day Package",
     id: "tier-international3",
     href: "/international-ticket",
-    price: "$499",
+    price: "",
     description: "Ideal for international attendees joining for the core conference.",
     features: [
       "Full 3-day conference access",
+      "Interactive Workshops",
+      "Academic, research and activities fairs",
+      "Gala Dinner",
+      "Networking opportunities",
+      "Certificate of attendance",
+      "CPD Certification",
+    ],
+    featured: false,
+    color: "teal",
+  },
+
+  {
+    name: "International &-Day Package",
+    id: "tier-international3",
+    href: "/international-ticket",
+    price: "",
+    description: "Ideal for international attendees joining for the core conference.",
+    features: [
+      "Full &-day conference access",
       "Interactive Workshops",
       "Academic, research and activities fairs",
       "Gala Dinner",
@@ -115,7 +134,7 @@ const ticketTiers = [
     name: "Doctor Ticket",
     id: "tier-doctor",
     href: "/doctor-ticket",
-    price: "$399",
+    price: "",
     description: "Exclusive category for licensed medical doctors.",
     features: [
       "Access to all keynote sessions",

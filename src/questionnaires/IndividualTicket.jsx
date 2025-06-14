@@ -120,6 +120,7 @@ export default function IndividualTicket() {
     "Akaki Tsereteli State University (Faculty of Medicine)",
     "BAU International University, Batumi",
     "Batumi Shota Rustaveli State University (Faculty of Medicine)",
+    "Other"
   ]
 
   const semesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])

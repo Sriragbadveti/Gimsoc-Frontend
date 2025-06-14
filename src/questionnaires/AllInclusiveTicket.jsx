@@ -125,6 +125,7 @@ export default function AllInclusiveTicket() {
     "Akaki Tsereteli State University (Faculty of Medicine)",
     "BAU International University, Batumi",
     "Batumi Shota Rustaveli State University (Faculty of Medicine)",
+    "Other"
   ];
 
   const memberSemesters = Array.from(

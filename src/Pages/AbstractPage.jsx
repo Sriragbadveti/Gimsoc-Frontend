@@ -198,52 +198,7 @@ export default function AbstractPage() {
               </div>
             </section>
 
-            {/* Section 2: Ticket Verification */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Award className="w-6 h-6 text-green-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">2. Ticket Verification</h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Have you purchased a conference ticket? *
-                </label>
-                <div className="space-y-2">
-                  {["Yes", "No"].map((option) => (
-                    <label key={option} className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="hasTicket"
-                        value={option}
-                        checked={formData.hasTicket === option}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-sm text-gray-700">{option}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {formData.hasTicket === "Yes" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Enter Your Unique Ticket ID *</label>
-                  <input
-                    type="text"
-                    name="ticketId"
-                    value={formData.ticketId}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="You received this after registration. This will be used to verify your payment."
-                    required
-                  />
-                </div>
-              )}
-            </section>
+            
 
             {/* Section 3: Abstract Details */}
             <section className="space-y-6">
@@ -314,27 +269,8 @@ export default function AbstractPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Is the presenting author the same as the ticket holder? *
-                  </label>
-                  <div className="space-y-2">
-                    {["Yes", "No"].map((option) => (
-                      <label key={option} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="isPresentingAuthorSame"
-                          value={option}
-                          checked={formData.isPresentingAuthorSame === option}
-                          onChange={handleInputChange}
-                          className="text-blue-600 focus:ring-blue-500"
-                          required
-                        />
-                        <span className="text-sm text-gray-700">{option}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+                
+                
               </div>
             </section>
 
@@ -364,10 +300,7 @@ export default function AbstractPage() {
                     <span className="text-gray-500"> or drag and drop</span>
                   </label>
                   <p className="text-xs text-gray-500 mt-2">Format: PDF only. Max file size: 10MB.</p>
-                  <p className="text-xs text-red-600 mt-1 font-medium">
-                    Important: Please ensure the file is uploaded with view access for anyone with the link. Abstracts
-                    that are not accessible will be disqualified.
-                  </p>
+                  
                   {formData.abstractFile && (
                     <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.abstractFile.name}</p>
                   )}
