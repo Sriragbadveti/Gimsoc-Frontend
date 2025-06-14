@@ -70,12 +70,20 @@ export default function Hero() {
     <div className="relative bg-white min-h-screen overflow-hidden">
       {/* Background Video */}
       <div className="absolute inset-0 w-full h-full z-0">
-        <video className="absolute top-0 left-0 w-full h-full object-cover" autoPlay loop muted playsInline>
-          <source src="/medcon-bg.mov" type="video/mov" />
-          <source src="/medcon-bg.mov" type="video/webm" />
-          {/* Fallback for browsers that don't support video */}
-          Your browser does not support the video tag.
-        </video>
+        <video
+  className="absolute top-0 left-0 w-full h-full object-cover"
+  autoPlay
+  loop
+  muted
+  playsInline
+>
+  <source
+    src="https://res.cloudinary.com/dllp1nsmt/video/upload/q_auto,f_auto/v1749914669/pao7gduan5aambzppvgp.mov"
+    type="video/mp4"
+  />
+  {/* Fallback for browsers that don't support video */}
+  Your browser does not support the video tag.
+</video>
 
         {/* Video Overlay for better text readability */}
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
