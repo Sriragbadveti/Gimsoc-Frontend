@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
-import { Upload, Users, Calendar, User, CreditCard } from 'lucide-react'
-import axios from "axios";
+import { Upload, Users, User, CreditCard } from "lucide-react"
+import axios from "axios"
+
 // Move AttendeeSection outside to prevent recreation on every render
 const AttendeeSection = ({ attendeeNum, attendee, onAttendeeChange, onAttendeeFileChange }) => {
   const universities = [
@@ -22,7 +23,7 @@ const AttendeeSection = ({ attendeeNum, attendee, onAttendeeChange, onAttendeeFi
     "Akaki Tsereteli State University (Faculty of Medicine)",
     "BAU International University, Batumi",
     "Batumi Shota Rustaveli State University (Faculty of Medicine)",
-    "Other"
+    "Other",
   ]
 
   const semesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
@@ -356,9 +357,7 @@ const AttendeeSection = ({ attendeeNum, attendee, onAttendeeChange, onAttendeeFi
 
 export default function GroupTicket() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-
   const [groupSize, setGroupSize] = useState("")
-  const [workshopPackage, setWorkshopPackage] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("")
   const [paymentProof, setPaymentProof] = useState(null)
 
@@ -425,17 +424,12 @@ export default function GroupTicket() {
     },
   })
 
-  // Calculate price based on group size and workshop package
+  // Fixed pricing with group discount
   const calculatePrice = () => {
-    const numAttendees = groupSize ? parseInt(groupSize.split(" ")[2]) : 0
-    const basePrice = 50 // Base price per individual ticket
-    const packagePrices = {
-      "Package A": 0,
-      "Package B": 25,
-      "Package C": 50,
-    }
-    const groupDiscount = numAttendees >= 2 ? 0.1 : 0 // 10% group discount
-    const totalBeforeDiscount = numAttendees * (basePrice + (packagePrices[workshopPackage] || 0))
+    const numAttendees = groupSize ? Number.parseInt(groupSize.split(" ")[2]) : 0
+    const basePrice = 75 // Fixed base price per individual ticket
+    const groupDiscount = 0.1 // 10% group discount
+    const totalBeforeDiscount = numAttendees * basePrice
     return Math.round(totalBeforeDiscount * (1 - groupDiscount))
   }
 
@@ -460,62 +454,121 @@ export default function GroupTicket() {
     }))
   }, [])
 
- 
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
+      setIsSubmitting(true)
 
-const handleSubmit = useCallback(
-  async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+      try {
+        const trimmedAttendees = Object.fromEntries(
+          Object.entries(attendees).slice(0, Number.parseInt(groupSize.split(" ")[2])),
+        )
 
-    try {
-      const trimmedAttendees = Object.fromEntries(
-        Object.entries(attendees).slice(0, parseInt(groupSize.split(" ")[2]))
-      );
+        const formData = new FormData()
+        formData.append("ticketType", "Group")
+        formData.append("groupSize", groupSize)
+        formData.append("paymentMethod", paymentMethod)
+        formData.append("paymentProof", paymentProof) // file
 
-      const formData = new FormData();
-      formData.append("ticketType", "Group");
-      formData.append("groupSize", groupSize);
-      formData.append("workshopPackage", workshopPackage);
-      formData.append("paymentMethod", paymentMethod);
-      formData.append("paymentProof", paymentProof); // file
+        // Add attendees JSON
+        formData.append("attendees", JSON.stringify(Object.values(trimmedAttendees)))
 
-      // Add attendees JSON
-      formData.append("attendees", JSON.stringify(Object.values(trimmedAttendees)));
+        // Add headshots
+        Object.entries(trimmedAttendees).forEach(([index, attendee], i) => {
+          if (attendee.headshot) {
+            formData.append(`headshot-${i + 1}`, attendee.headshot)
+          }
+        })
 
-      // Add headshots
-      Object.entries(trimmedAttendees).forEach(([index, attendee], i) => {
-        if (attendee.headshot) {
-          formData.append(`headshot-${i + 1}`, attendee.headshot);
-        }
-      });
-
-      const response = await axios.post(
-        "https://gimsoc-backend.onrender.com/api/tickets/submit",
-        formData,
-        {
+        const response = await axios.post("https://gimsoc-backend.onrender.com/api/tickets/submit", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,
-        }
-      );
+        })
 
-      console.log("✅ Group ticket submitted successfully:", response.data);
-      alert("✅ Group ticket submitted successfully!");
+        console.log("✅ Group ticket submitted successfully:", response.data)
+        alert("✅ Group ticket submitted successfully!")
 
-      // reset states here like before...
-    } catch (err) {
-      console.error("❌ Error submitting group ticket:", err);
-      alert("Submission failed. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  },
-  [groupSize, workshopPackage, paymentMethod, paymentProof, attendees]
-);
+        // Reset form
+        setGroupSize("")
+        setPaymentMethod("")
+        setPaymentProof(null)
+        setAttendees({
+          1: {
+            fullName: "",
+            email: "",
+            whatsapp: "",
+            university: "",
+            semester: "",
+            examPrep: "",
+            examOther: "",
+            headshot: null,
+            foodPreference: "",
+            dietaryRestrictions: "",
+            accessibilityNeeds: "",
+            isGimsocMember: "",
+            membershipCode: "",
+            infoAccurate: false,
+            mediaConsent: "",
+            policies: false,
+            emailConsent: false,
+            whatsappConsent: false,
+          },
+          2: {
+            fullName: "",
+            email: "",
+            whatsapp: "",
+            university: "",
+            semester: "",
+            examPrep: "",
+            examOther: "",
+            headshot: null,
+            foodPreference: "",
+            dietaryRestrictions: "",
+            accessibilityNeeds: "",
+            isGimsocMember: "",
+            membershipCode: "",
+            infoAccurate: false,
+            mediaConsent: "",
+            policies: false,
+            emailConsent: false,
+            whatsappConsent: false,
+          },
+          3: {
+            fullName: "",
+            email: "",
+            whatsapp: "",
+            university: "",
+            semester: "",
+            examPrep: "",
+            examOther: "",
+            headshot: null,
+            foodPreference: "",
+            dietaryRestrictions: "",
+            accessibilityNeeds: "",
+            isGimsocMember: "",
+            membershipCode: "",
+            infoAccurate: false,
+            mediaConsent: "",
+            policies: false,
+            emailConsent: false,
+            whatsappConsent: false,
+          },
+        })
+      } catch (err) {
+        console.error("❌ Error submitting group ticket:", err)
+        alert("Submission failed. Please try again.")
+      } finally {
+        setIsSubmitting(false)
+      }
+    },
+    [groupSize, paymentMethod, paymentProof, attendees],
+  )
+
   // Calculate number of attendees based on group size
   const numAttendees = useMemo(() => {
-    return groupSize ? parseInt(groupSize.split(" ")[2]) : 0
+    return groupSize ? Number.parseInt(groupSize.split(" ")[2]) : 0
   }, [groupSize])
 
   // Memoize attendee sections to prevent unnecessary re-renders
@@ -542,6 +595,16 @@ const handleSubmit = useCallback(
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
             <h1 className="text-3xl font-bold text-white text-center">Group Registration</h1>
             <p className="text-blue-100 text-center mt-2">Register multiple attendees together</p>
+            {/* Price Display in Header */}
+            {groupSize && (
+              <div className="text-center mt-4">
+                <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                  <span className="text-white text-lg font-medium">Group Total: </span>
+                  <span className="text-white text-2xl font-bold">{calculatePrice()} GEL</span>
+                  <p className="text-blue-100 text-sm mt-1">{groupSize} with 10% group discount</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-10">
@@ -559,69 +622,40 @@ const handleSubmit = useCallback(
                   How many attendees are registering in this group? *
                 </label>
                 <div className="space-y-3">
-                  {["Group of 2", "Group of 3"].map((size) => (
+                  {[
+                    { size: "Group of 2", price: Math.round(2 * 75 * 0.9) },
+                    { size: "Group of 3", price: Math.round(3 * 75 * 0.9) },
+                  ].map(({ size, price }) => (
                     <label
                       key={size}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
+                      className="flex items-center justify-between space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
                     >
-                      <input
-                        type="radio"
-                        name="groupSize"
-                        value={size}
-                        checked={groupSize === size}
-                        onChange={(e) => setGroupSize(e.target.value)}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-gray-700 font-medium">{size}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* Workshop Package Selection */}
-            {groupSize && (
-              <section className="space-y-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Calendar className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h2 className="text-2xl font-semibold text-gray-800">Select Your Group's Workshop Package</h2>
-                </div>
-
-                <div>
-                  <p className="text-sm text-gray-600 mb-4">
-                    The entire group will be registered under one workshop track. Please select your preferred package:
-                  </p>
-                  <div className="space-y-3">
-                    {["Package A", "Package B", "Package C"].map((pkg) => (
-                      <label
-                        key={pkg}
-                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                      >
+                      <div className="flex items-center space-x-3">
                         <input
                           type="radio"
-                          name="workshopPackage"
-                          value={pkg}
-                          checked={workshopPackage === pkg}
-                          onChange={(e) => setWorkshopPackage(e.target.value)}
+                          name="groupSize"
+                          value={size}
+                          checked={groupSize === size}
+                          onChange={(e) => setGroupSize(e.target.value)}
                           className="text-blue-600 focus:ring-blue-500"
                           required
                         />
-                        <span className="text-gray-700 font-medium">{pkg}</span>
-                      </label>
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Workshop spots are limited and will be confirmed based on availability
-                  </p>
+                        <span className="text-gray-700 font-medium">{size}</span>
+                      </div>
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-1">
+                        <span className="text-blue-700 font-bold">{price} GEL</span>
+                      </div>
+                    </label>
+                  ))}
                 </div>
-              </section>
-            )}
+                <p className="text-xs text-gray-500 mt-2">
+                  Group discount of 10% automatically applied to all group registrations
+                </p>
+              </div>
+            </section>
 
             {/* Attendee Sections */}
-            {workshopPackage && <div className="space-y-8">{attendeeSections}</div>}
+            {groupSize && <div className="space-y-8">{attendeeSections}</div>}
 
             {/* Payment Confirmation */}
             {numAttendees > 0 && (
@@ -633,18 +667,14 @@ const handleSubmit = useCallback(
                   <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
                 </div>
 
-                {/* Price Display */}
-                {workshopPackage && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-medium text-gray-700">Group Total Amount:</span>
-                      <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {groupSize} × ({workshopPackage}) with 10% group discount
-                    </p>
+                {/* Fixed Price Display */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-medium text-gray-700">Group Total Amount:</span>
+                    <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
                   </div>
-                )}
+                  <p className="text-sm text-gray-600 mt-1">{groupSize} Conference Tickets with 10% group discount</p>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -675,28 +705,52 @@ const handleSubmit = useCallback(
                   <div className="space-y-6">
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
-                      
+
                       <div className="space-y-4">
                         <div className="bg-white rounded-lg p-4 border border-blue-100">
-                          <h4 className="font-semibold text-gray-800 mb-3">BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)</h4>
+                          <h4 className="font-semibold text-gray-800 mb-3">
+                            BANK OF GEORGIA
+                          </h4>
                           <div className="space-y-2 text-sm">
-                            <p><span className="font-medium">Account with institution:</span> Bank of Georgia</p>
-                            <p><span className="font-medium">SWIFT:</span> BAGAGE22</p>
-                            <p><span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.</p>
-                            <p><span className="font-medium">Account:</span> GE94BG0000000608342766</p>
-                            <p><span className="font-medium">Phone:</span> (+995 32) 2 444 444</p>
-                            <p><span className="font-medium">E-mail:</span> welcome@bog.ge</p>
+                            <p>
+                              <span className="font-medium">Account with institution:</span> Bank of Georgia
+                            </p>
+                            <p>
+                              <span className="font-medium">SWIFT:</span> BAGAGE22
+                            </p>
+                            <p>
+                              <span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.
+                            </p>
+                            <p>
+                              <span className="font-medium">Account:</span> GE94BG0000000608342766
+                            </p>
+                            <p>
+                              <span className="font-medium">Phone:</span> (+995 32) 2 444 444
+                            </p>
+                            <p>
+                              <span className="font-medium">E-mail:</span> welcome@bog.ge
+                            </p>
                           </div>
                         </div>
 
                         <div className="bg-white rounded-lg p-4 border border-blue-100">
-                          <h4 className="font-semibold text-gray-800 mb-3">FOR LARI TRANSFER</h4>
+                          <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
                           <div className="space-y-2 text-sm">
-                            <p><span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank</p>
-                            <p><span className="font-medium">Location:</span> Tbilisi, Georgia</p>
-                            <p><span className="font-medium">Swift:</span> TBCBGE22</p>
-                            <p><span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012</p>
-                            <p><span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando</p>
+                            <p>
+                              <span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank
+                            </p>
+                            <p>
+                              <span className="font-medium">Location:</span> Tbilisi, Georgia
+                            </p>
+                            <p>
+                              <span className="font-medium">Swift:</span> TBCBGE22
+                            </p>
+                            <p>
+                              <span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012
+                            </p>
+                            <p>
+                              <span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando
+                            </p>
                           </div>
                         </div>
                       </div>

@@ -1,11 +1,10 @@
 "use client"
-import axios from "axios"
+
 import { useState } from "react"
 import {
   Upload,
   User,
   GraduationCap,
-  Calendar,
   Camera,
   Utensils,
   CreditCard,
@@ -14,12 +13,14 @@ import {
   AlertTriangle,
   CheckCircle,
 } from "lucide-react"
+import axios from "axios"
 import PayPalButton from "../Components/PaypalButton"
 
 export default function InternationalTicket() {
   // Payment states - exactly like individual ticket
   const [paymentCompleted, setPaymentCompleted] = useState(false)
   const [paymentDetails, setPaymentDetails] = useState(null)
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -33,7 +34,6 @@ export default function InternationalTicket() {
     universityName: "",
     yearOfStudy: "",
     studentIdProof: null,
-    workshopPackage: "",
     headshot: null,
     foodPreference: "",
     dietaryRestrictions: "",
@@ -66,17 +66,6 @@ export default function InternationalTicket() {
     }))
   }
 
-  // Calculate price based on workshop package - same as individual ticket
-  const calculatePrice = () => {
-    const basePrice = 100 // International Ticket base price
-    const packagePrices = {
-      "Package A": 0,
-      "Package B": 25,
-      "Package C": 50,
-    }
-    return basePrice + (packagePrices[formData.workshopPackage] || 0)
-  }
-
   // PayPal payment handlers - exactly like individual ticket
   const handlePaymentSuccess = (details) => {
     console.log("Payment successful:", details)
@@ -90,7 +79,6 @@ export default function InternationalTicket() {
     alert("Payment failed. Please try again.")
   }
 
-  // Submit handler with payment validation - exactly like individual ticket
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -107,18 +95,13 @@ export default function InternationalTicket() {
 
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
-        // Convert string to Boolean for specific fields
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
           form.append(key, value === true || value === "true" || value === "Yes")
         } else if (["isGimsocMember", "mediaConsent"].includes(key)) {
           form.append(key, value === "Yes")
-        }
-        // File fields
-        else if (key === "headshot" || key === "paymentProof" || key === "studentIdProof") {
-          form.append(key, value) // multer handles File object
-        }
-        // All others as-is
-        else {
+        } else if (key === "headshot" || key === "paymentProof" || key === "studentIdProof") {
+          form.append(key, value)
+        } else {
           form.append(key, value)
         }
       }
@@ -148,9 +131,13 @@ export default function InternationalTicket() {
     }
   }
 
+  // Fixed price for international ticket
+  const calculatePrice = () => {
+    return 125 // Fixed International Ticket price
+  }
+
   const yearOptions = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
 
-  // Common countries for nationality and residence
   const countries = [
     "Afghanistan",
     "Albania",
@@ -240,7 +227,7 @@ export default function InternationalTicket() {
             <div className="flex justify-center mt-3">
               <div className="flex items-center gap-1 bg-green-400 text-green-900 px-3 py-1 rounded-full text-sm font-medium">
                 <Globe className="w-4 h-4" />
-                International Package
+                International Package - 125 GEL
               </div>
             </div>
           </div>
@@ -456,44 +443,6 @@ export default function InternationalTicket() {
                   </label>
                   <p className="text-xs text-gray-500 mt-1">Required for student registration validation</p>
                 </div>
-              </div>
-            </section>
-
-            {/* Workshop Selection */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Calendar className="w-6 h-6 text-purple-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Workshop Selection</h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Select Your Desired Workshop Package *
-                </label>
-                <div className="space-y-3">
-                  {["Package A", "Package B", "Package C"].map((pkg) => (
-                    <label
-                      key={pkg}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name="workshopPackage"
-                        value={pkg}
-                        checked={formData.workshopPackage === pkg}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-gray-700 font-medium">{pkg}</span>
-                    </label>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Workshop spots are limited and will be confirmed based on availability
-                </p>
               </div>
             </section>
 
@@ -728,7 +677,7 @@ export default function InternationalTicket() {
               </div>
             </section>
 
-            {/* Payment Confirmation - Fixed implementation like individual ticket */}
+            {/* Payment Confirmation */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-yellow-100 rounded-lg">
@@ -737,16 +686,13 @@ export default function InternationalTicket() {
                 <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
               </div>
 
-              {/* Price Display */}
-              {formData.workshopPackage && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium text-gray-700">Total Amount:</span>
-                    <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">International ticket + {formData.workshopPackage}</p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-medium text-gray-700">Total Amount:</span>
+                  <span className="text-2xl font-bold text-blue-600">125 GEL</span>
                 </div>
-              )}
+                <p className="text-sm text-gray-600 mt-1">International student ticket</p>
+              </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -774,7 +720,7 @@ export default function InternationalTicket() {
               </div>
 
               {/* PayPal Button for Credit Card - exactly like individual ticket */}
-              {formData.paymentMethod === "Credit/Debit Card" && formData.workshopPackage && (
+              {formData.paymentMethod === "Credit/Debit Card" && (
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
                   <h3 className="text-lg font-medium text-gray-800 mb-4">Complete Your Payment</h3>
                   <div className="mb-4">
@@ -802,32 +748,86 @@ export default function InternationalTicket() {
                 </div>
               )}
 
-              {/* Bank Transfer Proof Upload */}
               {formData.paymentMethod === "Bank Transfer" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Proof of Payment *</label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <input
-                      type="file"
-                      name="paymentProof"
-                      onChange={handleFileChange}
-                      accept=".pdf"
-                      className="hidden"
-                      id="payment-upload"
-                      required
-                    />
-                    <label htmlFor="payment-upload" className="cursor-pointer">
-                      <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
-                      <span className="text-gray-500"> or drag and drop</span>
-                    </label>
-                    <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                <div className="space-y-6">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
+
+                    <div className="space-y-4">
+                      <div className="bg-white rounded-lg p-4 border border-blue-100">
+                        <h4 className="font-semibold text-gray-800 mb-3">
+                          BANK OF GEORGIA
+                        </h4>
+                        <div className="space-y-2 text-sm">
+                          <p>
+                            <span className="font-medium">Account with institution:</span> Bank of Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">SWIFT:</span> BAGAGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.
+                          </p>
+                          <p>
+                            <span className="font-medium">Account:</span> GE94BG0000000608342766
+                          </p>
+                          <p>
+                            <span className="font-medium">Phone:</span> (+995 32) 2 444 444
+                          </p>
+                          <p>
+                            <span className="font-medium">E-mail:</span> welcome@bog.ge
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white rounded-lg p-4 border border-blue-100">
+                        <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
+                        <div className="space-y-2 text-sm">
+                          <p>
+                            <span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank
+                          </p>
+                          <p>
+                            <span className="font-medium">Location:</span> Tbilisi, Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">Swift:</span> TBCBGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012
+                          </p>
+                          <p>
+                            <span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Proof of Payment *</label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <input
+                        type="file"
+                        name="paymentProof"
+                        onChange={handleFileChange}
+                        accept=".pdf"
+                        className="hidden"
+                        id="payment-upload"
+                        required
+                      />
+                      <label htmlFor="payment-upload" className="cursor-pointer">
+                        <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
+                        <span className="text-gray-500"> or drag and drop</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                    </div>
                   </div>
                 </div>
               )}
             </section>
 
-            {/* Submit Button - exactly like individual ticket */}
+            {/* Submit Button */}
             <div className="pt-6">
               <button
                 type="submit"

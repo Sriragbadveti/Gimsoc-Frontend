@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Upload, User, GraduationCap, Calendar, Camera, Utensils, CreditCard, Users, ArrowLeft } from 'lucide-react';
-import axios from "axios";
+import { useState } from "react"
+import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, Users, ArrowLeft } from "lucide-react"
+import axios from "axios"
 
 export default function AllInclusiveTicket() {
-  const [ticketType, setTicketType] = useState(""); // "member" or "non-member"
+  const [ticketType, setTicketType] = useState("") // "member" or "non-member"
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -14,7 +14,6 @@ export default function AllInclusiveTicket() {
     semester: "",
     examPrep: "",
     examOther: "",
-    workshopPackage: "",
     headshot: null,
     foodPreference: "",
     dietaryRestrictions: "",
@@ -27,63 +26,59 @@ export default function AllInclusiveTicket() {
     whatsappConsent: false,
     paymentMethod: "",
     paymentProof: null,
-  });
+  })
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+    }))
+  }
 
   const handleFileChange = (e) => {
-    const { name, files } = e.target;
+    const { name, files } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: files[0],
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const form = new FormData();
-    form.append("ticketType", "All Inclusive");
+    const form = new FormData()
+    form.append("ticketType", "All Inclusive")
 
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
         // File fields
         if (key === "headshot" || key === "paymentProof") {
-          form.append(key, value); // multer handles File object
+          form.append(key, value) // multer handles File object
         } else {
-          form.append(key, value);
+          form.append(key, value)
         }
       }
-    });
+    })
 
     try {
-      const response = await axios.post(
-        "https://gimsoc-backend.onrender.com/api/ticket/submit",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post("https://gimsoc-backend.onrender.com/api/ticket/submit", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      })
 
-      console.log("✅ Submitted successfully:", response.data);
-      alert("Form submitted successfully!");
+      console.log("✅ Submitted successfully:", response.data)
+      alert("Form submitted successfully!")
     } catch (err) {
-      console.error("❌ Submission failed:", err.response?.data || err.message);
-      alert("Form submission failed.");
+      console.error("❌ Submission failed:", err.response?.data || err.message)
+      alert("Form submission failed.")
     }
-  };
+  }
 
   const handleBack = () => {
-    setTicketType("");
+    setTicketType("")
     setFormData({
       fullName: "",
       email: "",
@@ -92,7 +87,6 @@ export default function AllInclusiveTicket() {
       semester: "",
       examPrep: "",
       examOther: "",
-      workshopPackage: "",
       headshot: null,
       foodPreference: "",
       dietaryRestrictions: "",
@@ -105,8 +99,13 @@ export default function AllInclusiveTicket() {
       whatsappConsent: false,
       paymentMethod: "",
       paymentProof: null,
-    });
-  };
+    })
+  }
+
+  // Fixed prices for all inclusive tickets
+  const getTicketPrice = () => {
+    return ticketType === "member" ? 120 : 150 // Member: 120 GEL, Non-member: 150 GEL
+  }
 
   const universities = [
     "Tbilisi State Medical University",
@@ -125,15 +124,12 @@ export default function AllInclusiveTicket() {
     "Akaki Tsereteli State University (Faculty of Medicine)",
     "BAU International University, Batumi",
     "Batumi Shota Rustaveli State University (Faculty of Medicine)",
-    "Other"
-  ];
+    "Other",
+  ]
 
-  const memberSemesters = Array.from(
-    { length: 12 },
-    (_, i) => `${i + 1}`
-  ).concat(["Graduated"]);
-  const nonMemberSemesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
-  const exams = ["USMLE", "AMC", "PLAB", "FMGE", "EMREE", "IFOM"];
+  const memberSemesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
+  const nonMemberSemesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`)
+  const exams = ["USMLE", "AMC", "PLAB", "FMGE", "EMREE", "IFOM"]
 
   // Ticket Type Selection Screen
   if (!ticketType) {
@@ -143,12 +139,8 @@ export default function AllInclusiveTicket() {
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
-              <h1 className="text-3xl font-bold text-white text-center">
-                All Inclusive Ticket
-              </h1>
-              <p className="text-blue-100 text-center mt-2">
-                Choose your registration type
-              </p>
+              <h1 className="text-3xl font-bold text-white text-center">All Inclusive Ticket</h1>
+              <p className="text-blue-100 text-center mt-2">Choose your registration type</p>
             </div>
 
             <div className="p-8">
@@ -156,12 +148,8 @@ export default function AllInclusiveTicket() {
                 <div className="p-4 bg-blue-100 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
                   <Users className="w-10 h-10 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                  Select Your Ticket Type
-                </h2>
-                <p className="text-gray-600">
-                  Choose the option that applies to you
-                </p>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-2">Select Your Ticket Type</h2>
+                <p className="text-gray-600">Choose the option that applies to you</p>
               </div>
 
               <div className="space-y-4 max-w-md mx-auto">
@@ -173,12 +161,11 @@ export default function AllInclusiveTicket() {
                     <div className="p-3 bg-green-100 rounded-lg w-16 h-16 mx-auto mb-3 flex items-center justify-center group-hover:bg-green-200 transition-colors">
                       <User className="w-8 h-8 text-green-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                      GIMSOC Member Ticket
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      For current GIMSOC members with membership code
-                    </p>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">GIMSOC Member Ticket</h3>
+                    <p className="text-sm text-gray-600 mb-3">For current GIMSOC members with membership code</p>
+                    <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-2">
+                      <span className="text-green-700 font-bold text-xl">120 GEL</span>
+                    </div>
                   </div>
                 </button>
 
@@ -190,12 +177,11 @@ export default function AllInclusiveTicket() {
                     <div className="p-3 bg-purple-100 rounded-lg w-16 h-16 mx-auto mb-3 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                       <Users className="w-8 h-8 text-purple-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                      Non-GIMSOC Member Ticket
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      For students who are not GIMSOC members
-                    </p>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Non-GIMSOC Member Ticket</h3>
+                    <p className="text-sm text-gray-600 mb-3">For students who are not GIMSOC members</p>
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg px-4 py-2">
+                      <span className="text-purple-700 font-bold text-xl">150 GEL</span>
+                    </div>
                   </div>
                 </button>
               </div>
@@ -203,7 +189,7 @@ export default function AllInclusiveTicket() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   // Main Registration Form
@@ -223,12 +209,16 @@ export default function AllInclusiveTicket() {
               </button>
               <div className="text-center flex-1">
                 <h1 className="text-3xl font-bold text-white">
-                  {ticketType === "member"
-                    ? "GIMSOC Member"
-                    : "Non-GIMSOC Member"}{" "}
-                  Registration
+                  {ticketType === "member" ? "GIMSOC Member" : "Non-GIMSOC Member"} Registration
                 </h1>
                 <p className="text-blue-100 mt-2">All Inclusive Ticket</p>
+                {/* Price Display in Header */}
+                <div className="mt-4">
+                  <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                    <span className="text-white text-lg font-medium">Ticket Price: </span>
+                    <span className="text-white text-2xl font-bold">{getTicketPrice()} GEL</span>
+                  </div>
+                </div>
               </div>
               <div className="w-16"></div>
             </div>
@@ -241,16 +231,12 @@ export default function AllInclusiveTicket() {
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <User className="w-6 h-6 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Personal Information
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Personal Information</h2>
               </div>
 
               <div className="grid md:grid-cols-1 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                   <input
                     type="text"
                     name="fullName"
@@ -261,15 +247,12 @@ export default function AllInclusiveTicket() {
                     required
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    As you would like it to appear on your ID card and
-                    certificate
+                    As you would like it to appear on your ID card and certificate
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                   <input
                     type="email"
                     name="email"
@@ -279,9 +262,7 @@ export default function AllInclusiveTicket() {
                     placeholder="Enter a valid email address"
                     required
                   />
-                  <p className="text-xs text-gray-500 mt-1">
-                    For all official conference communication
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">For all official conference communication</p>
                 </div>
 
                 <div>
@@ -297,9 +278,7 @@ export default function AllInclusiveTicket() {
                     placeholder="+995 XXX XXX XXX"
                     required
                   />
-                  <p className="text-xs text-gray-500 mt-1">
-                    For important updates before and during the conference
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">For important updates before and during the conference</p>
                 </div>
               </div>
             </section>
@@ -310,16 +289,12 @@ export default function AllInclusiveTicket() {
                 <div className="p-2 bg-green-100 rounded-lg">
                   <GraduationCap className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Academic Information
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Academic Information</h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    University Name *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">University Name *</label>
                   <select
                     name="university"
                     value={formData.university}
@@ -348,10 +323,7 @@ export default function AllInclusiveTicket() {
                     required
                   >
                     <option value="">Select semester</option>
-                    {(ticketType === "member"
-                      ? memberSemesters
-                      : nonMemberSemesters
-                    ).map((sem, index) => (
+                    {(ticketType === "member" ? memberSemesters : nonMemberSemesters).map((sem, index) => (
                       <option key={index} value={sem}>
                         {sem}
                       </option>
@@ -366,10 +338,7 @@ export default function AllInclusiveTicket() {
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {exams.map((exam) => (
-                    <label
-                      key={exam}
-                      className="flex items-center space-x-2 cursor-pointer"
-                    >
+                    <label key={exam} className="flex items-center space-x-2 cursor-pointer">
                       <input
                         type="radio"
                         name="examPrep"
@@ -395,56 +364,13 @@ export default function AllInclusiveTicket() {
               </div>
             </section>
 
-            {/* Workshop Selection */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Calendar className="w-6 h-6 text-purple-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Workshop Selection
-                </h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Select Your Desired Workshop Package *
-                </label>
-                <div className="space-y-3">
-                  {["Package A", "Package B", "Package C"].map((pkg) => (
-                    <label
-                      key={pkg}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name="workshopPackage"
-                        value={pkg}
-                        checked={formData.workshopPackage === pkg}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-gray-700 font-medium">{pkg}</span>
-                    </label>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Workshop spots are limited and will be confirmed based on
-                  availability
-                </p>
-              </div>
-            </section>
-
             {/* Identification */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Camera className="w-6 h-6 text-orange-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Identification
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Identification</h2>
               </div>
 
               <div>
@@ -462,17 +388,11 @@ export default function AllInclusiveTicket() {
                     id="headshot-upload"
                   />
                   <label htmlFor="headshot-upload" className="cursor-pointer">
-                    <span className="text-blue-600 hover:text-blue-700 font-medium">
-                      Click to upload
-                    </span>
+                    <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
                     <span className="text-gray-500"> or drag and drop</span>
                   </label>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Clear, front-facing photo with plain background
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Your ID will be made without a photo if none is uploaded
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">Clear, front-facing photo with plain background</p>
+                  <p className="text-xs text-gray-500">Your ID will be made without a photo if none is uploaded</p>
                 </div>
               </div>
             </section>
@@ -483,22 +403,15 @@ export default function AllInclusiveTicket() {
                 <div className="p-2 bg-red-100 rounded-lg">
                   <Utensils className="w-6 h-6 text-red-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Food Preferences and Health Needs
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Food Preferences and Health Needs</h2>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Preferred Food Option *
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Preferred Food Option *</label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {ticketType === "member"
                     ? ["Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
-                        <label
-                          key={option}
-                          className="flex items-center space-x-2 cursor-pointer"
-                        >
+                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
                           <input
                             type="radio"
                             name="foodPreference"
@@ -508,20 +421,11 @@ export default function AllInclusiveTicket() {
                             className="text-blue-600 focus:ring-blue-500"
                             required
                           />
-                          <span className="text-sm text-gray-700">
-                            {option}
-                          </span>
+                          <span className="text-sm text-gray-700">{option}</span>
                         </label>
                       ))
-                    : [
-                        "Vegetarian",
-                        "Non-Vegetarian",
-                        "Non-Vegetarian (Halal)",
-                      ].map((option) => (
-                        <label
-                          key={option}
-                          className="flex items-center space-x-2 cursor-pointer"
-                        >
+                    : ["Vegetarian", "Non-Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
+                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
                           <input
                             type="radio"
                             name="foodPreference"
@@ -531,9 +435,7 @@ export default function AllInclusiveTicket() {
                             className="text-blue-600 focus:ring-blue-500"
                             required
                           />
-                          <span className="text-sm text-gray-700">
-                            {option}
-                          </span>
+                          <span className="text-sm text-gray-700">{option}</span>
                         </label>
                       ))}
                 </div>
@@ -541,9 +443,7 @@ export default function AllInclusiveTicket() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Dietary Restrictions
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Dietary Restrictions</label>
                   <textarea
                     name="dietaryRestrictions"
                     value={formData.dietaryRestrictions}
@@ -577,15 +477,11 @@ export default function AllInclusiveTicket() {
                   <div className="p-2 bg-indigo-100 rounded-lg">
                     <User className="w-6 h-6 text-indigo-600" />
                   </div>
-                  <h2 className="text-2xl font-semibold text-gray-800">
-                    GIMSOC Membership
-                  </h2>
+                  <h2 className="text-2xl font-semibold text-gray-800">GIMSOC Membership</h2>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    GIMSOC Membership Code *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">GIMSOC Membership Code *</label>
                   <input
                     type="text"
                     name="membershipCode"
@@ -601,9 +497,7 @@ export default function AllInclusiveTicket() {
 
             {/* Declaration and Consent */}
             <section className="space-y-6">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                Declaration and Consent
-              </h2>
+              <h2 className="text-2xl font-semibold text-gray-800">Declaration and Consent</h2>
 
               <div className="space-y-4">
                 <label className="flex items-start space-x-3 cursor-pointer">
@@ -616,25 +510,19 @@ export default function AllInclusiveTicket() {
                     required
                   />
                   <span className="text-sm text-gray-700">
-                    I confirm that all the information provided is accurate to
-                    the best of my knowledge. *
+                    I confirm that all the information provided is accurate to the best of my knowledge. *
                   </span>
                 </label>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Media Consent *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Media Consent *</label>
                   <p className="text-sm text-gray-600 mb-3">
-                    Do you consent to the use of photos and videos of you taken
-                    during the conference for promotional purposes?
+                    Do you consent to the use of photos and videos of you taken during the conference for promotional
+                    purposes?
                   </p>
                   <div className="space-y-2">
                     {["Yes", "No"].map((option) => (
-                      <label
-                        key={option}
-                        className="flex items-center space-x-2 cursor-pointer"
-                      >
+                      <label key={option} className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="radio"
                           name="mediaConsent"
@@ -659,8 +547,7 @@ export default function AllInclusiveTicket() {
                     required
                   />
                   <span className="text-sm text-gray-700">
-                    I agree to comply with all conference policies, rules, and
-                    guidelines. *
+                    I agree to comply with all conference policies, rules, and guidelines. *
                   </span>
                 </label>
 
@@ -676,8 +563,8 @@ export default function AllInclusiveTicket() {
                         className="mt-1 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="text-sm text-gray-700">
-                        I agree to receive emails from GIMSOC, including
-                        updates, resources, and conference-related information
+                        I agree to receive emails from GIMSOC, including updates, resources, and conference-related
+                        information
                       </span>
                     </label>
 
@@ -690,8 +577,8 @@ export default function AllInclusiveTicket() {
                         className="mt-1 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="text-sm text-gray-700">
-                        I consent to be added to our WhatsApp group for updates,
-                        discussions, and announcements related to MEDCON
+                        I consent to be added to our WhatsApp group for updates, discussions, and announcements related
+                        to MEDCON
                       </span>
                     </label>
                   </>
@@ -705,9 +592,18 @@ export default function AllInclusiveTicket() {
                 <div className="p-2 bg-yellow-100 rounded-lg">
                   <CreditCard className="w-6 h-6 text-yellow-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Payment Confirmation
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
+              </div>
+
+              {/* Fixed Price Display */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-medium text-gray-700">Total Amount:</span>
+                  <span className="text-2xl font-bold text-blue-600">{getTicketPrice()} GEL</span>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">
+                  All Inclusive {ticketType === "member" ? "GIMSOC Member" : "Non-GIMSOC Member"} Ticket
+                </p>
               </div>
 
               <div>
@@ -739,37 +635,59 @@ export default function AllInclusiveTicket() {
                 <div className="space-y-6">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
-                    
+
                     <div className="space-y-4">
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)</h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">
+                          BANK OF GEORGIA
+                        </h4>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Account with institution:</span> Bank of Georgia</p>
-                          <p><span className="font-medium">SWIFT:</span> BAGAGE22</p>
-                          <p><span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.</p>
-                          <p><span className="font-medium">Account:</span> GE94BG0000000608342766</p>
-                          <p><span className="font-medium">Phone:</span> (+995 32) 2 444 444</p>
-                          <p><span className="font-medium">E-mail:</span> welcome@bog.ge</p>
+                          <p>
+                            <span className="font-medium">Account with institution:</span> Bank of Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">SWIFT:</span> BAGAGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.
+                          </p>
+                          <p>
+                            <span className="font-medium">Account:</span> GE94BG0000000608342766
+                          </p>
+                          <p>
+                            <span className="font-medium">Phone:</span> (+995 32) 2 444 444
+                          </p>
+                          <p>
+                            <span className="font-medium">E-mail:</span> welcome@bog.ge
+                          </p>
                         </div>
                       </div>
 
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">FOR LARI TRANSFER</h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank</p>
-                          <p><span className="font-medium">Location:</span> Tbilisi, Georgia</p>
-                          <p><span className="font-medium">Swift:</span> TBCBGE22</p>
-                          <p><span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012</p>
-                          <p><span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando</p>
+                          <p>
+                            <span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank
+                          </p>
+                          <p>
+                            <span className="font-medium">Location:</span> Tbilisi, Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">Swift:</span> TBCBGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012
+                          </p>
+                          <p>
+                            <span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Upload Proof of Payment *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Proof of Payment *</label>
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                       <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                       <input
@@ -781,14 +699,10 @@ export default function AllInclusiveTicket() {
                         id="payment-upload"
                       />
                       <label htmlFor="payment-upload" className="cursor-pointer">
-                        <span className="text-blue-600 hover:text-blue-700 font-medium">
-                          Click to upload
-                        </span>
+                        <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
                         <span className="text-gray-500"> or drag and drop</span>
                       </label>
-                      <p className="text-xs text-gray-500 mt-1">
-                        PDF format only - Bank transfer confirmation
-                      </p>
+                      <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
                     </div>
                   </div>
                 </div>
@@ -801,16 +715,12 @@ export default function AllInclusiveTicket() {
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 transition-all transform hover:scale-[1.02]"
               >
-                Submit{" "}
-                {ticketType === "member"
-                  ? "GIMSOC Member"
-                  : "Non-GIMSOC Member"}{" "}
-                Registration
+                Submit {ticketType === "member" ? "GIMSOC Member" : "Non-GIMSOC Member"} Registration
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 }

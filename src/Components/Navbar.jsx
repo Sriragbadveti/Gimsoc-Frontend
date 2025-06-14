@@ -7,19 +7,32 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Dashboard', href: '/attendeedashboard' },
-  { name: 'Register', href: '/tickets' },
+  { name: "Home", href: "/" },
+  { name: "Dashboard", href: "/attendeedashboard" },
+  { name: "Register for MEDCON", href: "/tickets" },
   {
-    name: 'About us',
-    href: '#',
+    name: "About us",
+    href: "#",
     subItems: [
-      { name: 'Medcon 2024', href: '/medcon2024' },
-      { name: 'Medcon 2023', href: '/medcon2023' },
-      { name: 'Details About Us', href: '/about-details' },
+      {
+        name: "MEDCON'23",
+        href: "/medcon2024",
+        description: "Previous year highlights",
+      },
+      {
+        name: "MEDCON'24",
+        href: "/medcon2023",
+        description: "Past conference details",
+      },
+      {
+        name: "Details About Us",
+        href: "/about-details",
+        description: "Our mission and vision",
+      },
     ],
   },
-]
+  { name: "Abstract Submission", href: "/abstract" },
+];
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -46,7 +59,7 @@ const Navbar = () => {
               <img
                 alt=""
                 src="/medcon-logo.png"
-                className="h-8 w-auto"
+                className="h-32 w-auto max-w-[280px] object-contain"
               />
             </a>
           </div>

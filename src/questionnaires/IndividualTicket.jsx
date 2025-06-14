@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, User, GraduationCap, Calendar, Camera, Utensils, CreditCard, FileText, CheckCircle } from 'lucide-react'
+import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, FileText } from "lucide-react"
 import axios from "axios"
 
 export default function IndividualTicket() {
@@ -13,7 +13,6 @@ export default function IndividualTicket() {
     semester: "",
     examPrep: "",
     examOther: "",
-    workshopPackage: "",
     headshot: null,
     foodPreference: "",
     dietaryRestrictions: "",
@@ -47,22 +46,14 @@ export default function IndividualTicket() {
     }))
   }
 
-  // Calculate price based on workshop package
-  const calculatePrice = () => {
-    const basePrice = 50 // Base price for individual ticket
-    const packagePrices = {
-      "Package A": 0,
-      "Package B": 25,
-      "Package C": 50,
-    }
-    return basePrice + (packagePrices[formData.workshopPackage] || 0)
-  }
+  // Fixed price for individual ticket
+  const ticketPrice = 75 // Fixed price in GEL
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     setIsSubmitting(true)
-                  
+
     const form = new FormData()
     form.append("ticketType", "Individual")
 
@@ -120,7 +111,7 @@ export default function IndividualTicket() {
     "Akaki Tsereteli State University (Faculty of Medicine)",
     "BAU International University, Batumi",
     "Batumi Shota Rustaveli State University (Faculty of Medicine)",
-    "Other"
+    "Other",
   ]
 
   const semesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
@@ -135,6 +126,13 @@ export default function IndividualTicket() {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
             <h1 className="text-3xl font-bold text-white text-center">Individual Ticket Registration</h1>
             <p className="text-blue-100 text-center mt-2">Complete your conference registration below</p>
+            {/* Price Display in Header */}
+            <div className="text-center mt-4">
+              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                <span className="text-white text-lg font-medium">Ticket Price: </span>
+                <span className="text-white text-2xl font-bold">{ticketPrice} GEL</span>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-10">
@@ -274,43 +272,6 @@ export default function IndividualTicket() {
                     placeholder="Specify other exam"
                   />
                 </div>
-              </div>
-            </section>
-
-            {/* Workshop Selection */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Calendar className="w-6 h-6 text-purple-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Workshop Selection</h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Select Your Desired Workshop Package *
-                </label>
-                <div className="space-y-3">
-                  {["Package A", "Package B", "Package C"].map((pkg) => (
-                    <label
-                      key={pkg}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name="workshopPackage"
-                        value={pkg}
-                        checked={formData.workshopPackage === pkg}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700 font-medium">{pkg}</span>
-                    </label>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Workshop spots are limited and will be confirmed based on availability
-                </p>
               </div>
             </section>
 
@@ -521,16 +482,14 @@ export default function IndividualTicket() {
                 <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
               </div>
 
-              {/* Price Display */}
-              {formData.workshopPackage && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium text-gray-700">Total Amount:</span>
-                    <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">Individual ticket + {formData.workshopPackage}</p>
+              {/* Fixed Price Display */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-medium text-gray-700">Total Amount:</span>
+                  <span className="text-2xl font-bold text-blue-600">{ticketPrice} GEL</span>
                 </div>
-              )}
+                <p className="text-sm text-gray-600 mt-1">Individual Conference Ticket</p>
+              </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -560,28 +519,52 @@ export default function IndividualTicket() {
                 <div className="space-y-6">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
-                    
+
                     <div className="space-y-4">
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)</h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">
+                          BANK OF GEORGIA
+                        </h4>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Account with institution:</span> Bank of Georgia</p>
-                          <p><span className="font-medium">SWIFT:</span> BAGAGE22</p>
-                          <p><span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.</p>
-                          <p><span className="font-medium">Account:</span> GE94BG0000000608342766</p>
-                          <p><span className="font-medium">Phone:</span> (+995 32) 2 444 444</p>
-                          <p><span className="font-medium">E-mail:</span> welcome@bog.ge</p>
+                          <p>
+                            <span className="font-medium">Account with institution:</span> Bank of Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">SWIFT:</span> BAGAGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.
+                          </p>
+                          <p>
+                            <span className="font-medium">Account:</span> GE94BG0000000608342766
+                          </p>
+                          <p>
+                            <span className="font-medium">Phone:</span> (+995 32) 2 444 444
+                          </p>
+                          <p>
+                            <span className="font-medium">E-mail:</span> welcome@bog.ge
+                          </p>
                         </div>
                       </div>
 
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">FOR LARI TRANSFER</h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank</p>
-                          <p><span className="font-medium">Location:</span> Tbilisi, Georgia</p>
-                          <p><span className="font-medium">Swift:</span> TBCBGE22</p>
-                          <p><span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012</p>
-                          <p><span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando</p>
+                          <p>
+                            <span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank
+                          </p>
+                          <p>
+                            <span className="font-medium">Location:</span> Tbilisi, Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">Swift:</span> TBCBGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012
+                          </p>
+                          <p>
+                            <span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando
+                          </p>
                         </div>
                       </div>
                     </div>

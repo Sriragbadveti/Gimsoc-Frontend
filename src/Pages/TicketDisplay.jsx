@@ -112,7 +112,7 @@ const ticketTiers = [
   },
 
   {
-    name: "International &-Day Package",
+    name: "International 7-Day Package",
     id: "tier-international3",
     href: "/international-ticket",
     price: "",
@@ -180,7 +180,7 @@ export default function Tickets() {
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-base font-semibold leading-7 text-indigo-600">Pricing</h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-              Choose your MEDCON'2025 ticket
+              Choose your MEDCON'25 ticket
             </p>
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
@@ -244,17 +244,7 @@ export default function Tickets() {
           ))}
         </div>
 
-        <ScrollReveal animation="fadeIn" delay={0.8}>
-          <div className="mx-auto mt-16 max-w-2xl text-center">
-            <p className="text-gray-600">
-              Group discounts available for 5+ attendees.
-              <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500 ml-1">
-                Contact us
-              </a>{" "}
-              for more information.
-            </p>
-          </div>
-        </ScrollReveal>
+        
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ export default function Information() {
             </h2>
             <p className="mt-4 text-lg text-gray-300">
               Introducing innovation & highlighting immunity at its forefront,
-              Medcon’25-Outbreaks to Breakthroughs, aims to provide
+              MEDCON’25-Outbreaks to Breakthroughs, aims to provide
               international collaborative opportunities, redefine knowledge
               enhancement with a selective set of networking lounges, enhance
               practical training by providing a plethora of academic activities,

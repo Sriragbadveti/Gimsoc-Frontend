@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, User, Stethoscope, Calendar, Camera, Utensils, CreditCard, FileText, Award } from 'lucide-react'
+import { Upload, User, Stethoscope, Camera, Utensils, CreditCard, FileText, Award } from "lucide-react"
 import axios from "axios"
 
 export default function DoctorTicket() {
@@ -15,7 +15,6 @@ export default function DoctorTicket() {
     specialty: "",
     currentWorkplace: "",
     countryOfPractice: "",
-    workshopPackage: "",
     headshot: null,
     foodPreference: "",
     dietaryRestrictions: "",
@@ -45,38 +44,30 @@ export default function DoctorTicket() {
     }))
   }
 
-  // Calculate price based on workshop package - Doctor rates
-  const calculatePrice = () => {
-    const basePrice = 150 // Doctor professional rate
-    const packagePrices = {
-      "Package A": 0,
-      "Package B": 50,
-      "Package C": 100,
-    }
-    return basePrice + (packagePrices[formData.workshopPackage] || 0)
-  }
+  // Fixed price for doctor professional ticket
+  const doctorTicketPrice = 200 // Fixed professional rate in GEL
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
-    const form = new FormData();
-    form.append("ticketType", "Doctor");
+    const form = new FormData()
+    form.append("ticketType", "Doctor")
 
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
-          form.append(key, value === true || value === "true" || value === "Yes");
+          form.append(key, value === true || value === "true" || value === "Yes")
         } else if (["mediaConsent"].includes(key)) {
-          form.append(key, value === true || value === "true" || value === "Yes");
+          form.append(key, value === true || value === "true" || value === "Yes")
         } else if (key === "headshot" || key === "paymentProof") {
-          form.append(key, value);
+          form.append(key, value)
         } else {
-          form.append(key, value);
+          form.append(key, value)
         }
       }
-    });
+    })
 
     try {
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/ticket/submit", form, {
@@ -84,10 +75,10 @@ export default function DoctorTicket() {
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
-      });
+      })
 
-      console.log("✅ Doctor ticket submitted successfully:", response.data);
-      alert("Doctor registration submitted successfully!");
+      console.log("✅ Doctor ticket submitted successfully:", response.data)
+      alert("Doctor registration submitted successfully!")
 
       // Reset form
       setFormData({
@@ -98,7 +89,6 @@ export default function DoctorTicket() {
         specialty: "",
         currentWorkplace: "",
         countryOfPractice: "",
-        workshopPackage: "",
         headshot: null,
         foodPreference: "",
         dietaryRestrictions: "",
@@ -110,14 +100,14 @@ export default function DoctorTicket() {
         policies: false,
         emailConsent: false,
         whatsappConsent: false,
-      });
+      })
     } catch (err) {
-      console.error("❌ Doctor submission failed:", err.response?.data || err.message);
-      alert("Form submission failed.");
+      console.error("❌ Doctor submission failed:", err.response?.data || err.message)
+      alert("Form submission failed.")
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const medicalQualifications = [
     "MBBS",
@@ -266,6 +256,13 @@ export default function DoctorTicket() {
                 Professional Ticket
               </div>
             </div>
+            {/* Price Display in Header */}
+            <div className="text-center mt-4">
+              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                <span className="text-white text-lg font-medium">Professional Rate: </span>
+                <span className="text-white text-2xl font-bold">{doctorTicketPrice} GEL</span>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-10">
@@ -411,51 +408,13 @@ export default function DoctorTicket() {
               </div>
             </section>
 
-            {/* Section 3: Workshop Package Selection */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Calendar className="w-6 h-6 text-purple-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 3: Workshop Package Selection</h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Select Your Desired Workshop Package *
-                </label>
-                <div className="space-y-3">
-                  {["Package A", "Package B", "Package C"].map((pkg) => (
-                    <label
-                      key={pkg}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name="workshopPackage"
-                        value={pkg}
-                        checked={formData.workshopPackage === pkg}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-gray-700 font-medium">{pkg}</span>
-                    </label>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Workshop spots are limited and will be confirmed based on availability
-                </p>
-              </div>
-            </section>
-
-            {/* Section 4: Identification */}
+            {/* Section 3: Identification */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Camera className="w-6 h-6 text-orange-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 4: Identification</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Section 3: Identification</h2>
               </div>
 
               <div>
@@ -487,13 +446,13 @@ export default function DoctorTicket() {
               </div>
             </section>
 
-            {/* Section 5: Food Preferences & Health Needs */}
+            {/* Section 4: Food Preferences & Health Needs */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-red-100 rounded-lg">
                   <Utensils className="w-6 h-6 text-red-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 5: Food Preferences & Health Needs</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Section 4: Food Preferences & Health Needs</h2>
               </div>
 
               <div>
@@ -548,25 +507,23 @@ export default function DoctorTicket() {
               </div>
             </section>
 
-            {/* Section 6: Payment Confirmation */}
+            {/* Section 5: Payment Confirmation */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-yellow-100 rounded-lg">
                   <CreditCard className="w-6 h-6 text-yellow-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 6: Payment Confirmation</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Section 5: Payment Confirmation</h2>
               </div>
 
-              {/* Price Display */}
-              {formData.workshopPackage && (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium text-gray-700">Professional Rate Total:</span>
-                    <span className="text-2xl font-bold text-emerald-600">{calculatePrice()} GEL</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">Doctor professional ticket + {formData.workshopPackage}</p>
+              {/* Fixed Price Display */}
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-medium text-gray-700">Professional Rate Total:</span>
+                  <span className="text-2xl font-bold text-emerald-600">{doctorTicketPrice} GEL</span>
                 </div>
-              )}
+                <p className="text-sm text-gray-600 mt-1">Doctor Professional Conference Ticket</p>
+              </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">Choose Your Payment Method *</label>
@@ -595,28 +552,52 @@ export default function DoctorTicket() {
                 <div className="space-y-6">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
-                    
+
                     <div className="space-y-4">
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)</h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">
+                          BANK OF GEORGIA
+                        </h4>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Account with institution:</span> Bank of Georgia</p>
-                          <p><span className="font-medium">SWIFT:</span> BAGAGE22</p>
-                          <p><span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.</p>
-                          <p><span className="font-medium">Account:</span> GE94BG0000000608342766</p>
-                          <p><span className="font-medium">Phone:</span> (+995 32) 2 444 444</p>
-                          <p><span className="font-medium">E-mail:</span> welcome@bog.ge</p>
+                          <p>
+                            <span className="font-medium">Account with institution:</span> Bank of Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">SWIFT:</span> BAGAGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.
+                          </p>
+                          <p>
+                            <span className="font-medium">Account:</span> GE94BG0000000608342766
+                          </p>
+                          <p>
+                            <span className="font-medium">Phone:</span> (+995 32) 2 444 444
+                          </p>
+                          <p>
+                            <span className="font-medium">E-mail:</span> welcome@bog.ge
+                          </p>
                         </div>
                       </div>
 
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">FOR LARI TRANSFER</h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank</p>
-                          <p><span className="font-medium">Location:</span> Tbilisi, Georgia</p>
-                          <p><span className="font-medium">Swift:</span> TBCBGE22</p>
-                          <p><span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012</p>
-                          <p><span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando</p>
+                          <p>
+                            <span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank
+                          </p>
+                          <p>
+                            <span className="font-medium">Location:</span> Tbilisi, Georgia
+                          </p>
+                          <p>
+                            <span className="font-medium">Swift:</span> TBCBGE22
+                          </p>
+                          <p>
+                            <span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012
+                          </p>
+                          <p>
+                            <span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -652,13 +633,13 @@ export default function DoctorTicket() {
               )}
             </section>
 
-            {/* Section 7: Declaration and Consent */}
+            {/* Section 6: Declaration and Consent */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-indigo-100 rounded-lg">
                   <FileText className="w-6 h-6 text-indigo-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 7: Declaration and Consent</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Section 6: Declaration and Consent</h2>
               </div>
 
               <div className="space-y-4">

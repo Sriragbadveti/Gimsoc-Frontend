@@ -1,23 +1,8 @@
-"use client"
 import { useState } from "react"
-import {
-  Upload,
-  User,
-  GraduationCap,
-  Calendar,
-  Camera,
-  Utensils,
-  CreditCard,
-  AlertCircle,
-  CheckCircle,
-  Star,
-} from "lucide-react"
-import PayPalButton from "../Components/PaypalButton"
+import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, AlertCircle, CheckCircle, Star } from 'lucide-react'
 import axios from "axios"
+
 export default function TsuAllInclusiveTicket() {
-  // Payment states - exactly like individual ticket
-  const [paymentCompleted, setPaymentCompleted] = useState(false)
-  const [paymentDetails, setPaymentDetails] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -29,7 +14,6 @@ export default function TsuAllInclusiveTicket() {
     tsuEmail: "",
     examPrep: "",
     examOther: "",
-    workshopPackage: "",
     headshot: null,
     foodPreference: "",
     dietaryRestrictions: "",
@@ -60,108 +44,60 @@ export default function TsuAllInclusiveTicket() {
     }))
   }
 
-  // Calculate price based on workshop package - TSU discounted rates
-  const calculatePrice = () => {
-    const basePrice = 30 // TSU discounted base price
-    const packagePrices = {
-      "Package A": 0,
-      "Package B": 15,
-      "Package C": 25,
-    }
-    return basePrice + (packagePrices[formData.workshopPackage] || 0)
-  }
-
-  // PayPal payment handlers - exactly like individual ticket
-  const handlePaymentSuccess = (details) => {
-    console.log("Payment successful:", details)
-    setPaymentCompleted(true)
-    setPaymentDetails(details)
-    alert("Payment completed successfully!")
-  }
-
-  const handlePaymentError = (error) => {
-    console.error("Payment failed:", error)
-    alert("Payment failed. Please try again.")
-  }
-
-  // Submit handler with payment validation - exactly like individual ticket
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault()
 
-  // Check if payment is required and completed
-  if (formData.paymentMethod === "Credit/Debit Card" && !paymentCompleted) {
-    alert("Please complete the payment before submitting the form.");
-    return;
-  }
+    setIsSubmitting(true)
 
-  setIsSubmitting(true);
+    const form = new FormData()
+    form.append("ticketType", "TSU All Inclusive")
 
-  const form = new FormData();
-  form.append("ticketType", "TSU All Inclusive");
-
-  Object.entries(formData).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      // Convert string to Boolean for specific fields
-      if (
-        [
-          "infoAccurate",
-          "policies",
-          "emailConsent",
-          "whatsappConsent",
-          "discountConfirmation",
-        ].includes(key)
-      ) {
-        form.append(
-          key,
-          value === true || value === "true" || value === "Yes"
-        );
-      } else if (["isTsuStudent", "mediaConsent"].includes(key)) {
-        form.append(key, value === "Yes");
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        if (
+          [
+            "infoAccurate",
+            "policies",
+            "emailConsent",
+            "whatsappConsent",
+            "discountConfirmation",
+          ].includes(key)
+        ) {
+          form.append(
+            key,
+            value === true || value === "true" || value === "Yes"
+          )
+        } else if (["isTsuStudent", "mediaConsent"].includes(key)) {
+          form.append(key, value === "Yes")
+        } else if (key === "headshot" || key === "paymentProof") {
+          form.append(key, value)
+        } else {
+          form.append(key, value)
+        }
       }
-      // File fields
-      else if (key === "headshot" || key === "paymentProof") {
-        form.append(key, value); // multer handles File object
-      }
-      // All others as-is
-      else {
-        form.append(key, value);
-      }
+    })
+
+    try {
+      const response = await axios.post(
+        "https://gimsoc-backend.onrender.com/api/ticket/submit",
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      )
+
+      console.log("✅ Submitted successfully:", response.data)
+      alert("Form submitted successfully!")
+    } catch (err) {
+      console.error("❌ Submission failed:", err.response?.data || err.message)
+      alert("Form submission failed.")
+    } finally {
+      setIsSubmitting(false)
     }
-  });
-
-  // Add payment details if payment was completed
-  if (paymentDetails) {
-    form.append("paymentDetails", JSON.stringify(paymentDetails));
-    form.append("paymentStatus", "completed");
   }
-
-  try {
-    const response = await axios.post(
-      "https://gimsoc-backend.onrender.com/api/ticket/submit",
-      form,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      }
-    );
-
-    console.log("✅ Submitted successfully:", response.data);
-    alert("Form submitted successfully!");
-
-    // Optionally reset form after submission — up to you
-    // setFormData({ ... });  (you already have this in your original handleSubmit)
-    // setPaymentCompleted(false);
-    // setPaymentDetails(null);
-
-  } catch (err) {
-    console.error("❌ Submission failed:", err.response?.data || err.message);
-    alert("Form submission failed.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
 
   const semesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
   const exams = ["USMLE", "AMC", "PLAB", "FMGE", "EMREE", "IFOM"]
@@ -210,7 +146,7 @@ export default function TsuAllInclusiveTicket() {
             <div className="flex justify-center mt-3">
               <div className="flex items-center gap-1 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium">
                 <Star className="w-4 h-4" />
-                All Inclusive Package
+                All Inclusive Package - 55 GEL
               </div>
             </div>
           </div>
@@ -402,44 +338,6 @@ export default function TsuAllInclusiveTicket() {
                         placeholder="Specify other exam"
                       />
                     </div>
-                  </div>
-                </section>
-
-                {/* Workshop Selection */}
-                <section className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-purple-100 rounded-lg">
-                      <Calendar className="w-6 h-6 text-purple-600" />
-                    </div>
-                    <h2 className="text-2xl font-semibold text-gray-800">Workshop Selection</h2>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Select Your Desired Workshop Package *
-                    </label>
-                    <div className="space-y-3">
-                      {["Package A", "Package B", "Package C"].map((pkg) => (
-                        <label
-                          key={pkg}
-                          className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                        >
-                          <input
-                            type="radio"
-                            name="workshopPackage"
-                            value={pkg}
-                            checked={formData.workshopPackage === pkg}
-                            onChange={handleInputChange}
-                            className="text-blue-600 focus:ring-blue-500"
-                            required
-                          />
-                          <span className="text-gray-700 font-medium">{pkg}</span>
-                        </label>
-                      ))}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2">
-                      Workshop spots are limited and will be confirmed based on availability
-                    </p>
                   </div>
                 </section>
 
@@ -652,123 +550,116 @@ export default function TsuAllInclusiveTicket() {
                   </div>
                 </section>
 
-                {/* Payment Confirmation - Enhanced with PayPal integration */}
+                {/* Payment Confirmation */}
                 <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-yellow-100 rounded-lg">
-                  <CreditCard className="w-6 h-6 text-yellow-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
-              </div>
-
-              {/* Price Display */}
-              {formData.workshopPackage && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium text-gray-700">Total Amount:</span>
-                    <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">Individual ticket + {formData.workshopPackage}</p>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  How will you be making the payment? *
-                </label>
-                <div className="space-y-3">
-                  {["Bank Transfer"].map((method) => (
-                    <label
-                      key={method}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={method}
-                        checked={formData.paymentMethod === method}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700">{method}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {formData.paymentMethod === "Bank Transfer" && (
-                <div className="space-y-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
-                    
-                    <div className="space-y-4">
-                      <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)</h4>
-                        <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Account with institution:</span> Bank of Georgia</p>
-                          <p><span className="font-medium">SWIFT:</span> BAGAGE22</p>
-                          <p><span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.</p>
-                          <p><span className="font-medium">Account:</span> GE94BG0000000608342766</p>
-                          <p><span className="font-medium">Phone:</span> (+995 32) 2 444 444</p>
-                          <p><span className="font-medium">E-mail:</span> welcome@bog.ge</p>
-                        </div>
-                      </div>
-
-                      <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">FOR LARI TRANSFER</h4>
-                        <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank</p>
-                          <p><span className="font-medium">Location:</span> Tbilisi, Georgia</p>
-                          <p><span className="font-medium">Swift:</span> TBCBGE22</p>
-                          <p><span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012</p>
-                          <p><span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando</p>
-                        </div>
-                      </div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-yellow-100 rounded-lg">
+                      <CreditCard className="w-6 h-6 text-yellow-600" />
                     </div>
+                    <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-medium text-gray-700">Total Amount:</span>
+                      <span className="text-2xl font-bold text-blue-600">55 GEL</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">TSU All Inclusive ticket</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Proof of Payment *</label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <input
-                        type="file"
-                        name="paymentProof"
-                        onChange={handleFileChange}
-                        accept=".pdf"
-                        className="hidden"
-                        id="payment-upload"
-                      />
-                      <label htmlFor="payment-upload" className="cursor-pointer">
-                        <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
-                        <span className="text-gray-500"> or drag and drop</span>
-                      </label>
-                      <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      How will you be making the payment? *
+                    </label>
+                    <div className="space-y-3">
+                      {["Bank Transfer"].map((method) => (
+                        <label
+                          key={method}
+                          className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
+                        >
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value={method}
+                            checked={formData.paymentMethod === method}
+                            onChange={handleInputChange}
+                            className="text-blue-600 focus:ring-blue-500"
+                            required
+                          />
+                          <span className="text-gray-700">{method}</span>
+                        </label>
+                      ))}
                     </div>
                   </div>
-                </div>
-              )}
-            </section>
 
-                {/* Submit Button - exactly like individual ticket */}
+                  {formData.paymentMethod === "Bank Transfer" && (
+                    <div className="space-y-6">
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
+                        
+                        <div className="space-y-4">
+                          <div className="bg-white rounded-lg p-4 border border-blue-100">
+                            <h4 className="font-semibold text-gray-800 mb-3">BANK OF GEORGIA</h4>
+                            <div className="space-y-2 text-sm">
+                              <p><span className="font-medium">Account with institution:</span> Bank of Georgia</p>
+                              <p><span className="font-medium">SWIFT:</span> BAGAGE22</p>
+                              <p><span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.</p>
+                              <p><span className="font-medium">Account:</span> GE94BG0000000608342766</p>
+                              <p><span className="font-medium">Phone:</span> (+995 32) 2 444 444</p>
+                              <p><span className="font-medium">E-mail:</span> welcome@bog.ge</p>
+                            </div>
+                          </div>
+
+                          <div className="bg-white rounded-lg p-4 border border-blue-100">
+                            <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
+                            <div className="space-y-2 text-sm">
+                              <p><span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank</p>
+                              <p><span className="font-medium">Location:</span> Tbilisi, Georgia</p>
+                              <p><span className="font-medium">Swift:</span> TBCBGE22</p>
+                              <p><span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012</p>
+                              <p><span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Upload Proof of Payment *</label>
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                          <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                          <input
+                            type="file"
+                            name="paymentProof"
+                            onChange={handleFileChange}
+                            accept=".pdf"
+                            className="hidden"
+                            id="payment-upload"
+                            required
+                          />
+                          <label htmlFor="payment-upload" className="cursor-pointer">
+                            <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
+                            <span className="text-gray-500"> or drag and drop</span>
+                          </label>
+                          <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </section>
+
+                {/* Submit Button */}
                 <div className="pt-6">
                   <button
                     type="submit"
-                    disabled={isSubmitting || (formData.paymentMethod === "Credit/Debit Card" && !paymentCompleted)}
+                    disabled={isSubmitting}
                     className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all transform hover:scale-[1.02] ${
-                      isSubmitting || (formData.paymentMethod === "Credit/Debit Card" && !paymentCompleted)
+                      isSubmitting
                         ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                         : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200"
                     }`}
                   >
                     {isSubmitting ? "Submitting..." : "Submit TSU All Inclusive Registration"}
                   </button>
-
-                  {formData.paymentMethod === "Credit/Debit Card" && !paymentCompleted && (
-                    <p className="text-sm text-gray-500 text-center mt-2">
-                      Please complete the payment above before submitting
-                    </p>
-                  )}
                 </div>
               </>
             )}

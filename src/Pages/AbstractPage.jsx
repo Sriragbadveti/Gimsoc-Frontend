@@ -105,8 +105,8 @@ export default function AbstractPage() {
   const categories = [
     "Literature Review",
     "Case Presentation",
-    "Oral Presentation",
-    "Poster Presentation",
+    
+    "Original",
     "Research Study",
     "Clinical Trial",
     "Other",
