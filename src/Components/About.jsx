@@ -4,7 +4,7 @@ export default function About() {
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
           <h2 className="text-center text-base/7 font-semibold text-indigo-600">Deploy faster</h2>
           <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">
-            About MEDCON 2025
+            About MEDCON'25
           </p>
           <div className="mx-auto mt-8 max-w-2xl text-center">
             <p className="text-lg font-medium text-gray-500 sm:text-xl/8 tracking-tight">

@@ -1,10 +1,11 @@
-'use client'
+"use client"
 
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import axios from 'axios'
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { Dialog } from "@headlessui/react"
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import axios from "axios"
+import Cookies from "js-cookie"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -32,20 +33,56 @@ const navigation = [
     ],
   },
   { name: "Abstract Submission", href: "/abstract" },
-];
+]
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false)
   const navigate = useNavigate()
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [hasAccess, setHasAccess] = useState(false)
+  const [isCheckingAccess, setIsCheckingAccess] = useState(false)
+
+  useEffect(() => {
+    const token = Cookies.get("token")
+    setIsLoggedIn(!!token)
+
+    const checkAccess = async () => {
+      if (token) {
+        setIsCheckingAccess(true)
+        try {
+          const res = await axios.get("http://localhost:8000/api/info/check-dashboard-access", {
+            withCredentials: true,
+          })
+          setHasAccess(res.data.access)
+        } catch (err) {
+          console.error("Access check failed:", err)
+          setHasAccess(false)
+        } finally {
+          setIsCheckingAccess(false)
+        }
+      } else {
+        setHasAccess(false)
+      }
+    }
+
+    checkAccess()
+  }, [])
+
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8000/api/auth/logout', {}, { withCredentials: true })
-      console.log('User logged out successfully')
-      navigate('/')
+      await axios.post("http://localhost:8000/api/auth/logout", {}, { withCredentials: true })
+      Cookies.remove("token")
+      setIsLoggedIn(false)
+      console.log("User logged out successfully")
+      navigate("/")
     } catch (error) {
-      console.error('Logout failed:', error)
+      console.error("Logout failed:", error)
+      // Still remove cookie and redirect even if API call fails
+      Cookies.remove("token")
+      setIsLoggedIn(false)
+      navigate("/")
     }
   }
 
@@ -56,18 +93,14 @@ const Navbar = () => {
           <div className="flex lg:flex-1">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img
-                alt=""
-                src="/medcon-logo.png"
-                className="h-32 w-auto max-w-[280px] object-contain"
-              />
+              <img alt="" src="/medcon-logo.png" className="h-32 w-auto max-w-[280px] object-contain" />
             </a>
           </div>
           <div className="flex lg:hidden">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white"
             >
               <span className="sr-only">Open main menu</span>
               <Bars3Icon aria-hidden="true" className="size-6" />
@@ -82,23 +115,16 @@ const Navbar = () => {
                   onMouseEnter={() => setAboutDropdownOpen(true)}
                   onMouseLeave={() => setAboutDropdownOpen(false)}
                 >
-                  <button
-                    className="text-sm font-semibold text-gray-900 inline-flex items-center"
-                  >
+                  <button className="text-sm font-semibold text-white inline-flex items-center">
                     {item.name}
                     <svg
-                      className="ml-1 w-4 h-4 text-gray-500"
+                      className="ml-1 w-4 h-4 text-gray-300"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   {aboutDropdownOpen && (
@@ -107,7 +133,7 @@ const Navbar = () => {
                         <a
                           key={subItem.name}
                           href={subItem.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
                         >
                           {subItem.name}
                         </a>
@@ -116,22 +142,61 @@ const Navbar = () => {
                   )}
                 </div>
               ) : (
-                <a key={item.name} href={item.href} className="text-sm font-semibold text-gray-900">
+                <a key={item.name} href={item.href} className="text-sm font-semibold text-white">
                   {item.name}
                 </a>
-              )
+              ),
             )}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-            <button
-              onClick={handleLogout}
-              className="group relative text-sm font-semibold text-gray-900 px-3 py-2 transition hover:bg-gray-100 rounded-md"
-            >
-              Sign Out
-              <span className="ml-1 opacity-0 group-hover:opacity-100 transition text-gray-500">
-                &rarr;
-              </span>
-            </button>
+            {isLoggedIn ? (
+              <>
+                {!isCheckingAccess ? (
+                  <button
+                    onClick={() => hasAccess && navigate("/attendeedashboard")}
+                    disabled={!hasAccess}
+                    className={`group relative text-sm font-semibold px-3 py-2 transition rounded-md ${
+                      hasAccess
+                        ? "text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 cursor-pointer"
+                        : "text-gray-400 bg-gray-600 cursor-not-allowed opacity-50"
+                    }`}
+                    title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
+                  >
+                    Dashboard
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="text-gray-300 bg-gray-500 cursor-not-allowed px-3 py-2 rounded-md text-sm font-semibold"
+                  >
+                    Checking Access...
+                  </button>
+                )}
+
+                <button
+                  onClick={handleLogout}
+                  className="group relative text-sm font-semibold text-white px-3 py-2 transition hover:bg-white hover:bg-opacity-20 rounded-md"
+                >
+                  Logout
+                  <span className="ml-1 opacity-0 group-hover:opacity-100 transition text-gray-300">&rarr;</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigate("/login")}
+                  className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => navigate("/signup")}
+                  className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
+                >
+                  Signup
+                </button>
+              </>
+            )}
           </div>
         </nav>
 
@@ -163,14 +228,12 @@ const Navbar = () => {
                   {navigation.map((item) =>
                     item.subItems ? (
                       <div key={item.name} className="space-y-1">
-                        <span className="block px-3 py-2 text-base font-semibold text-gray-900">
-                          {item.name}
-                        </span>
+                        <span className="block px-3 py-2 text-base font-semibold text-gray-900">{item.name}</span>
                         {item.subItems.map((subItem) => (
                           <a
                             key={subItem.name}
                             href={subItem.href}
-                            className="block px-6 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-6 py-2 text-sm text-gray-900 hover:bg-gray-100"
                           >
                             {subItem.name}
                           </a>
@@ -184,28 +247,70 @@ const Navbar = () => {
                       >
                         {item.name}
                       </a>
-                    )
+                    ),
                   )}
                 </div>
                 <div className="py-6 space-y-2">
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      navigate('/login')
-                    }}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    Log in
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      navigate('/signup')
-                    }}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    Signup
-                  </button>
+                  {isLoggedIn ? (
+                    <>
+                      {!isCheckingAccess ? (
+                        <button
+                          onClick={() => {
+                            if (hasAccess) {
+                              setMobileMenuOpen(false)
+                              navigate("/attendeedashboard")
+                            }
+                          }}
+                          disabled={!hasAccess}
+                          className={`-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold ${
+                            hasAccess
+                              ? "text-gray-900 hover:bg-gray-50 cursor-pointer"
+                              : "text-gray-400 cursor-not-allowed opacity-50"
+                          }`}
+                          title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
+                        >
+                          Dashboard
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-400 cursor-not-allowed opacity-50"
+                        >
+                          Checking Access...
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false)
+                          handleLogout()
+                        }}
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false)
+                          navigate("/login")
+                        }}
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                      >
+                        Login
+                      </button>
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false)
+                          navigate("/signup")
+                        }}
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                      >
+                        Signup
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

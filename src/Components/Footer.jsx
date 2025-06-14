@@ -5,7 +5,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* MEDCON Section */}
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-white mb-4">MEDCON</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-white mb-4">MEDCON'25</h2>
               <p className="text-gray-300 text-sm max-w-xs">
                 The premier medical conference for students and professionals. Join us for workshops, networking, and the
                 latest in medical research.
