@@ -206,7 +206,7 @@ export default function AbstractPage() {
                 <div className="p-2 bg-purple-100 rounded-lg">
                   <FileText className="w-6 h-6 text-purple-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">3. Abstract Details</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">2. Abstract Details</h2>
               </div>
 
               <div className="space-y-6">
@@ -280,7 +280,7 @@ export default function AbstractPage() {
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Upload className="w-6 h-6 text-orange-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">4. Abstract Upload</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">3. Abstract Upload</h2>
               </div>
 
               <div>
@@ -310,7 +310,7 @@ export default function AbstractPage() {
 
             {/* Section 5: Consent and Declaration */}
             <section className="space-y-6">
-              <h2 className="text-2xl font-semibold text-gray-800">5. Consent and Declaration</h2>
+              <h2 className="text-2xl font-semibold text-gray-800">4. Consent and Declaration</h2>
 
               <div className="space-y-4">
                 <label className="flex items-start space-x-3 cursor-pointer">

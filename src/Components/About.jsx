@@ -8,11 +8,12 @@ export default function About() {
           </p>
           <div className="mx-auto mt-8 max-w-2xl text-center">
             <p className="text-lg font-medium text-gray-500 sm:text-xl/8 tracking-tight">
-              Centered around Infectious Diseases, this Conference offers a blend of new speakers, new innovations, bigger connections. Providing CPD & CME accreditations, MEDCON’25 will bring together over 30 healthcare professionals, from USA, UK, UAE, South Africa, Georgia, India etc including specialists in the field of Gastroenterology, Microbiology, Epidemiology, Dermatovenerology, etc exploring the latest advancements, from Outbreaks to Breakthroughs in Infectious Diseases
+              Centered around Infectious Diseases, this Conference offers a blend of new speakers, new innovations, bigger connections. Providing CPD & CME accreditations, MEDCON’25 will bring together over 30 healthcare professionals, from USA, UK, UAE, South Africa, Georgia, India etc exploring the latest advancements, from Outbreaks to Breakthroughs in Infectious Diseases. Highlights include keynote sessions from Notable Speakers, hands-on workshops, and discussions on emerging therapies — offering an excellent opportunity for students and Healthcare professionals to engage directly with leading experts and practitioners.
+
+
+
             </p>
-            <p className="text-lg font-medium text-gray-500 sm:text-xl/8 tracking-tight">
-             Highlights include keynote sessions from Notable Speakers, hands-on workshops, and discussions on emerging therapies — offering an excellent opportunity for students and Healthcare professionals to engage directly with leading experts and practitioners.
-            </p>
+            
           </div>
           <div className="mt-10 grid gap-6 sm:mt-16 md:grid-cols-2 lg:grid-cols-3">
             {/* Card 1 - Networking */}

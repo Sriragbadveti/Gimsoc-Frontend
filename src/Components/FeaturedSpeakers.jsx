@@ -1,155 +1,108 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 
 export default function FeaturedSpeakers() {
-  const containerRef = useRef(null)
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    const scrollContainer = containerRef.current
-    if (!scrollContainer) return
+    const scrollContainer = containerRef.current;
+    if (!scrollContainer) return;
 
-    const scrollWidth = scrollContainer.scrollWidth
-    const clientWidth = scrollContainer.clientWidth
+    const scrollWidth = scrollContainer.scrollWidth;
+    const clientWidth = scrollContainer.clientWidth;
 
     // Only activate the animation if there's content to scroll
-    if (scrollWidth <= clientWidth) return
+    if (scrollWidth <= clientWidth) return;
 
-    let animationId
-    let scrollPos = 0
-    const speed = 0.5 // Adjust speed as needed
+    let animationId;
+    let scrollPos = 0;
+    const speed = 0.5; // Adjust speed as needed
 
     const scroll = () => {
-      scrollPos += speed
+      scrollPos += speed;
 
       // Reset position when we've scrolled one item
       if (scrollPos >= scrollWidth / 2) {
-        scrollPos = 0
+        scrollPos = 0;
       }
 
       if (scrollContainer) {
-        scrollContainer.scrollLeft = scrollPos
+        scrollContainer.scrollLeft = scrollPos;
       }
 
-      animationId = requestAnimationFrame(scroll)
-    }
+      animationId = requestAnimationFrame(scroll);
+    };
 
-    scroll()
+    scroll();
 
     return () => {
-      cancelAnimationFrame(animationId)
-    }
-  }, [])
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
 
   // Duplicate the speakers to create a seamless loop
   const speakers = [
-  {
-    name: "Dr. Abhishek Ray",
-    title: "Gastroenterologist",
-    institution: "UK",
-    image: "/medical-professional.png",
-  },
-  {
-    name: "Chisomo (Mark) Kanthanga",
-    title: "Microbiologist",
-    institution: "Malawi Liverpool Wellcome Research Programme",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Nayab Mustafa",
-    title: "Family Resident",
-    institution: "Sheikh Rashid Hospital",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Annam Rafique",
-    title: "Histology",
-    institution: "University of Georgia",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Neli Solomonia",
-    title: "Infectious Disease",
-    institution: "CIU",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Salome Tasaria",
-    title: "Epidemiologist and Dean of UG",
-    institution: "University of Georgia",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Ana Aslanikashvili",
-    title: "Professor of Clinical Epidemiology",
-    institution: "Petre Shotadze University",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Zubair Ahmad",
-    title: "Internal Medicine (UKMLA Pathway)",
-    institution: "NHS, UK",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Anjum Pervez",
-    title: "Workshops Supervisor",
-    institution: "-",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Tahseen J. Siddiqui",
-    title: "Board Certified in Internal Medicine & Infectious Diseases",
-    institution: "IMG Unity",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Giorgi Derevenskikh",
-    title: "Pulmonology, Internal Medicine, USA Fellowship",
-    institution: "-",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Otar Chokoshvili",
-    title: "-",
-    institution: "Geomedi",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Ali Teimoori",
-    title: "Virology",
-    institution: "Hamedan University of Medical Sciences",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Dr. Paata Vepkhvadze",
-    title: "Infectious Disease Specialist",
-    institution: "CIU",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Sofo Liluashvili",
-    title: "Dermatology",
-    institution: "University of Georgia",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Mamuka Asatiani",
-    title: "Pharmacology",
-    institution: "Tbilisi Medical Academy",
-    image: "/placeholder.svg",
-  },
-];
+    {
+      name: "Dr. Abhishek Ray",
+      title: "Gastroenterologist",
+      institution: "UK",
+      image: "/medical-professional.png",
+    },
+    {
+      name: "Chisomo (Mark) Kanthanga",
+      title: "Microbiologist",
+      institution: "Malawi Liverpool Wellcome Research Programme",
+      image: "/placeholder.svg",
+    },
+
+    {
+      name: "Annam Rafique",
+      title: "Histology",
+      institution: "University of Georgia",
+      image: "/placeholder.svg",
+    },
+
+    {
+      name: "Salome Tasaria",
+      title: "Epidemiologist and Dean of UG",
+      institution: "University of Georgia",
+      image: "/placeholder.svg",
+    },
+
+    {
+      name: "Dr. Tahseen J. Siddiqui",
+      title: "Board Certified in Internal Medicine & Infectious Diseases",
+      institution: "IMG Unity",
+      image: "/placeholder.svg",
+    },
+    {
+      name: "Dr. Giorgi Derevenskikh",
+      title: "Pulmonology, Internal Medicine, USA Fellowship",
+      institution: "-",
+      image: "/placeholder.svg",
+    },
+    {
+      name: "Dr. Otar Chokoshvili",
+      title: "-",
+      institution: "Geomedi",
+      image: "/placeholder.svg",
+    },
+  ];
 
   // Duplicate speakers for seamless scrolling
-  const allSpeakers = [...speakers, ...speakers]
+  const allSpeakers = [...speakers, ...speakers];
 
   return (
     <div className="bg-gray-50 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">Featured Speakers</h2>
-          <p className="mt-4 text-lg text-gray-600">Learn from world-renowned medical professionals and researchers.</p>
+          <h2 className="text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
+            Featured Speakers
+          </h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Learn from world-renowned medical professionals and researchers.
+          </p>
         </div>
 
         <div className="mt-16 overflow-hidden">
@@ -164,7 +117,9 @@ export default function FeaturedSpeakers() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">{speaker.name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    {speaker.name}
+                  </h3>
                   <p className="text-sm text-gray-600">{speaker.title}</p>
                   <p className="text-sm text-gray-600">{speaker.institution}</p>
                 </div>
@@ -183,5 +138,5 @@ export default function FeaturedSpeakers() {
         </div>
       </div>
     </div>
-  )
+  );
 }
