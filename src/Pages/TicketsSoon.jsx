@@ -1,16 +1,35 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Calendar, Clock, Bell, Star, Sparkles } from "lucide-react"
 
 export default function TicketsSoon() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [timeLeft, setTimeLeft] = useState({})
+  const countdownDate = useRef(new Date("2024-06-25T00:00:00+04:00")) // Georgian time (UTC+4)
+
+  const calculateTimeLeft = () => {
+    const now = new Date()
+    const difference = countdownDate.current - now
+
+    if (difference <= 0) {
+      return null
+    }
+
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    }
+  }
 
   useEffect(() => {
     setIsVisible(true)
+    setTimeLeft(calculateTimeLeft())
     const timer = setInterval(() => {
-      setCurrentTime(new Date())
+      setTimeLeft(calculateTimeLeft())
     }, 1000)
 
     return () => clearInterval(timer)
@@ -92,14 +111,19 @@ export default function TicketsSoon() {
             </p>
           </div>
 
-          {/* Live Clock */}
+          {/* Countdown Timer */}
           <div className="mb-12 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl">
             <div className="flex items-center justify-center mb-4">
-              <Clock className="w-6 h-6 text-purple-300 mr-3" />
-              <span className="text-purple-300 font-medium">Current Time</span>
+              <Calendar className="w-6 h-6 text-purple-300 mr-3" />
+              <span className="text-purple-300 font-medium">Countdown to Ticket Release</span>
             </div>
-            <div className="text-3xl md:text-4xl font-mono text-white mb-2">{formatTime(currentTime)}</div>
-            <div className="text-lg text-gray-300">{formatDate(currentTime)}</div>
+            {timeLeft ? (
+              <div className="text-3xl md:text-4xl font-mono text-white mb-2">
+                {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
+              </div>
+            ) : (
+              <div className="text-3xl font-bold text-green-400">🎟️ Tickets are now live!</div>
+            )}
           </div>
 
           
