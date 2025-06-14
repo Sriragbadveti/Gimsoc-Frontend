@@ -107,7 +107,7 @@ export default function AdminDashboard() {
     try {
       setTicketsLoading(true)
       setTicketsError(null)
-      const response = await axios.get("http://localhost:8000/api/admin/getalltickets", { withCredentials: true })
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getalltickets", { withCredentials: true })
       setTickets(response.data)
     } catch (err) {
       console.error("Error fetching tickets:", err)
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
     try {
       setAbstractsLoading(true)
       setAbstractsError(null)
-      const response = await axios.get("http://localhost:8000/api/admin/getallabstracts", { withCredentials: true })
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getallabstracts", { withCredentials: true })
       setAbstracts(response.data)
     } catch (err) {
       console.error("Error fetching abstracts:", err)
@@ -135,7 +135,7 @@ export default function AdminDashboard() {
     try {
       setApprovingTickets((prev) => new Set([...prev, ticketId]))
       await axios.patch(
-        `http://localhost:8000/api/admin/approveticket/${ticketId}`,
+        `https://gimsoc-backend.onrender.com/api/admin/approveticket/${ticketId}`,
         { paymentStatus: "completed" },
         { withCredentials: true },
       )

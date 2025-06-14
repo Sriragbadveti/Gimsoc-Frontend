@@ -27,7 +27,7 @@ export default function LoginForm() {
     e.preventDefault()
     setIsLoading(true)
 
-   const response = await axios.post("http://localhost:8000/api/auth/login" , formData , {withCredentials:true});
+   const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login" , formData , {withCredentials:true});
    console.log("Successfully logged in the user", response.data.message);
    navigate("/tickets")
 

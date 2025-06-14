@@ -79,7 +79,7 @@ export default function DoctorTicket() {
     });
 
     try {
-      const response = await axios.post("http://localhost:8000/api/ticket/submit", form, {
+      const response = await axios.post("https://gimsoc-backend.onrender.com/api/ticket/submit", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

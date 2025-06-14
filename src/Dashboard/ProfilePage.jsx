@@ -13,7 +13,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/info/getprofileinfo", {
+        const res = await axios.get("https://gimsoc-backend.onrender.com/api/info/getprofileinfo", {
           withCredentials: true,
         })
         setUserData(res.data)

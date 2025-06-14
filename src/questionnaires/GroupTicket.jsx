@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react"
 import { Upload, Users, Calendar, User, CreditCard } from 'lucide-react'
-
+import axios from "axios";
 // Move AttendeeSection outside to prevent recreation on every render
 const AttendeeSection = ({ attendeeNum, attendee, onAttendeeChange, onAttendeeFileChange }) => {
   const universities = [
@@ -459,107 +459,59 @@ export default function GroupTicket() {
     }))
   }, [])
 
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault()
+ 
 
-      setIsSubmitting(true)
+const handleSubmit = useCallback(
+  async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-      try {
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const trimmedAttendees = Object.fromEntries(
+        Object.entries(attendees).slice(0, parseInt(groupSize.split(" ")[2]))
+      );
 
-        const trimmedAttendees = Object.fromEntries(
-          Object.entries(attendees).slice(0, parseInt(groupSize.split(" ")[2]))
-        )
+      const formData = new FormData();
+      formData.append("ticketType", "Group");
+      formData.append("groupSize", groupSize);
+      formData.append("workshopPackage", workshopPackage);
+      formData.append("paymentMethod", paymentMethod);
+      formData.append("paymentProof", paymentProof); // file
 
-        console.log("✅ Group ticket submitted successfully:", {
-          ticketType: "Group",
-          groupSize,
-          workshopPackage,
-          paymentMethod,
-          attendees: Object.values(trimmedAttendees),
-        })
+      // Add attendees JSON
+      formData.append("attendees", JSON.stringify(Object.values(trimmedAttendees)));
 
-        alert("✅ Group ticket submitted successfully!")
+      // Add headshots
+      Object.entries(trimmedAttendees).forEach(([index, attendee], i) => {
+        if (attendee.headshot) {
+          formData.append(`headshot-${i + 1}`, attendee.headshot);
+        }
+      });
 
-        // Reset form
-        setGroupSize("")
-        setWorkshopPackage("")
-        setPaymentMethod("")
-        setPaymentProof(null)
-        setAttendees({
-          1: {
-            fullName: "",
-            email: "",
-            whatsapp: "",
-            university: "",
-            semester: "",
-            examPrep: "",
-            examOther: "",
-            headshot: null,
-            foodPreference: "",
-            dietaryRestrictions: "",
-            accessibilityNeeds: "",
-            isGimsocMember: "",
-            membershipCode: "",
-            infoAccurate: false,
-            mediaConsent: "",
-            policies: false,
-            emailConsent: false,
-            whatsappConsent: false,
+      const response = await axios.post(
+        "https://gimsoc-backend.onrender.com/api/tickets/submit",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-          2: {
-            fullName: "",
-            email: "",
-            whatsapp: "",
-            university: "",
-            semester: "",
-            examPrep: "",
-            examOther: "",
-            headshot: null,
-            foodPreference: "",
-            dietaryRestrictions: "",
-            accessibilityNeeds: "",
-            isGimsocMember: "",
-            membershipCode: "",
-            infoAccurate: false,
-            mediaConsent: "",
-            policies: false,
-            emailConsent: false,
-            whatsappConsent: false,
-          },
-          3: {
-            fullName: "",
-            email: "",
-            whatsapp: "",
-            university: "",
-            semester: "",
-            examPrep: "",
-            examOther: "",
-            headshot: null,
-            foodPreference: "",
-            dietaryRestrictions: "",
-            accessibilityNeeds: "",
-            isGimsocMember: "",
-            membershipCode: "",
-            infoAccurate: false,
-            mediaConsent: "",
-            policies: false,
-            emailConsent: false,
-            whatsappConsent: false,
-          },
-        })
-      } catch (err) {
-        console.error("❌ Error submitting group ticket:", err)
-        alert("Submission failed. Please try again.")
-      } finally {
-        setIsSubmitting(false)
-      }
-    },
-    [groupSize, workshopPackage, paymentMethod, paymentProof, attendees]
-  )
+          withCredentials: true,
+        }
+      );
 
+      console.log("✅ Group ticket submitted successfully:", response.data);
+      alert("✅ Group ticket submitted successfully!");
+
+      // reset states here like before...
+    } catch (err) {
+      console.error("❌ Error submitting group ticket:", err);
+      alert("Submission failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  },
+  [groupSize, workshopPackage, paymentMethod, paymentProof, attendees]
+);
   // Calculate number of attendees based on group size
   const numAttendees = useMemo(() => {
     return groupSize ? parseInt(groupSize.split(" ")[2]) : 0

@@ -64,7 +64,7 @@ const navigate = useNavigate();
       setIsLoading(true)
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/auth/signup",
+          "https://gimsoc-backend.onrender.com/api/auth/signup",
           formData,
           { withCredentials: true }
         )

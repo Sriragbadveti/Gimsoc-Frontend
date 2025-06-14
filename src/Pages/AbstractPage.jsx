@@ -64,7 +64,7 @@ export default function AbstractPage() {
     }
 
     const response = await axios.post(
-      "http://localhost:8000/api/abstract/submission",
+      "https://gimsoc-backend.onrender.com/api/abstract/submission",
       form,
       {
         headers: {
