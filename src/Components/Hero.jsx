@@ -89,7 +89,7 @@ export default function Hero() {
               <img
   alt="MEDCON'25 Logo"
   src="/medcon-logo.png"
-  className="h-14 w-auto max-w-[160px] object-contain"
+  className="h-32 w-auto max-w-[280px] object-contain"
 />
             </a>
           </div>
