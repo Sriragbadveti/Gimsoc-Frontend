@@ -182,7 +182,7 @@ export default function AdminDashboard() {
     try {
       const response = await axios.get(url, {
         responseType: "blob",
-        withCredentials: true,
+        
       })
       const downloadUrl = window.URL.createObjectURL(response.data)
       const link = document.createElement("a")
