@@ -52,7 +52,7 @@ export default function TsuTicket() {
     setIsSubmitting(true)
 
     const form = new FormData()
-    form.append("ticketType", "TSU Student")
+    form.append("ticketType", "TSU")
 
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
