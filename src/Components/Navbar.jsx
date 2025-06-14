@@ -17,12 +17,14 @@ const navigation = [
     subItems: [
       {
         name: "MEDCON'23",
-        href: "/medcon2024",
+        href: "/pdfs/medcon23.pdf",
+        download: true,
         description: "Previous year highlights",
       },
       {
         name: "MEDCON'24",
-        href: "/medcon2023",
+        href: "/pdfs/medcon24.pdf",
+        download: true,
         description: "Past conference details",
       },
       {
@@ -112,8 +114,15 @@ const Navbar = () => {
                 <div
                   key={item.name}
                   className="relative group"
-                  onMouseEnter={() => setAboutDropdownOpen(true)}
-                  onMouseLeave={() => setAboutDropdownOpen(false)}
+                  onMouseEnter={() => {
+                    clearTimeout(window.aboutDropdownTimeout)
+                    setAboutDropdownOpen(true)
+                  }}
+                  onMouseLeave={() => {
+                    window.aboutDropdownTimeout = setTimeout(() => {
+                      setAboutDropdownOpen(false)
+                    }, 200) // 200ms delay before closing
+                  }}
                 >
                   <button className="text-sm font-semibold text-white inline-flex items-center">
                     {item.name}
@@ -133,6 +142,7 @@ const Navbar = () => {
                         <a
                           key={subItem.name}
                           href={subItem.href}
+                          download={subItem.download || false}
                           className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
                         >
                           {subItem.name}
