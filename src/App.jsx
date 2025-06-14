@@ -6,7 +6,7 @@ import { ScrollReveal } from "./Pages/ScrollReveal"
 import { SparklesCore } from "../Animations/Sparkles"
 
 import LoginForm from "./Pages/LoginForm"
-import SignupForm from "./Pages/SignUpForm"
+
 import Hero from "./Components/Hero"
 import Information from "./Components/Information"
 import About from "./Components/About"
@@ -25,6 +25,8 @@ import AttendeeDashboard from "./Dashboard/AttendeeDashboard"
 import AdminTicketDashboard from "./Pages/AdminPage"
 import AbstractPage from "./Pages/AbstractPage"
 import ExecutiveTicket from "./questionnaires/ExecutiveTicket"
+import SignUpForm from "./Pages/SignUpForm"
+
 
 
 const HomePage = () => (
@@ -95,7 +97,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/signup" element={<SignUpForm/>} />
           <Route path="/tickets" element={<TicketDisplay />} />
           <Route path="/individual-ticket" element={<IndividualTicket/>}/>
           <Route path="/group-ticket" element={<GroupTicket/>}/>
