@@ -159,7 +159,7 @@ function classNames(...classes) {
 export default function Tickets() {
   return (
     <div className="bg-white">
-      <Navbar />
+      <Navbar textColor="black" />
 
       <div className="relative isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
         {/* Background gradient */}
