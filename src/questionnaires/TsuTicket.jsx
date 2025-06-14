@@ -69,7 +69,7 @@ export default function TsuTicket() {
     })
 
     try {
-      const response = await axios.post("https://gimsoc-backend.onrender.com/api/ticket/submit", form, {
+      const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
