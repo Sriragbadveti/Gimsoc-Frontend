@@ -119,7 +119,7 @@ export default function AbstractPage() {
           {/* Header */}
           <div className="bg-gray-900 px-8 py-6">
             <h1 className="text-3xl font-bold text-white text-center">Abstract Submission</h1>
-            <p className="text-gray-300 text-center mt-2">MEDCON 2025</p>
+            <p className="text-gray-300 text-center mt-2">MEDCON'25</p>
           </div>
 
           {/* Important Notice */}
