@@ -75,6 +75,7 @@ export default function AbstractPage() {
     )
 
     alert("✅ Abstract submitted successfully!")
+    window.location.href = "/abstract-success";
     console.log("Server Response:", response.data)
 
     // Reset form
@@ -281,7 +282,7 @@ export default function AbstractPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Upload Your Abstract File *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Upload Your Abstract File (Name your pdf as - (Lastname_Firstname_AbstractTitle) )*</label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                   <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                   <input

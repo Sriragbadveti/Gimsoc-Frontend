@@ -27,6 +27,7 @@ import AbstractPage from "./Pages/AbstractPage"
 import ExecutiveTicket from "./questionnaires/ExecutiveTicket"
 import TicketSuccessPage from "./Pages/TicketSuccessPage"
 import TicketsSoon from "./Pages/TicketsSoon"
+import AbstractSuccessPage from "./Pages/AbstractSuccess"
 
 
 
@@ -114,6 +115,7 @@ const App = () => {
           <Route path="/executive-ticket" element={<ExecutiveTicket/>}/>
           <Route path="/ticket-success" element={<TicketSuccessPage/>}/>
           <Route path="/comingsoon" element={<TicketsSoon/>}/>
+          <Route path="/abstract-success" element={<AbstractSuccessPage/>}/>
         </Routes>
       )}
     </div>
