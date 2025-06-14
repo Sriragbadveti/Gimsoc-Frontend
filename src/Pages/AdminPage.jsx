@@ -761,14 +761,14 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {abstract.abstractFileUrl ? (
-                          <button
-                            onClick={() =>
-                              handleDownload(
-                                abstract.abstractFileUrl,
-                                `abstract-${abstract.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
-                              )
-                            }
+                        {abstract.abstractFileURL ? (
+  <button
+    onClick={() =>
+      handleDownload(
+        abstract.abstractFileURL,
+        `abstract-${abstract.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
+      )
+    }
                             className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
                           >
                             <FileText className="h-4 w-4" />
@@ -913,14 +913,14 @@ export default function AdminDashboard() {
 
               <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                 <div className="flex items-center gap-4">
-                  {abstract.abstractFileUrl && (
-                    <button
-                      onClick={() =>
-                        handleDownload(
-                          abstract.abstractFileUrl,
-                          `abstract-${abstract.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
-                        )
-                      }
+                  {abstract.abstractFileURL && (
+  <button
+    onClick={() =>
+      handleDownload(
+        abstract.abstractFileURL,
+        `abstract-${abstract.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`,
+      )
+    }
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
                     >
                       <FileText className="h-4 w-4" />
