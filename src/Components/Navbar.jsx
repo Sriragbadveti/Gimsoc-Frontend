@@ -9,8 +9,8 @@ import Cookies from "js-cookie"
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Dashboard", href: "/attendeedashboard" },
-  { name: "Register for MEDCON", href: "/tickets" },
+  
+  { name: "Register for MEDCON", href: "/comingsoon" },
   {
     name: "About us",
     href: "#",
@@ -151,27 +151,13 @@ const Navbar = () => {
           <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
             {isLoggedIn ? (
               <>
-                {!isCheckingAccess ? (
-                  <button
-                    onClick={() => hasAccess && navigate("/attendeedashboard")}
-                    disabled={!hasAccess}
-                    className={`group relative text-sm font-semibold px-3 py-2 transition rounded-md ${
-                      hasAccess
-                        ? "text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 cursor-pointer"
-                        : "text-gray-400 bg-gray-600 cursor-not-allowed opacity-50"
-                    }`}
-                    title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
-                  >
-                    Dashboard
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="text-gray-300 bg-gray-500 cursor-not-allowed px-3 py-2 rounded-md text-sm font-semibold"
-                  >
-                    Checking Access...
-                  </button>
-                )}
+                <button
+                  disabled
+                  className="group relative text-sm font-semibold px-3 py-2 bg-gray-500 text-white cursor-not-allowed opacity-50 rounded-md"
+                  title="Dashboard will be accessible later"
+                >
+                  Dashboard
+                </button>
 
                 <button
                   onClick={handleLogout}
@@ -253,32 +239,13 @@ const Navbar = () => {
                 <div className="py-6 space-y-2">
                   {isLoggedIn ? (
                     <>
-                      {!isCheckingAccess ? (
-                        <button
-                          onClick={() => {
-                            if (hasAccess) {
-                              setMobileMenuOpen(false)
-                              navigate("/attendeedashboard")
-                            }
-                          }}
-                          disabled={!hasAccess}
-                          className={`-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold ${
-                            hasAccess
-                              ? "text-gray-900 hover:bg-gray-50 cursor-pointer"
-                              : "text-gray-400 cursor-not-allowed opacity-50"
-                          }`}
-                          title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
-                        >
-                          Dashboard
-                        </button>
-                      ) : (
-                        <button
-                          disabled
-                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-400 cursor-not-allowed opacity-50"
-                        >
-                          Checking Access...
-                        </button>
-                      )}
+                      <button
+                        disabled
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-400 cursor-not-allowed opacity-50"
+                        title="Dashboard will be accessible later"
+                      >
+                        Dashboard
+                      </button>
                       <button
                         onClick={() => {
                           setMobileMenuOpen(false)

@@ -1,41 +1,79 @@
 "use client"
 
-import { useState  } from "react"
-import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, FileText } from "lucide-react"
+import { useState } from "react"
+import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, CheckCircle, Users } from "lucide-react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+
 export default function IndividualTicket() {
   const [formData, setFormData] = useState({
+    // Ticket Classification
+    ticketCategory: "Standard",
+    subType: "",
+
+    // Student/Member Status (only one can be selected)
+    isTsuStudent: "",
+    tsuEmail: "",
+    isGimsocMember: "",
+    membershipCode: "",
+
+    // Personal Information
     fullName: "",
     email: "",
     whatsapp: "",
-    university: "",
+
+    // Academic Information
+    universityName: "",
     semester: "",
     examPrep: "",
     examOther: "",
+
+    // Uploads
     headshot: null,
+    paymentProof: null,
+
+    // Preferences
     foodPreference: "",
     dietaryRestrictions: "",
     accessibilityNeeds: "",
-    membershipCode: "",
+
+    // Consent
+    discountConfirmation: false,
     infoAccurate: false,
     mediaConsent: "",
     policies: false,
     emailConsent: false,
     whatsappConsent: false,
+
+    // Payment
     paymentMethod: "",
-    paymentProof: null,
   })
 
-  // Payment states
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigate = useNavigate();
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
+
+    // Handle mutual exclusivity between TSU student and GIMSOC member
+    if (name === "isTsuStudent" && value === "Yes") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        isGimsocMember: "No", // Reset GIMSOC membership if TSU student is selected
+        membershipCode: "", // Clear membership code
+      }))
+    } else if (name === "isGimsocMember" && value === "Yes") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        isTsuStudent: "No", // Reset TSU student if GIMSOC member is selected
+        tsuEmail: "", // Clear TSU email
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }))
+    }
   }
 
   const handleFileChange = (e) => {
@@ -46,30 +84,52 @@ export default function IndividualTicket() {
     }))
   }
 
-  // Fixed price for individual ticket
-  const ticketPrice = 75 // Fixed price in GEL
+  // Calculate pricing based on selections
+  const calculatePrice = () => {
+    if (formData.isTsuStudent === "Yes") {
+      return 45 // TSU student discount
+    } else if (formData.isGimsocMember === "Yes") {
+      return 65 // GIMSOC member price
+    } else {
+      return 75 // Regular price
+    }
+  }
+
+  // Determine subType based on selections
+  const getSubType = () => {
+    if (formData.isTsuStudent === "Yes") {
+      return "TSU"
+    } else if (formData.isGimsocMember === "Yes") {
+      return "GIMSOC"
+    } else {
+      return "Non-GIMSOC"
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     setIsSubmitting(true)
 
     const form = new FormData()
-    form.append("ticketType", "Individual")
 
+    // Set ticket classification
+    form.append("ticketCategory", "Standard")
+    form.append("subType", getSubType())
+
+    // Convert form data according to schema
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        // Convert string to Boolean for specific fields
-        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
+      if (value !== null && value !== undefined && value !== "") {
+        // Boolean conversions
+        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "discountConfirmation"].includes(key)) {
           form.append(key, value === true || value === "true" || value === "Yes")
-        } else if (["isGimsocMember", "mediaConsent"].includes(key)) {
+        } else if (["isTsuStudent", "isGimsocMember", "mediaConsent"].includes(key)) {
           form.append(key, value === "Yes")
         }
         // File fields
         else if (key === "headshot" || key === "paymentProof") {
-          form.append(key, value) // multer handles File object
+          form.append(key, value)
         }
-        // All others as-is
+        // Regular fields
         else {
           form.append(key, value)
         }
@@ -85,9 +145,7 @@ export default function IndividualTicket() {
       })
 
       console.log("✅ Submitted successfully:", response.data)
-      navigate("/ticket-success")
       alert("Form submitted successfully!")
-      navigate
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       alert("Form submission failed.")
@@ -117,7 +175,6 @@ export default function IndividualTicket() {
   ]
 
   const semesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
-
   const exams = ["USMLE", "AMC", "PLAB", "FMGE", "EMREE", "IFOM"]
 
   return (
@@ -128,16 +185,158 @@ export default function IndividualTicket() {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
             <h1 className="text-3xl font-bold text-white text-center">Individual Ticket Registration</h1>
             <p className="text-blue-100 text-center mt-2">Complete your conference registration below</p>
-            {/* Price Display in Header */}
+
+            {/* Dynamic Price Display */}
             <div className="text-center mt-4">
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
                 <span className="text-white text-lg font-medium">Ticket Price: </span>
-                <span className="text-white text-2xl font-bold">{ticketPrice} GEL</span>
+                <span className="text-white text-2xl font-bold">{calculatePrice()} GEL</span>
+                {formData.isTsuStudent === "Yes" && (
+                  <div className="text-green-200 text-sm mt-1">✓ TSU Student Discount Applied!</div>
+                )}
+                {formData.isGimsocMember === "Yes" && (
+                  <div className="text-purple-200 text-sm mt-1">✓ GIMSOC Member Discount Applied!</div>
+                )}
               </div>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-10">
+            {/* Eligibility Check */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-semibold text-gray-800">Student & Membership Status</h2>
+              </div>
+
+              {/* TSU Student Check */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Are you a currently enrolled student at Ivane Javakhishvili Tbilisi State University – Faculty of
+                  Medicine? *
+                </label>
+                <div className="space-y-3">
+                  {["Yes", "No"].map((option) => (
+                    <label
+                      key={option}
+                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all"
+                    >
+                      <input
+                        type="radio"
+                        name="isTsuStudent"
+                        value={option}
+                        checked={formData.isTsuStudent === option}
+                        onChange={handleInputChange}
+                        className="text-blue-600 focus:ring-blue-500"
+                        required
+                      />
+                      <span className="text-gray-700 font-medium">{option}</span>
+                      {option === "Yes" && (
+                        <span className="ml-auto text-green-600 text-sm font-medium">45 GEL (TSU Discount)</span>
+                      )}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* TSU Email Validation - Only show if TSU student */}
+              {formData.isTsuStudent === "Yes" && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    TSU Email Address (for verification) *
+                  </label>
+                  <input
+                    type="email"
+                    name="tsuEmail"
+                    value={formData.tsuEmail}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Enter your TSU email ID (e.g., student@tsu.ge)"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Please enter your official TSU email address for verification
+                  </p>
+                </div>
+              )}
+
+              {/* GIMSOC Membership Check - Only show if NOT TSU student */}
+              {formData.isTsuStudent === "No" && (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Users className="w-5 h-5 text-purple-600" />
+                    <h3 className="text-lg font-semibold text-gray-800">GIMSOC Membership</h3>
+                  </div>
+
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Are you a GIMSOC member? *</label>
+                  <div className="space-y-3">
+                    {["Yes", "No"].map((option) => (
+                      <label
+                        key={option}
+                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all"
+                      >
+                        <input
+                          type="radio"
+                          name="isGimsocMember"
+                          value={option}
+                          checked={formData.isGimsocMember === option}
+                          onChange={handleInputChange}
+                          className="text-purple-600 focus:ring-purple-500"
+                          required
+                        />
+                        <span className="text-gray-700 font-medium">{option}</span>
+                        <span className="ml-auto text-sm font-medium">
+                          {option === "Yes" ? (
+                            <span className="text-purple-600">65 GEL (GIMSOC Discount)</span>
+                          ) : (
+                            <span className="text-gray-600">75 GEL (Regular Price)</span>
+                          )}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+
+                  {/* GIMSOC Membership Code - Only show if GIMSOC member */}
+                  {formData.isGimsocMember === "Yes" && (
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">GIMSOC Membership Code *</label>
+                      <input
+                        type="text"
+                        name="membershipCode"
+                        value={formData.membershipCode}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="Enter your GIMSOC membership code"
+                        required
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Status Summary */}
+              {(formData.isTsuStudent === "Yes" || formData.isGimsocMember === "Yes") && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-gray-800">Registration Status:</h4>
+                      <p className="text-sm text-gray-600">
+                        {formData.isTsuStudent === "Yes"
+                          ? "TSU Student - Eligible for student discount"
+                          : "GIMSOC Member - Eligible for member discount"}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-green-600">{calculatePrice()} GEL</div>
+                      <div className="text-xs text-gray-500">Discounted Price</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </section>
+
             {/* Personal Information */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
@@ -208,20 +407,30 @@ export default function IndividualTicket() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">University Name *</label>
-                  <select
-                    name="university"
-                    value={formData.university}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    required
-                  >
-                    <option value="">Select your university</option>
-                    {universities.map((uni, index) => (
-                      <option key={index} value={uni}>
-                        {uni}
-                      </option>
-                    ))}
-                  </select>
+                  {formData.isTsuStudent === "Yes" ? (
+                    <input
+                      type="text"
+                      name="universityName"
+                      value="Ivane Javakhishvili Tbilisi State University – Faculty of Medicine"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600"
+                      readOnly
+                    />
+                  ) : (
+                    <select
+                      name="universityName"
+                      value={formData.universityName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      required
+                    >
+                      <option value="">Select your university</option>
+                      {universities.map((uni, index) => (
+                        <option key={index} value={uni}>
+                          {uni}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div>
@@ -288,7 +497,7 @@ export default function IndividualTicket() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Upload a Headshot for Your Conference ID Card
+                  Upload a Headshot for Your Conference ID Card *
                 </label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                   <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
@@ -299,12 +508,16 @@ export default function IndividualTicket() {
                     accept="image/*"
                     className="hidden"
                     id="headshot-upload"
+                    required
                   />
                   <label htmlFor="headshot-upload" className="cursor-pointer">
                     <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
                     <span className="text-gray-500"> or drag and drop</span>
                   </label>
                   <p className="text-xs text-gray-500 mt-1">Clear, front-facing photo with plain background</p>
+                  {formData.headshot && (
+                    <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.headshot.name}</p>
+                  )}
                 </div>
               </div>
             </section>
@@ -322,7 +535,7 @@ export default function IndividualTicket() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">Preferred Food Option *</label>
                   <div className="space-y-2">
-                    {["Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
+                    {["Vegetarian", "Non-Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
                       <label key={option} className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="radio"
@@ -331,6 +544,7 @@ export default function IndividualTicket() {
                           checked={formData.foodPreference === option}
                           onChange={handleInputChange}
                           className="text-blue-600 focus:ring-blue-500"
+                          required
                         />
                         <span className="text-sm text-gray-700">{option}</span>
                       </label>
@@ -366,34 +580,35 @@ export default function IndividualTicket() {
               </div>
             </section>
 
-            {/* GIMSOC Membership */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-indigo-100 rounded-lg">
-                  <FileText className="w-6 h-6 text-indigo-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">GIMSOC Membership</h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">GIMSOC Membership Code *</label>
-                <input
-                  type="text"
-                  name="membershipCode"
-                  value={formData.membershipCode}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter your membership code"
-                  required
-                />
-              </div>
-            </section>
-
             {/* Declaration and Consent */}
             <section className="space-y-6">
               <h2 className="text-2xl font-semibold text-gray-800">Declaration and Consent</h2>
 
               <div className="space-y-4">
+                {/* Discount Confirmation for TSU/GIMSOC */}
+                {(formData.isTsuStudent === "Yes" || formData.isGimsocMember === "Yes") && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <label className="flex items-start space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="discountConfirmation"
+                        checked={formData.discountConfirmation}
+                        onChange={handleInputChange}
+                        className="mt-1 text-green-600 focus:ring-green-500"
+                        required
+                      />
+                      <div>
+                        <span className="text-sm font-medium text-gray-700">Discount Confirmation *</span>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {formData.isTsuStudent === "Yes"
+                            ? "I acknowledge that I am eligible for the TSU student discount and understand that this rate applies only with valid proof of enrollment."
+                            : "I acknowledge that I am eligible for the GIMSOC member discount and understand that this rate applies only with valid membership verification."}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                )}
+
                 <label className="flex items-start space-x-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -424,6 +639,7 @@ export default function IndividualTicket() {
                           checked={formData.mediaConsent === option}
                           onChange={handleInputChange}
                           className="text-blue-600 focus:ring-blue-500"
+                          required
                         />
                         <span className="text-sm text-gray-700">{option}</span>
                       </label>
@@ -484,13 +700,19 @@ export default function IndividualTicket() {
                 <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
               </div>
 
-              {/* Fixed Price Display */}
+              {/* Dynamic Price Display */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-medium text-gray-700">Total Amount:</span>
-                  <span className="text-2xl font-bold text-blue-600">{ticketPrice} GEL</span>
+                  <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">Individual Conference Ticket</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {formData.isTsuStudent === "Yes"
+                    ? "TSU Student Ticket"
+                    : formData.isGimsocMember === "Yes"
+                      ? "GIMSOC Member Ticket"
+                      : "Individual Conference Ticket"}
+                </p>
               </div>
 
               <div>
@@ -510,6 +732,7 @@ export default function IndividualTicket() {
                         checked={formData.paymentMethod === method}
                         onChange={handleInputChange}
                         className="text-blue-600 focus:ring-blue-500"
+                        required
                       />
                       <span className="text-gray-700">{method}</span>
                     </label>
@@ -524,9 +747,7 @@ export default function IndividualTicket() {
 
                     <div className="space-y-4">
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">
-                          BANK OF GEORGIA
-                        </h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">BANK OF GEORGIA</h4>
                         <div className="space-y-2 text-sm">
                           <p>
                             <span className="font-medium">Account with institution:</span> Bank of Georgia
@@ -583,12 +804,16 @@ export default function IndividualTicket() {
                         accept=".pdf"
                         className="hidden"
                         id="payment-upload"
+                        required
                       />
                       <label htmlFor="payment-upload" className="cursor-pointer">
                         <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
                         <span className="text-gray-500"> or drag and drop</span>
                       </label>
                       <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                      {formData.paymentProof && (
+                        <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.paymentProof.name}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -606,7 +831,7 @@ export default function IndividualTicket() {
                     : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200"
                 }`}
               >
-                {isSubmitting ? "Submitting..." : "Submit Registration"}
+                {isSubmitting ? "Submitting..." : `Submit Registration - ${calculatePrice()} GEL`}
               </button>
             </div>
           </form>

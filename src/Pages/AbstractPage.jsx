@@ -134,10 +134,7 @@ export default function AbstractPage() {
                       Once abstracts are accepted, participants must purchase a ticket. If you have not purchased a
                       ticket, your abstract will be disqualified.
                     </li>
-                    <li>
-                      Make sure the uploaded file has public access. Submissions that are not viewable by the organizing
-                      team will be automatically disqualified.
-                    </li>
+                   
                   </ul>
                 </div>
               </div>

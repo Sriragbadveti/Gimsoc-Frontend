@@ -1,41 +1,81 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, Users, ArrowLeft } from "lucide-react"
+import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, CheckCircle, Users, Star } from "lucide-react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+
 export default function AllInclusiveTicket() {
-  const [ticketType, setTicketType] = useState("") // "member" or "non-member"
   const [formData, setFormData] = useState({
+    // Ticket Classification
+    ticketCategory: "All-Inclusive",
+    subType: "",
+
+    // Student/Member Status (only one can be selected)
+    isTsuStudent: "",
+    tsuEmail: "",
+    isGimsocMember: "",
+    membershipCode: "",
+
+    // Personal Information
     fullName: "",
     email: "",
     whatsapp: "",
-    university: "",
+
+    // Academic Information
+    universityName: "",
     semester: "",
     examPrep: "",
     examOther: "",
+
+    // Uploads
     headshot: null,
+    paymentProof: null,
+
+    // Preferences
     foodPreference: "",
     dietaryRestrictions: "",
     accessibilityNeeds: "",
-    membershipCode: "",
+
+    // Consent
+    discountConfirmation: false,
     infoAccurate: false,
     mediaConsent: "",
     policies: false,
     emailConsent: false,
     whatsappConsent: false,
+
+    // Payment
     paymentMethod: "",
-    paymentProof: null,
   })
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
+
+    // Handle mutual exclusivity between TSU student and GIMSOC member
+    if (name === "isTsuStudent" && value === "Yes") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        isGimsocMember: "No", // Reset GIMSOC membership if TSU student is selected
+        membershipCode: "", // Clear membership code
+      }))
+    } else if (name === "isGimsocMember" && value === "Yes") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        isTsuStudent: "No", // Reset TSU student if GIMSOC member is selected
+        tsuEmail: "", // Clear TSU email
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }))
+    }
   }
-const navigate = useNavigate();
+
   const handleFileChange = (e) => {
     const { name, files } = e.target
     setFormData((prev) => ({
@@ -44,18 +84,53 @@ const navigate = useNavigate();
     }))
   }
 
+  // Calculate pricing based on selections
+  const calculatePrice = () => {
+    if (formData.isTsuStudent === "Yes") {
+      return 55 // TSU student all-inclusive discount
+    } else if (formData.isGimsocMember === "Yes") {
+      return 120 // GIMSOC member all-inclusive price
+    } else {
+      return 150 // Regular all-inclusive price
+    }
+  }
+
+  // Determine subType based on selections
+  const getSubType = () => {
+    if (formData.isTsuStudent === "Yes") {
+      return "TSU"
+    } else if (formData.isGimsocMember === "Yes") {
+      return "GIMSOC"
+    } else {
+      return "Non-GIMSOC"
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsSubmitting(true)
 
     const form = new FormData()
-    form.append("ticketType", "All Inclusive")
 
+    // Set ticket classification
+    form.append("ticketCategory", "All-Inclusive")
+    form.append("subType", getSubType())
+
+    // Convert form data according to schema
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
+      if (value !== null && value !== undefined && value !== "") {
+        // Boolean conversions
+        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "discountConfirmation"].includes(key)) {
+          form.append(key, value === true || value === "true" || value === "Yes")
+        } else if (["isTsuStudent", "isGimsocMember", "mediaConsent"].includes(key)) {
+          form.append(key, value === "Yes")
+        }
         // File fields
-        if (key === "headshot" || key === "paymentProof") {
-          form.append(key, value) // multer handles File object
-        } else {
+        else if (key === "headshot" || key === "paymentProof") {
+          form.append(key, value)
+        }
+        // Regular fields
+        else {
           form.append(key, value)
         }
       }
@@ -71,41 +146,12 @@ const navigate = useNavigate();
 
       console.log("✅ Submitted successfully:", response.data)
       alert("Form submitted successfully!")
-      navigate("/ticket-success")
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       alert("Form submission failed.")
+    } finally {
+      setIsSubmitting(false)
     }
-  }
-
-  const handleBack = () => {
-    setTicketType("")
-    setFormData({
-      fullName: "",
-      email: "",
-      whatsapp: "",
-      university: "",
-      semester: "",
-      examPrep: "",
-      examOther: "",
-      headshot: null,
-      foodPreference: "",
-      dietaryRestrictions: "",
-      accessibilityNeeds: "",
-      membershipCode: "",
-      infoAccurate: false,
-      mediaConsent: "",
-      policies: false,
-      emailConsent: false,
-      whatsappConsent: false,
-      paymentMethod: "",
-      paymentProof: null,
-    })
-  }
-
-  // Fixed prices for all inclusive tickets
-  const getTicketPrice = () => {
-    return ticketType === "member" ? 120 : 150 // Member: 120 GEL, Non-member: 150 GEL
   }
 
   const universities = [
@@ -128,104 +174,172 @@ const navigate = useNavigate();
     "Other",
   ]
 
-  const memberSemesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
-  const nonMemberSemesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`)
+  const semesters = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
   const exams = ["USMLE", "AMC", "PLAB", "FMGE", "EMREE", "IFOM"]
 
-  // Ticket Type Selection Screen
-  if (!ticketType) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
-              <h1 className="text-3xl font-bold text-white text-center">All Inclusive Ticket</h1>
-              <p className="text-blue-100 text-center mt-2">Choose your registration type</p>
-            </div>
-
-            <div className="p-8">
-              <div className="text-center mb-8">
-                <div className="p-4 bg-blue-100 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-                  <Users className="w-10 h-10 text-blue-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-2">Select Your Ticket Type</h2>
-                <p className="text-gray-600">Choose the option that applies to you</p>
-              </div>
-
-              <div className="space-y-4 max-w-md mx-auto">
-                <button
-                  onClick={() => setTicketType("member")}
-                  className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all group"
-                >
-                  <div className="text-center">
-                    <div className="p-3 bg-green-100 rounded-lg w-16 h-16 mx-auto mb-3 flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                      <User className="w-8 h-8 text-green-600" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">GIMSOC Member Ticket</h3>
-                    <p className="text-sm text-gray-600 mb-3">For current GIMSOC members with membership code</p>
-                    <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-2">
-                      <span className="text-green-700 font-bold text-xl">120 GEL</span>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => setTicketType("non-member")}
-                  className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all group"
-                >
-                  <div className="text-center">
-                    <div className="p-3 bg-purple-100 rounded-lg w-16 h-16 mx-auto mb-3 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                      <Users className="w-8 h-8 text-purple-600" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Non-GIMSOC Member Ticket</h3>
-                    <p className="text-sm text-gray-600 mb-3">For students who are not GIMSOC members</p>
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg px-4 py-2">
-                      <span className="text-purple-700 font-bold text-xl">150 GEL</span>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Main Registration Form
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
-            <div className="flex items-center justify-between">
-              <button
-                onClick={handleBack}
-                className="text-white hover:text-blue-200 transition-colors flex items-center gap-2"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                Back
-              </button>
-              <div className="text-center flex-1">
-                <h1 className="text-3xl font-bold text-white">
-                  {ticketType === "member" ? "GIMSOC Member" : "Non-GIMSOC Member"} Registration
-                </h1>
-                <p className="text-blue-100 mt-2">All Inclusive Ticket</p>
-                {/* Price Display in Header */}
-                <div className="mt-4">
-                  <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
-                    <span className="text-white text-lg font-medium">Ticket Price: </span>
-                    <span className="text-white text-2xl font-bold">{getTicketPrice()} GEL</span>
+            <h1 className="text-3xl font-bold text-white text-center">All-Inclusive Ticket Registration</h1>
+            <p className="text-blue-100 text-center mt-2">Complete your all-inclusive conference registration</p>
+
+            {/* Dynamic Price Display */}
+            <div className="text-center mt-4">
+              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                <span className="text-white text-lg font-medium">Ticket Price: </span>
+                <span className="text-white text-2xl font-bold">{calculatePrice()} GEL</span>
+                {formData.isTsuStudent === "Yes" && (
+                  <div className="flex items-center justify-center gap-1 mt-1">
+                    <Star className="w-4 h-4 text-yellow-300" />
+                    <span className="text-yellow-300 text-sm">TSU Student All-Inclusive Discount!</span>
                   </div>
-                </div>
+                )}
+                {formData.isGimsocMember === "Yes" && (
+                  <div className="text-purple-200 text-sm mt-1">✓ GIMSOC Member All-Inclusive Discount!</div>
+                )}
               </div>
-              <div className="w-16"></div>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-10">
+            {/* Eligibility Check */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-semibold text-gray-800">Student & Membership Status</h2>
+              </div>
+
+              {/* TSU Student Check */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Are you a currently enrolled student at Ivane Javakhishvili Tbilisi State University – Faculty of
+                  Medicine? *
+                </label>
+                <div className="space-y-3">
+                  {["Yes", "No"].map((option) => (
+                    <label
+                      key={option}
+                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all"
+                    >
+                      <input
+                        type="radio"
+                        name="isTsuStudent"
+                        value={option}
+                        checked={formData.isTsuStudent === option}
+                        onChange={handleInputChange}
+                        className="text-blue-600 focus:ring-blue-500"
+                        required
+                      />
+                      <span className="text-gray-700 font-medium">{option}</span>
+                      {option === "Yes" && (
+                        <span className="ml-auto text-green-600 text-sm font-medium">55 GEL (TSU All-Inclusive)</span>
+                      )}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* TSU Email Validation - Only show if TSU student */}
+              {formData.isTsuStudent === "Yes" && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    TSU Email Address (for verification) *
+                  </label>
+                  <input
+                    type="email"
+                    name="tsuEmail"
+                    value={formData.tsuEmail}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Enter your TSU email ID (e.g., student@tsu.ge)"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Please enter your official TSU email address for verification
+                  </p>
+                </div>
+              )}
+
+              {/* GIMSOC Membership Check - Only show if NOT TSU student */}
+              {formData.isTsuStudent === "No" && (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Users className="w-5 h-5 text-purple-600" />
+                    <h3 className="text-lg font-semibold text-gray-800">GIMSOC Membership</h3>
+                  </div>
+
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Are you a GIMSOC member? *</label>
+                  <div className="space-y-3">
+                    {["Yes", "No"].map((option) => (
+                      <label
+                        key={option}
+                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all"
+                      >
+                        <input
+                          type="radio"
+                          name="isGimsocMember"
+                          value={option}
+                          checked={formData.isGimsocMember === option}
+                          onChange={handleInputChange}
+                          className="text-purple-600 focus:ring-purple-500"
+                          required
+                        />
+                        <span className="text-gray-700 font-medium">{option}</span>
+                        <span className="ml-auto text-sm font-medium">
+                          {option === "Yes" ? (
+                            <span className="text-purple-600">120 GEL (GIMSOC All-Inclusive)</span>
+                          ) : (
+                            <span className="text-gray-600">150 GEL (Regular All-Inclusive)</span>
+                          )}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+
+                  {/* GIMSOC Membership Code - Only show if GIMSOC member */}
+                  {formData.isGimsocMember === "Yes" && (
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">GIMSOC Membership Code *</label>
+                      <input
+                        type="text"
+                        name="membershipCode"
+                        value={formData.membershipCode}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="Enter your GIMSOC membership code"
+                        required
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Status Summary */}
+              {(formData.isTsuStudent === "Yes" || formData.isGimsocMember === "Yes") && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-gray-800">All-Inclusive Package Status:</h4>
+                      <p className="text-sm text-gray-600">
+                        {formData.isTsuStudent === "Yes"
+                          ? "TSU Student - Premium all-inclusive discount"
+                          : "GIMSOC Member - All-inclusive member discount"}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-green-600">{calculatePrice()} GEL</div>
+                      <div className="text-xs text-gray-500">All-Inclusive Price</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </section>
+
             {/* Personal Information */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
@@ -296,20 +410,30 @@ const navigate = useNavigate();
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">University Name *</label>
-                  <select
-                    name="university"
-                    value={formData.university}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    required
-                  >
-                    <option value="">Select your university</option>
-                    {universities.map((uni, index) => (
-                      <option key={index} value={uni}>
-                        {uni}
-                      </option>
-                    ))}
-                  </select>
+                  {formData.isTsuStudent === "Yes" ? (
+                    <input
+                      type="text"
+                      name="universityName"
+                      value="Ivane Javakhishvili Tbilisi State University – Faculty of Medicine"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600"
+                      readOnly
+                    />
+                  ) : (
+                    <select
+                      name="universityName"
+                      value={formData.universityName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      required
+                    >
+                      <option value="">Select your university</option>
+                      {universities.map((uni, index) => (
+                        <option key={index} value={uni}>
+                          {uni}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div>
@@ -324,7 +448,7 @@ const navigate = useNavigate();
                     required
                   >
                     <option value="">Select semester</option>
-                    {(ticketType === "member" ? memberSemesters : nonMemberSemesters).map((sem, index) => (
+                    {semesters.map((sem, index) => (
                       <option key={index} value={sem}>
                         {sem}
                       </option>
@@ -394,6 +518,9 @@ const navigate = useNavigate();
                   </label>
                   <p className="text-xs text-gray-500 mt-1">Clear, front-facing photo with plain background</p>
                   <p className="text-xs text-gray-500">Your ID will be made without a photo if none is uploaded</p>
+                  {formData.headshot && (
+                    <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.headshot.name}</p>
+                  )}
                 </div>
               </div>
             </section>
@@ -410,35 +537,20 @@ const navigate = useNavigate();
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">Preferred Food Option *</label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {ticketType === "member"
-                    ? ["Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
-                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="foodPreference"
-                            value={option}
-                            checked={formData.foodPreference === option}
-                            onChange={handleInputChange}
-                            className="text-blue-600 focus:ring-blue-500"
-                            required
-                          />
-                          <span className="text-sm text-gray-700">{option}</span>
-                        </label>
-                      ))
-                    : ["Vegetarian", "Non-Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
-                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="foodPreference"
-                            value={option}
-                            checked={formData.foodPreference === option}
-                            onChange={handleInputChange}
-                            className="text-blue-600 focus:ring-blue-500"
-                            required
-                          />
-                          <span className="text-sm text-gray-700">{option}</span>
-                        </label>
-                      ))}
+                  {["Vegetarian", "Non-Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
+                    <label key={option} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="foodPreference"
+                        value={option}
+                        checked={formData.foodPreference === option}
+                        onChange={handleInputChange}
+                        className="text-blue-600 focus:ring-blue-500"
+                        required
+                      />
+                      <span className="text-sm text-gray-700">{option}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -471,36 +583,35 @@ const navigate = useNavigate();
               </div>
             </section>
 
-            {/* GIMSOC Membership - Only for members */}
-            {ticketType === "member" && (
-              <section className="space-y-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-indigo-100 rounded-lg">
-                    <User className="w-6 h-6 text-indigo-600" />
-                  </div>
-                  <h2 className="text-2xl font-semibold text-gray-800">GIMSOC Membership</h2>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">GIMSOC Membership Code *</label>
-                  <input
-                    type="text"
-                    name="membershipCode"
-                    value={formData.membershipCode}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Enter your membership code"
-                    required
-                  />
-                </div>
-              </section>
-            )}
-
             {/* Declaration and Consent */}
             <section className="space-y-6">
               <h2 className="text-2xl font-semibold text-gray-800">Declaration and Consent</h2>
 
               <div className="space-y-4">
+                {/* Discount Confirmation for TSU/GIMSOC */}
+                {(formData.isTsuStudent === "Yes" || formData.isGimsocMember === "Yes") && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <label className="flex items-start space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="discountConfirmation"
+                        checked={formData.discountConfirmation}
+                        onChange={handleInputChange}
+                        className="mt-1 text-green-600 focus:ring-green-500"
+                        required
+                      />
+                      <div>
+                        <span className="text-sm font-medium text-gray-700">Discount Confirmation *</span>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {formData.isTsuStudent === "Yes"
+                            ? "I acknowledge that I am eligible for the TSU student all-inclusive discount and understand that this rate applies only with valid proof of enrollment."
+                            : "I acknowledge that I am eligible for the GIMSOC member all-inclusive discount and understand that this rate applies only with valid membership verification."}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                )}
+
                 <label className="flex items-start space-x-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -531,6 +642,7 @@ const navigate = useNavigate();
                           checked={formData.mediaConsent === option}
                           onChange={handleInputChange}
                           className="text-blue-600 focus:ring-blue-500"
+                          required
                         />
                         <span className="text-sm text-gray-700">{option}</span>
                       </label>
@@ -552,8 +664,8 @@ const navigate = useNavigate();
                   </span>
                 </label>
 
-                {/* GIMSOC-specific consents - Only for members */}
-                {ticketType === "member" && (
+                {/* GIMSOC/TSU-specific consents */}
+                {(formData.isGimsocMember === "Yes" || formData.isTsuStudent === "Yes") && (
                   <>
                     <label className="flex items-start space-x-3 cursor-pointer">
                       <input
@@ -596,14 +708,18 @@ const navigate = useNavigate();
                 <h2 className="text-2xl font-semibold text-gray-800">Payment Confirmation</h2>
               </div>
 
-              {/* Fixed Price Display */}
+              {/* Dynamic Price Display */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-medium text-gray-700">Total Amount:</span>
-                  <span className="text-2xl font-bold text-blue-600">{getTicketPrice()} GEL</span>
+                  <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">
-                  All Inclusive {ticketType === "member" ? "GIMSOC Member" : "Non-GIMSOC Member"} Ticket
+                  {formData.isTsuStudent === "Yes"
+                    ? "TSU Student All-Inclusive Ticket"
+                    : formData.isGimsocMember === "Yes"
+                      ? "GIMSOC Member All-Inclusive Ticket"
+                      : "All-Inclusive Conference Ticket"}
                 </p>
               </div>
 
@@ -639,9 +755,7 @@ const navigate = useNavigate();
 
                     <div className="space-y-4">
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">
-                          BANK OF GEORGIA
-                        </h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">BANK OF GEORGIA</h4>
                         <div className="space-y-2 text-sm">
                           <p>
                             <span className="font-medium">Account with institution:</span> Bank of Georgia
@@ -698,12 +812,16 @@ const navigate = useNavigate();
                         accept=".pdf"
                         className="hidden"
                         id="payment-upload"
+                        required
                       />
                       <label htmlFor="payment-upload" className="cursor-pointer">
                         <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
                         <span className="text-gray-500"> or drag and drop</span>
                       </label>
                       <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                      {formData.paymentProof && (
+                        <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.paymentProof.name}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -714,9 +832,14 @@ const navigate = useNavigate();
             <div className="pt-6">
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 transition-all transform hover:scale-[1.02]"
+                disabled={isSubmitting}
+                className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all transform hover:scale-[1.02] ${
+                  isSubmitting
+                    ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200"
+                }`}
               >
-                Submit {ticketType === "member" ? "GIMSOC Member" : "Non-GIMSOC Member"} Registration
+                {isSubmitting ? "Submitting..." : `Submit All-Inclusive Registration - ${calculatePrice()} GEL`}
               </button>
             </div>
           </form>

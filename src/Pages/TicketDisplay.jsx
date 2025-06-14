@@ -24,40 +24,8 @@ const ticketTiers = [
     featured: false,
     color: "green",
   },
-  {
-    name: "Standard TSU Ticket",
-    id: "tier-tsu",
-    href: "/tsu-ticket",
-    price: "",
-    description: "Special discounted rate for TSU students.",
-    features: [
-      "Access to all keynote sessions",
-      "Workshops (requires separate registration)",
-      "Meals and refreshments",
-      "Academic, research and activities fair",
-      "Goodie bag with exclusive MEDCON merchandise",
-      "Certificate of attendance",
-      "CPD certificate",
-    ],
-    featured: false,
-    color: "blue",
-  },
-  {
-    name: "Group Ticket",
-    id: "tier-group",
-    href: "/group-ticket",
-    price: "",
-    description: "For groups of 2–3 registering under Standard Ticket.",
-    features: [
-      "All Standard Ticket benefits",
-      "Must register via the designated group registration form",
-      "Opportunity to attend workshops and sessions with your group",
-      "\"Learn together. Laugh together. MEDCON with your crew.\"",
-      "Not valid for All-Inclusive access",
-    ],
-    featured: true,
-    color: "indigo",
-  },
+  
+  
   {
     name: "All-Inclusive Ticket",
     id: "tier-allinclusive",
@@ -75,25 +43,9 @@ const ticketTiers = [
     featured: false,
     color: "purple",
   },
+  
   {
-    name: "TSU All-Inclusive Ticket",
-    id: "tier-tsuallinclusive",
-    href: "/tsuallinclusive-ticket",
-    price: "",
-    description: "Discounted All-Inclusive package for TSU students.",
-    features: [
-      "All Standard benefits",
-      "Gala Dinner access",
-      "Formal evening celebration",
-      "Live performances",
-      "Buffet dinner",
-      "Networking opportunities",
-    ],
-    featured: false,
-    color: "orange",
-  },
-  {
-    name: "International 3-Day Package",
+    name: "International Ticket",
     id: "tier-international3",
     href: "/international-ticket",
     price: "",
@@ -110,15 +62,14 @@ const ticketTiers = [
     featured: false,
     color: "teal",
   },
-
-  {
-    name: "International 7-Day Package",
+{
+    name: "Executive Ticket",
     id: "tier-international3",
-    href: "/international-ticket",
+    href: "/executive-ticket",
     price: "",
     description: "Ideal for international attendees joining for the core conference.",
     features: [
-      "Full &-day conference access",
+      "Full 3-day conference access",
       "Interactive Workshops",
       "Academic, research and activities fairs",
       "Gala Dinner",
@@ -129,6 +80,7 @@ const ticketTiers = [
     featured: false,
     color: "teal",
   },
+  
   
   {
     name: "Doctor Ticket",

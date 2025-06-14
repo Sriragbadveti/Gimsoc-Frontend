@@ -8,10 +8,10 @@ import {
   Camera,
   Utensils,
   CreditCard,
-  Globe,
   FileText,
   AlertTriangle,
   CheckCircle,
+  Calendar,
 } from "lucide-react"
 import axios from "axios"
 import PayPalButton from "../Components/PaypalButton"
@@ -24,6 +24,9 @@ export default function InternationalTicket() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({
+    // Ticket Duration
+    ticketDuration: "",
+
     fullName: "",
     email: "",
     whatsapp: "",
@@ -131,9 +134,15 @@ export default function InternationalTicket() {
     }
   }
 
-  // Fixed price for international ticket
+  // Calculate price based on ticket duration
   const calculatePrice = () => {
-    return 125 // Fixed International Ticket price
+    if (formData.ticketDuration === "3-day") {
+      return 100 // 3-day International Ticket price
+    } else if (formData.ticketDuration === "7-day") {
+      return 125 // 7-day International Ticket price
+    } else {
+      return 125 // Default price if no selection
+    }
   }
 
   const yearOptions = Array.from({ length: 12 }, (_, i) => `${i + 1}`).concat(["Graduated"])
@@ -224,15 +233,73 @@ export default function InternationalTicket() {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
             <h1 className="text-3xl font-bold text-white text-center">International Students Registration</h1>
             <p className="text-blue-100 text-center mt-2">Welcome international medical students</p>
-            <div className="flex justify-center mt-3">
-              <div className="flex items-center gap-1 bg-green-400 text-green-900 px-3 py-1 rounded-full text-sm font-medium">
-                <Globe className="w-4 h-4" />
-                International Package - 125 GEL
+
+            {/* Dynamic Price Display */}
+            <div className="text-center mt-4">
+              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                <span className="text-white text-lg font-medium">Ticket Price: </span>
+                <span className="text-white text-2xl font-bold">{calculatePrice()} GEL</span>
+                {formData.ticketDuration && (
+                  <div className="text-blue-100 text-sm mt-1">
+                    {formData.ticketDuration === "3-day" ? "3-Day Conference Package" : "7-Day Full Conference Package"}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-10">
+            {/* Ticket Duration Selection */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <Calendar className="w-6 h-6 text-purple-600" />
+                </div>
+                <h2 className="text-2xl font-semibold text-gray-800">Conference Duration</h2>
+              </div>
+
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Select your conference ticket duration *
+                </label>
+                <div className="space-y-3">
+                  <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all">
+                    <input
+                      type="radio"
+                      name="ticketDuration"
+                      value="3-day"
+                      checked={formData.ticketDuration === "3-day"}
+                      onChange={handleInputChange}
+                      className="text-purple-600 focus:ring-purple-500"
+                      required
+                    />
+                    <div className="flex-1">
+                      <span className="text-gray-700 font-medium">3-Day Conference Package</span>
+                      <p className="text-sm text-gray-600">Access to main conference days (Day 1-3)</p>
+                    </div>
+                    <span className="text-purple-600 text-lg font-bold">100 GEL</span>
+                  </label>
+
+                  <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all">
+                    <input
+                      type="radio"
+                      name="ticketDuration"
+                      value="7-day"
+                      checked={formData.ticketDuration === "7-day"}
+                      onChange={handleInputChange}
+                      className="text-purple-600 focus:ring-purple-500"
+                      required
+                    />
+                    <div className="flex-1">
+                      <span className="text-gray-700 font-medium">7-Day Full Conference Package</span>
+                      <p className="text-sm text-gray-600">Complete access to all conference activities (Day 1-7)</p>
+                    </div>
+                    <span className="text-purple-600 text-lg font-bold">125 GEL</span>
+                  </label>
+                </div>
+              </div>
+            </section>
+
             {/* Personal Information */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
@@ -442,6 +509,9 @@ export default function InternationalTicket() {
                     <span className="text-gray-500"> or drag and drop</span>
                   </label>
                   <p className="text-xs text-gray-500 mt-1">Required for student registration validation</p>
+                  {formData.studentIdProof && (
+                    <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.studentIdProof.name}</p>
+                  )}
                 </div>
               </div>
             </section>
@@ -476,6 +546,9 @@ export default function InternationalTicket() {
                   <p className="text-xs text-gray-500 mt-1">
                     A clear, front-facing photo (passport-style) with a plain background
                   </p>
+                  {formData.headshot && (
+                    <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.headshot.name}</p>
+                  )}
                 </div>
               </div>
             </section>
@@ -689,9 +762,15 @@ export default function InternationalTicket() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-medium text-gray-700">Total Amount:</span>
-                  <span className="text-2xl font-bold text-blue-600">125 GEL</span>
+                  <span className="text-2xl font-bold text-blue-600">{calculatePrice()} GEL</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">International student ticket</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {formData.ticketDuration === "3-day"
+                    ? "3-Day International Student Ticket"
+                    : formData.ticketDuration === "7-day"
+                      ? "7-Day International Student Ticket"
+                      : "International Student Ticket"}
+                </p>
               </div>
 
               <div>
@@ -755,9 +834,7 @@ export default function InternationalTicket() {
 
                     <div className="space-y-4">
                       <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">
-                          BANK OF GEORGIA
-                        </h4>
+                        <h4 className="font-semibold text-gray-800 mb-3">BANK OF GEORGIA</h4>
                         <div className="space-y-2 text-sm">
                           <p>
                             <span className="font-medium">Account with institution:</span> Bank of Georgia
@@ -821,6 +898,9 @@ export default function InternationalTicket() {
                         <span className="text-gray-500"> or drag and drop</span>
                       </label>
                       <p className="text-xs text-gray-500 mt-1">PDF format only - Bank transfer confirmation</p>
+                      {formData.paymentProof && (
+                        <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.paymentProof.name}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -838,7 +918,7 @@ export default function InternationalTicket() {
                     : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200"
                 }`}
               >
-                {isSubmitting ? "Submitting..." : "Submit International Registration"}
+                {isSubmitting ? "Submitting..." : `Submit International Registration - ${calculatePrice()} GEL`}
               </button>
 
               {formData.paymentMethod === "Credit/Debit Card" && !paymentCompleted && (
