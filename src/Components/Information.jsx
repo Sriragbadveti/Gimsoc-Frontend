@@ -46,7 +46,7 @@ export default function Information() {
                   Date & Time
                 </dt>
                 <dd className="mt-1 text-base text-gray-400">
-                  October 24-26, 2025 | 9:00 AM - 6:00 PM
+                  October  | Soon to be announced
                 </dd>
               </div>
             </div>

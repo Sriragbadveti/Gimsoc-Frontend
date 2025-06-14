@@ -2,16 +2,16 @@ export default function About() {
     return (
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-          <h2 className="text-center text-base/7 font-semibold text-indigo-600">Deploy faster</h2>
+          <h2 className="text-center text-base/7 font-semibold text-indigo-600"></h2>
           <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">
             About MEDCON'25
           </p>
           <div className="mx-auto mt-8 max-w-2xl text-center">
             <p className="text-lg font-medium text-gray-500 sm:text-xl/8 tracking-tight">
-              MEDCON is the annual medical conference bringing together
+              Centered around Infectious Diseases, this Conference offers a blend of new speakers, new innovations, bigger connections. Providing CPD & CME accreditations, MEDCON’25 will bring together over 30 healthcare professionals, from USA, UK, UAE, South Africa, Georgia, India etc including specialists in the field of Gastroenterology, Microbiology, Epidemiology, Dermatovenerology, etc exploring the latest advancements, from Outbreaks to Breakthroughs in Infectious Diseases
             </p>
             <p className="text-lg font-medium text-gray-500 sm:text-xl/8 tracking-tight">
-              medical students, researchers, and professionals from around the world.
+             Highlights include keynote sessions from Notable Speakers, hands-on workshops, and discussions on emerging therapies — offering an excellent opportunity for students and Healthcare professionals to engage directly with leading experts and practitioners.
             </p>
           </div>
           <div className="mt-10 grid gap-6 sm:mt-16 md:grid-cols-2 lg:grid-cols-3">
