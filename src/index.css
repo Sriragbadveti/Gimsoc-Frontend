@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation-name: float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 3s ease-in-out infinite;
+}
+
+input:focus + .input-icon {
+  color: #3b82f6;
+}
+
+.form-container {
+  transition: all 0.3s ease-in-out;
+}
+
+.form-container.slide-in {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.form-container.slide-out {
+  transform: translateX(100px);
+  opacity: 0;
+}
+
+/* Hyperspeed animation styles */
+@keyframes hyperspeed {
+  0% {
+    transform: scale(0) translateZ(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(30) translateZ(1000px);
+    opacity: 0;
+  }
+}
+
+.hyperspeed-star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  animation: hyperspeed var(--speed) infinite linear;
+  animation-delay: var(--delay);
+}
+
+

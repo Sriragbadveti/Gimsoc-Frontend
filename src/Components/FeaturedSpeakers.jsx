@@ -1,0 +1,187 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+
+export default function FeaturedSpeakers() {
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    const scrollContainer = containerRef.current
+    if (!scrollContainer) return
+
+    const scrollWidth = scrollContainer.scrollWidth
+    const clientWidth = scrollContainer.clientWidth
+
+    // Only activate the animation if there's content to scroll
+    if (scrollWidth <= clientWidth) return
+
+    let animationId
+    let scrollPos = 0
+    const speed = 0.5 // Adjust speed as needed
+
+    const scroll = () => {
+      scrollPos += speed
+
+      // Reset position when we've scrolled one item
+      if (scrollPos >= scrollWidth / 2) {
+        scrollPos = 0
+      }
+
+      if (scrollContainer) {
+        scrollContainer.scrollLeft = scrollPos
+      }
+
+      animationId = requestAnimationFrame(scroll)
+    }
+
+    scroll()
+
+    return () => {
+      cancelAnimationFrame(animationId)
+    }
+  }, [])
+
+  // Duplicate the speakers to create a seamless loop
+  const speakers = [
+  {
+    name: "Dr. Abhishek Ray",
+    title: "Gastroenterologist",
+    institution: "UK",
+    image: "/medical-professional.png",
+  },
+  {
+    name: "Chisomo (Mark) Kanthanga",
+    title: "Microbiologist",
+    institution: "Malawi Liverpool Wellcome Research Programme",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Nayab Mustafa",
+    title: "Family Resident",
+    institution: "Sheikh Rashid Hospital",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Annam Rafique",
+    title: "Histology",
+    institution: "University of Georgia",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Neli Solomonia",
+    title: "Infectious Disease",
+    institution: "CIU",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Salome Tasaria",
+    title: "Epidemiologist and Dean of UG",
+    institution: "University of Georgia",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Ana Aslanikashvili",
+    title: "Professor of Clinical Epidemiology",
+    institution: "Petre Shotadze University",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Zubair Ahmad",
+    title: "Internal Medicine (UKMLA Pathway)",
+    institution: "NHS, UK",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Anjum Pervez",
+    title: "Workshops Supervisor",
+    institution: "-",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Tahseen J. Siddiqui",
+    title: "Board Certified in Internal Medicine & Infectious Diseases",
+    institution: "IMG Unity",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Giorgi Derevenskikh",
+    title: "Pulmonology, Internal Medicine, USA Fellowship",
+    institution: "-",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Otar Chokoshvili",
+    title: "-",
+    institution: "Geomedi",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Ali Teimoori",
+    title: "Virology",
+    institution: "Hamedan University of Medical Sciences",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Dr. Paata Vepkhvadze",
+    title: "Infectious Disease Specialist",
+    institution: "CIU",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Sofo Liluashvili",
+    title: "Dermatology",
+    institution: "University of Georgia",
+    image: "/placeholder.svg",
+  },
+  {
+    name: "Mamuka Asatiani",
+    title: "Pharmacology",
+    institution: "Tbilisi Medical Academy",
+    image: "/placeholder.svg",
+  },
+];
+
+  // Duplicate speakers for seamless scrolling
+  const allSpeakers = [...speakers, ...speakers]
+
+  return (
+    <div className="bg-gray-50 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">Featured Speakers</h2>
+          <p className="mt-4 text-lg text-gray-600">Learn from world-renowned medical professionals and researchers.</p>
+        </div>
+
+        <div className="mt-16 overflow-hidden">
+          <div ref={containerRef} className="flex space-x-8 overflow-x-hidden">
+            {allSpeakers.map((speaker, index) => (
+              <div key={index} className="flex-none w-64">
+                <div className="flex flex-col items-center">
+                  <div className="w-48 h-48 rounded-full bg-gray-200 overflow-hidden mb-4">
+                    <img
+                      src={speaker.image || "/placeholder.svg"}
+                      alt={`${speaker.name}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900">{speaker.name}</h3>
+                  <p className="text-sm text-gray-600">{speaker.title}</p>
+                  <p className="text-sm text-gray-600">{speaker.institution}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 flex justify-center">
+          <a
+            href="#"
+            className="rounded-md border border-gray-300 px-6 py-3 text-base font-medium text-gray-900 hover:bg-gray-50"
+          >
+            View All Speakers
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
