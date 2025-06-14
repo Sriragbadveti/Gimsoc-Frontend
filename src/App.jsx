@@ -25,6 +25,7 @@ import AttendeeDashboard from "./Dashboard/AttendeeDashboard"
 import AdminTicketDashboard from "./Pages/AdminPage"
 import AbstractPage from "./Pages/AbstractPage"
 import ExecutiveTicket from "./questionnaires/ExecutiveTicket"
+import TicketSuccessPage from "./Pages/TicketSuccessPage"
 
 
 
@@ -110,6 +111,7 @@ const App = () => {
           <Route path="/adminpage" element={<AdminTicketDashboard/>}/>
           <Route path="/abstract" element={<AbstractPage/>}/>
           <Route path="/executive-ticket" element={<ExecutiveTicket/>}/>
+          <Route path="/ticket-success" element={<TicketSuccessPage/>}/>
         </Routes>
       )}
     </div>

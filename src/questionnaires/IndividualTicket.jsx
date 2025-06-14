@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState  } from "react"
 import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, FileText } from "lucide-react"
 import axios from "axios"
-
+import { useNavigate } from "react-router-dom";
 export default function IndividualTicket() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -29,7 +29,7 @@ export default function IndividualTicket() {
 
   // Payment states
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  const navigate = useNavigate();
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
@@ -85,7 +85,9 @@ export default function IndividualTicket() {
       })
 
       console.log("✅ Submitted successfully:", response.data)
+      navigate("/ticket-success")
       alert("Form submitted successfully!")
+      navigate
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       alert("Form submission failed.")

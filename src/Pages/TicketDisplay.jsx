@@ -69,7 +69,7 @@ const ticketTiers = [
       "Gala Dinner access",
       "Formal evening celebration",
       "Live entertainment",
-      "Dinner buffet",
+      "Buffet Dinner",
       "Networking with speakers and delegates",
     ],
     featured: false,

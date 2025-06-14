@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, Users, ArrowLeft } from "lucide-react"
 import axios from "axios"
-
+import { useNavigate } from "react-router-dom";
 export default function AllInclusiveTicket() {
   const [ticketType, setTicketType] = useState("") // "member" or "non-member"
   const [formData, setFormData] = useState({
@@ -35,7 +35,7 @@ export default function AllInclusiveTicket() {
       [name]: type === "checkbox" ? checked : value,
     }))
   }
-
+const navigate = useNavigate();
   const handleFileChange = (e) => {
     const { name, files } = e.target
     setFormData((prev) => ({
@@ -71,6 +71,7 @@ export default function AllInclusiveTicket() {
 
       console.log("✅ Submitted successfully:", response.data)
       alert("Form submitted successfully!")
+      navigate("/ticket-success")
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       alert("Form submission failed.")

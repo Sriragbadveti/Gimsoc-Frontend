@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Upload, User, Stethoscope, Camera, Utensils, CreditCard, FileText, Award } from "lucide-react"
 import axios from "axios"
-
+import { useNavigate } from "react-router-dom";
 export default function DoctorTicket() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -46,7 +46,7 @@ export default function DoctorTicket() {
 
   // Fixed price for doctor professional ticket
   const doctorTicketPrice = 200 // Fixed professional rate in GEL
-
+const navigate =  useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -79,7 +79,7 @@ export default function DoctorTicket() {
 
       console.log("✅ Doctor ticket submitted successfully:", response.data)
       alert("Doctor registration submitted successfully!")
-
+navigate("/ticket-success")
       // Reset form
       setFormData({
         fullName: "",

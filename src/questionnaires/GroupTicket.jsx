@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from "react"
 import { Upload, Users, User, CreditCard } from "lucide-react"
 import axios from "axios"
-
+import { useNavigate } from "react-router-dom";
 // Move AttendeeSection outside to prevent recreation on every render
 const AttendeeSection = ({ attendeeNum, attendee, onAttendeeChange, onAttendeeFileChange }) => {
   const universities = [
@@ -360,7 +360,7 @@ export default function GroupTicket() {
   const [groupSize, setGroupSize] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("")
   const [paymentProof, setPaymentProof] = useState(null)
-
+const navigate = useNavigate();
   const [attendees, setAttendees] = useState({
     1: {
       fullName: "",
@@ -489,7 +489,7 @@ export default function GroupTicket() {
 
         console.log("✅ Group ticket submitted successfully:", response.data)
         alert("✅ Group ticket submitted successfully!")
-
+navigate("/ticket-success");
         // Reset form
         setGroupSize("")
         setPaymentMethod("")
