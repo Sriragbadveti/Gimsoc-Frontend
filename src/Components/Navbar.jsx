@@ -220,7 +220,7 @@ const Navbar = () => {
                 <img
                   alt=""
                   src="/medcon-logo.png"
-                  className="h-8 w-auto"
+                  className="h-32 w-auto max-w-[280px] object-contain"
                 />
               </a>
               <button
