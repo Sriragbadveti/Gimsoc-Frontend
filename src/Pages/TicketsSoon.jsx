@@ -134,6 +134,16 @@ export default function TicketsSoon() {
           <div className="text-gray-400 text-sm">
             <p>Stay tuned for updates • Follow us for the latest news</p>
           </div>
+
+          {/* Back to Home Button */}
+          <div className="mt-8">
+            <button
+              onClick={() => (window.location.href = "/")}
+              className="px-6 py-3 bg-white text-purple-700 font-semibold rounded-full shadow-lg hover:bg-purple-100 transition"
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
       </div>
 

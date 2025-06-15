@@ -10,7 +10,7 @@ export default function FAQSection() {
     {
       question: "Can I get a refund if I can't attend?",
       answer:
-        "Refunds are available up to 30 days before the event with a 15% processing fee. Within 30 days of the event, we offer credit for next year's conference instead of refunds.",
+        "Refunds are not possible due to the nature of our conference , Please make sure you can attend before buying the ticket.",
     },
     {
       question: "How do I submit an abstract?",
