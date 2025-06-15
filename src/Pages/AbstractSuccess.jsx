@@ -72,7 +72,7 @@ const AbstractSuccessPage = () => {
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2">Notification</h4>
                     <p className="text-gray-600 text-sm">
-                      You'll receive an email notification about the acceptance status within 2-3 weeks.
+                      You'll receive an email notification about the acception or rejection after the deadline closes within 2-3 weeks
                     </p>
                   </div>
                 </div>

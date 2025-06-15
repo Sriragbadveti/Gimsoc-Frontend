@@ -50,21 +50,21 @@ export default function FeaturedSpeakers() {
       image: "/Abhishek.jpeg",
     },
     {
-      name: "Chisomo (Mark) Kanthanga",
+      name: " Chisomo (Mark) Kanthanga",
       title: "Microbiologist",
       institution: "Malawi Liverpool Wellcome Research Programme",
       image: "/flat.webp",
     },
 
     {
-      name: "Annam Rafique",
+      name: " Annam Rafique",
       title: "Histology",
       institution: "University of Georgia",
       image: "/Anaam.jpg",
     },
 
     {
-      name: "Salome Tasaria",
+      name: " Salome Tasaria",
       title: "Epidemiologist and Dean of UG",
       institution: "University of Georgia",
       image: "/flat.webp",

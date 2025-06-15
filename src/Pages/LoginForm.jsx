@@ -3,6 +3,7 @@
 import { useState } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -24,20 +25,19 @@ export default function LoginForm() {
   }
 
   const handleSubmit = async(e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
-   const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login" , formData , {withCredentials:true});
-   console.log("Successfully logged in the user", response.data.message);
-   navigate("/comingsoon")
-
-
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Form submitted:", formData)
-      setIsLoading(false)
-      // Here you would typically handle authentication
-    }, 1500)
+    try {
+      const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login", formData, { withCredentials: true });
+      console.log("Successfully logged in the user", response.data.message);
+      navigate("/comingsoon");
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Login failed. Please check your email or password.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -59,7 +59,7 @@ export default function LoginForm() {
 
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900">MEDCON</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">MEDCON'25</h1>
           <p className="mt-2 text-gray-600">Sign in to your account</p>
         </div>
 
@@ -183,7 +183,7 @@ export default function LoginForm() {
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
             <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-              Register for MEDCON
+              Register for MEDCON'25
             </a>
           </p>
         </div>

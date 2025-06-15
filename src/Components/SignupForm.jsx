@@ -3,6 +3,7 @@
 import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 export default function SignupForm() {
   const [formData, setFormData] = useState({
     firstname: "",
@@ -78,6 +79,7 @@ const navigate = useNavigate();
       } catch (error) {
         console.error("Signup error:", error.response?.data?.message || error.message)
         alert(error.response?.data?.message || "Signup failed")
+        toast.error("Signup failed. Please check your details.");
         setIsLoading(false)
       }
     }
@@ -92,13 +94,13 @@ const navigate = useNavigate();
 
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900">MEDCON</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">MEDCON'25</h1>
           <p className="mt-2 text-gray-600">Create your account</p>
         </div>
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="px-8 pt-8 pb-6 border-b border-gray-200">
-            <h2 className="text-xl font-medium text-gray-800">Join MEDCON</h2>
+            <h2 className="text-xl font-medium text-gray-800">Join MEDCON'25</h2>
             <p className="text-sm text-gray-500 mt-1">Please fill in your information to register</p>
           </div>
 
