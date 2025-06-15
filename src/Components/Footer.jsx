@@ -108,6 +108,7 @@ export default function Footer() {
             <p className="text-sm text-gray-400 mt-2 md:mt-0">
               Made with <span className="text-red-500">❤</span> for medical students worldwide
             </p>
+            <p>Designed and Developed by Srirag Badveti</p>
           </div>
         </div>
       </footer>
