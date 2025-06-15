@@ -107,8 +107,7 @@ const AbstractSuccessPage = () => {
                 <div className="ml-3">
                   <h4 className="text-lg font-semibold text-yellow-800 mb-2">Important Reminder</h4>
                   <p className="text-yellow-700 text-sm">
-                    Please check your email regularly for updates. Make sure to add our conference email to your
-                    contacts to avoid missing important notifications.
+                    Please check your email regularly for updates. Make sure to keep your eyes on our socials for all future announcements.
                   </p>
                 </div>
               </div>

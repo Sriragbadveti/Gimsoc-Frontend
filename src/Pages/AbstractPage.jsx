@@ -332,7 +332,7 @@ export default function AbstractPage() {
                       required
                     />
                     <span className="text-sm text-gray-700">
-                      I consent that if my abstract is accepted to be added to a whatsapp group to a clearer
+                      I consent that if my abstract is accepted to be added to a whatsapp group for clearer
                       communication with the scientific committee. *
                     </span>
                   </label>
@@ -387,7 +387,7 @@ export default function AbstractPage() {
               {/* Success Message */}
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Abstract Submitted Successfully!</h3>
               <p className="text-gray-600 mb-6">
-                You will receive updates , acceptance or rejection through the provided emails.
+                You will receive updates , acceptance or rejection through the provided email.
               </p>
 
               {/* Continue Button */}
