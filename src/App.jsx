@@ -10,7 +10,7 @@ import SignupForm from "./Components/SignupForm"
 import Hero from "./Components/Hero"
 import Information from "./Components/Information"
 import About from "./Components/About"
-import FeaturedSpeakers from "./Components/FeaturedSpeakers"
+// import FeaturedSpeakers from "./Components/FeaturedSpeakers"
 import FAQSection from "./Components/FaqSection"
 import Footer from "./Components/Footer"
 import TicketDisplay from "./Pages/TicketDisplay"
@@ -46,9 +46,9 @@ const HomePage = () => (
       <About />
     </ScrollReveal>
 
-    <ScrollReveal animation="zoomIn" delay={0.1}>
+    {/* <ScrollReveal animation="zoomIn" delay={0.1}>
       <FeaturedSpeakers />
-    </ScrollReveal>
+    </ScrollReveal> */}
 
     <ScrollReveal animation="fadeInRight" delay={0.2}>
       <FAQSection />
