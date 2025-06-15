@@ -39,7 +39,7 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="/tickets" className="text-gray-300 hover:text-white transition-colors">
+                  <a href="/abstract" className="text-gray-300 hover:text-white transition-colors">
                     Registration
                   </a>
                 </li>
