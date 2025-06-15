@@ -1,5 +1,22 @@
+"use client"
+
+import { useState } from "react"
+
 export default function Footer() {
-    return (
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false)
+
+  const openContactModal = () => setIsContactModalOpen(true)
+  const closeContactModal = () => setIsContactModalOpen(false)
+
+  const contactEmails = [
+    { department: "General", email: "medconconferencegimsoc@gmail.com" },
+    { department: "IT", email: "badvetisrirag@gmail.com" },
+    { department: "Media", email: "workmail.hadeshchaudhary@gmail.com" },
+    { department: "Ticketing", email: "nupuraajesh@gmail.com" },
+  ]
+
+  return (
+    <>
       <footer className="bg-gray-900 text-white py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -7,11 +24,11 @@ export default function Footer() {
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-white mb-4">MEDCON'25</h2>
               <p className="text-gray-300 text-sm max-w-xs">
-                The premier medical conference for students and professionals. Join us for workshops, networking, and the
-                latest in medical research.
+                The premier medical conference for students and professionals. Join us for workshops, networking, and
+                the latest in medical research.
               </p>
             </div>
-  
+
             {/* QUICK LINKS Section */}
             <div>
               <h3 className="text-base font-semibold uppercase tracking-wider text-white mb-4">Quick Links</h3>
@@ -33,26 +50,19 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-  
+
             {/* SUPPORT Section */}
             <div>
               <h3 className="text-base font-semibold uppercase tracking-wider text-white mb-4">Support</h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                  <button
+                    onClick={openContactModal}
+                    className="text-gray-300 hover:text-white transition-colors cursor-pointer text-left"
+                  >
                     Contact Us
-                  </a>
+                  </button>
                 </li>
-                {/* <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                    FAQ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                    Privacy Policy
-                  </a>
-                </li> */}
                 <li>
                   <a href="#" className="text-gray-300 hover:text-white transition-colors">
                     Terms of Service
@@ -60,12 +70,15 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-  
+
             {/* CONNECT WITH US Section */}
             <div>
               <h3 className="text-base font-semibold uppercase tracking-wider text-white mb-4">Connect with us</h3>
               <div className="flex space-x-6">
-                <a href="https://www.facebook.com/profile.php?id=61575322144494" className="text-gray-300 hover:text-white">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61575322144494"
+                  className="text-gray-300 hover:text-white"
+                >
                   <span className="sr-only">Facebook</span>
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path
@@ -75,7 +88,7 @@ export default function Footer() {
                     />
                   </svg>
                 </a>
-  
+
                 <a href="https://www.instagram.com/medcon_gimsoc/" className="text-gray-300 hover:text-white">
                   <span className="sr-only">Instagram</span>
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -86,12 +99,10 @@ export default function Footer() {
                     />
                   </svg>
                 </a>
-  
-                
               </div>
             </div>
           </div>
-  
+
           <div className="mt-12 border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between">
             <p className="text-sm text-gray-400">© 2025 MEDCON. All rights reserved.</p>
             <p className="text-sm text-gray-400 mt-2 md:mt-0">
@@ -100,6 +111,60 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-    )
-  }
-  
+
+      {/* Contact Modal */}
+      {isContactModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4"
+          onClick={closeContactModal}
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-lg">
+              <h3 className="text-lg font-semibold text-gray-900">Contact Us</h3>
+              <button
+                onClick={closeContactModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-4 sm:p-6">
+              <p className="text-gray-600 mb-4 text-sm sm:text-base">Get in touch with our team for any inquiries:</p>
+              <div className="space-y-4">
+                {contactEmails.map((contact, index) => (
+                  <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
+                    <h4 className="font-medium text-gray-900 capitalize text-sm sm:text-base">{contact.department}</h4>
+                    <a
+                      href={`mailto:${contact.email}`}
+                      className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm break-all transition-colors block mt-1"
+                    >
+                      {contact.email}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-4 sm:px-6 py-4 bg-gray-50 rounded-b-lg sticky bottom-0">
+              <button
+                onClick={closeContactModal}
+                className="w-full bg-gray-900 text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors text-sm sm:text-base"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}

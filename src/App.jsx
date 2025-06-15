@@ -10,7 +10,7 @@ import SignupForm from "./Components/SignupForm"
 import Hero from "./Components/Hero"
 import Information from "./Components/Information"
 import About from "./Components/About"
-// import FeaturedSpeakers from "./Components/FeaturedSpeakers"
+import FeaturedSpeakers from "./Components/FeaturedSpeakers"
 import FAQSection from "./Components/FaqSection"
 import Footer from "./Components/Footer"
 import TicketDisplay from "./Pages/TicketDisplay"
@@ -28,6 +28,7 @@ import ExecutiveTicket from "./questionnaires/ExecutiveTicket"
 import TicketSuccessPage from "./Pages/TicketSuccessPage"
 import TicketsSoon from "./Pages/TicketsSoon"
 import AbstractSuccessPage from "./Pages/AbstractSuccess"
+import AboutusMain from "./Pages/AboutusMain"
 
 
 
@@ -46,9 +47,9 @@ const HomePage = () => (
       <About />
     </ScrollReveal>
 
-    {/* <ScrollReveal animation="zoomIn" delay={0.1}>
+    <ScrollReveal animation="zoomIn" delay={0.1}>
       <FeaturedSpeakers />
-    </ScrollReveal> */}
+    </ScrollReveal>
 
     <ScrollReveal animation="fadeInRight" delay={0.2}>
       <FAQSection />
@@ -116,6 +117,7 @@ const App = () => {
           <Route path="/ticket-success" element={<TicketSuccessPage/>}/>
           <Route path="/comingsoon" element={<TicketsSoon/>}/>
           <Route path="/abstract-success" element={<AbstractSuccessPage/>}/>
+          <Route path="/learnmore" element={<AboutusMain/>}/>
         </Routes>
       )}
     </div>

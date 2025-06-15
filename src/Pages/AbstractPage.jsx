@@ -104,11 +104,11 @@ export default function AbstractPage() {
 }
 
   const categories = [
-    "Literature Review",
-    "Case Presentation",
     
-    "Original",
-    "Research Study",
+    "Case Report",
+    
+    "Original Work ",
+    "Systematic Review / Meta Analysis",
     "Clinical Trial",
     "Other",
   ]
@@ -134,6 +134,12 @@ export default function AbstractPage() {
                     <li>
                       Once abstracts are accepted, participants must purchase a ticket. If you have not purchased a
                       ticket, your abstract will be disqualified.
+                    </li>
+                    <li>
+                      Follow the abstract guidelines
+                    </li>
+                    <li>
+                      For any questions feel free to reach out by email to nikhilalizaby@gmail.com and CC medconconferencegimsoc@gmail.com
                     </li>
                    
                   </ul>
