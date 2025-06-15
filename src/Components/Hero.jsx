@@ -56,8 +56,8 @@ export default function Hero() {
 
       <Navbar />
 
-      <div className="relative isolate px-4 pt-14 lg:px-8 z-10">
-        <div className="mx-auto max-w-6xl py-20 sm:py-32 lg:py-40">
+      <div className="relative isolate px-6 pt-20 sm:pt-14 lg:px-8 z-10">
+        <div className="mx-auto max-w-6xl py-16 px-4 sm:py-32 lg:py-40 sm:px-0">
           <div className="hidden sm:mb-6 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-xs sm:text-sm text-white bg-white bg-opacity-20 backdrop-blur-sm ring-1 ring-white ring-opacity-30 hover:ring-opacity-50 text-center">
               <span className="whitespace-nowrap">Announcing GIMSOC's 3rd Annual International Conference</span>{" "}
@@ -67,10 +67,10 @@ export default function Hero() {
             </div>
           </div>
           <div className="text-center">
-            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-white leading-tight whitespace-nowrap">
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-white leading-tight sm:whitespace-nowrap">
               <SplitText text="MEDCON'25: Outbreaks to Breakthroughs" delay={0.2} />
             </h1>
-            <div className="mt-6 sm:mt-8 px-2">
+            <div className="mt-8 sm:mt-8 px-4 sm:px-2">
               <div className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white leading-relaxed max-w-4xl mx-auto">
                 <div className="block">
                   <SplitText
@@ -79,7 +79,7 @@ export default function Hero() {
                     staggerChildren={0.01}
                   />
                 </div>
-                <div className="block mt-1">
+                <div className="block mt-2 sm:mt-1">
                   <SplitText
                     text="This 2025, join us in reshaping the future of Infectious Disease!"
                     delay={1.0}
@@ -88,7 +88,7 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6 px-4">
+            <div className="mt-10 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-4 sm:gap-x-6 px-4">
               <motion.button
                 onClick={() => navigate("/login")}
                 className="w-full sm:w-auto rounded-md bg-gradient-to-br from-[#c43410] to-[#461307] px-6 py-3 text-sm font-semibold text-white shadow-xs hover:opacity-90 hover:scale-105 transition-transform duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c43410] cursor-pointer whitespace-nowrap"
