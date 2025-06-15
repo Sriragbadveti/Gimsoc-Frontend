@@ -28,7 +28,7 @@ const navigation = [
       },
       {
         name: "Details About Us",
-        href: "/about-details",
+        href: "/learnmore",
         description: "Our mission and vision",
       },
     ],
