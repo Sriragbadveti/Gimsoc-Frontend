@@ -101,7 +101,7 @@ export default function Hero() {
             </div>
             <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-3">
               <motion.button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/signup")}
                 className="w-full sm:w-auto rounded-md bg-gradient-to-br from-[#c43410] to-[#461307] px-6 py-3 text-sm font-semibold text-white shadow-xs hover:opacity-90 hover:scale-105 transition-transform duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c43410] cursor-pointer whitespace-nowrap"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -136,7 +136,7 @@ export default function AbstractPage() {
                       ticket, your abstract will be disqualified.
                     </li>
                     <li>
-                      Follow the abstract guidelines
+                      Follow the MEDCON'25 abstract guidelines
                     </li>
                     <li>
                       For any questions feel free to reach out by email to nikhilalizaby@gmail.com and CC medconconferencegimsoc@gmail.com

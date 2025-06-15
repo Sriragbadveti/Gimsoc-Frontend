@@ -129,12 +129,7 @@ export default function FeaturedSpeakers() {
         </div>
 
         <div className="mt-12 flex justify-center">
-          <a
-            href="#"
-            className="rounded-md border border-gray-300 px-6 py-3 text-base font-medium text-gray-900 hover:bg-gray-50"
-          >
-            View All Speakers
-          </a>
+          
         </div>
       </div>
     </div>
