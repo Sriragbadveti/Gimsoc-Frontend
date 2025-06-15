@@ -57,7 +57,7 @@ export default function Hero() {
       <Navbar />
 
       <div className="relative isolate px-4 pt-14 lg:px-8 z-10">
-        <div className="mx-auto max-w-4xl py-20 sm:py-32 lg:py-40">
+        <div className="mx-auto max-w-5xl py-20 sm:py-32 lg:py-40">
           <div className="hidden sm:mb-6 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-xs sm:text-sm text-white bg-white bg-opacity-20 backdrop-blur-sm ring-1 ring-white ring-opacity-30 hover:ring-opacity-50 text-center">
               <span className="whitespace-nowrap">Announcing GIMSOC's 3rd Annual International Conference</span>{" "}
@@ -77,13 +77,22 @@ export default function Hero() {
               </span>
             </h1>
             <div className="mt-6 sm:mt-8 px-2">
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white leading-relaxed max-w-3xl mx-auto">
-                <SplitText
-                  text="The premier Medical Conference for students and Healthcare professionals.This 2025,join us in reshaping the future of Infectious Disease!"
-                  delay={0.8}
-                  staggerChildren={0.01}
-                />
-              </p>
+              <div className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white leading-relaxed max-w-4xl mx-auto">
+                <div className="block">
+                  <SplitText
+                    text="The premier Medical Conference for students and Healthcare professionals."
+                    delay={0.8}
+                    staggerChildren={0.01}
+                  />
+                </div>
+                <div className="block mt-1">
+                  <SplitText
+                    text="This 2025, join us in reshaping the future of Infectious Disease!"
+                    delay={1.0}
+                    staggerChildren={0.01}
+                  />
+                </div>
+              </div>
             </div>
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6 px-4">
               <motion.button
