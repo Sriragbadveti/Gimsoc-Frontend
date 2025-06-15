@@ -79,7 +79,7 @@ export default function Hero() {
             <div className="mt-6 sm:mt-8 px-2">
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white leading-relaxed max-w-3xl mx-auto">
                 <SplitText
-                  text="The premier Medical Conference for students and Healthcare professionals. This 2025, join us in reshaping the future of Infectious Disease!"
+                  text="The premier Medical Conference for students and Healthcare professionals.This 2025,join us in reshaping the future of Infectious Disease!"
                   delay={0.8}
                   staggerChildren={0.01}
                 />

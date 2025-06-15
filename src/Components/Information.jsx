@@ -20,7 +20,7 @@ export default function Information() {
               other engaging events.
             </p>
             <div className="mt-6 flex max-w-md gap-x-4">
-              <input
+              {/* <input
                 type="email"
                 placeholder="Enter your email"
                 className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -30,7 +30,7 @@ export default function Information() {
                 className="flex-none rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Register
-              </button>
+              </button> */}
             </div>
           </div>
           <dl className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-1 lg:pt-2">
@@ -51,9 +51,9 @@ export default function Information() {
               </div>
             </div>
             <div className="flex items-start gap-x-4">
-              <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
+              {/* <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
                 <MapPinIcon aria-hidden="true" className="h-6 w-6 text-white" />
-              </div>
+              </div> */}
               <div>
                 {/* <dt className="text-base font-semibold text-white">Location</dt>
                 <dd className="mt-1 text-base text-gray-400">
