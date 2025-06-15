@@ -351,7 +351,7 @@ const AboutusMain = () => {
                   icon: "🎓",
                   title: "CPD Accreditation",
                   description:
-                    "Continuing Medical Education credits recognized by international medical boards for professional development.",
+                    "Continuing Professional Development credits recognized by international medical boards for professional development.",
                   color: "from-indigo-600 to-purple-700",
                 },
                 {
