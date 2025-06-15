@@ -72,7 +72,7 @@ export default function About() {
   
             {/* Card 3 - Research */}
             <div className="relative md:col-span-2 lg:col-span-1">
-              <div className="flex flex-col items-center p-6 bg-white rounded-lg border border-gray-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+              <div className="flex flex-col items-center p-6 bg-gradient-to-br from-[#4aa053] to-[#1e4923] rounded-lg border border-gray-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
                 <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

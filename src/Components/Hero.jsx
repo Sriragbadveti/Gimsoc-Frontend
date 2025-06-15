@@ -57,7 +57,7 @@ export default function Hero() {
       <Navbar />
 
       <div className="relative isolate px-4 pt-14 lg:px-8 z-10">
-        <div className="mx-auto max-w-5xl py-20 sm:py-32 lg:py-40">
+        <div className="mx-auto max-w-6xl py-20 sm:py-32 lg:py-40">
           <div className="hidden sm:mb-6 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-xs sm:text-sm text-white bg-white bg-opacity-20 backdrop-blur-sm ring-1 ring-white ring-opacity-30 hover:ring-opacity-50 text-center">
               <span className="whitespace-nowrap">Announcing GIMSOC's 3rd Annual International Conference</span>{" "}
@@ -67,14 +67,8 @@ export default function Hero() {
             </div>
           </div>
           <div className="text-center">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-tight">
-              <span className="block whitespace-nowrap">MEDCON'25:</span>
-              <span className="block whitespace-nowrap">
-                <SplitText text="Outbreaks" delay={0.2} />
-              </span>
-              <span className="block whitespace-nowrap">
-                <SplitText text="to Breakthroughs" delay={0.4} />
-              </span>
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-white leading-tight whitespace-nowrap">
+              <SplitText text="MEDCON'25: Outbreaks to Breakthroughs" delay={0.2} />
             </h1>
             <div className="mt-6 sm:mt-8 px-2">
               <div className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white leading-relaxed max-w-4xl mx-auto">

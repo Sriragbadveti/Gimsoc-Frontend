@@ -206,7 +206,7 @@ const Navbar = () => {
                 <img
                   alt=""
                   src="/medcon-logo.png"
-                  className="h-8 w-auto"
+                  className="h-32 w-auto max-w-[280px] object-contain"
                 />
               </a>
               <button
@@ -273,7 +273,7 @@ const Navbar = () => {
                           setMobileMenuOpen(false)
                           navigate("/login")
                         }}
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                        className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
                       >
                         Login
                       </button>
@@ -282,7 +282,7 @@ const Navbar = () => {
                           setMobileMenuOpen(false)
                           navigate("/signup")
                         }}
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                         className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
                       >
                         Signup
                       </button>
