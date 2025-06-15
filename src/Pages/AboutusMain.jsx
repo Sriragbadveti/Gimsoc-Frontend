@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Users, Globe, Award, Microscope, Heart, Zap, Sparkles, ArrowRight, Star } from "lucide-react"
+import { Users, Globe, Award, Microscope, Heart, Zap, Sparkles, ArrowRight, Star, Ticket } from "lucide-react"
 
 const FallingStars = () => {
   const [stars, setStars] = useState([])
@@ -349,7 +349,7 @@ const AboutusMain = () => {
                 },
                 {
                   icon: "🎓",
-                  title: "CME Accreditation",
+                  title: "CPD Accreditation",
                   description:
                     "Continuing Medical Education credits recognized by international medical boards for professional development.",
                   color: "from-indigo-600 to-purple-700",
@@ -403,19 +403,34 @@ const AboutusMain = () => {
                 Advance your career in infectious disease medicine through evidence-based learning, professional
                 networking, and innovative healthcare solutions.
               </p>
-              <motion.a
-                href="/abstract"
-                className="inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg group"
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px -12px rgba(59, 130, 246, 0.4)",
-                }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-              >
-                Register Now
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.a>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <motion.a
+                  href="/abstract"
+                  className="inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg group"
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px -12px rgba(59, 130, 246, 0.4)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Register Now
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+                <motion.a
+                  href="/comingsoon"
+                  className="inline-flex items-center bg-gradient-to-r from-purple-600 to-pink-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg group"
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px -12px rgba(147, 51, 234, 0.4)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Tickets
+                  <Ticket className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+              </div>
             </motion.div>
           </motion.div>
         </div>

@@ -88,6 +88,21 @@ const Navbar = () => {
     }
   }
 
+  // Handle navigation for sub-items
+  const handleSubItemClick = (subItem, closeMobile = false) => {
+    if (closeMobile) {
+      setMobileMenuOpen(false)
+    }
+
+    if (subItem.download) {
+      // For download links, use regular navigation
+      window.location.href = subItem.href
+    } else {
+      // For internal routes, use React Router navigate
+      navigate(subItem.href)
+    }
+  }
+
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -139,14 +154,13 @@ const Navbar = () => {
                   {aboutDropdownOpen && (
                     <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                       {item.subItems.map((subItem) => (
-                        <a
+                        <button
                           key={subItem.name}
-                          href={subItem.href}
-                          download={subItem.download || false}
-                          className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
+                          onClick={() => handleSubItemClick(subItem)}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
                         >
                           {subItem.name}
-                        </a>
+                        </button>
                       ))}
                     </div>
                   )}
@@ -210,18 +224,14 @@ const Navbar = () => {
           </div>
         </nav>
 
-        {/* Mobile Dialog will remain same */}
+        {/* Mobile Dialog */}
         <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
           <div className="fixed inset-0 z-50" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <a href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
-                  alt=""
-                  src="/medcon-logo.png"
-                  className="h-32 w-auto max-w-[280px] object-contain"
-                />
+                <img alt="" src="/medcon-logo.png" className="h-32 w-auto max-w-[280px] object-contain" />
               </a>
               <button
                 type="button"
@@ -258,15 +268,13 @@ const Navbar = () => {
                         {mobileAboutDropdownOpen && (
                           <div className="pl-4 space-y-1">
                             {item.subItems.map((subItem) => (
-                              <a
+                              <button
                                 key={subItem.name}
-                                href={subItem.href}
-                                download={subItem.download || false}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
-                                onClick={() => setMobileMenuOpen(false)}
+                                onClick={() => handleSubItemClick(subItem, true)}
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                               >
                                 {subItem.name}
-                              </a>
+                              </button>
                             ))}
                           </div>
                         )}
