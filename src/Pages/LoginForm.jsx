@@ -29,7 +29,7 @@ export default function LoginForm() {
 
    const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login" , formData , {withCredentials:true});
    console.log("Successfully logged in the user", response.data.message);
-   navigate("/tickets")
+   navigate("/comingsoon")
 
 
     // Simulate API call

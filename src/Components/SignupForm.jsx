@@ -69,7 +69,7 @@ const navigate = useNavigate();
           { withCredentials: true }
         )
         console.log("Successfully registered the user", response.data.message)
-        navigate("/tickets")
+        navigate("/comingsoon")
 
         setTimeout(() => {
           console.log("Form submitted:", formData)

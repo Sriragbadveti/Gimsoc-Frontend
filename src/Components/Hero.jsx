@@ -71,7 +71,7 @@ export default function Hero() {
               <SplitText text="MEDCON'25: Outbreaks to Breakthroughs" delay={0.2} />
             </h1>
             <div className="mt-6 sm:mt-8 px-2">
-              <div className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white leading-relaxed max-w-4xl mx-auto">
+              <div className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white leading-relaxed max-w-4xl mx-auto">
                 <div className="block">
                   <SplitText
                     text="The premier Medical Conference for students and Healthcare professionals."

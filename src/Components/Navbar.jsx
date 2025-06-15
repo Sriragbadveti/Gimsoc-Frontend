@@ -9,7 +9,6 @@ import Cookies from "js-cookie"
 
 const navigation = [
   { name: "Home", href: "/" },
-  
   { name: "Register for MEDCON", href: "/comingsoon" },
   {
     name: "About us",
@@ -41,6 +40,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false)
   const navigate = useNavigate()
+  const [mobileAboutDropdownOpen, setMobileAboutDropdownOpen] = useState(false)
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [hasAccess, setHasAccess] = useState(false)
@@ -161,13 +161,27 @@ const Navbar = () => {
           <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
             {isLoggedIn ? (
               <>
-                <button
-                  disabled
-                  className="group relative text-sm font-semibold px-3 py-2 bg-gray-500 text-white cursor-not-allowed opacity-50 rounded-md"
-                  title="Dashboard will be accessible later"
-                >
-                  Dashboard
-                </button>
+                {!isCheckingAccess ? (
+                  <button
+                    onClick={() => hasAccess && navigate("/attendeedashboard")}
+                    disabled={!hasAccess}
+                    className={`group relative text-sm font-semibold px-3 py-2 transition rounded-md ${
+                      hasAccess
+                        ? "text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 cursor-pointer"
+                        : "text-gray-400 bg-gray-600 cursor-not-allowed opacity-50"
+                    }`}
+                    title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
+                  >
+                    Dashboard
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="text-gray-300 bg-gray-500 cursor-not-allowed px-3 py-2 rounded-md text-sm font-semibold"
+                  >
+                    Checking Access...
+                  </button>
+                )}
 
                 <button
                   onClick={handleLogout}
@@ -205,8 +219,8 @@ const Navbar = () => {
                 <span className="sr-only">Your Company</span>
                 <img
                   alt=""
-                  src="/medcon-logo.png"
-                  className="h-32 w-auto max-w-[280px] object-contain"
+                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+                  className="h-8 w-auto"
                 />
               </a>
               <button
@@ -224,22 +238,45 @@ const Navbar = () => {
                   {navigation.map((item) =>
                     item.subItems ? (
                       <div key={item.name} className="space-y-1">
-                        <span className="block px-3 py-2 text-base font-semibold text-gray-900">{item.name}</span>
-                        {item.subItems.map((subItem) => (
-                          <a
-                            key={subItem.name}
-                            href={subItem.href}
-                            className="block px-6 py-2 text-sm text-gray-900 hover:bg-gray-100"
+                        <button
+                          onClick={() => setMobileAboutDropdownOpen(!mobileAboutDropdownOpen)}
+                          className="flex items-center justify-between w-full px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 rounded-lg"
+                        >
+                          <span>{item.name}</span>
+                          <svg
+                            className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                              mobileAboutDropdownOpen ? "rotate-180" : ""
+                            }`}
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            {subItem.name}
-                          </a>
-                        ))}
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {mobileAboutDropdownOpen && (
+                          <div className="pl-4 space-y-1">
+                            {item.subItems.map((subItem) => (
+                              <a
+                                key={subItem.name}
+                                href={subItem.href}
+                                download={subItem.download || false}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                {subItem.name}
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <a
                         key={item.name}
                         href={item.href}
                         className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
                       </a>
@@ -249,13 +286,32 @@ const Navbar = () => {
                 <div className="py-6 space-y-2">
                   {isLoggedIn ? (
                     <>
-                      <button
-                        disabled
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-400 cursor-not-allowed opacity-50"
-                        title="Dashboard will be accessible later"
-                      >
-                        Dashboard
-                      </button>
+                      {!isCheckingAccess ? (
+                        <button
+                          onClick={() => {
+                            if (hasAccess) {
+                              setMobileMenuOpen(false)
+                              navigate("/attendeedashboard")
+                            }
+                          }}
+                          disabled={!hasAccess}
+                          className={`-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold ${
+                            hasAccess
+                              ? "text-gray-900 hover:bg-gray-50 cursor-pointer"
+                              : "text-gray-400 cursor-not-allowed opacity-50"
+                          }`}
+                          title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
+                        >
+                          Dashboard
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-400 cursor-not-allowed opacity-50"
+                        >
+                          Checking Access...
+                        </button>
+                      )}
                       <button
                         onClick={() => {
                           setMobileMenuOpen(false)
@@ -267,13 +323,13 @@ const Navbar = () => {
                       </button>
                     </>
                   ) : (
-                    <>
+                    <div className="space-y-3">
                       <button
                         onClick={() => {
                           setMobileMenuOpen(false)
                           navigate("/login")
                         }}
-                        className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
+                        className="w-full text-center rounded-lg px-3 py-2.5 text-base font-semibold text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 transition-opacity"
                       >
                         Login
                       </button>
@@ -282,11 +338,11 @@ const Navbar = () => {
                           setMobileMenuOpen(false)
                           navigate("/signup")
                         }}
-                         className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
+                        className="w-full text-center rounded-lg px-3 py-2.5 text-base font-semibold text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 transition-opacity"
                       >
                         Signup
                       </button>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
