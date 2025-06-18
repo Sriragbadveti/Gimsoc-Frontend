@@ -33,6 +33,7 @@ import AboutusMain from "./Pages/AboutusMain"
 
 
 
+
 const HomePage = () => (
   <>
     {/* Hero doesn't need animation as it's the first thing visible */}
@@ -118,6 +119,7 @@ const App = () => {
           <Route path="/comingsoon" element={<TicketsSoon/>}/>
           <Route path="/abstract-success" element={<AbstractSuccessPage/>}/>
           <Route path="/learnmore" element={<AboutusMain/>}/>
+          
         </Routes>
       )}
     </div>
