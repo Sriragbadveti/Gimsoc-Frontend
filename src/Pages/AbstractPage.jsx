@@ -133,7 +133,7 @@ export default function AbstractPage() {
                       </li>
                                          <li>
                        Make sure to follow the MEDCON'25 Author guidelines (In order to access the guidelines please click<a
-                         href="/pdfs/guidelines.pdf"
+                         href="/pdfs/medcon25-author-guidelines.pdf"
                          download="MEDCON25_Author_Guidelines.pdf"
                          className="text-blue-600 hover:underline ml-1"
                        >
