@@ -400,12 +400,23 @@ export default function AdminDashboard() {
                         {ticket.headshotUrl ? (
                           <div className="flex items-center gap-2">
                             <img
-                              src={ticket.headshotUrl?.startsWith("http") ? ticket.headshotUrl : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${ticket.headshotUrl}`}
+                              src={
+                                ticket.headshotUrl?.startsWith("http")
+                                  ? ticket.headshotUrl
+                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`
+                              }
                               alt="Headshot"
                               className="h-10 w-10 rounded-full object-cover border border-gray-200"
                             />
                             <button
-                              onClick={() => handleDownload(ticket.headshotUrl, `headshot-${ticket.fullName}.png`)}
+                              onClick={() =>
+                                handleDownload(
+                                  ticket.headshotUrl?.startsWith("http")
+                                    ? ticket.headshotUrl
+                                    : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`,
+                                  `headshot-${ticket.fullName}.png`
+                                )
+                              }
                               className="p-1 text-gray-400 hover:text-gray-600"
                               title="Download headshot"
                             >
@@ -423,7 +434,7 @@ export default function AdminDashboard() {
                               handleDownload(
                                 ticket.paymentProofUrl?.startsWith("http")
                                   ? ticket.paymentProofUrl
-                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${ticket.paymentProofUrl}`,
+                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl.replace(/^\/?uploads\//, "")}`,
                                 `payment-${ticket.fullName}.pdf`
                               )
                             }
@@ -470,13 +481,22 @@ export default function AdminDashboard() {
                                         {attendee.headshotUrl ? (
                                           <div className="flex items-center gap-2">
                                             <img
-                                              src={attendee.headshotUrl?.startsWith("http") ? attendee.headshotUrl : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${attendee.headshotUrl}`}
+                                              src={
+                                                attendee.headshotUrl?.startsWith("http")
+                                                  ? attendee.headshotUrl
+                                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${attendee.headshotUrl.replace(/^\/?uploads\//, "")}`
+                                              }
                                               alt="Attendee headshot"
                                               className="h-8 w-8 rounded-full object-cover border border-gray-200"
                                             />
                                             <button
                                               onClick={() =>
-                                                handleDownload(attendee.headshotUrl, `headshot-${attendee.name}.png`)
+                                                handleDownload(
+                                                  attendee.headshotUrl?.startsWith("http")
+                                                    ? attendee.headshotUrl
+                                                    : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${attendee.headshotUrl.replace(/^\/?uploads\//, "")}`,
+                                                  `headshot-${attendee.name}.png`
+                                                )
                                               }
                                               className="p-1 text-gray-400 hover:text-gray-600"
                                               title="Download headshot"
@@ -566,7 +586,14 @@ export default function AdminDashboard() {
                 <div className="flex items-center gap-4">
                   {ticket.headshotUrl && (
                     <button
-                      onClick={() => handleDownload(ticket.headshotUrl, `headshot-${ticket.fullName}.png`)}
+                      onClick={() =>
+                        handleDownload(
+                          ticket.headshotUrl?.startsWith("http")
+                            ? ticket.headshotUrl
+                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`,
+                          `headshot-${ticket.fullName}.png`
+                        )
+                      }
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
                     >
                       <Download className="h-4 w-4" />
@@ -579,7 +606,7 @@ export default function AdminDashboard() {
                         handleDownload(
                           ticket.paymentProofUrl?.startsWith("http")
                             ? ticket.paymentProofUrl
-                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${ticket.paymentProofUrl}`,
+                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl.replace(/^\/?uploads\//, "")}`,
                           `payment-${ticket.fullName}.pdf`
                         )
                       }
