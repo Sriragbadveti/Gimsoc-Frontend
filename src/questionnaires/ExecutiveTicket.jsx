@@ -83,33 +83,46 @@ export default function ExecutiveIndividualTicket() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    try {
-      const submissionData = new FormData()
-      // Add required backend fields
-      submissionData.append("ticketType", "Executive");
-      submissionData.append("subType", formData.ticketCategory);
+    const form = new FormData()
 
-      for (const key in formData) {
-        const value = formData[key];
-        if (value instanceof File) {
-          submissionData.append(key, value);
-        } else if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
-          submissionData.append(key, value === true || value === "true" || value === "Yes");
-        } else if (["isGimsocMember", "mediaConsent"].includes(key)) {
-          submissionData.append(key, value === "Yes");
-        } else {
-          submissionData.append(key, value);
+    // Set required backend fields
+    form.append("ticketType", "Executive")
+    form.append("subType", formData.ticketCategory)
+
+    // Convert and append all fields appropriately
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== "") {
+        // Boolean fields
+        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
+          form.append(key, value === true || value === "true" || value === "Yes")
+        }
+        // Radio boolean fields
+        else if (["isGimsocMember", "mediaConsent"].includes(key)) {
+          form.append(key, value === "Yes")
+        }
+        // File fields
+        else if (key === "headshot" || key === "paymentProof") {
+          form.append(key, value)
+        }
+        // Normal fields
+        else {
+          form.append(key, value)
         }
       }
+    })
 
-      await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", submissionData, {
-        headers: { "Content-Type": "multipart/form-data" },
+    try {
+      const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
         withCredentials: true,
       })
 
+      console.log("✅ Submitted successfully:", response.data)
       alert("✅ Executive ticket submitted successfully!")
 
-      // Reset form
+      // Reset form state
       setFormData({
         ticketCategory: "",
         fullName: "",
@@ -134,7 +147,7 @@ export default function ExecutiveIndividualTicket() {
         paymentMethod: "",
       })
     } catch (err) {
-      console.error("❌ Submission failed:", err?.response?.data || err.message);
+      console.error("❌ Submission failed:", err?.response?.data || err.message)
       alert("Submission failed. Please try again.")
     } finally {
       setIsSubmitting(false)
