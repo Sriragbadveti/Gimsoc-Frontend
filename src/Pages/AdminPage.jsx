@@ -400,7 +400,7 @@ export default function AdminDashboard() {
                         {ticket.headshotUrl ? (
                           <div className="flex items-center gap-2">
                             <img
-                              src={ticket.headshotUrl || "/placeholder.svg"}
+                              src={ticket.headshotUrl?.startsWith("http") ? ticket.headshotUrl : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${ticket.headshotUrl}`}
                               alt="Headshot"
                               className="h-10 w-10 rounded-full object-cover border border-gray-200"
                             />
@@ -419,7 +419,14 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {ticket.paymentProofUrl ? (
                           <button
-                            onClick={() => handleDownload(ticket.paymentProofUrl, `payment-${ticket.fullName}.pdf`)}
+                            onClick={() =>
+                              handleDownload(
+                                ticket.paymentProofUrl?.startsWith("http")
+                                  ? ticket.paymentProofUrl
+                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${ticket.paymentProofUrl}`,
+                                `payment-${ticket.fullName}.pdf`
+                              )
+                            }
                             className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
                           >
                             <FileText className="h-4 w-4" />
@@ -463,7 +470,7 @@ export default function AdminDashboard() {
                                         {attendee.headshotUrl ? (
                                           <div className="flex items-center gap-2">
                                             <img
-                                              src={attendee.headshotUrl || "/placeholder.svg"}
+                                              src={attendee.headshotUrl?.startsWith("http") ? attendee.headshotUrl : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${attendee.headshotUrl}`}
                                               alt="Attendee headshot"
                                               className="h-8 w-8 rounded-full object-cover border border-gray-200"
                                             />
@@ -568,7 +575,14 @@ export default function AdminDashboard() {
                   )}
                   {ticket.paymentProofUrl && (
                     <button
-                      onClick={() => handleDownload(ticket.paymentProofUrl, `payment-${ticket.fullName}.pdf`)}
+                      onClick={() =>
+                        handleDownload(
+                          ticket.paymentProofUrl?.startsWith("http")
+                            ? ticket.paymentProofUrl
+                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${ticket.paymentProofUrl}`,
+                          `payment-${ticket.fullName}.pdf`
+                        )
+                      }
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
                     >
                       <FileText className="h-4 w-4" />
