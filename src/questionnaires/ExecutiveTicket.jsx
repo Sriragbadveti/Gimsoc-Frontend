@@ -84,13 +84,18 @@ export default function ExecutiveIndividualTicket() {
     setIsSubmitting(true)
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const submissionData = new FormData()
+      for (const key in formData) {
+        if (formData[key] instanceof File) {
+          submissionData.append(key, formData[key])
+        } else {
+          submissionData.append(key, formData[key])
+        }
+      }
 
-      console.log("✅ Executive ticket submitted successfully:", {
-        ticketCategory: formData.ticketCategory,
-        subType: "Executive & Subcom",
-        ...formData,
+      await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", submissionData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
       })
 
       alert("✅ Executive ticket submitted successfully!")
