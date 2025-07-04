@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, Star } from "lucide-react"
-
+import axios from "axios"
 export default function ExecutiveIndividualTicket() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
