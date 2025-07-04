@@ -85,11 +85,20 @@ export default function ExecutiveIndividualTicket() {
 
     try {
       const submissionData = new FormData()
+      // Add required backend fields
+      submissionData.append("ticketType", "Executive");
+      submissionData.append("subType", formData.ticketCategory);
+
       for (const key in formData) {
-        if (formData[key] instanceof File) {
-          submissionData.append(key, formData[key])
+        const value = formData[key];
+        if (value instanceof File) {
+          submissionData.append(key, value);
+        } else if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
+          submissionData.append(key, value === true || value === "true" || value === "Yes");
+        } else if (["isGimsocMember", "mediaConsent"].includes(key)) {
+          submissionData.append(key, value === "Yes");
         } else {
-          submissionData.append(key, formData[key])
+          submissionData.append(key, value);
         }
       }
 
@@ -125,7 +134,7 @@ export default function ExecutiveIndividualTicket() {
         paymentMethod: "",
       })
     } catch (err) {
-      console.error("❌ Error submitting executive ticket:", err)
+      console.error("❌ Submission failed:", err?.response?.data || err.message);
       alert("Submission failed. Please try again.")
     } finally {
       setIsSubmitting(false)
