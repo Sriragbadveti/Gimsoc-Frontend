@@ -183,8 +183,9 @@ export default function AdminDashboard() {
     try {
       console.log("Attempting to download:", url)
       
-      // For external URLs (like Cloudinary), we can directly download
-      if (url.startsWith("http") && !url.includes("gimsoc-backend.onrender.com")) {
+      // For Cloudinary URLs, we can directly download
+      if (url.includes("cloudinary.com") || url.includes("res.cloudinary.com")) {
+        console.log("Detected Cloudinary URL, downloading directly...")
         const link = document.createElement("a")
         link.href = url
         link.download = filename || "download"
@@ -195,57 +196,67 @@ export default function AdminDashboard() {
         return
       }
 
-      // Extract filename from URL for our backend files
-      let downloadUrl = url
-      let downloadFilename = filename
+      // For external URLs (like other cloud services), we can directly download
+      if (url.startsWith("http") && !url.includes("gimsoc-backend.onrender.com")) {
+        console.log("Detected external URL, downloading directly...")
+        const link = document.createElement("a")
+        link.href = url
+        link.download = filename || "download"
+        link.target = "_blank"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        return
+      }
 
-      // If it's a backend URL, use our download endpoint
+      // For backend URLs, check if the file actually exists locally
       if (url.includes("gimsoc-backend.onrender.com")) {
+        console.log("Detected backend URL, checking if file exists locally...")
+        
         // Extract the filename from the URL
         const urlParts = url.split('/')
         const originalFilename = urlParts[urlParts.length - 1]
         
-        // Use our dedicated download endpoint
-        downloadUrl = `https://gimsoc-backend.onrender.com/api/admin/download/${originalFilename}`
-        downloadFilename = filename || originalFilename
-      }
-
-      // Try the download endpoint first
-      try {
-        const response = await axios.get(downloadUrl, {
-          responseType: "blob",
-          withCredentials: true,
-          headers: {
-            'Accept': 'application/octet-stream',
-          }
-        })
-        
-        const blobUrl = window.URL.createObjectURL(response.data)
-        const link = document.createElement("a")
-        link.href = blobUrl
-        link.download = downloadFilename || "download"
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(blobUrl)
-        return
-      } catch (downloadError) {
-        console.log("Download endpoint failed, trying direct URL...")
-        
-        // Fallback: try direct URL access
-        const response = await axios.get(url, {
-          responseType: "blob",
-          withCredentials: true,
-        })
-        
-        const blobUrl = window.URL.createObjectURL(response.data)
-        const link = document.createElement("a")
-        link.href = blobUrl
-        link.download = downloadFilename || "download"
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(blobUrl)
+        // Try the download endpoint first
+        try {
+          const downloadUrl = `https://gimsoc-backend.onrender.com/api/admin/download/${originalFilename}`
+          console.log("Trying download endpoint:", downloadUrl)
+          
+          const response = await axios.get(downloadUrl, {
+            responseType: "blob",
+            withCredentials: true,
+            headers: {
+              'Accept': 'application/octet-stream',
+            }
+          })
+          
+          const blobUrl = window.URL.createObjectURL(response.data)
+          const link = document.createElement("a")
+          link.href = blobUrl
+          link.download = filename || originalFilename
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          window.URL.revokeObjectURL(blobUrl)
+          return
+        } catch (downloadError) {
+          console.log("Download endpoint failed, trying direct URL...")
+          
+          // Fallback: try direct URL access
+          const response = await axios.get(url, {
+            responseType: "blob",
+            withCredentials: true,
+          })
+          
+          const blobUrl = window.URL.createObjectURL(response.data)
+          const link = document.createElement("a")
+          link.href = blobUrl
+          link.download = filename || originalFilename
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          window.URL.revokeObjectURL(blobUrl)
+        }
       }
     } catch (err) {
       console.error("Download failed:", err)
@@ -464,15 +475,15 @@ export default function AdminDashboard() {
                               alt="Headshot"
                               className="h-10 w-10 rounded-full object-cover border border-gray-200"
                             />
+                            {console.log("Headshot URL for", ticket.fullName, ":", ticket.headshotUrl)}
                             <button
-                              onClick={() =>
-                                handleDownload(
-                                  ticket.headshotUrl?.startsWith("http")
-                                    ? ticket.headshotUrl
-                                    : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`,
-                                  `headshot-${ticket.fullName}.png`
-                                )
-                              }
+                              onClick={() => {
+                                const downloadUrl = ticket.headshotUrl?.startsWith("http")
+                                  ? ticket.headshotUrl
+                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`
+                                console.log("Download button clicked for", ticket.fullName, "URL:", downloadUrl)
+                                handleDownload(downloadUrl, `headshot-${ticket.fullName}.png`)
+                              }}
                               className="p-1 text-gray-400 hover:text-gray-600"
                               title="Download headshot"
                             >
