@@ -79,7 +79,7 @@ const navigate =  useNavigate();
 
       console.log("✅ Doctor ticket submitted successfully:", response.data)
       alert("Doctor registration submitted successfully!")
-navigate("/ticket-success")
+      window.location.href = "/ticket-success"
       // Reset form
       setFormData({
         fullName: "",

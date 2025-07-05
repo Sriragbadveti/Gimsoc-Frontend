@@ -121,6 +121,7 @@ export default function ExecutiveIndividualTicket() {
 
       console.log("✅ Submitted successfully:", response.data)
       alert("✅ Executive ticket submitted successfully!")
+      window.location.href = "/ticket-success"
 
       // Reset form state
       setFormData({

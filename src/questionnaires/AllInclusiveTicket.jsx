@@ -146,6 +146,7 @@ export default function AllInclusiveTicket() {
 
       console.log("✅ Submitted successfully:", response.data)
       alert("Form submitted successfully!")
+      window.location.href = "/ticket-success"
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       alert("Form submission failed.")

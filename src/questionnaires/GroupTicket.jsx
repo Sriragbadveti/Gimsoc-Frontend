@@ -489,7 +489,7 @@ const navigate = useNavigate();
 
         console.log("✅ Group ticket submitted successfully:", response.data)
         alert("✅ Group ticket submitted successfully!")
-navigate("/ticket-success");
+        window.location.href = "/ticket-success"
         // Reset form
         setGroupSize("")
         setPaymentMethod("")
