@@ -108,6 +108,7 @@ export default function AdminDashboard() {
       setTicketsLoading(true)
       setTicketsError(null)
       const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getalltickets", { withCredentials: true })
+      console.log("Fetched tickets:", response.data)
       setTickets(response.data)
     } catch (err) {
       console.error("Error fetching tickets:", err)
@@ -180,20 +181,75 @@ export default function AdminDashboard() {
 
   const handleDownload = async (url, filename) => {
     try {
-      const response = await axios.get(url, {
-        responseType: "blob",
+      console.log("Attempting to download:", url)
+      
+      // For external URLs (like Cloudinary), we can directly download
+      if (url.startsWith("http") && !url.includes("gimsoc-backend.onrender.com")) {
+        const link = document.createElement("a")
+        link.href = url
+        link.download = filename || "download"
+        link.target = "_blank"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        return
+      }
+
+      // Extract filename from URL for our backend files
+      let downloadUrl = url
+      let downloadFilename = filename
+
+      // If it's a backend URL, use our download endpoint
+      if (url.includes("gimsoc-backend.onrender.com")) {
+        // Extract the filename from the URL
+        const urlParts = url.split('/')
+        const originalFilename = urlParts[urlParts.length - 1]
         
-      })
-      const downloadUrl = window.URL.createObjectURL(response.data)
-      const link = document.createElement("a")
-      link.href = downloadUrl
-      link.download = filename || "download"
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(downloadUrl)
+        // Use our dedicated download endpoint
+        downloadUrl = `https://gimsoc-backend.onrender.com/api/admin/download/${originalFilename}`
+        downloadFilename = filename || originalFilename
+      }
+
+      // Try the download endpoint first
+      try {
+        const response = await axios.get(downloadUrl, {
+          responseType: "blob",
+          withCredentials: true,
+          headers: {
+            'Accept': 'application/octet-stream',
+          }
+        })
+        
+        const blobUrl = window.URL.createObjectURL(response.data)
+        const link = document.createElement("a")
+        link.href = blobUrl
+        link.download = downloadFilename || "download"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(blobUrl)
+        return
+      } catch (downloadError) {
+        console.log("Download endpoint failed, trying direct URL...")
+        
+        // Fallback: try direct URL access
+        const response = await axios.get(url, {
+          responseType: "blob",
+          withCredentials: true,
+        })
+        
+        const blobUrl = window.URL.createObjectURL(response.data)
+        const link = document.createElement("a")
+        link.href = blobUrl
+        link.download = downloadFilename || "download"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(blobUrl)
+      }
     } catch (err) {
       console.error("Download failed:", err)
+      console.error("Error details:", err.response?.data || err.message)
       alert("Download failed. Please try again.")
     }
   }
