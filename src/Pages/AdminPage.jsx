@@ -480,7 +480,7 @@ export default function AdminDashboard() {
                               onClick={() => {
                                 const downloadUrl = ticket.headshotUrl?.startsWith("http")
                                   ? ticket.headshotUrl
-                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`
+                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl}`
                                 console.log("Download button clicked for", ticket.fullName, "URL:", downloadUrl)
                                 handleDownload(downloadUrl, `headshot-${ticket.fullName}.png`)
                               }}
@@ -498,12 +498,12 @@ export default function AdminDashboard() {
                         {ticket.paymentProofUrl ? (
                           <button
                             onClick={() =>
-                              handleDownload(
-                                ticket.paymentProofUrl?.startsWith("http")
-                                  ? ticket.paymentProofUrl
-                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl.replace(/^\/?uploads\//, "")}`,
-                                `payment-${ticket.fullName}.pdf`
-                              )
+                                                      handleDownload(
+                          ticket.paymentProofUrl?.startsWith("http")
+                            ? ticket.paymentProofUrl
+                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl}`,
+                          `payment-${ticket.fullName}.pdf`
+                        )
                             }
                             className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
                           >
@@ -657,7 +657,7 @@ export default function AdminDashboard() {
                         handleDownload(
                           ticket.headshotUrl?.startsWith("http")
                             ? ticket.headshotUrl
-                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl.replace(/^\/?uploads\//, "")}`,
+                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl}`,
                           `headshot-${ticket.fullName}.png`
                         )
                       }
@@ -673,7 +673,7 @@ export default function AdminDashboard() {
                         handleDownload(
                           ticket.paymentProofUrl?.startsWith("http")
                             ? ticket.paymentProofUrl
-                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl.replace(/^\/?uploads\//, "")}`,
+                            : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl}`,
                           `payment-${ticket.fullName}.pdf`
                         )
                       }
