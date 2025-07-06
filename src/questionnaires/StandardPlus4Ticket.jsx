@@ -206,6 +206,13 @@ export default function StandardPlus4Ticket() {
     e.preventDefault()
     setIsSubmitting(true)
 
+    // Validate required fields
+    if (!formData.email || !formData.fullName) {
+      alert("Please fill in all required fields (Email and Full Name)")
+      setIsSubmitting(false)
+      return
+    }
+
     const form = new FormData()
 
     // Set ticket classification - map to backend schema
@@ -257,8 +264,30 @@ export default function StandardPlus4Ticket() {
         subType: memberType,
         ticketType: "Standard",
         email: formData.email,
-        fullName: formData.fullName
+        fullName: formData.fullName,
+        workshopPackage: formData.workshopPackage,
+        isGimsocMember: memberType === "GIMSOC"
       })
+      
+      // Log all form data entries
+      console.log("📋 FormData entries:")
+      for (let [key, value] of form.entries()) {
+        console.log(`${key}: ${value}`)
+      }
+      
+      // Test backend connectivity
+      console.log("🔍 Testing backend connectivity...")
+      
+      // Test if backend is reachable
+      try {
+        const testResponse = await axios.get("https://gimsoc-backend.onrender.com/api/info/getprofileinfo", {
+          withCredentials: true,
+          timeout: 5000
+        })
+        console.log("✅ Backend is reachable")
+      } catch (testErr) {
+        console.warn("⚠️ Backend connectivity test failed:", testErr.message)
+      }
       
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
         headers: {
@@ -279,7 +308,19 @@ export default function StandardPlus4Ticket() {
       console.error("❌ Full error response:", err.response)
       console.error("❌ Error status:", err.response?.status)
       console.error("❌ Error data:", err.response?.data)
-      alert(`Form submission failed: ${err.response?.data?.message || err.message}`)
+      console.error("❌ Network error:", err.message)
+      console.error("❌ Request config:", err.config)
+      
+      if (err.response) {
+        // Server responded with error
+        alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+      } else if (err.request) {
+        // Network error
+        alert("Network error: Unable to reach the server. Please check your connection.")
+      } else {
+        // Other error
+        alert(`Error: ${err.message}`)
+      }
     } finally {
       setIsSubmitting(false)
     }
