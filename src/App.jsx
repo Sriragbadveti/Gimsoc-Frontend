@@ -30,6 +30,7 @@ import TicketsSoon from "./Pages/TicketsSoon"
 import AbstractSuccessPage from "./Pages/AbstractSuccess"
 import AboutusMain from "./Pages/AboutusMain"
 import StandardPlus4Ticket from "./questionnaires/StandardPlus4Ticket"
+import StandardPlus3Ticket from "./questionnaires/StandardPlus3Ticket"
 
 
 
@@ -121,6 +122,7 @@ const App = () => {
           <Route path="/abstract-success" element={<AbstractSuccessPage/>}/>
           <Route path="/learnmore" element={<AboutusMain/>}/>
           <Route path="/standard-plus-4" element={<StandardPlus4Ticket/>}/>
+          <Route path="/standard-plus-3" element={<StandardPlus3Ticket/>}/>
           
         </Routes>
       )}

@@ -203,6 +203,43 @@ input:focus + .input-icon {
   animation: float-particle 6s ease-in-out infinite;
 }
 
+/* Fast balloon animation */
+@keyframes balloon-float-fast {
+  0% {
+    transform: translateY(100vh) scale(0.3);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(80vh) scale(0.6);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-50px) scale(1.2);
+  }
+  100% {
+    transform: translateY(-100px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes balloon-bounce-fast {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.1);
+  }
+}
+
+.balloon-float-fast {
+  animation: balloon-float-fast 1.5s ease-out forwards;
+}
+
+.balloon-bounce-fast {
+  animation: balloon-bounce-fast 0.8s ease-in-out infinite;
+}
+
 /* Card hover effects */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

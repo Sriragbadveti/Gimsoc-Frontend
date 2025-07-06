@@ -1,0 +1,43 @@
+/* Fast Balloon Animation */
+@keyframes balloon-float-fast {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-200px) rotate(5deg);
+  }
+  100% {
+    transform: translateY(-400px) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+.balloon-float-fast {
+  animation: balloon-float-fast 2s ease-out forwards;
+}
+
+/* Existing animations */
+@keyframes balloon-float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-200px) rotate(5deg);
+  }
+  100% {
+    transform: translateY(-400px) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+.balloon-float {
+  animation: balloon-float 4s ease-out forwards;
+}

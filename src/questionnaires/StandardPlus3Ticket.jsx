@@ -1,32 +1,42 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, CheckCircle, Users, Star, Crown, Shield, Award, Sparkles, Calendar, MapPin, Clock, XCircle } from "lucide-react"
+import {
+  Upload,
+  User,
+  GraduationCap,
+  Camera,
+  Utensils,
+  CreditCard,
+  CheckCircle,
+  Users,
+  Star,
+  Crown,
+  Shield,
+  Award,
+  Sparkles,
+} from "lucide-react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
   const balloons = [
-    { id: 1, color: 'bg-red-500', delay: 0, x: '10%', size: 'w-10 h-12' },
-    { id: 2, color: 'bg-blue-500', delay: 0.1, x: '20%', size: 'w-8 h-10' },
-    { id: 3, color: 'bg-green-500', delay: 0.2, x: '30%', size: 'w-12 h-14' },
-    { id: 4, color: 'bg-yellow-500', delay: 0.3, x: '40%', size: 'w-9 h-11' },
-    { id: 5, color: 'bg-purple-500', delay: 0.4, x: '50%', size: 'w-11 h-13' },
-    { id: 6, color: 'bg-pink-500', delay: 0.5, x: '60%', size: 'w-8 h-10' },
-    { id: 7, color: 'bg-indigo-500', delay: 0.6, x: '70%', size: 'w-10 h-12' },
-    { id: 8, color: 'bg-orange-500', delay: 0.7, x: '80%', size: 'w-9 h-11' },
-    { id: 9, color: 'bg-teal-500', delay: 0.8, x: '90%', size: 'w-12 h-14' },
-    { id: 10, color: 'bg-rose-500', delay: 0.9, x: '95%', size: 'w-8 h-10' },
+    { id: 1, color: "bg-red-500", delay: 0, x: "10%", size: "w-10 h-12" },
+    { id: 2, color: "bg-blue-500", delay: 0.1, x: "20%", size: "w-8 h-10" },
+    { id: 3, color: "bg-green-500", delay: 0.2, x: "30%", size: "w-12 h-14" },
+    { id: 4, color: "bg-yellow-500", delay: 0.3, x: "40%", size: "w-9 h-11" },
+    { id: 5, color: "bg-purple-500", delay: 0.4, x: "50%", size: "w-11 h-13" },
+    { id: 6, color: "bg-pink-500", delay: 0.5, x: "60%", size: "w-8 h-10" },
+    { id: 7, color: "bg-indigo-500", delay: 0.6, x: "70%", size: "w-10 h-12" },
+    { id: 8, color: "bg-orange-500", delay: 0.7, x: "80%", size: "w-9 h-11" },
+    { id: 9, color: "bg-teal-500", delay: 0.8, x: "90%", size: "w-12 h-14" },
+    { id: 10, color: "bg-rose-500", delay: 0.9, x: "95%", size: "w-8 h-10" },
   ]
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="text-center">
-        <h2 className="text-4xl font-bold text-white mb-8 animate-bounce">
-          🎉 Ticket Submitted Successfully! 🎉
-        </h2>
-        
+        <h2 className="text-4xl font-bold text-white mb-8 animate-bounce">🎉 Ticket Submitted Successfully! 🎉</h2>
         {/* Balloons */}
         <div className="relative h-96 w-full overflow-hidden">
           {balloons.map((balloon) => (
@@ -35,7 +45,7 @@ const BalloonAnimation = ({ onComplete }) => {
               className={`absolute ${balloon.color} ${balloon.size} rounded-full balloon-float-fast`}
               style={{
                 left: balloon.x,
-                bottom: '-40px',
+                bottom: "-40px",
                 animationDelay: `${balloon.delay}s`,
               }}
             >
@@ -44,53 +54,42 @@ const BalloonAnimation = ({ onComplete }) => {
             </div>
           ))}
         </div>
-        
-        <p className="text-white text-xl mt-8 animate-pulse">
-          Redirecting to success page...
-        </p>
+        <p className="text-white text-xl mt-8 animate-pulse">Redirecting to success page...</p>
       </div>
     </div>
   )
 }
 
-export default function StandardPlus4Ticket() {
+export default function StandardPlus3Ticket() {
   const [memberType, setMemberType] = useState("")
   const [formData, setFormData] = useState({
     // Member Type
     memberType: "",
-
     // Personal Information
     fullName: "",
     email: "",
     whatsapp: "",
-
     // Academic Information
     universityName: "",
     semester: "",
     examPrep: "",
     examOther: "",
-
     // TSU/GEOMEDI Specific
     tsuEmail: "",
     geomediEmail: "",
     enrollmentProof: null,
-
     // GIMSOC Specific
     gimsocMembershipCode: "",
     gimsocPosition: "",
-
     // Uploads
     headshot: null,
     paymentProof: null,
-
     // Preferences
     foodPreference: "",
     dietaryRestrictions: "",
     accessibilityNeeds: "",
-
     // Gala Dinner
     galaDinner: "",
-
     // Consent
     discountConfirmation: false,
     infoAccurate: false,
@@ -98,17 +97,16 @@ export default function StandardPlus4Ticket() {
     policies: false,
     emailConsent: false,
     whatsappConsent: false,
-
     // Payment
     paymentMethod: "",
-
     // Additional fields for backend compatibility
-    workshopPackage: "Standard+4",
+    workshopPackage: "Standard+3",
     medicalQualification: "",
     specialty: "",
     currentWorkplace: "",
     countryOfPractice: "",
     isTsuStudent: false,
+    isGeomediStudent: false,
     nationality: "",
     countryOfResidence: "",
     passportNumber: "",
@@ -123,7 +121,6 @@ export default function StandardPlus4Ticket() {
   const [currentStep, setCurrentStep] = useState(1)
   const [fadeIn, setFadeIn] = useState(false)
   const [showBalloons, setShowBalloons] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     setFadeIn(true)
@@ -148,45 +145,47 @@ export default function StandardPlus4Ticket() {
   const handleMemberTypeSelect = (type) => {
     // Map frontend types to backend subType values
     const typeMapping = {
-      "gimsoc": "GIMSOC",
-      "non-gimsoc": "Non-GIMSOC", 
-      "tsu": "TSU",
-      "exec": "GIMSOC", // Executive & Subcommittee maps to GIMSOC
-      "geomedi": "Non-GIMSOC" // GEOMEDI maps to Non-GIMSOC
+      gimsoc: "GIMSOC",
+      "non-gimsoc": "Non-GIMSOC",
+      tsu: "TSU",
+      exec: "GIMSOC", // Executive & Subcommittee maps to GIMSOC
+      geomedi: "GEOMEDI",
     }
-    
+
     const mappedType = typeMapping[type] || type
     setMemberType(mappedType)
     setFormData((prev) => ({
       ...prev,
       memberType: mappedType,
       isTsuStudent: mappedType === "TSU",
+      isGeomediStudent: mappedType === "GEOMEDI",
     }))
     setCurrentStep(2)
   }
 
   // Calculate pricing based on member type
   const calculatePrice = () => {
-    const basePrice = 75 // Standard price
-    let discount = 0
+    let basePrice = 0
 
     switch (memberType) {
       case "GIMSOC":
-        discount = 10
+        basePrice = 65 // 75 - 10 discount
         break
       case "TSU":
-        discount = 30
+        basePrice = 45 // 75 - 30 discount
+        break
+      case "GEOMEDI":
+        basePrice = 50 // 75 - 25 discount
         break
       case "Non-GIMSOC":
-        discount = 0
+        basePrice = 75 // Regular price
         break
       default:
-        discount = 0
+        basePrice = 75
     }
 
-    const ticketPrice = basePrice - discount
     const galaPrice = formData.galaDinner && formData.galaDinner.includes("Yes") ? 40 : 0
-    return ticketPrice + galaPrice
+    return basePrice + galaPrice
   }
 
   const getMemberTypeDisplay = () => {
@@ -197,6 +196,8 @@ export default function StandardPlus4Ticket() {
         return "Non-GIMSOC Member"
       case "TSU":
         return "TSU Student"
+      case "GEOMEDI":
+        return "GEOMEDI Student"
       default:
         return ""
     }
@@ -218,23 +219,32 @@ export default function StandardPlus4Ticket() {
     // Set ticket classification - map to backend schema
     form.append("ticketCategory", "Standard")
     form.append("subType", memberType)
-    form.append("ticketType", "Standard") // Backend expects this field
+    form.append("ticketType", "Standard+3")
 
     // Convert form data according to schema
     console.log("🔍 Form data being processed:", formData)
-    
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         console.log(`📝 Adding field: ${key} = ${value} (type: ${typeof value})`)
-        
+
         // Boolean conversions
-        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "discountConfirmation", "isTsuStudent"].includes(key)) {
+        if (
+          [
+            "infoAccurate",
+            "policies",
+            "emailConsent",
+            "whatsappConsent",
+            "discountConfirmation",
+            "isTsuStudent",
+            "isGeomediStudent",
+          ].includes(key)
+        ) {
           const boolValue = value === true || value === "true" || value === "Yes"
-          form.append(key, boolValue.toString()) // Send as string, backend will convert
+          form.append(key, boolValue.toString())
           console.log(`✅ Boolean field ${key}: ${boolValue}`)
         } else if (["mediaConsent"].includes(key)) {
           const boolValue = value === "Yes"
-          form.append(key, boolValue.toString()) // Send as string, backend will convert
+          form.append(key, boolValue.toString())
           console.log(`✅ Media consent ${key}: ${boolValue}`)
         }
         // File fields
@@ -252,7 +262,7 @@ export default function StandardPlus4Ticket() {
 
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
-    
+
     // Add membership code for GIMSOC members
     if (memberType === "GIMSOC" && formData.gimsocMembershipCode) {
       form.append("membershipCode", formData.gimsocMembershipCode)
@@ -262,22 +272,21 @@ export default function StandardPlus4Ticket() {
       console.log("📤 Submitting form with data:", {
         ticketCategory: "Standard",
         subType: memberType,
-        ticketType: "Standard",
+        ticketType: "Standard+3",
         email: formData.email,
         fullName: formData.fullName,
         workshopPackage: formData.workshopPackage,
-        isGimsocMember: memberType === "GIMSOC"
+        isGimsocMember: memberType === "GIMSOC",
       })
-      
+
       // Log all form data entries
       console.log("📋 FormData entries:")
-      for (let [key, value] of form.entries()) {
+      for (const [key, value] of form.entries()) {
         console.log(`${key}: ${value}`)
       }
-      
+
       // Test backend connectivity
       console.log("🔍 Testing backend connectivity...")
-      
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -288,10 +297,11 @@ export default function StandardPlus4Ticket() {
 
       console.log("✅ Submitted successfully:", response.data)
       setShowBalloons(true)
-      
-      // Navigate to success page after 2 seconds
+
+      // Navigate to success page after 3.5 seconds
       setTimeout(() => {
-        navigate("/ticket-success")
+        // Replace with your navigation logic
+        window.location.href = "/ticket-success"
       }, 3500)
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
@@ -300,8 +310,8 @@ export default function StandardPlus4Ticket() {
       console.error("❌ Error data:", err.response?.data)
       console.error("❌ Network error:", err.message)
       console.error("❌ Request config:", err.config)
-      
-      if (err.code === 'ECONNABORTED') {
+
+      if (err.code === "ECONNABORTED") {
         alert("Request timed out. The server is not responding. Please try again later.")
       } else if (err.response) {
         // Server responded with error
@@ -346,26 +356,29 @@ export default function StandardPlus4Ticket() {
   // Member Type Selection Step
   if (currentStep === 1) {
     return (
-      <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
+      <div
+        className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}
+      >
         {showBalloons && <BalloonAnimation />}
+
         {/* Floating particles background - reduced for performance */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-2 h-2 bg-white/20 rounded-full animate-float-particle"
+              className="absolute w-2 h-2 bg-white/20 rounded-full animate-pulse"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 6}s`,
-                animationDuration: `${6 + Math.random() * 4}s`
+                animationDuration: `${6 + Math.random() * 4}s`,
               }}
             />
           ))}
         </div>
-        
+
         <div className="max-w-4xl mx-auto relative z-10">
-          <div className="glass rounded-3xl shadow-2xl overflow-hidden animate-bounce-in">
+          <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
             {/* Animated Header */}
             <div className="relative bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 px-8 py-12 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-blue-600/50 animate-pulse"></div>
@@ -373,16 +386,14 @@ export default function StandardPlus4Ticket() {
                 <div className="flex justify-center mb-4">
                   <Sparkles className="w-8 h-8 text-yellow-300 animate-bounce" />
                 </div>
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in gradient-text">
-                  Standard+4 Ticket
-                </h1>
+                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">Standard+3 Ticket</h1>
                 <p className="text-blue-100 text-xl mb-6 animate-fade-in-delay">
                   Choose your membership type to continue
                 </p>
-                                  <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4 animate-glow">
+                <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4">
                   <span className="text-white text-lg font-medium">Base Price: </span>
                   <span className="text-white text-3xl font-bold">75 GEL</span>
-                  <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (4 workshops)</div>
+                  <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (3 workshops)</div>
                 </div>
               </div>
             </div>
@@ -390,95 +401,91 @@ export default function StandardPlus4Ticket() {
             <div className="p-8">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* GIMSOC Member */}
-                <div 
+                <div
                   onClick={() => handleMemberTypeSelect("gimsoc")}
-                  className="group cursor-pointer card-hover animate-fade-in"
+                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-2 border-blue-300/50 rounded-2xl p-6 hover:border-blue-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-2 border-blue-300/50 rounded-2xl p-6 hover:border-blue-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4 group-hover:bg-blue-200 transition-colors">
                       <Users className="w-8 h-8 text-blue-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">GIMSOC Member</h3>
                     <p className="text-white mb-4">Active GIMSOC membership required</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-600">65 GEL</span>
-                      <div className="text-sm text-gray-500">10 GEL discount</div>
+                      <span className="text-2xl font-bold text-green-400">65 GEL</span>
+                      <div className="text-sm text-gray-400">10 GEL discount</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Non-GIMSOC Member */}
-                <div 
+                <div
                   onClick={() => handleMemberTypeSelect("non-gimsoc")}
-                  className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.1s' }}
+                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="bg-gradient-to-br from-gray-600/20 to-slate-600/20 border-2 border-gray-300/50 rounded-2xl p-6 hover:border-gray-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-gray-600/20 to-slate-600/20 border-2 border-gray-300/50 rounded-2xl p-6 hover:border-gray-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4 group-hover:bg-gray-200 transition-colors">
                       <User className="w-8 h-8 text-gray-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-gray-600">75 GEL</span>
-                      <div className="text-sm text-gray-500">Regular price</div>
+                      <span className="text-2xl font-bold text-gray-400">75 GEL</span>
+                      <div className="text-sm text-gray-400">Regular price</div>
                     </div>
                   </div>
                 </div>
 
                 {/* TSU Student */}
-                <div 
+                <div
                   onClick={() => handleMemberTypeSelect("tsu")}
-                  className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.2s' }}
+                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 border-2 border-green-300/50 rounded-2xl p-6 hover:border-green-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 border-2 border-green-300/50 rounded-2xl p-6 hover:border-green-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4 group-hover:bg-green-200 transition-colors">
                       <GraduationCap className="w-8 h-8 text-green-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">TSU Student</h3>
                     <p className="text-white mb-4">TSU Faculty of Medicine</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-600">45 GEL</span>
-                      <div className="text-sm text-gray-500">30 GEL discount</div>
+                      <span className="text-2xl font-bold text-green-400">45 GEL</span>
+                      <div className="text-sm text-gray-400">30 GEL discount</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Executive & Subcommittee */}
-                <div 
+                <div
                   onClick={() => handleMemberTypeSelect("exec")}
-                  className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.3s' }}
+                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="bg-gradient-to-br from-purple-600/20 to-violet-600/20 border-2 border-purple-300/50 rounded-2xl p-6 hover:border-purple-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-purple-600/20 to-violet-600/20 border-2 border-purple-300/50 rounded-2xl p-6 hover:border-purple-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4 group-hover:bg-purple-200 transition-colors">
                       <Crown className="w-8 h-8 text-purple-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Executive & Subcommittee</h3>
                     <p className="text-white mb-4">GIMSOC leadership team</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-purple-600">50 GEL</span>
-                      <div className="text-sm text-gray-500">25 GEL discount</div>
+                      <span className="text-2xl font-bold text-purple-400">50 GEL</span>
+                      <div className="text-sm text-gray-400">25 GEL discount</div>
                     </div>
                   </div>
                 </div>
 
                 {/* GEOMEDI Student */}
-                <div 
+                <div
                   onClick={() => handleMemberTypeSelect("geomedi")}
-                  className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.4s' }}
+                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4 group-hover:bg-orange-200 transition-colors">
                       <Award className="w-8 h-8 text-orange-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">GEOMEDI Student</h3>
                     <p className="text-white mb-4">GEOMEDI Faculty of Medicine</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-orange-600">50 GEL</span>
-                      <div className="text-sm text-gray-500">25 GEL discount</div>
+                      <span className="text-2xl font-bold text-orange-400">50 GEL</span>
+                      <div className="text-sm text-gray-400">25 GEL discount</div>
                     </div>
                   </div>
                 </div>
@@ -492,24 +499,25 @@ export default function StandardPlus4Ticket() {
 
   // Form Step
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
+    <div
+      className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}
+    >
       {showBalloons && <BalloonAnimation />}
+
       <div className="max-w-4xl mx-auto">
         <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
           {/* Header */}
           <div className="relative bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 px-8 py-8 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-blue-600/50 animate-pulse"></div>
             <div className="relative z-10 text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                {getMemberTypeDisplay()} Registration
-              </h1>
-              <p className="text-blue-100 mb-4">Standard+4 Ticket - Complete your registration</p>
-              
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{getMemberTypeDisplay()} Registration</h1>
+              <p className="text-blue-100 mb-4">Standard+3 Ticket - Complete your registration</p>
+
               {/* Dynamic Price Display */}
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
                 <span className="text-white text-lg font-medium">Total Price: </span>
                 <span className="text-white text-3xl font-bold">{calculatePrice()} GEL</span>
-                {formData.galaDinner === "Yes" && (
+                {formData.galaDinner === "Yes, I would like to attend the Gala Dinner (+40 GEL)" && (
                   <div className="text-yellow-300 text-sm mt-1">✓ Gala Dinner Included (+40 GEL)</div>
                 )}
               </div>
@@ -517,8 +525,58 @@ export default function StandardPlus4Ticket() {
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-8">
+            {/* Eligibility Check for TSU and GEOMEDI */}
+            {(memberType === "TSU" || memberType === "GEOMEDI") && (
+              <section className="space-y-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 bg-yellow-100 rounded-xl">
+                    <CheckCircle className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <h2 className="text-2xl font-semibold text-white">Eligibility Confirmation</h2>
+                </div>
+                <div className="bg-yellow-50/10 border border-yellow-200/30 rounded-xl p-6">
+                  <p className="text-white mb-4">
+                    Are you a currently enrolled student at{" "}
+                    {memberType === "TSU"
+                      ? "Ivane Javakhishvili Tbilisi State University – Faculty of Medicine"
+                      : "GEOMEDI – Faculty of Medicine"}
+                    ?
+                  </p>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="eligibilityConfirmation"
+                        value="Yes"
+                        className="text-yellow-600 focus:ring-yellow-500"
+                        required
+                      />
+                      <span className="text-white">Yes</span>
+                    </label>
+                    <label className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="eligibilityConfirmation"
+                        value="No"
+                        className="text-yellow-600 focus:ring-yellow-500"
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            alert(
+                              `This registration form is only for ${memberType} students eligible for the discounted ticket. Please return to the main registration page.`,
+                            )
+                            setCurrentStep(1)
+                          }
+                        }}
+                      />
+                      <span className="text-white">No</span>
+                    </label>
+                  </div>
+                </div>
+              </section>
+            )}
+
             {/* Personal Information */}
-            <section className="space-y-6 animate-fade-in">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-100 rounded-xl">
                   <User className="w-6 h-6 text-blue-600" />
@@ -576,7 +634,7 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Academic Information */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-green-100 rounded-xl">
                   <GraduationCap className="w-6 h-6 text-green-600" />
@@ -587,20 +645,36 @@ export default function StandardPlus4Ticket() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">University Name *</label>
-                  <select
-                    name="universityName"
-                    value={formData.universityName}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
-                    required
-                  >
-                    <option value="">Select your university</option>
-                    {universities.map((uni, index) => (
-                      <option key={index} value={uni}>
-                        {uni}
-                      </option>
-                    ))}
-                  </select>
+                  {memberType === "TSU" ? (
+                    <input
+                      type="text"
+                      value="Ivane Javakhishvili Tbilisi State University – Faculty of Medicine"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-100 text-gray-600"
+                      readOnly
+                    />
+                  ) : memberType === "GEOMEDI" ? (
+                    <input
+                      type="text"
+                      value="GEOMEDI – Faculty of Medicine"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-100 text-gray-600"
+                      readOnly
+                    />
+                  ) : (
+                    <select
+                      name="universityName"
+                      value={formData.universityName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                      required
+                    >
+                      <option value="">Select your university</option>
+                      {universities.map((uni, index) => (
+                        <option key={index} value={uni}>
+                          {uni}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div className="transform hover:scale-105 transition-transform duration-300">
@@ -626,7 +700,10 @@ export default function StandardPlus4Ticket() {
                 <label className="block text-sm font-medium text-white mb-3">Which exam are you preparing for?</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {exams.map((exam) => (
-                    <label key={exam} className="flex items-center space-x-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-white/50 transition-colors bg-white/20 backdrop-blur-sm">
+                    <label
+                      key={exam}
+                      className="flex items-center space-x-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-white/50 transition-colors bg-white/20 backdrop-blur-sm"
+                    >
                       <input
                         type="radio"
                         name="examPrep"
@@ -653,15 +730,14 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Member-Specific Sections */}
-            {memberType === "gimsoc" && (
-              <section className="space-y-6 animate-fade-in-delay">
+            {memberType === "GIMSOC" && (
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <Shield className="w-6 h-6 text-purple-600" />
                   </div>
                   <h2 className="text-2xl font-semibold text-white">GIMSOC Membership</h2>
                 </div>
-
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">GIMSOC Membership Code *</label>
                   <input
@@ -677,15 +753,14 @@ export default function StandardPlus4Ticket() {
               </section>
             )}
 
-            {memberType === "tsu" && (
-              <section className="space-y-6 animate-fade-in-delay">
+            {memberType === "TSU" && (
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <CheckCircle className="w-6 h-6 text-green-600" />
                   </div>
                   <h2 className="text-2xl font-semibold text-white">TSU Student Verification</h2>
                 </div>
-
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">TSU Email Address *</label>
                   <input
@@ -697,20 +772,21 @@ export default function StandardPlus4Ticket() {
                     placeholder="Enter your TSU email ID (e.g., student@tsu.ge)"
                     required
                   />
-                  <p className="text-xs text-gray-300 mt-1">Please enter your official TSU email address for verification</p>
+                  <p className="text-xs text-gray-300 mt-1">
+                    Please enter your official TSU email address for verification
+                  </p>
                 </div>
               </section>
             )}
 
-            {memberType === "geomedi" && (
-              <section className="space-y-6 animate-fade-in-delay">
+            {memberType === "GEOMEDI" && (
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-orange-100 rounded-xl">
                     <Award className="w-6 h-6 text-orange-600" />
                   </div>
                   <h2 className="text-2xl font-semibold text-white">GEOMEDI Student Verification</h2>
                 </div>
-
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">GEOMEDI Email Address *</label>
                   <input
@@ -722,20 +798,21 @@ export default function StandardPlus4Ticket() {
                     placeholder="Enter your GEOMEDI email ID"
                     required
                   />
-                  <p className="text-xs text-gray-300 mt-1">Please enter your official GEOMEDI email address for verification</p>
+                  <p className="text-xs text-gray-300 mt-1">
+                    Please enter your official GEOMEDI email address for verification
+                  </p>
                 </div>
               </section>
             )}
 
             {memberType === "exec" && (
-              <section className="space-y-6 animate-fade-in-delay">
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <Crown className="w-6 h-6 text-purple-600" />
                   </div>
                   <h2 className="text-2xl font-semibold text-white">Executive & Subcommittee Information</h2>
                 </div>
-
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="transform hover:scale-105 transition-transform duration-300">
                     <label className="block text-sm font-medium text-white mb-2">Your Position in GIMSOC *</label>
@@ -749,7 +826,6 @@ export default function StandardPlus4Ticket() {
                       required
                     />
                   </div>
-
                   <div className="transform hover:scale-105 transition-transform duration-300">
                     <label className="block text-sm font-medium text-white mb-2">GIMSOC Membership Code *</label>
                     <input
@@ -767,23 +843,22 @@ export default function StandardPlus4Ticket() {
             )}
 
             {/* Workshop Selection */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-yellow-100 rounded-xl">
                   <Star className="w-6 h-6 text-yellow-600" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Workshop Selection</h2>
               </div>
-
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+              <div className="bg-yellow-50/10 border border-yellow-200/30 rounded-xl p-6">
                 <div className="text-center">
-                  <Star className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Workshop Selection Coming Soon!</h3>
-                  <p className="text-gray-700 mb-4">
-                    You will be able to select 4 workshops from our comprehensive workshop lineup.
+                  <Star className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">Workshop Selection Coming Soon!</h3>
+                  <p className="text-gray-300 mb-4">
+                    You will be able to select 3 workshops from our comprehensive workshop lineup.
                   </p>
-                  <div className="bg-yellow-100 rounded-lg p-4">
-                    <p className="text-sm text-yellow-800">
+                  <div className="bg-yellow-100/20 rounded-lg p-4">
+                    <p className="text-sm text-yellow-300">
                       <strong>Note:</strong> Workshop spots are limited and will be confirmed based on availability.
                     </p>
                   </div>
@@ -792,42 +867,41 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Identification */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-100 rounded-xl">
                   <Camera className="w-6 h-6 text-blue-600" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Identification</h2>
               </div>
-
-                              <div className="transform hover:scale-105 transition-transform duration-300">
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Upload a Headshot for Your Conference ID Card
+              <div className="transform hover:scale-105 transition-transform duration-300">
+                <label className="block text-sm font-medium text-white mb-2">
+                  Upload a Headshot for Your Conference ID Card
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors bg-white/20 backdrop-blur-sm">
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    name="headshot"
+                    accept="image/*"
+                    className="hidden"
+                    id="headshot-upload"
+                  />
+                  <label htmlFor="headshot-upload" className="cursor-pointer">
+                    <span className="text-blue-400 hover:text-blue-300 font-medium text-lg">Click to upload</span>
+                    <span className="text-gray-300"> or drag and drop</span>
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors bg-white/20 backdrop-blur-sm">
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      name="headshot"
-                      accept="image/*"
-                      className="hidden"
-                      id="headshot-upload"
-                    />
-                    <label htmlFor="headshot-upload" className="cursor-pointer">
-                      <span className="text-blue-400 hover:text-blue-300 font-medium text-lg">Click to upload</span>
-                      <span className="text-gray-300"> or drag and drop</span>
-                    </label>
-                    <p className="text-xs text-gray-300 mt-2">Clear, front-facing photo with plain background</p>
-                    {formData.headshot && (
-                      <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
-                    )}
-                  </div>
+                  <p className="text-xs text-gray-300 mt-2">Clear, front-facing photo with plain background</p>
+                  {formData.headshot && (
+                    <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
+                  )}
                 </div>
+              </div>
             </section>
 
             {/* Food Preferences */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-green-100 rounded-xl">
                   <Utensils className="w-6 h-6 text-green-600" />
@@ -840,7 +914,10 @@ export default function StandardPlus4Ticket() {
                   <label className="block text-sm font-medium text-white mb-3">Preferred Food Option *</label>
                   <div className="space-y-3">
                     {["Vegetarian", "Vegan", "Non-Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
-                      <label key={option} className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
+                      <label
+                        key={option}
+                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm"
+                      >
                         <input
                           type="radio"
                           name="foodPreference"
@@ -885,7 +962,7 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Gala Dinner */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-purple-100 rounded-xl">
                   <Crown className="w-6 h-6 text-purple-600" />
@@ -893,24 +970,30 @@ export default function StandardPlus4Ticket() {
                 <h2 className="text-2xl font-semibold text-white">Gala Dinner Add-On</h2>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-6">
+              <div className="bg-gradient-to-r from-purple-50/10 to-pink-50/10 border border-purple-200/30 rounded-xl p-6">
                 <div className="text-center mb-6">
-                  <Crown className="w-12 h-12 text-purple-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-black mb-2">Would you like to attend the Gala Dinner?</h3>
-                  <p className="text-black mb-4">
-                    The Gala is the grand finale of MEDCON, an elegant evening designed to celebrate the success of the conference, 
-                    reflect on inspiring moments shared, and strengthen the connections formed.
+                  <Crown className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">Would you like to attend the Gala Dinner?</h3>
+                  <p className="text-gray-300 mb-4">
+                    The Gala is the grand finale of MEDCON, an elegant evening designed to celebrate the success of the
+                    conference, reflect on inspiring moments shared, and strengthen the connections formed.
                   </p>
-                  <div className="bg-purple-100 rounded-lg p-4 mb-6">
-                    <p className="text-sm text-black">
+                  <div className="bg-purple-100/20 rounded-lg p-4 mb-6">
+                    <p className="text-sm text-purple-300">
                       <strong>Note:</strong> Gala access is optional and costs an additional 40 GEL.
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {["Yes, I would like to attend the Gala Dinner (+40 GEL)", "No, I will not attend the Gala Dinner"].map((option) => (
-                    <label key={option} className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
+                  {[
+                    "Yes, I would like to attend the Gala Dinner (+40 GEL)",
+                    "No, I will not attend the Gala Dinner",
+                  ].map((option) => (
+                    <label
+                      key={option}
+                      className="flex items-center space-x-3 p-4 border border-gray-200/30 rounded-lg hover:bg-white/10 cursor-pointer transition-all bg-white/5 backdrop-blur-sm"
+                    >
                       <input
                         type="radio"
                         name="galaDinner"
@@ -920,7 +1003,7 @@ export default function StandardPlus4Ticket() {
                         className="text-purple-600 focus:ring-purple-500"
                         required
                       />
-                      <span className="text-black font-medium">{option}</span>
+                      <span className="text-white font-medium">{option}</span>
                     </label>
                   ))}
                 </div>
@@ -928,7 +1011,7 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Declaration and Consent */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-100 rounded-xl">
                   <Shield className="w-6 h-6 text-blue-600" />
@@ -947,7 +1030,9 @@ export default function StandardPlus4Ticket() {
                       className="text-blue-600 focus:ring-blue-500 rounded"
                       required
                     />
-                    <span className="text-white">I confirm that all the information provided is accurate to the best of my knowledge.</span>
+                    <span className="text-white">
+                      I confirm that all the information provided is accurate to the best of my knowledge.
+                    </span>
                   </label>
                 </div>
 
@@ -965,7 +1050,10 @@ export default function StandardPlus4Ticket() {
                           className="text-blue-600 focus:ring-blue-500"
                           required
                         />
-                        <span className="text-white">Do you consent to the use of photos and videos of you taken during the conference for promotional purposes? {option}</span>
+                        <span className="text-white">
+                          Do you consent to the use of photos and videos of you taken during the conference for
+                          promotional purposes? {option}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -982,7 +1070,9 @@ export default function StandardPlus4Ticket() {
                         className="text-blue-600 focus:ring-blue-500 rounded"
                         required
                       />
-                      <span className="text-white">I agree to comply with all conference policies, rules, and guidelines.</span>
+                      <span className="text-white">
+                        I agree to comply with all conference policies, rules, and guidelines.
+                      </span>
                     </label>
                   </div>
 
@@ -995,7 +1085,10 @@ export default function StandardPlus4Ticket() {
                         onChange={handleInputChange}
                         className="text-blue-600 focus:ring-blue-500 rounded"
                       />
-                      <span className="text-white">I agree to receive emails from GIMSOC and MEDCON, including updates, resources, and conference-related information.</span>
+                      <span className="text-white">
+                        I agree to receive emails from GIMSOC and MEDCON, including updates, resources, and
+                        conference-related information.
+                      </span>
                     </label>
                   </div>
 
@@ -1008,7 +1101,10 @@ export default function StandardPlus4Ticket() {
                         onChange={handleInputChange}
                         className="text-blue-600 focus:ring-blue-500 rounded"
                       />
-                      <span className="text-white">I consent to be added to our WhatsApp group for updates, discussions, and announcements related to MEDCON.</span>
+                      <span className="text-white">
+                        I consent to be added to our WhatsApp group for updates, discussions, and announcements related
+                        to MEDCON.
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -1016,7 +1112,7 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Payment Confirmation */}
-            <section className="space-y-6 animate-fade-in-delay">
+            <section className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-green-100 rounded-xl">
                   <CreditCard className="w-6 h-6 text-green-600" />
@@ -1028,6 +1124,18 @@ export default function StandardPlus4Ticket() {
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-3">Payment Method *</label>
                   <div className="space-y-3">
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Credit/Debit Card"
+                        checked={formData.paymentMethod === "Credit/Debit Card"}
+                        onChange={handleInputChange}
+                        className="text-green-600 focus:ring-green-500"
+                        required
+                      />
+                      <span className="text-white font-medium">Credit/Debit Card (note regarding the tax)</span>
+                    </label>
                     <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
                       <input
                         type="radio"
@@ -1046,40 +1154,62 @@ export default function StandardPlus4Ticket() {
                 {formData.paymentMethod === "Bank Transfer" && (
                   <div className="space-y-6">
                     {/* Bank Details */}
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-green-800 mb-4">Bank Transfer Details</h3>
-                      
+                    <div className="bg-gradient-to-r from-green-50/10 to-emerald-50/10 border-2 border-green-200/30 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold text-green-400 mb-4">Bank Transfer Details</h3>
+
                       {/* TBC Bank Details */}
                       <div className="mb-6">
-                        <h4 className="text-md font-semibold text-green-700 mb-3">FOR LARI TRANSFER</h4>
-                        <div className="bg-white/80 rounded-lg p-4 space-y-2">
-                          <p className="text-sm text-gray-700"><strong>Beneficiary's Bank:</strong> JSC TBC Bank</p>
-                          <p className="text-sm text-gray-700"><strong>Location:</strong> Tbilisi, Georgia</p>
-                          <p className="text-sm text-gray-700"><strong>Swift:</strong> TBCBGE22</p>
-                          <p className="text-sm text-gray-700"><strong>Beneficiary's IBAN:</strong> GE31TB7724245061200012</p>
-                          <p className="text-sm text-gray-700"><strong>Name of Beneficiary:</strong> Mandrika Santosh Umanga Fernando</p>
+                        <h4 className="text-md font-semibold text-green-300 mb-3">FOR LARI TRANSFER</h4>
+                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
+                          <p className="text-sm text-gray-300">
+                            <strong>Beneficiary's Bank:</strong> JSC TBC Bank
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Location:</strong> Tbilisi, Georgia
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Swift:</strong> TBCBGE22
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Beneficiary's IBAN:</strong> GE31TB7724245061200012
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Name of Beneficiary:</strong> Mandrika Santosh Umanga Fernando
+                          </p>
                         </div>
                       </div>
 
                       {/* Bank of Georgia Details */}
                       <div>
-                        <h4 className="text-md font-semibold text-green-700 mb-3">BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)</h4>
-                        <div className="bg-white/80 rounded-lg p-4 space-y-2">
-                          <p className="text-sm text-gray-700"><strong>Account with institution:</strong> Bank of Georgia</p>
-                          <p className="text-sm text-gray-700"><strong>SWIFT:</strong> BAGAGE22</p>
-                          <p className="text-sm text-gray-700"><strong>Beneficiary:</strong> FERNANDO MANDRIKA SANTOSH U.</p>
-                          <p className="text-sm text-gray-700"><strong>Account:</strong> GE94BG0000000608342766</p>
-                          <p className="text-sm text-gray-700"><strong>Phone:</strong> (+995 32) 2 444 444</p>
-                          <p className="text-sm text-gray-700"><strong>E-mail:</strong> welcome@bog.ge</p>
+                        <h4 className="text-md font-semibold text-green-300 mb-3">
+                          BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)
+                        </h4>
+                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
+                          <p className="text-sm text-gray-300">
+                            <strong>Account with institution:</strong> Bank of Georgia
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>SWIFT:</strong> BAGAGE22
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Beneficiary:</strong> FERNANDO MANDRIKA SANTOSH U.
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Account:</strong> GE94BG0000000608342766
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Phone:</strong> (+995 32) 2 444 444
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>E-mail:</strong> welcome@bog.ge
+                          </p>
                         </div>
                       </div>
                     </div>
 
                     {/* Upload Section */}
                     <div className="transform hover:scale-105 transition-transform duration-300">
-                      <label className="block text-sm font-medium text-white mb-2">
-                        Upload Proof of Payment *
-                      </label>
+                      <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
                       <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors bg-white/20 backdrop-blur-sm">
                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                         <input
@@ -1094,7 +1224,9 @@ export default function StandardPlus4Ticket() {
                           <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
                           <span className="text-gray-300"> or drag and drop</span>
                         </label>
-                        <p className="text-xs text-gray-300 mt-1">Please upload a screenshot or PDF of your bank transfer confirmation</p>
+                        <p className="text-xs text-gray-300 mt-1">
+                          Please upload a screenshot or PDF of your bank transfer confirmation
+                        </p>
                         {formData.paymentProof && (
                           <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
                         )}
@@ -1105,12 +1237,40 @@ export default function StandardPlus4Ticket() {
               </div>
             </section>
 
+            {/* Discount Confirmation for TSU and GEOMEDI */}
+            {(memberType === "TSU" || memberType === "GEOMEDI") && (
+              <section className="space-y-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 bg-yellow-100 rounded-xl">
+                    <CheckCircle className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <h2 className="text-2xl font-semibold text-white">Payment and Pricing Acknowledgment</h2>
+                </div>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="discountConfirmation"
+                      checked={formData.discountConfirmation}
+                      onChange={handleInputChange}
+                      className="text-yellow-600 focus:ring-yellow-500 rounded"
+                      required
+                    />
+                    <span className="text-white">
+                      I acknowledge that I am eligible for the discounted {memberType} student ticket and understand
+                      that this rate applies only with valid proof of enrollment.
+                    </span>
+                  </label>
+                </div>
+              </section>
+            )}
+
             {/* Submit Button */}
             <div className="pt-8">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
@@ -1127,48 +1287,4 @@ export default function StandardPlus4Ticket() {
       </div>
     </div>
   )
-}
-
-// Add custom CSS for balloon animations
-const balloonStyles = `
-  @keyframes float-up {
-    0% {
-      transform: translateY(100vh) scale(0.5);
-      opacity: 0;
-    }
-    20% {
-      opacity: 1;
-    }
-    80% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-100px) scale(1);
-      opacity: 0;
-    }
-  }
-  
-  @keyframes balloon-bounce {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-  
-  .balloon-float {
-    animation: float-up 4s ease-out forwards;
-  }
-  
-  .balloon-bounce {
-    animation: balloon-bounce 2s ease-in-out infinite;
-  }
-`
-
-// Inject styles
-if (typeof document !== 'undefined') {
-  const style = document.createElement('style')
-  style.textContent = balloonStyles
-  document.head.appendChild(style)
 }
