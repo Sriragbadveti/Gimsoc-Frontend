@@ -160,6 +160,7 @@ export default function StandardPlus4Ticket() {
     setFormData((prev) => ({
       ...prev,
       memberType: mappedType,
+      isTsuStudent: mappedType === "TSU",
     }))
     setCurrentStep(2)
   }
@@ -184,7 +185,7 @@ export default function StandardPlus4Ticket() {
     }
 
     const ticketPrice = basePrice - discount
-    const galaPrice = formData.galaDinner === "Yes, I would like to attend the Gala Dinner (+40 GEL)" ? 40 : 0
+    const galaPrice = formData.galaDinner && formData.galaDinner.includes("Yes") ? 40 : 0
     return ticketPrice + galaPrice
   }
 
@@ -213,29 +214,37 @@ export default function StandardPlus4Ticket() {
     form.append("ticketType", "Standard") // Backend expects this field
 
     // Convert form data according to schema
+    console.log("🔍 Form data being processed:", formData)
+    
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
+        console.log(`📝 Adding field: ${key} = ${value} (type: ${typeof value})`)
+        
         // Boolean conversions
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "discountConfirmation", "isTsuStudent"].includes(key)) {
-          form.append(key, value === true || value === "true" || value === "Yes")
+          const boolValue = value === true || value === "true" || value === "Yes"
+          form.append(key, boolValue.toString()) // Send as string, backend will convert
+          console.log(`✅ Boolean field ${key}: ${boolValue}`)
         } else if (["mediaConsent"].includes(key)) {
-          form.append(key, value === "Yes")
+          const boolValue = value === "Yes"
+          form.append(key, boolValue.toString()) // Send as string, backend will convert
+          console.log(`✅ Media consent ${key}: ${boolValue}`)
         }
         // File fields
         else if (key === "headshot" || key === "paymentProof" || key === "enrollmentProof") {
           form.append(key, value)
+          console.log(`📁 File field ${key}: ${value.name}`)
         }
         // Regular fields
         else {
           form.append(key, value)
+          console.log(`📄 Regular field ${key}: ${value}`)
         }
       }
     })
 
     // Add required fields that might be empty but are expected by backend
-    form.append("workshopPackage", "Standard+4")
-    form.append("isTsuStudent", memberType === "TSU")
-    form.append("isGimsocMember", memberType === "GIMSOC")
+    form.append("isGimsocMember", (memberType === "GIMSOC").toString())
     
     // Add membership code for GIMSOC members
     if (memberType === "GIMSOC" && formData.gimsocMembershipCode) {
