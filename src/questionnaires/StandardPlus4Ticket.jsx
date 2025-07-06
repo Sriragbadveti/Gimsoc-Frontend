@@ -278,22 +278,12 @@ export default function StandardPlus4Ticket() {
       // Test backend connectivity
       console.log("🔍 Testing backend connectivity...")
       
-      // Test if backend is reachable
-      try {
-        const testResponse = await axios.get("https://gimsoc-backend.onrender.com/api/info/getprofileinfo", {
-          withCredentials: true,
-          timeout: 5000
-        })
-        console.log("✅ Backend is reachable")
-      } catch (testErr) {
-        console.warn("⚠️ Backend connectivity test failed:", testErr.message)
-      }
-      
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
+        timeout: 30000, // 30 second timeout
       })
 
       console.log("✅ Submitted successfully:", response.data)
@@ -311,7 +301,9 @@ export default function StandardPlus4Ticket() {
       console.error("❌ Network error:", err.message)
       console.error("❌ Request config:", err.config)
       
-      if (err.response) {
+      if (err.code === 'ECONNABORTED') {
+        alert("Request timed out. The server is not responding. Please try again later.")
+      } else if (err.response) {
         // Server responded with error
         alert(`Form submission failed: ${err.response.data?.message || err.message}`)
       } else if (err.request) {
