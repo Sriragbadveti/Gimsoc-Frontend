@@ -210,7 +210,7 @@ export default function StandardPlus4Ticket() {
     // Set ticket classification - map to backend schema
     form.append("ticketCategory", "Standard")
     form.append("subType", memberType)
-    form.append("ticketType", "Standard") // Use "Standard" instead of "Standard+4" to match backend expectations
+    form.append("ticketType", "Standard") // Backend expects this field
 
     // Convert form data according to schema
     Object.entries(formData).forEach(([key, value]) => {
@@ -267,7 +267,10 @@ export default function StandardPlus4Ticket() {
       }, 3500)
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
-      alert("Form submission failed.")
+      console.error("❌ Full error response:", err.response)
+      console.error("❌ Error status:", err.response?.status)
+      console.error("❌ Error data:", err.response?.data)
+      alert(`Form submission failed: ${err.response?.data?.message || err.message}`)
     } finally {
       setIsSubmitting(false)
     }
