@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -58,6 +59,50 @@ const BalloonAnimation = ({ onComplete }) => {
       </div>
     </div>
   )
+}
+
+// Add custom CSS for balloon animations
+const balloonStyles = `
+  @keyframes float-up {
+    0% {
+      transform: translateY(100vh) scale(0.5);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) scale(1);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes balloon-bounce {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .balloon-float {
+    animation: float-up 4s ease-out forwards;
+  }
+  
+  .balloon-bounce {
+    animation: balloon-bounce 2s ease-in-out infinite;
+  }
+`
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style')
+  style.textContent = balloonStyles
+  document.head.appendChild(style)
 }
 
 export default function StandardPlus3Ticket() {
@@ -121,6 +166,7 @@ export default function StandardPlus3Ticket() {
   const [currentStep, setCurrentStep] = useState(1)
   const [fadeIn, setFadeIn] = useState(false)
   const [showBalloons, setShowBalloons] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     setFadeIn(true)
@@ -298,11 +344,10 @@ export default function StandardPlus3Ticket() {
       console.log("✅ Submitted successfully:", response.data)
       setShowBalloons(true)
 
-      // Navigate to success page after 3.5 seconds
-      setTimeout(() => {
-        // Replace with your navigation logic
-        window.location.href = "/ticket-success"
-      }, 3500)
+              // Navigate to success page after 3.5 seconds
+        setTimeout(() => {
+          navigate("/ticket-success")
+        }, 3500)
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       console.error("❌ Full error response:", err.response)
@@ -366,7 +411,7 @@ export default function StandardPlus3Ticket() {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-2 h-2 bg-white/20 rounded-full animate-pulse"
+              className="absolute w-2 h-2 bg-white/20 rounded-full animate-float-particle"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -378,7 +423,7 @@ export default function StandardPlus3Ticket() {
         </div>
 
         <div className="max-w-4xl mx-auto relative z-10">
-          <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+          <div className="glass rounded-3xl shadow-2xl overflow-hidden animate-bounce-in">
             {/* Animated Header */}
             <div className="relative bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 px-8 py-12 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-blue-600/50 animate-pulse"></div>
@@ -386,11 +431,13 @@ export default function StandardPlus3Ticket() {
                 <div className="flex justify-center mb-4">
                   <Sparkles className="w-8 h-8 text-yellow-300 animate-bounce" />
                 </div>
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">Standard+3 Ticket</h1>
+                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in gradient-text">
+                  Standard+3 Ticket
+                </h1>
                 <p className="text-blue-100 text-xl mb-6 animate-fade-in-delay">
                   Choose your membership type to continue
                 </p>
-                <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4">
+                <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4 animate-glow">
                   <span className="text-white text-lg font-medium">Base Price: </span>
                   <span className="text-white text-3xl font-bold">75 GEL</span>
                   <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (3 workshops)</div>
@@ -403,9 +450,9 @@ export default function StandardPlus3Ticket() {
                 {/* GIMSOC Member */}
                 <div
                   onClick={() => handleMemberTypeSelect("gimsoc")}
-                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
+                  className="group cursor-pointer card-hover animate-fade-in"
                 >
-                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-2 border-blue-300/50 rounded-2xl p-6 hover:border-blue-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-2 border-blue-300/50 rounded-2xl p-6 hover:border-blue-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4 group-hover:bg-blue-200 transition-colors">
                       <Users className="w-8 h-8 text-blue-600" />
                     </div>
@@ -421,9 +468,10 @@ export default function StandardPlus3Ticket() {
                 {/* Non-GIMSOC Member */}
                 <div
                   onClick={() => handleMemberTypeSelect("non-gimsoc")}
-                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
+                  className="group cursor-pointer card-hover animate-fade-in"
+                  style={{ animationDelay: '0.1s' }}
                 >
-                  <div className="bg-gradient-to-br from-gray-600/20 to-slate-600/20 border-2 border-gray-300/50 rounded-2xl p-6 hover:border-gray-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-gray-600/20 to-slate-600/20 border-2 border-gray-300/50 rounded-2xl p-6 hover:border-gray-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4 group-hover:bg-gray-200 transition-colors">
                       <User className="w-8 h-8 text-gray-600" />
                     </div>
@@ -439,9 +487,10 @@ export default function StandardPlus3Ticket() {
                 {/* TSU Student */}
                 <div
                   onClick={() => handleMemberTypeSelect("tsu")}
-                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
+                  className="group cursor-pointer card-hover animate-fade-in"
+                  style={{ animationDelay: '0.2s' }}
                 >
-                  <div className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 border-2 border-green-300/50 rounded-2xl p-6 hover:border-green-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 border-2 border-green-300/50 rounded-2xl p-6 hover:border-green-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4 group-hover:bg-green-200 transition-colors">
                       <GraduationCap className="w-8 h-8 text-green-600" />
                     </div>
@@ -457,9 +506,10 @@ export default function StandardPlus3Ticket() {
                 {/* Executive & Subcommittee */}
                 <div
                   onClick={() => handleMemberTypeSelect("exec")}
-                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
+                  className="group cursor-pointer card-hover animate-fade-in"
+                  style={{ animationDelay: '0.3s' }}
                 >
-                  <div className="bg-gradient-to-br from-purple-600/20 to-violet-600/20 border-2 border-purple-300/50 rounded-2xl p-6 hover:border-purple-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-purple-600/20 to-violet-600/20 border-2 border-purple-300/50 rounded-2xl p-6 hover:border-purple-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4 group-hover:bg-purple-200 transition-colors">
                       <Crown className="w-8 h-8 text-purple-600" />
                     </div>
@@ -475,9 +525,10 @@ export default function StandardPlus3Ticket() {
                 {/* GEOMEDI Student */}
                 <div
                   onClick={() => handleMemberTypeSelect("geomedi")}
-                  className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
+                  className="group cursor-pointer card-hover animate-fade-in"
+                  style={{ animationDelay: '0.4s' }}
                 >
-                  <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4 group-hover:bg-orange-200 transition-colors">
                       <Award className="w-8 h-8 text-orange-600" />
                     </div>
@@ -576,7 +627,7 @@ export default function StandardPlus3Ticket() {
             )}
 
             {/* Personal Information */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-100 rounded-xl">
                   <User className="w-6 h-6 text-blue-600" />
@@ -634,7 +685,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Academic Information */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-green-100 rounded-xl">
                   <GraduationCap className="w-6 h-6 text-green-600" />
@@ -731,7 +782,7 @@ export default function StandardPlus3Ticket() {
 
             {/* Member-Specific Sections */}
             {memberType === "GIMSOC" && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <Shield className="w-6 h-6 text-purple-600" />
@@ -754,7 +805,7 @@ export default function StandardPlus3Ticket() {
             )}
 
             {memberType === "TSU" && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-green-100 rounded-xl">
                     <CheckCircle className="w-6 h-6 text-green-600" />
@@ -780,7 +831,7 @@ export default function StandardPlus3Ticket() {
             )}
 
             {memberType === "GEOMEDI" && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-orange-100 rounded-xl">
                     <Award className="w-6 h-6 text-orange-600" />
@@ -806,7 +857,7 @@ export default function StandardPlus3Ticket() {
             )}
 
             {memberType === "exec" && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <Crown className="w-6 h-6 text-purple-600" />
@@ -843,7 +894,7 @@ export default function StandardPlus3Ticket() {
             )}
 
             {/* Workshop Selection */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-yellow-100 rounded-xl">
                   <Star className="w-6 h-6 text-yellow-600" />
@@ -867,7 +918,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Identification */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-100 rounded-xl">
                   <Camera className="w-6 h-6 text-blue-600" />
@@ -901,7 +952,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Food Preferences */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-green-100 rounded-xl">
                   <Utensils className="w-6 h-6 text-green-600" />
@@ -962,7 +1013,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Gala Dinner */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-purple-100 rounded-xl">
                   <Crown className="w-6 h-6 text-purple-600" />
@@ -1011,7 +1062,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Declaration and Consent */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-100 rounded-xl">
                   <Shield className="w-6 h-6 text-blue-600" />
@@ -1112,7 +1163,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Payment Confirmation */}
-            <section className="space-y-6">
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-green-100 rounded-xl">
                   <CreditCard className="w-6 h-6 text-green-600" />
@@ -1239,7 +1290,7 @@ export default function StandardPlus3Ticket() {
 
             {/* Discount Confirmation for TSU and GEOMEDI */}
             {(memberType === "TSU" || memberType === "GEOMEDI") && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-yellow-100 rounded-xl">
                     <CheckCircle className="w-6 h-6 text-yellow-600" />
@@ -1270,7 +1321,7 @@ export default function StandardPlus3Ticket() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
