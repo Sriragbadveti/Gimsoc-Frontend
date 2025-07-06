@@ -14,21 +14,22 @@ import FeaturedSpeakers from "./Components/FeaturedSpeakers"
 import FAQSection from "./Components/FaqSection"
 import Footer from "./Components/Footer"
 import TicketDisplay from "./Pages/TicketDisplay"
-import IndividualTicket from "./questionnaires/IndividualTicket"
-import GroupTicket from "./questionnaires/GroupTicket"
+// import IndividualTicket from "./questionnaires/IndividualTicket"
+// import GroupTicket from "./questionnaires/GroupTicket"
 // import TsuTicket from "./questionnaires/TsuTicket"
-import AllInclusiveTicket from "./questionnaires/AllInclusiveTicket"
+// import AllInclusiveTicket from "./questionnaires/AllInclusiveTicket"
 // import TsuAllInclusiveTicket from "./questionnaires/TsuAllinclusiveTicket"
 import InternationalTicket from "./questionnaires/InternationalTicket"
 import DoctorTicket from "./questionnaires/DoctorTicket"
 import AttendeeDashboard from "./Dashboard/AttendeeDashboard"
 import AdminTicketDashboard from "./Pages/AdminPage"
 import AbstractPage from "./Pages/AbstractPage"
-import ExecutiveTicket from "./questionnaires/ExecutiveTicket"
+// import ExecutiveTicket from "./questionnaires/ExecutiveTicket"
 import TicketSuccessPage from "./Pages/TicketSuccessPage"
 import TicketsSoon from "./Pages/TicketsSoon"
 import AbstractSuccessPage from "./Pages/AbstractSuccess"
 import AboutusMain from "./Pages/AboutusMain"
+import StandardPlus4Ticket from "./questionnaires/StandardPlus4Ticket"
 
 
 
@@ -104,21 +105,22 @@ const App = () => {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm/>}/>
           <Route path="/tickets" element={<TicketDisplay />} />
-          <Route path="/individual-ticket" element={<IndividualTicket/>}/>
-          <Route path="/group-ticket" element={<GroupTicket/>}/>
+          {/* <Route path="/individual-ticket" element={<IndividualTicket/>}/> */}
+          {/* <Route path="/group-ticket" element={<GroupTicket/>}/> */}
           {/* <Route path="/tsu-ticket" element={<TsuTicket/>}/> */}
-          <Route path="/allinclusive-ticket" element={<AllInclusiveTicket/>}/>
+          {/* <Route path="/allinclusive-ticket" element={<AllInclusiveTicket/>}/> */}
           {/* <Route path="/tsuallinclusive-ticket" element={<TsuAllInclusiveTicket/>}/> */}
           <Route path="/international-ticket" element={<InternationalTicket/>}/>
           <Route path="/doctor-ticket" element={<DoctorTicket/>} />
           <Route path="/attendeedashboard" element={<AttendeeDashboard/>}/>
           <Route path="/adminpage" element={<AdminTicketDashboard/>}/>
           <Route path="/abstract" element={<AbstractPage/>}/>
-          <Route path="/executive-ticket" element={<ExecutiveTicket/>}/>
+          {/* <Route path="/executive-ticket" element={<ExecutiveTicket/>}/> */}
           <Route path="/ticket-success" element={<TicketSuccessPage/>}/>
           <Route path="/comingsoon" element={<TicketsSoon/>}/>
           <Route path="/abstract-success" element={<AbstractSuccessPage/>}/>
           <Route path="/learnmore" element={<AboutusMain/>}/>
+          <Route path="/standard-plus-4" element={<StandardPlus4Ticket/>}/>
           
         </Routes>
       )}
