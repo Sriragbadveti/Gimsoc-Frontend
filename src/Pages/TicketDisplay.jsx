@@ -7,9 +7,9 @@ import { Link } from "react-router-dom" // ✅ Add this line
 
 const ticketTiers = [
   {
-    name: "Standard Ticket",
+    name: "Standard Ticket + 2",
     id: "tier-standard",
-    href: "/individual-ticket",
+    href: "/standard-plus-2",
     price: "",
     description: "Available for GIMSOC members and non-GIMSOC participants.",
     features: [
@@ -27,9 +27,9 @@ const ticketTiers = [
   
   
   {
-    name: "All-Inclusive Ticket",
+    name: "Standard Ticket + 3",
     id: "tier-allinclusive",
-    href: "/allinclusive-ticket",
+    href: "/standard-plus-3",
     price: "",
     description: "Includes everything in the Standard Ticket, plus exclusive gala access.",
     features: [
@@ -45,9 +45,9 @@ const ticketTiers = [
   },
   
   {
-    name: "International Ticket",
+    name: "Standard Ticket + 4",
     id: "tier-international3",
-    href: "/international-ticket",
+    href: "/standard-plus-4",
     price: "",
     description: "Ideal for international attendees joining for the core conference.",
     features: [
@@ -63,9 +63,9 @@ const ticketTiers = [
     color: "teal",
   },
 {
-    name: "Executive Ticket",
+    name: "Doctor Ticket",
     id: "tier-international3",
-    href: "/executive-ticket",
+    href: "/doctor-ticket",
     price: "",
     description: "Ideal for international attendees joining for the core conference.",
     features: [
@@ -83,9 +83,9 @@ const ticketTiers = [
   
   
   {
-    name: "Doctor Ticket",
+    name: "International Ticket",
     id: "tier-doctor",
-    href: "/doctor-ticket",
+    href: "/international-ticket",
     price: "",
     description: "Exclusive category for licensed medical doctors.",
     features: [

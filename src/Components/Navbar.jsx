@@ -9,7 +9,7 @@ import Cookies from "js-cookie"
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Register for MEDCON", href: "/comingsoon" },
+  { name: "Register for MEDCON", href: "/tickets" },
   {
     name: "About us",
     href: "#",
@@ -54,7 +54,7 @@ const Navbar = () => {
       if (token) {
         setIsCheckingAccess(true)
         try {
-          const res = await axios.get("http://localhost:8000/api/info/check-dashboard-access", {
+          const res = await axios.get("https://gimsoc-backend.onrender.com/api/info/check-dashboard-access", {
             withCredentials: true,
           })
           setHasAccess(res.data.access)
@@ -74,7 +74,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8000/api/auth/logout", {}, { withCredentials: true })
+      await axios.post("https://gimsoc-backend.onrender.com/api/auth/logout", {}, { withCredentials: true })
       Cookies.remove("token")
       setIsLoggedIn(false)
       console.log("User logged out successfully")

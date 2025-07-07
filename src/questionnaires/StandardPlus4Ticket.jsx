@@ -123,6 +123,7 @@ export default function StandardPlus4Ticket() {
   const [currentStep, setCurrentStep] = useState(1)
   const [fadeIn, setFadeIn] = useState(false)
   const [showBalloons, setShowBalloons] = useState(false)
+  const [errorBooking, setErrorBooking] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -294,6 +295,7 @@ export default function StandardPlus4Ticket() {
         navigate("/ticket-success")
       }, 3500)
     } catch (err) {
+      setErrorBooking(true)
       console.error("❌ Submission failed:", err.response?.data || err.message)
       console.error("❌ Full error response:", err.response)
       console.error("❌ Error status:", err.response?.status)
@@ -494,6 +496,31 @@ export default function StandardPlus4Ticket() {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       {showBalloons && <BalloonAnimation />}
+      {isSubmitting && (
+        <div className="fixed top-0 left-0 w-full z-50">
+          <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
+          <div className="w-full text-center py-2 bg-black/80 text-white font-bold text-lg shadow-lg">
+            Booking your ticket
+          </div>
+          <style>{`
+            @keyframes loading-bar {
+              0% { background-position: 0% 50%; }
+              100% { background-position: 100% 50%; }
+            }
+            .animate-loading-bar {
+              background-size: 200% 100%;
+              animation: loading-bar 1.5s linear infinite;
+            }
+          `}</style>
+        </div>
+      )}
+      {errorBooking && (
+        <div className="fixed top-0 left-0 w-full z-50">
+          <div className="w-full text-center py-2 bg-red-600 text-white font-bold text-lg shadow-lg animate-fade-in">
+            Error booking the ticket
+          </div>
+        </div>
+      )}
       <div className="max-w-4xl mx-auto">
         <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
           {/* Header */}

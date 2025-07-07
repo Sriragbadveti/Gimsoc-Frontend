@@ -11,7 +11,7 @@ export default function PayPalButton({ amount, onSuccess, onError }) {
       .Buttons({
         createOrder: async () => {
           try {
-            const response = await axios.post("http://localhost:8000/api/paypal/create-order", {
+            const response = await axios.post("https://gimsoc-backend.onrender.com/api/paypal/create-order", {
               amount: amount || "15.00",
             });
             return response.data.id;
@@ -24,7 +24,7 @@ export default function PayPalButton({ amount, onSuccess, onError }) {
         onApprove: async (data) => {
           try {
             const response = await axios.post(
-              `http://localhost:8000/api/paypal/capture-order/${data.orderID}`
+              `https://gimsoc-backend.onrender.com/api/paypal/capture-order/${data.orderID}`
             );
             onSuccess && onSuccess(response.data);
           } catch (error) {

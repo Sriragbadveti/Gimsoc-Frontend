@@ -19,7 +19,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/logout", {}, { withCredentials: true });
+      const res = await axios.post("https://gimsoc-backend.onrender.com/api/auth/logout", {}, { withCredentials: true });
 
       if (res.status === 200) {
         console.log("✅ Logged out successfully");
