@@ -79,7 +79,6 @@ const balloonStyles = `
       opacity: 0;
     }
   }
-  
   @keyframes balloon-bounce {
     0%, 100% {
       transform: translateY(0px);
@@ -88,24 +87,22 @@ const balloonStyles = `
       transform: translateY(-10px);
     }
   }
-  
   .balloon-float {
     animation: float-up 4s ease-out forwards;
   }
-  
   .balloon-bounce {
     animation: balloon-bounce 2s ease-in-out infinite;
   }
 `
 
 // Inject styles
-if (typeof document !== 'undefined') {
-  const style = document.createElement('style')
+if (typeof document !== "undefined") {
+  const style = document.createElement("style")
   style.textContent = balloonStyles
   document.head.appendChild(style)
 }
 
-export default function StandardPlus3Ticket() {
+export default function StandardPlus2Ticket() {
   const [memberType, setMemberType] = useState("")
   const [formData, setFormData] = useState({
     // Member Type
@@ -145,7 +142,7 @@ export default function StandardPlus3Ticket() {
     // Payment
     paymentMethod: "",
     // Additional fields for backend compatibility
-    workshopPackage: "Standard+3",
+    workshopPackage: "Standard+2",
     medicalQualification: "",
     specialty: "",
     currentWorkplace: "",
@@ -212,7 +209,6 @@ export default function StandardPlus3Ticket() {
   // Calculate pricing based on member type
   const calculatePrice = () => {
     let basePrice = 0
-
     switch (memberType) {
       case "GIMSOC":
         basePrice = 65 // 75 - 10 discount
@@ -265,10 +261,11 @@ export default function StandardPlus3Ticket() {
     // Set ticket classification - map to backend schema
     form.append("ticketCategory", "Standard")
     form.append("subType", memberType)
-    form.append("ticketType", "Standard+3")
+    form.append("ticketType", "Standard+2")
 
     // Convert form data according to schema
     console.log("🔍 Form data being processed:", formData)
+
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         console.log(`📝 Adding field: ${key} = ${value} (type: ${typeof value})`)
@@ -318,7 +315,7 @@ export default function StandardPlus3Ticket() {
       console.log("📤 Submitting form with data:", {
         ticketCategory: "Standard",
         subType: memberType,
-        ticketType: "Standard+3",
+        ticketType: "Standard+2",
         email: formData.email,
         fullName: formData.fullName,
         workshopPackage: formData.workshopPackage,
@@ -344,10 +341,10 @@ export default function StandardPlus3Ticket() {
       console.log("✅ Submitted successfully:", response.data)
       setShowBalloons(true)
 
-              // Navigate to success page after 3.5 seconds
-        setTimeout(() => {
-          navigate("/ticket-success")
-        }, 3500)
+      // Navigate to success page after 3.5 seconds
+      setTimeout(() => {
+        navigate("/ticket-success")
+      }, 3500)
     } catch (err) {
       console.error("❌ Submission failed:", err.response?.data || err.message)
       console.error("❌ Full error response:", err.response)
@@ -402,7 +399,9 @@ export default function StandardPlus3Ticket() {
   if (currentStep === 1) {
     return (
       <div
-        className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}
+        className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${
+          fadeIn ? "opacity-100" : "opacity-0"
+        }`}
       >
         {showBalloons && <BalloonAnimation />}
 
@@ -432,7 +431,7 @@ export default function StandardPlus3Ticket() {
                   <Sparkles className="w-8 h-8 text-yellow-300 animate-bounce" />
                 </div>
                 <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in gradient-text">
-                  Standard+3 Ticket
+                  Standard+2 Ticket
                 </h1>
                 <p className="text-blue-100 text-xl mb-6 animate-fade-in-delay">
                   Choose your membership type to continue
@@ -440,7 +439,7 @@ export default function StandardPlus3Ticket() {
                 <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4 animate-glow">
                   <span className="text-white text-lg font-medium">Base Price: </span>
                   <span className="text-white text-3xl font-bold">75 GEL</span>
-                  <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (3 workshops)</div>
+                  <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (2 workshops)</div>
                 </div>
               </div>
             </div>
@@ -469,7 +468,7 @@ export default function StandardPlus3Ticket() {
                 <div
                   onClick={() => handleMemberTypeSelect("non-gimsoc")}
                   className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.1s' }}
+                  style={{ animationDelay: "0.1s" }}
                 >
                   <div className="bg-gradient-to-br from-gray-600/20 to-slate-600/20 border-2 border-gray-300/50 rounded-2xl p-6 hover:border-gray-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4 group-hover:bg-gray-200 transition-colors">
@@ -488,7 +487,7 @@ export default function StandardPlus3Ticket() {
                 <div
                   onClick={() => handleMemberTypeSelect("tsu")}
                   className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.2s' }}
+                  style={{ animationDelay: "0.2s" }}
                 >
                   <div className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 border-2 border-green-300/50 rounded-2xl p-6 hover:border-green-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4 group-hover:bg-green-200 transition-colors">
@@ -507,7 +506,7 @@ export default function StandardPlus3Ticket() {
                 <div
                   onClick={() => handleMemberTypeSelect("exec")}
                   className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.3s' }}
+                  style={{ animationDelay: "0.3s" }}
                 >
                   <div className="bg-gradient-to-br from-purple-600/20 to-violet-600/20 border-2 border-purple-300/50 rounded-2xl p-6 hover:border-purple-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4 group-hover:bg-purple-200 transition-colors">
@@ -526,7 +525,7 @@ export default function StandardPlus3Ticket() {
                 <div
                   onClick={() => handleMemberTypeSelect("geomedi")}
                   className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.4s' }}
+                  style={{ animationDelay: "0.4s" }}
                 >
                   <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
                     <div className="flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4 group-hover:bg-orange-200 transition-colors">
@@ -551,7 +550,9 @@ export default function StandardPlus3Ticket() {
   // Form Step
   return (
     <div
-      className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}
+      className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${
+        fadeIn ? "opacity-100" : "opacity-0"
+      }`}
     >
       {showBalloons && <BalloonAnimation />}
 
@@ -562,7 +563,7 @@ export default function StandardPlus3Ticket() {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-blue-600/50 animate-pulse"></div>
             <div className="relative z-10 text-center">
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{getMemberTypeDisplay()} Registration</h1>
-              <p className="text-blue-100 mb-4">Standard+3 Ticket - Complete your registration</p>
+              <p className="text-blue-100 mb-4">Standard+2 Ticket - Complete your registration</p>
 
               {/* Dynamic Price Display */}
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
@@ -585,6 +586,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                   <h2 className="text-2xl font-semibold text-white">Eligibility Confirmation</h2>
                 </div>
+
                 <div className="bg-yellow-50/10 border border-yellow-200/30 rounded-xl p-6">
                   <p className="text-white mb-4">
                     Are you a currently enrolled student at{" "}
@@ -789,6 +791,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                   <h2 className="text-2xl font-semibold text-white">GIMSOC Membership</h2>
                 </div>
+
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">GIMSOC Membership Code *</label>
                   <input
@@ -812,6 +815,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                   <h2 className="text-2xl font-semibold text-white">TSU Student Verification</h2>
                 </div>
+
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">TSU Email Address *</label>
                   <input
@@ -838,6 +842,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                   <h2 className="text-2xl font-semibold text-white">GEOMEDI Student Verification</h2>
                 </div>
+
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="block text-sm font-medium text-white mb-2">GEOMEDI Email Address *</label>
                   <input
@@ -864,6 +869,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                   <h2 className="text-2xl font-semibold text-white">Executive & Subcommittee Information</h2>
                 </div>
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="transform hover:scale-105 transition-transform duration-300">
                     <label className="block text-sm font-medium text-white mb-2">Your Position in GIMSOC *</label>
@@ -877,6 +883,7 @@ export default function StandardPlus3Ticket() {
                       required
                     />
                   </div>
+
                   <div className="transform hover:scale-105 transition-transform duration-300">
                     <label className="block text-sm font-medium text-white mb-2">GIMSOC Membership Code *</label>
                     <input
@@ -901,12 +908,13 @@ export default function StandardPlus3Ticket() {
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Workshop Selection</h2>
               </div>
+
               <div className="bg-yellow-50/10 border border-yellow-200/30 rounded-xl p-6">
                 <div className="text-center">
                   <Star className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-white mb-2">Workshop Selection Coming Soon!</h3>
                   <p className="text-gray-300 mb-4">
-                    You will be able to select 3 workshops from our comprehensive workshop lineup.
+                    You will be able to select 2 workshops from our comprehensive workshop lineup.
                   </p>
                   <div className="bg-yellow-100/20 rounded-lg p-4">
                     <p className="text-sm text-yellow-300">
@@ -925,6 +933,7 @@ export default function StandardPlus3Ticket() {
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Identification</h2>
               </div>
+
               <div className="transform hover:scale-105 transition-transform duration-300">
                 <label className="block text-sm font-medium text-white mb-2">
                   Upload a Headshot for Your Conference ID Card
@@ -1187,6 +1196,7 @@ export default function StandardPlus3Ticket() {
                       />
                       <span className="text-white font-medium">Credit/Debit Card (note regarding the tax)</span>
                     </label>
+
                     <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
                       <input
                         type="radio"
@@ -1289,7 +1299,7 @@ export default function StandardPlus3Ticket() {
             </section>
 
             {/* Discount Confirmation for TSU and GEOMEDI */}
-            {(memberType === "TSU" || memberType === "GEOMEDI") && (
+            {(memberType === "TSU" || memberType === "Non-GIMSOC") && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-yellow-100 rounded-xl">
@@ -1297,6 +1307,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                   <h2 className="text-2xl font-semibold text-white">Payment and Pricing Acknowledgment</h2>
                 </div>
+
                 <div className="transform hover:scale-105 transition-transform duration-300">
                   <label className="flex items-center space-x-3 cursor-pointer">
                     <input

@@ -1,32 +1,107 @@
 "use client"
 
-import { useState } from "react"
-import { Upload, User, Stethoscope, Camera, Utensils, CreditCard, FileText, Award } from "lucide-react"
+import { useState, useEffect } from "react"
+import {
+  Upload,
+  User,
+  Briefcase,
+  Camera,
+  Utensils,
+  CreditCard,
+  CheckCircle,
+  Shield,
+  Stethoscope,
+  Crown,
+  Star,
+} from "lucide-react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
-export default function DoctorTicket() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+import { useNavigate } from "react-router-dom"
 
+// Balloon Animation Component
+const BalloonAnimation = ({ onComplete }) => {
+  const balloons = [
+    { id: 1, color: "bg-red-500", delay: 0, x: "10%", size: "w-10 h-12" },
+    { id: 2, color: "bg-blue-500", delay: 0.1, x: "20%", size: "w-8 h-10" },
+    { id: 3, color: "bg-green-500", delay: 0.2, x: "30%", size: "w-12 h-14" },
+    { id: 4, color: "bg-yellow-500", delay: 0.3, x: "40%", size: "w-9 h-11" },
+    { id: 5, color: "bg-purple-500", delay: 0.4, x: "50%", size: "w-11 h-13" },
+    { id: 6, color: "bg-pink-500", delay: 0.5, x: "60%", size: "w-8 h-10" },
+    { id: 7, color: "bg-indigo-500", delay: 0.6, x: "70%", size: "w-10 h-12" },
+    { id: 8, color: "bg-orange-500", delay: 0.7, x: "80%", size: "w-9 h-11" },
+    { id: 9, color: "bg-teal-500", delay: 0.8, x: "90%", size: "w-12 h-14" },
+    { id: 10, color: "bg-rose-500", delay: 0.9, x: "95%", size: "w-8 h-10" },
+  ]
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="text-center">
+        <h2 className="text-4xl font-bold text-white mb-8 animate-bounce">
+          🎉 Registration Submitted Successfully! 🎉
+        </h2>
+        <div className="relative h-96 w-full overflow-hidden">
+          {balloons.map((balloon) => (
+            <div
+              key={balloon.id}
+              className={`absolute ${balloon.color} ${balloon.size} rounded-full balloon-float-fast`}
+              style={{
+                left: balloon.x,
+                bottom: "-40px",
+                animationDelay: `${balloon.delay}s`,
+              }}
+            >
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-px h-8 bg-gray-400"></div>
+            </div>
+          ))}
+        </div>
+        <p className="text-white text-xl mt-8 animate-pulse">Redirecting to success page...</p>
+      </div>
+    </div>
+  )
+}
+
+export default function DoctorTicket() {
+  const [passType, setPassType] = useState("")
   const [formData, setFormData] = useState({
+    // Pass Type
+    passType: "",
+    // Personal Information
     fullName: "",
     email: "",
     whatsapp: "",
+    // Professional Information
     medicalQualification: "",
     specialty: "",
     currentWorkplace: "",
     countryOfPractice: "",
+    // Uploads
     headshot: null,
+    paymentProof: null,
+    // Preferences
     foodPreference: "",
     dietaryRestrictions: "",
     accessibilityNeeds: "",
-    paymentMethod: "",
-    paymentProof: null,
+    // Consent
     infoAccurate: false,
     mediaConsent: false,
     policies: false,
     emailConsent: false,
     whatsappConsent: false,
+    // Payment
+    paymentMethod: "",
+    // Additional fields for backend compatibility
+    ticketType: "",
+    workshopPackage: "",
   })
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [currentStep, setCurrentStep] = useState(1)
+  const [fadeIn, setFadeIn] = useState(false)
+  const [showBalloons, setShowBalloons] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setFadeIn(true)
+  }, [])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -44,23 +119,36 @@ export default function DoctorTicket() {
     }))
   }
 
-  // Fixed price for doctor professional ticket
-  const doctorTicketPrice = 200 // Fixed professional rate in GEL
-const navigate =  useNavigate();
+  const handlePassSelect = (type) => {
+    setPassType(type)
+    setFormData((prev) => ({
+      ...prev,
+      passType: type,
+      ticketType: `Doctor-${type}`,
+      workshopPackage: `Doctor-${type}`,
+    }))
+    setCurrentStep(2)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     setIsSubmitting(true)
 
+    if (!formData.email || !formData.fullName) {
+      alert("Please fill in all required fields (Email and Full Name)")
+      setIsSubmitting(false)
+      return
+    }
+
     const form = new FormData()
-    form.append("ticketType", "Doctor")
+    form.append("ticketCategory", "Doctor")
+    form.append("ticketType", `Doctor-${passType}`)
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
-          form.append(key, value === true || value === "true" || value === "Yes")
-        } else if (["mediaConsent"].includes(key)) {
-          form.append(key, value === true || value === "true" || value === "Yes")
+      if (value !== null && value !== undefined && value !== "") {
+        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "mediaConsent"].includes(key)) {
+          const boolValue = value === true || value === "true" || value === "Yes"
+          form.append(key, boolValue.toString())
         } else if (key === "headshot" || key === "paymentProof") {
           form.append(key, value)
         } else {
@@ -75,658 +163,631 @@ const navigate =  useNavigate();
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
+        timeout: 30000,
       })
 
-      console.log("✅ Doctor ticket submitted successfully:", response.data)
-      alert("Doctor registration submitted successfully!")
-      window.location.href = "/ticket-success"
-      // Reset form
-      setFormData({
-        fullName: "",
-        email: "",
-        whatsapp: "",
-        medicalQualification: "",
-        specialty: "",
-        currentWorkplace: "",
-        countryOfPractice: "",
-        headshot: null,
-        foodPreference: "",
-        dietaryRestrictions: "",
-        accessibilityNeeds: "",
-        paymentMethod: "",
-        paymentProof: null,
-        infoAccurate: false,
-        mediaConsent: false,
-        policies: false,
-        emailConsent: false,
-        whatsappConsent: false,
-      })
+      console.log("✅ Submitted successfully:", response.data)
+      setShowBalloons(true)
+
+      setTimeout(() => {
+        navigate("/ticket-success")
+      }, 3500)
     } catch (err) {
-      console.error("❌ Doctor submission failed:", err.response?.data || err.message)
-      alert("Form submission failed.")
+      console.error("❌ Submission failed:", err)
+      if (err.code === "ECONNABORTED") {
+        alert("Request timed out. Please try again later.")
+      } else if (err.response) {
+        alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+      } else if (err.request) {
+        alert("Network error: Unable to reach the server.")
+      } else {
+        alert(`Error: ${err.message}`)
+      }
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const medicalQualifications = [
-    "MBBS",
-    "MD",
-    "MS",
-    "DM",
-    "MCh",
-    "DNB",
-    "MRCP",
-    "MRCS",
-    "FRCP",
-    "FRCS",
-    "DO",
-    "PharmD",
-    "BDS",
-    "MDS",
-    "BAMS",
-    "BHMS",
-    "BUMS",
-    "Other",
-  ]
+  // Pass Selection Step
+  if (currentStep === 1) {
+    return (
+      <div
+        className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${
+          fadeIn ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        {showBalloons && <BalloonAnimation />}
 
-  const specialties = [
-    "General Medicine",
-    "Internal Medicine",
-    "Family Medicine",
-    "Cardiology",
-    "Dermatology",
-    "Neurology",
-    "Psychiatry",
-    "Pediatrics",
-    "Obstetrics & Gynecology",
-    "Surgery",
-    "Orthopedics",
-    "Ophthalmology",
-    "ENT",
-    "Anesthesiology",
-    "Radiology",
-    "Pathology",
-    "Emergency Medicine",
-    "Critical Care",
-    "Oncology",
-    "Endocrinology",
-    "Gastroenterology",
-    "Pulmonology",
-    "Nephrology",
-    "Rheumatology",
-    "Infectious Diseases",
-    "Geriatrics",
-    "Sports Medicine",
-    "Plastic Surgery",
-    "Urology",
-    "Other",
-  ]
+        {/* Floating particles background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-white/20 rounded-full animate-float-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 6}s`,
+                animationDuration: `${6 + Math.random() * 4}s`,
+              }}
+            />
+          ))}
+        </div>
 
-  const countries = [
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Argentina",
-    "Armenia",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "Bahrain",
-    "Bangladesh",
-    "Belarus",
-    "Belgium",
-    "Brazil",
-    "Bulgaria",
-    "Canada",
-    "China",
-    "Croatia",
-    "Czech Republic",
-    "Denmark",
-    "Egypt",
-    "Estonia",
-    "Finland",
-    "France",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Greece",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran",
-    "Iraq",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kuwait",
-    "Latvia",
-    "Lebanon",
-    "Lithuania",
-    "Luxembourg",
-    "Malaysia",
-    "Mexico",
-    "Morocco",
-    "Netherlands",
-    "New Zealand",
-    "Nigeria",
-    "Norway",
-    "Pakistan",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Qatar",
-    "Romania",
-    "Russia",
-    "Saudi Arabia",
-    "Singapore",
-    "South Africa",
-    "South Korea",
-    "Spain",
-    "Sri Lanka",
-    "Sweden",
-    "Switzerland",
-    "Syria",
-    "Thailand",
-    "Turkey",
-    "Ukraine",
-    "United Arab Emirates",
-    "United Kingdom",
-    "United States",
-    "Uzbekistan",
-    "Vietnam",
-  ]
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
-            <h1 className="text-3xl font-bold text-white text-center">Doctor Registration</h1>
-            <p className="text-blue-100 text-center mt-2">Professional medical conference registration</p>
-            <div className="flex justify-center mt-3">
-              <div className="flex items-center gap-1 bg-emerald-400 text-emerald-900 px-3 py-1 rounded-full text-sm font-medium">
-                <Award className="w-4 h-4" />
-                Professional Ticket
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="glass rounded-3xl shadow-2xl overflow-hidden animate-bounce-in">
+            {/* Animated Header */}
+            <div className="relative bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 px-8 py-12 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-blue-600/50 animate-pulse"></div>
+              <div className="relative z-10 text-center">
+                <div className="flex justify-center mb-4">
+                  <Stethoscope className="w-8 h-8 text-yellow-300 animate-bounce" />
+                </div>
+                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in gradient-text">
+                  Doctor Ticket
+                </h1>
+                <p className="text-blue-100 text-xl mb-6 animate-fade-in-delay">Choose your pass type</p>
               </div>
             </div>
-            {/* Price Display in Header */}
-            <div className="text-center mt-4">
-              <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
-                <span className="text-white text-lg font-medium">Professional Rate: </span>
-                <span className="text-white text-2xl font-bold">{doctorTicketPrice} GEL</span>
+
+            <div className="p-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Basic Pass */}
+                <div
+                  onClick={() => handlePassSelect("Basic")}
+                  className="group cursor-pointer card-hover animate-fade-in"
+                >
+                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-2 border-blue-300/50 rounded-2xl p-8 hover:border-blue-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                    <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6 group-hover:bg-blue-200 transition-colors">
+                      <CheckCircle className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">BASIC PASS</h3>
+                    <p className="text-white mb-6">Essential conference access</p>
+
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">All Speaker Sessions</span>
+                      </div>
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">Medical Fairs & Booths</span>
+                      </div>
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">Poster & Oral Presentations</span>
+                      </div>
+                      <div className="flex items-center text-red-300">
+                        <span className="w-4 h-4 mr-3 text-red-400">❌</span>
+                        <span className="text-sm">Workshops</span>
+                      </div>
+                      <div className="flex items-center text-red-300">
+                        <span className="w-4 h-4 mr-3 text-red-400">❌</span>
+                        <span className="text-sm">Gala Night</span>
+                      </div>
+                    </div>
+
+                    <div className="text-center">
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                        Select Basic Pass
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* All-Inclusive Pass */}
+                <div
+                  onClick={() => handlePassSelect("AllInclusive")}
+                  className="group cursor-pointer card-hover animate-fade-in"
+                  style={{ animationDelay: "0.1s" }}
+                >
+                  <div className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 border-2 border-purple-300/50 rounded-2xl p-8 hover:border-purple-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                    <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6 group-hover:bg-purple-200 transition-colors">
+                      <Crown className="w-8 h-8 text-purple-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">ALL-INCLUSIVE PASS</h3>
+                    <p className="text-white mb-6">Complete conference experience</p>
+
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">Full 3-Day Conference</span>
+                      </div>
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">All Speaker Sessions</span>
+                      </div>
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">Medical Fairs & Booths</span>
+                      </div>
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">All Workshops</span>
+                      </div>
+                      <div className="flex items-center text-green-300">
+                        <CheckCircle className="w-4 h-4 mr-3" />
+                        <span className="text-sm">GALA NIGHT</span>
+                      </div>
+                    </div>
+
+                    <div className="text-center">
+                      <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                        Select All-Inclusive
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Form Step
+  return (
+    <div
+      className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${
+        fadeIn ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      {showBalloons && <BalloonAnimation />}
+
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+          {/* Header */}
+          <div className="relative bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 px-8 py-8 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-blue-600/50 animate-pulse"></div>
+            <div className="relative z-10 text-center">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Doctor {passType} Pass Registration</h1>
+              <p className="text-blue-100 mb-4">Complete your professional registration</p>
+
+              {/* Access Information */}
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4 mb-4">
+                <h3 className="text-white text-lg font-semibold mb-2">🎟️ Includes Access To:</h3>
+                {passType === "Basic" ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                    <div className="text-green-300">✅ All Speaker Sessions</div>
+                    <div className="text-green-300">✅ Medical Fairs & Booths</div>
+                    <div className="text-green-300">✅ Poster & Oral Presentations</div>
+                    <div className="text-red-300 md:col-span-3 mt-2">❌ Does NOT include workshops or Gala Night</div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-green-300">
+                    <div>✅ Full 3-Day Conference</div>
+                    <div>✅ All Speaker Sessions</div>
+                    <div>✅ Medical Fairs & Booths</div>
+                    <div>✅ Poster & Oral Presentations</div>
+                    <div>✅ All Workshops</div>
+                    <div>✅ GALA NIGHT</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-8 space-y-10">
-            {/* Section 1: Personal Information */}
-            <section className="space-y-6">
+          <form onSubmit={handleSubmit} className="p-8 space-y-8">
+            {/* Personal Information */}
+            <section className="space-y-6 animate-fade-in">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-blue-100 rounded-lg">
+                <div className="p-3 bg-blue-100 rounded-xl">
                   <User className="w-6 h-6 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 1: Personal Information</h2>
+                <h2 className="text-2xl font-semibold text-white">Personal Information</h2>
               </div>
 
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+              <div className="grid md:grid-cols-1 gap-6">
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Full Name *</label>
                   <input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    placeholder="Enter your full name"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="As you would like it to appear on ID & certificate"
                     required
                   />
-                  <p className="text-xs text-gray-500 mt-1">As it should appear on your ID badge and certificate</p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Enter your email address"
-                      required
-                    />
-                    <p className="text-xs text-gray-500 mt-1">For all official conference communication</p>
-                  </div>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Email Address *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="For all official communication"
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      WhatsApp Number (with country code) *
-                    </label>
-                    <input
-                      type="tel"
-                      name="whatsapp"
-                      value={formData.whatsapp}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="+1 XXX XXX XXXX"
-                      required
-                    />
-                    <p className="text-xs text-gray-500 mt-1">For important updates and urgent communication</p>
-                  </div>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">
+                    WhatsApp Number (with country code) *
+                  </label>
+                  <input
+                    type="tel"
+                    name="whatsapp"
+                    value={formData.whatsapp}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="For urgent updates"
+                    required
+                  />
                 </div>
               </div>
             </section>
 
-            {/* Section 2: Professional Information */}
-            <section className="space-y-6">
+            {/* Professional Information */}
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Stethoscope className="w-6 h-6 text-green-600" />
+                <div className="p-3 bg-green-100 rounded-xl">
+                  <Briefcase className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 2: Professional Information</h2>
+                <h2 className="text-2xl font-semibold text-white">Professional Information</h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Medical Qualification *</label>
-                  <select
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Medical Qualification *</label>
+                  <input
+                    type="text"
                     name="medicalQualification"
                     value={formData.medicalQualification}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="E.g., MBBS, MD, MS, DM, MRCP"
                     required
-                  >
-                    <option value="">Select your highest qualification</option>
-                    {medicalQualifications.map((qualification, index) => (
-                      <option key={index} value={qualification}>
-                        {qualification}
-                      </option>
-                    ))}
-                  </select>
-                  <p className="text-xs text-gray-500 mt-1">e.g., MBBS, MD, MS, DM, MRCP</p>
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Specialty/Area of Practice *</label>
-                  <select
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Specialty/Area of Practice *</label>
+                  <input
+                    type="text"
                     name="specialty"
                     value={formData.specialty}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="E.g., General Medicine, Dermatology, Surgery, etc."
                     required
-                  >
-                    <option value="">Select your specialty</option>
-                    {specialties.map((specialty, index) => (
-                      <option key={index} value={specialty}>
-                        {specialty}
-                      </option>
-                    ))}
-                  </select>
-                  <p className="text-xs text-gray-500 mt-1">e.g., General Medicine, Dermatology, Surgery, Pediatrics</p>
+                  />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Workplace / Affiliation *
-                </label>
-                <input
-                  type="text"
-                  name="currentWorkplace"
-                  value={formData.currentWorkplace}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Include hospital/clinic/medical college or institution name"
-                  required
-                />
-              </div>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Current Workplace / Affiliation *</label>
+                  <input
+                    type="text"
+                    name="currentWorkplace"
+                    value={formData.currentWorkplace}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="Hospital/Clinic/Institution name"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Country of Practice *</label>
-                <select
-                  name="countryOfPractice"
-                  value={formData.countryOfPractice}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  required
-                >
-                  <option value="">Select country where you practice</option>
-                  {countries.map((country, index) => (
-                    <option key={index} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Where you are currently practicing medicine</p>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Country of Practice *</label>
+                  <input
+                    type="text"
+                    name="countryOfPractice"
+                    value={formData.countryOfPractice}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="Country where you practice"
+                    required
+                  />
+                </div>
               </div>
             </section>
 
-            {/* Section 3: Identification */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-orange-100 rounded-lg">
-                  <Camera className="w-6 h-6 text-orange-600" />
+            {/* Workshop Package Selection - Only for All-Inclusive */}
+            {passType === "AllInclusive" && (
+              <section className="space-y-6 animate-fade-in-delay">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 bg-yellow-100 rounded-xl">
+                    <Star className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <h2 className="text-2xl font-semibold text-white">Workshop Package Selection</h2>
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 3: Identification</h2>
+
+                <div className="bg-yellow-50/10 border border-yellow-200/30 rounded-xl p-6">
+                  <div className="text-center">
+                    <Star className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-white mb-2">Workshop Selection Coming Soon!</h3>
+                    <p className="text-gray-300 mb-4">Workshop selection will be available soon.</p>
+                    <div className="bg-yellow-100/20 rounded-lg p-4">
+                      <p className="text-sm text-yellow-300">
+                        <strong>Note:</strong> Workshop spots are limited and will be confirmed based on availability.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Identification */}
+            <section className="space-y-6 animate-fade-in-delay">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-blue-100 rounded-xl">
+                  <Camera className="w-6 h-6 text-blue-600" />
+                </div>
+                <h2 className="text-2xl font-semibold text-white">Identification</h2>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="transform hover:scale-105 transition-transform duration-300">
+                <label className="block text-sm font-medium text-white mb-2">
                   Upload a Recent Headshot for ID Badge *
                 </label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors bg-white/20 backdrop-blur-sm">
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <input
                     type="file"
-                    name="headshot"
                     onChange={handleFileChange}
+                    name="headshot"
                     accept="image/*"
                     className="hidden"
                     id="headshot-upload"
                     required
                   />
                   <label htmlFor="headshot-upload" className="cursor-pointer">
-                    <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
-                    <span className="text-gray-500"> or drag and drop</span>
+                    <span className="text-blue-400 hover:text-blue-300 font-medium text-lg">Click to upload</span>
+                    <span className="text-gray-300"> or drag and drop</span>
                   </label>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Please upload a clear, front-facing, passport-style photo with a plain background
-                  </p>
+                  <p className="text-xs text-gray-300 mt-2">Image formats only</p>
                   {formData.headshot && (
-                    <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.headshot.name}</p>
+                    <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
                   )}
                 </div>
               </div>
             </section>
 
-            {/* Section 4: Food Preferences & Health Needs */}
-            <section className="space-y-6">
+            {/* Food Preferences */}
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <Utensils className="w-6 h-6 text-red-600" />
+                <div className="p-3 bg-green-100 rounded-xl">
+                  <Utensils className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 4: Food Preferences & Health Needs</h2>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Preferred Food Option *</label>
-                <p className="text-sm text-gray-600 mb-3">Choose your food preference for the conference:</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {["Vegetarian", "Non-Vegetarian"].map((option) => (
-                    <label key={option} className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="foodPreference"
-                        value={option}
-                        checked={formData.foodPreference === option}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-sm text-gray-700">{option}</span>
-                    </label>
-                  ))}
-                </div>
+                <h2 className="text-2xl font-semibold text-white">Food Preferences & Health Needs</h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Dietary Restrictions or Allergies
-                  </label>
-                  <textarea
-                    name="dietaryRestrictions"
-                    value={formData.dietaryRestrictions}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    rows="3"
-                    placeholder="If yes, please specify (e.g., gluten-free, nut allergy)"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Accessibility Needs or Medical Conditions
-                  </label>
-                  <textarea
-                    name="accessibilityNeeds"
-                    value={formData.accessibilityNeeds}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    rows="3"
-                    placeholder="Any accessibility needs or medical conditions we should be aware of"
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* Section 5: Payment Confirmation */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-yellow-100 rounded-lg">
-                  <CreditCard className="w-6 h-6 text-yellow-600" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 5: Payment Confirmation</h2>
-              </div>
-
-              {/* Fixed Price Display */}
-              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-medium text-gray-700">Professional Rate Total:</span>
-                  <span className="text-2xl font-bold text-emerald-600">{doctorTicketPrice} GEL</span>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">Doctor Professional Conference Ticket</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Choose Your Payment Method *</label>
-                <div className="space-y-3">
-                  {["Bank Transfer"].map((method) => (
-                    <label
-                      key={method}
-                      className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={method}
-                        checked={formData.paymentMethod === method}
-                        onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
-                        required
-                      />
-                      <span className="text-gray-700">{method}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {formData.paymentMethod === "Bank Transfer" && (
-                <div className="space-y-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-blue-800 mb-4">Bank Details for Transfer</h3>
-
-                    <div className="space-y-4">
-                      <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">
-                          BANK OF GEORGIA
-                        </h4>
-                        <div className="space-y-2 text-sm">
-                          <p>
-                            <span className="font-medium">Account with institution:</span> Bank of Georgia
-                          </p>
-                          <p>
-                            <span className="font-medium">SWIFT:</span> BAGAGE22
-                          </p>
-                          <p>
-                            <span className="font-medium">Beneficiary:</span> FERNANDO MANDRIKA SANTOSH U.
-                          </p>
-                          <p>
-                            <span className="font-medium">Account:</span> GE94BG0000000608342766
-                          </p>
-                          <p>
-                            <span className="font-medium">Phone:</span> (+995 32) 2 444 444
-                          </p>
-                          <p>
-                            <span className="font-medium">E-mail:</span> welcome@bog.ge
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-white rounded-lg p-4 border border-blue-100">
-                        <h4 className="font-semibold text-gray-800 mb-3">TBC BANK</h4>
-                        <div className="space-y-2 text-sm">
-                          <p>
-                            <span className="font-medium">Beneficiary's Bank:</span> JSC TBC Bank
-                          </p>
-                          <p>
-                            <span className="font-medium">Location:</span> Tbilisi, Georgia
-                          </p>
-                          <p>
-                            <span className="font-medium">Swift:</span> TBCBGE22
-                          </p>
-                          <p>
-                            <span className="font-medium">Beneficiary's IBAN:</span> GE31TB7724245061200012
-                          </p>
-                          <p>
-                            <span className="font-medium">Name of Beneficiary:</span> Mandrika Santosh Umanga Fernando
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Upload Proof of Payment (if paid via bank transfer) *
-                    </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <input
-                        type="file"
-                        name="paymentProof"
-                        onChange={handleFileChange}
-                        accept=".pdf"
-                        className="hidden"
-                        id="payment-upload"
-                      />
-                      <label htmlFor="payment-upload" className="cursor-pointer">
-                        <span className="text-blue-600 hover:text-blue-700 font-medium">Click to upload</span>
-                        <span className="text-gray-500"> or drag and drop</span>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-3">Preferred Food Option *</label>
+                  <div className="space-y-3">
+                    {["Vegetarian", "Vegan", "Non-Vegetarian", "Non-Vegetarian (Halal)"].map((option) => (
+                      <label
+                        key={option}
+                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm"
+                      >
+                        <input
+                          type="radio"
+                          name="foodPreference"
+                          value={option}
+                          checked={formData.foodPreference === option}
+                          onChange={handleInputChange}
+                          className="text-green-600 focus:ring-green-500"
+                          required
+                        />
+                        <span className="text-white font-medium">{option}</span>
                       </label>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Make sure the payment slip is clear and includes your full name (PDF format)
-                      </p>
-                      {formData.paymentProof && (
-                        <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.paymentProof.name}</p>
-                      )}
-                    </div>
+                    ))}
                   </div>
                 </div>
-              )}
+
+                <div className="space-y-4">
+                  <div className="transform hover:scale-105 transition-transform duration-300">
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Dietary Restrictions or Allergies
+                    </label>
+                    <textarea
+                      name="dietaryRestrictions"
+                      value={formData.dietaryRestrictions}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                      placeholder="Optional - Short answer"
+                      rows="3"
+                    />
+                  </div>
+
+                  <div className="transform hover:scale-105 transition-transform duration-300">
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Accessibility Needs or Medical Conditions
+                    </label>
+                    <textarea
+                      name="accessibilityNeeds"
+                      value={formData.accessibilityNeeds}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                      placeholder="Optional - Short answer"
+                      rows="3"
+                    />
+                  </div>
+                </div>
+              </div>
             </section>
 
-            {/* Section 6: Declaration and Consent */}
-            <section className="space-y-6">
+            {/* Payment Confirmation */}
+            <section className="space-y-6 animate-fade-in-delay">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-indigo-100 rounded-lg">
-                  <FileText className="w-6 h-6 text-indigo-600" />
+                <div className="p-3 bg-green-100 rounded-xl">
+                  <CreditCard className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800">Section 6: Declaration and Consent</h2>
+                <h2 className="text-2xl font-semibold text-white">Payment Confirmation</h2>
               </div>
 
               <div className="space-y-4">
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="infoAccurate"
-                    checked={formData.infoAccurate}
-                    onChange={handleInputChange}
-                    className="mt-1 text-blue-600 focus:ring-blue-500"
-                    required
-                  />
-                  <span className="text-sm text-gray-700">
-                    I confirm that all the information provided above is true and correct to the best of my knowledge. *
-                  </span>
-                </label>
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-3">Choose Your Payment Method *</label>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Bank Transfer"
+                        checked={formData.paymentMethod === "Bank Transfer"}
+                        onChange={handleInputChange}
+                        className="text-green-600 focus:ring-green-500"
+                        required
+                      />
+                      <span className="text-white font-medium">Bank Transfer</span>
+                    </label>
 
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="mediaConsent"
-                    checked={formData.mediaConsent}
-                    onChange={handleInputChange}
-                    className="mt-1 text-blue-600 focus:ring-blue-500"
-                    required
-                  />
-                  <span className="text-sm text-gray-700">
-                    I consent to the use of photos or videos taken of me during the event for promotional purposes. *
-                  </span>
-                </label>
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Credit/Debit Card"
+                        checked={formData.paymentMethod === "Credit/Debit Card"}
+                        onChange={handleInputChange}
+                        className="text-green-600 focus:ring-green-500"
+                        required
+                      />
+                      <span className="text-white font-medium">Credit/Debit Card</span>
+                    </label>
+                  </div>
+                </div>
 
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="policies"
-                    checked={formData.policies}
-                    onChange={handleInputChange}
-                    className="mt-1 text-blue-600 focus:ring-blue-500"
-                    required
-                  />
-                  <span className="text-sm text-gray-700">
-                    I agree to abide by all rules, guidelines, and policies set by the conference organizing team. *
-                  </span>
-                </label>
+                {formData.paymentMethod === "Bank Transfer" && (
+                  <div className="transform hover:scale-105 transition-transform duration-300">
+                    <label className="block text-sm font-medium text-white mb-2">Upload Payment Proof *</label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors bg-white/20 backdrop-blur-sm">
+                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <input
+                        type="file"
+                        onChange={handleFileChange}
+                        name="paymentProof"
+                        accept=".pdf"
+                        className="hidden"
+                        id="payment-upload"
+                        required
+                      />
+                      <label htmlFor="payment-upload" className="cursor-pointer">
+                        <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
+                        <span className="text-gray-300"> or drag and drop</span>
+                      </label>
+                      <p className="text-xs text-gray-300 mt-1">PDF only</p>
+                      {formData.paymentProof && (
+                        <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
 
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="emailConsent"
-                    checked={formData.emailConsent}
-                    onChange={handleInputChange}
-                    className="mt-1 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">
-                    I agree to receive emails from GIMSOC, including updates, resources, and conference-related
-                    information
-                  </span>
-                </label>
+            {/* Declaration & Consent */}
+            <section className="space-y-6 animate-fade-in-delay">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-blue-100 rounded-xl">
+                  <Shield className="w-6 h-6 text-blue-600" />
+                </div>
+                <h2 className="text-2xl font-semibold text-white">Declaration & Consent</h2>
+              </div>
 
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="whatsappConsent"
-                    checked={formData.whatsappConsent}
-                    onChange={handleInputChange}
-                    className="mt-1 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">
-                    I consent to be added to our WhatsApp group for updates, discussions, and announcements related to
-                    MEDCON
-                  </span>
-                </label>
+              <div className="space-y-4">
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="infoAccurate"
+                      checked={formData.infoAccurate}
+                      onChange={handleInputChange}
+                      className="text-blue-600 focus:ring-blue-500 rounded"
+                      required
+                    />
+                    <span className="text-white">
+                      I confirm that all the information provided above is true and correct to the best of my knowledge.
+                    </span>
+                  </label>
+                </div>
+
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="mediaConsent"
+                      checked={formData.mediaConsent}
+                      onChange={handleInputChange}
+                      className="text-blue-600 focus:ring-blue-500 rounded"
+                      required
+                    />
+                    <span className="text-white">
+                      I consent to the use of photos or videos taken of me during the event for promotional purposes.
+                    </span>
+                  </label>
+                </div>
+
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="policies"
+                      checked={formData.policies}
+                      onChange={handleInputChange}
+                      className="text-blue-600 focus:ring-blue-500 rounded"
+                      required
+                    />
+                    <span className="text-white">
+                      I agree to abide by all rules, guidelines, and policies set by the conference organizing team.
+                    </span>
+                  </label>
+                </div>
+
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="emailConsent"
+                      checked={formData.emailConsent}
+                      onChange={handleInputChange}
+                      className="text-blue-600 focus:ring-blue-500 rounded"
+                    />
+                    <span className="text-white">
+                      I agree to receive emails from GIMSOC, including updates, resources, and conference-related
+                      information.
+                    </span>
+                  </label>
+                </div>
+
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="whatsappConsent"
+                      checked={formData.whatsappConsent}
+                      onChange={handleInputChange}
+                      className="text-blue-600 focus:ring-blue-500 rounded"
+                    />
+                    <span className="text-white">
+                      I consent to be added to our WhatsApp group for updates, discussions, and announcements related to
+                      MEDCON.
+                    </span>
+                  </label>
+                </div>
               </div>
             </section>
 
             {/* Submit Button */}
-            <div className="pt-6">
+            <div className="pt-8">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all transform hover:scale-[1.02] ${
-                  isSubmitting
-                    ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200"
-                }`}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
               >
-                {isSubmitting ? "Submitting..." : "Submit Doctor Registration"}
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-2"></div>
+                    Submitting...
+                  </div>
+                ) : (
+                  "Complete Registration"
+                )}
               </button>
             </div>
           </form>
