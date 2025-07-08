@@ -31,7 +31,7 @@ export default function LoginForm() {
     try {
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login", formData, { withCredentials: true });
       console.log("Successfully logged in the user", response.data.message);
-      navigate("/comingsoon");
+      navigate("/tickets");
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please check your email or password.");
