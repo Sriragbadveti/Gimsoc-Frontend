@@ -47,7 +47,7 @@ const Navbar = () => {
   const [isCheckingAccess, setIsCheckingAccess] = useState(false)
 
   useEffect(() => {
-    const token = Cookies.get("id_token")
+    const token = Cookies.get("token")
     setIsLoggedIn(!!token)
 
     const checkAccess = async () => {
@@ -104,7 +104,7 @@ const Navbar = () => {
   }
 
   return (
-    <div>
+    <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">

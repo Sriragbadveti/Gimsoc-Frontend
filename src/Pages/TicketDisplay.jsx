@@ -9,7 +9,7 @@ const ticketTiers = [
   {
     name: "Standard Ticket + 2",
     id: "tier-standard",
-    href: "/allinclusive-ticket",
+    href: "/standard-plus-2",
     price: "",
     description: "Available for GIMSOC members and non-GIMSOC participants.",
     features: [
