@@ -327,8 +327,8 @@ export default function StandardPlus3Ticket() {
             console.log(`🌐 Cloudinary URL field ${key + "Url"}: ${value}`)
           } else if (value instanceof File) {
             // Legacy/manual file upload
-            form.append(key, value)
-            console.log(`📁 File field ${key}: ${value.name}`)
+          form.append(key, value)
+          console.log(`📁 File field ${key}: ${value.name}`)
           }
         }
         // Regular fields
@@ -376,9 +376,9 @@ export default function StandardPlus3Ticket() {
 
       console.log("✅ Submitted successfully:", response.data)
       setShowBalloons(true)
-      setTimeout(() => {
-        navigate("/ticket-success")
-      }, 3500)
+        setTimeout(() => {
+          navigate("/ticket-success")
+        }, 3500)
     } catch (err) {
       setErrorBooking(true)
       console.error("❌ Submission failed:", err.response?.data || err.message)

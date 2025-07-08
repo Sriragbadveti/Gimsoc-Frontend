@@ -155,6 +155,29 @@ export default function AdminDashboard() {
     }
   }
 
+  const rejectTicket = async (ticketId) => {
+    try {
+      setApprovingTickets((prev) => new Set([...prev, ticketId]))
+      await axios.patch(
+        `https://gimsoc-backend.onrender.com/api/admin/approveticket/${ticketId}`,
+        { paymentStatus: "rejected" },
+        { withCredentials: true },
+      )
+      setTickets((prevTickets) =>
+        prevTickets.map((ticket) => (ticket._id === ticketId ? { ...ticket, paymentStatus: "rejected" } : ticket)),
+      )
+    } catch (err) {
+      console.error("Error rejecting ticket:", err)
+      alert("Failed to reject ticket. Please try again.")
+    } finally {
+      setApprovingTickets((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(ticketId)
+        return newSet
+      })
+    }
+  }
+
   const toggleGroupExpansion = (ticketId) => {
     setExpandedGroups((prev) => {
       const newSet = new Set(prev)
@@ -447,12 +470,15 @@ export default function AdminDashboard() {
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                               ticket.paymentStatus === "completed"
                                 ? "bg-green-100 text-green-800"
+                                : ticket.paymentStatus === "rejected"
+                                ? "bg-red-100 text-red-800"
                                 : "bg-yellow-100 text-yellow-800"
                             }`}
                           >
                             {ticket.paymentStatus || "pending"}
                           </span>
                           {(!ticket.paymentStatus || ticket.paymentStatus === "pending") && (
+                            <>
                             <button
                               onClick={() => approveTicket(ticket._id)}
                               disabled={approvingTickets.has(ticket._id)}
@@ -460,6 +486,14 @@ export default function AdminDashboard() {
                             >
                               {approvingTickets.has(ticket._id) ? "Approving..." : "Approve"}
                             </button>
+                              <button
+                                onClick={() => rejectTicket(ticket._id)}
+                                disabled={approvingTickets.has(ticket._id)}
+                                className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed ml-2"
+                              >
+                                {approvingTickets.has(ticket._id) ? "Rejecting..." : "Reject"}
+                              </button>
+                            </>
                           )}
                         </div>
                       </td>
@@ -627,6 +661,7 @@ export default function AdminDashboard() {
                     {ticket.paymentStatus || "pending"}
                   </span>
                   {(!ticket.paymentStatus || ticket.paymentStatus === "pending") && (
+                    <>
                     <button
                       onClick={() => approveTicket(ticket._id)}
                       disabled={approvingTickets.has(ticket._id)}
@@ -634,6 +669,14 @@ export default function AdminDashboard() {
                     >
                       {approvingTickets.has(ticket._id) ? "Approving..." : "Approve"}
                     </button>
+                      <button
+                        onClick={() => rejectTicket(ticket._id)}
+                        disabled={approvingTickets.has(ticket._id)}
+                        className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed ml-2"
+                      >
+                        {approvingTickets.has(ticket._id) ? "Rejecting..." : "Reject"}
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

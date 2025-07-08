@@ -246,8 +246,8 @@ export default function StandardPlus4Ticket() {
             console.log(`🌐 Cloudinary URL field ${key + "Url"}: ${value}`)
           } else if (value instanceof File) {
             // Legacy/manual file upload
-            form.append(key, value)
-            console.log(`📁 File field ${key}: ${value.name}`)
+          form.append(key, value)
+          console.log(`📁 File field ${key}: ${value.name}`)
           }
         }
         // Regular fields

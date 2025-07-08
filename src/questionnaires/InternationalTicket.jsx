@@ -173,7 +173,7 @@ export default function InternationalTicket() {
             console.log(`🌐 Cloudinary URL field ${key + "Url"}: ${value}`)
           } else if (value instanceof File) {
             // Legacy/manual file upload
-            form.append(key, value)
+          form.append(key, value)
             console.log(`📁 File field ${key}: ${value.name}`)
           }
         }
