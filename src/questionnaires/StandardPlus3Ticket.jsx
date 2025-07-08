@@ -19,6 +19,19 @@ import {
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
+// Cloudinary direct upload utility
+async function uploadToCloudinary(file, onProgress) {
+  const url = `https://api.cloudinary.com/v1_1/dllp1nsmt/auto/upload`;
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "Tickets");
+  return axios.post(url, formData, {
+    onUploadProgress: (evt) => {
+      if (onProgress) onProgress(Math.round((evt.loaded * 100) / evt.total));
+    },
+  }).then(res => res.data.secure_url);
+}
+
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
   const balloons = [
@@ -168,6 +181,8 @@ export default function StandardPlus3Ticket() {
   const [showBalloons, setShowBalloons] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
   const navigate = useNavigate()
+  const [uploading, setUploading] = useState({}); // { fieldName: progress }
+  const [uploadError, setUploadError] = useState({}); // { fieldName: errorMsg }
 
   useEffect(() => {
     setFadeIn(true)
@@ -181,12 +196,22 @@ export default function StandardPlus3Ticket() {
     }))
   }
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files[0],
-    }))
+  const handleFileChange = async (e) => {
+    const { name, files } = e.target;
+    const file = files[0];
+    if (!file) return;
+    setUploading((prev) => ({ ...prev, [name]: 0 }));
+    setUploadError((prev) => ({ ...prev, [name]: null }));
+    try {
+      const url = await uploadToCloudinary(file, (progress) => {
+        setUploading((prev) => ({ ...prev, [name]: progress }));
+      });
+      setFormData((prev) => ({ ...prev, [name]: url }));
+    } catch (err) {
+      setUploadError((prev) => ({ ...prev, [name]: "Upload failed. Please try again." }));
+    } finally {
+      setUploading((prev) => ({ ...prev, [name]: undefined }));
+    }
   }
 
   const handleMemberTypeSelect = (type) => {
@@ -983,6 +1008,12 @@ export default function StandardPlus3Ticket() {
                     className="hidden"
                     id="headshot-upload"
                   />
+                  {uploading.headshot && (
+                    <div className="text-blue-300 text-xs mt-1">Uploading: {uploading.headshot}%</div>
+                  )}
+                  {uploadError.headshot && (
+                    <div className="text-red-400 text-xs mt-1">{uploadError.headshot}</div>
+                  )}
                   <label htmlFor="headshot-upload" className="cursor-pointer">
                     <span className="text-blue-400 hover:text-blue-300 font-medium text-lg">Click to upload</span>
                     <span className="text-gray-300"> or drag and drop</span>
@@ -1315,6 +1346,12 @@ export default function StandardPlus3Ticket() {
                           className="hidden"
                           id="payment-upload"
                         />
+                        {uploading.paymentProof && (
+                          <div className="text-green-300 text-xs mt-1">Uploading: {uploading.paymentProof}%</div>
+                        )}
+                        {uploadError.paymentProof && (
+                          <div className="text-red-400 text-xs mt-1">{uploadError.paymentProof}</div>
+                        )}
                         <label htmlFor="payment-upload" className="cursor-pointer">
                           <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
                           <span className="text-gray-300"> or drag and drop</span>
