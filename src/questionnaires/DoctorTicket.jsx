@@ -105,8 +105,8 @@ export default function DoctorTicket() {
 
   useEffect(() => {
     setFadeIn(true)
-    // Require login: check token in cookies
-    const token = Cookies.get("token")
+    // Require login: check id_token in cookies
+    const token = Cookies.get("id_token")
     if (!token) {
       navigate("/login")
     }

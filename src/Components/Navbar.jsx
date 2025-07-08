@@ -47,7 +47,7 @@ const Navbar = () => {
   const [isCheckingAccess, setIsCheckingAccess] = useState(false)
 
   useEffect(() => {
-    const token = Cookies.get("token")
+    const token = Cookies.get("id_token")
     setIsLoggedIn(!!token)
 
     const checkAccess = async () => {
@@ -105,7 +105,7 @@ const Navbar = () => {
 
   const handleRegisterClick = (e) => {
     e.preventDefault();
-    const token = Cookies.get("token");
+    const token = Cookies.get("id_token");
     if (token) {
       navigate("/tickets");
     } else {
