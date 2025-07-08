@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Upload, User, GraduationCap, Camera, Utensils, CreditCard, CheckCircle, Users, Star, Crown, Shield, Award, Sparkles, Calendar, MapPin, Clock, XCircle } from "lucide-react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
-import Cookies from "js-cookie"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -126,17 +125,10 @@ export default function StandardPlus4Ticket() {
   const [showBalloons, setShowBalloons] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
   const navigate = useNavigate()
-  const [soldOut, setSoldOut] = useState(false)
-  const [emailUsed, setEmailUsed] = useState(false)
 
   useEffect(() => {
     setFadeIn(true)
-    // Require login: check token in cookies
-    const token = Cookies.get("token")
-    if (!token) {
-      navigate("/login")
-    }
-  }, [navigate])
+  }, [])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -214,8 +206,6 @@ export default function StandardPlus4Ticket() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setSoldOut(false)
-    setEmailUsed(false)
 
     // Validate required fields
     if (!formData.email || !formData.fullName) {
@@ -313,11 +303,6 @@ export default function StandardPlus4Ticket() {
       }, 3500)
     } catch (err) {
       setErrorBooking(true)
-      if (err.response?.status === 409 && err.response?.data?.message?.includes("sold out")) {
-        setSoldOut(true)
-      } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
-        setEmailUsed(true)
-      }
       console.error("❌ Submission failed:", err.response?.data || err.message)
       console.error("❌ Full error response:", err.response)
       console.error("❌ Error status:", err.response?.status)
@@ -517,22 +502,6 @@ export default function StandardPlus4Ticket() {
   // Form Step
   return (
     <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
-      {soldOut && (
-        <div className="fixed top-0 left-0 w-full z-50">
-          <div className="w-full text-center py-4 bg-gradient-to-r from-red-700 via-yellow-500 to-red-700 text-white font-extrabold text-2xl shadow-2xl animate-fade-in rounded-b-2xl border-b-4 border-yellow-300">
-            🎟️ Tickets for this category are <span className="text-yellow-300">SOLD OUT</span>!<br />
-            <span className="text-lg font-medium">Thank you for your interest. Please check other ticket options or follow us for updates.</span>
-          </div>
-        </div>
-      )}
-      {emailUsed && (
-        <div className="fixed top-0 left-0 w-full z-50">
-          <div className="w-full text-center py-4 bg-gradient-to-r from-pink-600 via-red-500 to-yellow-500 text-white font-extrabold text-xl shadow-2xl animate-fade-in rounded-b-2xl border-b-4 border-pink-300">
-            🚫 This email has already been used to book a ticket.<br />
-            <span className="text-lg font-medium">Each attendee can only book one ticket per email.</span>
-          </div>
-        </div>
-      )}
       {showBalloons && <BalloonAnimation />}
       {isSubmitting && (
         <div className="fixed top-0 left-0 w-full z-50">
@@ -1174,7 +1143,7 @@ export default function StandardPlus4Ticket() {
             <div className="pt-8">
               <button
                 type="submit"
-                disabled={isSubmitting || soldOut || emailUsed}
+                disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
               >
                 {isSubmitting ? (
