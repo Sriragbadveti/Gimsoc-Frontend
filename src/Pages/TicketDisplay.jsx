@@ -3,8 +3,7 @@
 import { CheckIcon } from "@heroicons/react/20/solid"
 import { ScrollReveal } from "../Pages/ScrollReveal"
 import Navbar from "../Components/Navbar"
-import { Link, useNavigate } from "react-router-dom" // ✅ Add this line
-import Cookies from "js-cookie"
+import { Link } from "react-router-dom" // ✅ Add this line
 
 const ticketTiers = [
   {
@@ -110,15 +109,6 @@ function classNames(...classes) {
 }
 
 export default function Tickets() {
-  const navigate = useNavigate()
-  const handleTicketClick = (href) => {
-    const token = Cookies.get("token")
-    if (token) {
-      navigate(href)
-    } else {
-      navigate("/login")
-    }
-  }
   return (
     <div className="bg-white">
       <Navbar textColor="black" />
@@ -189,8 +179,8 @@ export default function Tickets() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => handleTicketClick(tier.href)}
+                <Link
+                  to={tier.href}
                   aria-describedby={tier.id}
                   className={classNames(
                     tier.featured
@@ -200,7 +190,7 @@ export default function Tickets() {
                   )}
                 >
                   {tier.featured ? "Register Now" : "Get Started"}
-                </button>
+                </Link>
               </div>
             </ScrollReveal>
           ))}
