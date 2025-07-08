@@ -142,10 +142,14 @@ export default function DoctorTicket() {
     }
 
     const form = new FormData()
+    // Only append these once, not in the loop
     form.append("ticketCategory", "Doctor")
     form.append("ticketType", `Doctor-${passType}`)
+    form.append("workshopPackage", `Doctor-${passType}`)
 
     Object.entries(formData).forEach(([key, value]) => {
+      // Skip ticketType and workshopPackage to avoid duplicates
+      if (["ticketType", "workshopPackage"].includes(key)) return;
       if (value !== null && value !== undefined && value !== "") {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "mediaConsent"].includes(key)) {
           const boolValue = value === true || value === "true" || value === "Yes"
@@ -719,7 +723,7 @@ export default function DoctorTicket() {
                         type="file"
                         onChange={handleFileChange}
                         name="paymentProof"
-                        accept=".pdf"
+                        accept="*"
                         className="hidden"
                         id="payment-upload"
                         required
