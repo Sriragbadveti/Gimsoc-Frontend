@@ -321,8 +321,15 @@ export default function StandardPlus3Ticket() {
         }
         // File fields
         else if (key === "headshot" || key === "paymentProof" || key === "enrollmentProof") {
-          form.append(key, value)
-          console.log(`📁 File field ${key}: ${value.name}`)
+          if (typeof value === "string" && value.startsWith("http")) {
+            // Direct Cloudinary URL
+            form.append(key + "Url", value)
+            console.log(`🌐 Cloudinary URL field ${key + "Url"}: ${value}`)
+          } else if (value instanceof File) {
+            // Legacy/manual file upload
+            form.append(key, value)
+            console.log(`📁 File field ${key}: ${value.name}`)
+          }
         }
         // Regular fields
         else {
