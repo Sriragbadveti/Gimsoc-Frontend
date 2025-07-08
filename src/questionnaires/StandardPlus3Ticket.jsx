@@ -187,7 +187,14 @@ export default function StandardPlus3Ticket() {
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
 
-  // Remove useEffect that checks for id_token/cookies and redirects to /login.
+  useEffect(() => {
+    setFadeIn(true)
+    // Require login: check id_token in cookies
+    const token = Cookies.get("id_token")
+    if (!token) {
+      navigate("/login")
+    }
+  }, [navigate])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
