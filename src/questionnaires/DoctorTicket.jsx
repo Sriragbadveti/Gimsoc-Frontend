@@ -150,9 +150,20 @@ export default function DoctorTicket() {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "mediaConsent"].includes(key)) {
           const boolValue = value === true || value === "true" || value === "Yes"
           form.append(key, boolValue.toString())
-        } else if (key === "headshot" || key === "paymentProof") {
-          form.append(key, value)
-        } else {
+        }
+        // File fields
+        else if (key === "headshot" || key === "paymentProof" || key === "enrollmentProof") {
+          if (typeof value === "string" && value.startsWith("http")) {
+            // Direct Cloudinary URL
+            form.append(key + "Url", value)
+            console.log(`🌐 Cloudinary URL field ${key + "Url"}: ${value}`)
+          } else if (value instanceof File) {
+            // Legacy/manual file upload
+            form.append(key, value)
+            console.log(`📁 File field ${key}: ${value.name}`)
+          }
+        }
+        else {
           form.append(key, value)
         }
       }
