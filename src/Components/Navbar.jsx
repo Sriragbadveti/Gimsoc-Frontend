@@ -103,16 +103,6 @@ const Navbar = () => {
     }
   }
 
-  const handleRegisterClick = (e) => {
-    e.preventDefault();
-    const token = Cookies.get("id_token");
-    if (token) {
-      navigate("/tickets");
-    } else {
-      navigate("/login");
-    }
-  };
-
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -176,19 +166,9 @@ const Navbar = () => {
                   )}
                 </div>
               ) : (
-                item.name === "Register for MEDCON" ? (
-                  <button
-                    key={item.name}
-                    onClick={handleRegisterClick}
-                    className="text-sm font-semibold text-white bg-gradient-to-br from-[#c43410] to-[#461307] px-4 py-2 rounded-md hover:opacity-90 transition"
-                  >
-                    {item.name}
-                  </button>
-                ) : (
-                  <a key={item.name} href={item.href} className="text-sm font-semibold text-white">
-                    {item.name}
-                  </a>
-                )
+                <a key={item.name} href={item.href} className="text-sm font-semibold text-white">
+                  {item.name}
+                </a>
               ),
             )}
           </div>
@@ -300,27 +280,14 @@ const Navbar = () => {
                         )}
                       </div>
                     ) : (
-                      item.name === "Register for MEDCON" ? (
-                        <button
-                          key={item.name}
-                          onClick={(e) => {
-                            setMobileMenuOpen(false);
-                            handleRegisterClick(e);
-                          }}
-                          className="w-full text-center rounded-lg px-3 py-2 text-base font-semibold text-white bg-gradient-to-br from-[#c43410] to-[#461307] hover:opacity-90 transition"
-                        >
-                          {item.name}
-                        </button>
-                      ) : (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {item.name}
-                        </a>
-                      )
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </a>
                     ),
                   )}
                 </div>

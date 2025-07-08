@@ -103,14 +103,7 @@ export default function DoctorTicket() {
   const [emailUsed, setEmailUsed] = useState(false)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    setFadeIn(true)
-    // Require login: check id_token in cookies
-    const token = Cookies.get("id_token")
-    if (!token) {
-      navigate("/login")
-    }
-  }, [navigate])
+  // Remove useEffect that checks for id_token/cookies and redirects to /login.
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
