@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Cookies from "js-cookie"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -98,11 +99,18 @@ export default function DoctorTicket() {
   const [fadeIn, setFadeIn] = useState(false)
   const [showBalloons, setShowBalloons] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
+  const [soldOut, setSoldOut] = useState(false)
+  const [emailUsed, setEmailUsed] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     setFadeIn(true)
-  }, [])
+    // Require login: check token in cookies
+    const token = Cookies.get("token")
+    if (!token) {
+      navigate("/login")
+    }
+  }, [navigate])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -134,6 +142,8 @@ export default function DoctorTicket() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSoldOut(false)
+    setEmailUsed(false)
 
     if (!formData.email || !formData.fullName) {
       alert("Please fill in all required fields (Email and Full Name)")
@@ -190,6 +200,11 @@ export default function DoctorTicket() {
       }, 3500)
     } catch (err) {
       setErrorBooking(true)
+      if (err.response?.status === 409 && err.response?.data?.message?.includes("sold out")) {
+        setSoldOut(true)
+      } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
+        setEmailUsed(true)
+      }
       console.error("❌ Submission failed:", err)
       if (err.code === "ECONNABORTED") {
         alert("Request timed out. Please try again later.")
@@ -230,6 +245,22 @@ export default function DoctorTicket() {
                 animation: loading-bar 1.5s linear infinite;
               }
             `}</style>
+          </div>
+        )}
+        {soldOut && (
+          <div className="fixed top-0 left-0 w-full z-50">
+            <div className="w-full text-center py-4 bg-gradient-to-r from-red-700 via-yellow-500 to-red-700 text-white font-extrabold text-2xl shadow-2xl animate-fade-in rounded-b-2xl border-b-4 border-yellow-300">
+              🎟️ Tickets for this category are <span className="text-yellow-300">SOLD OUT</span>!<br />
+              <span className="text-lg font-medium">Thank you for your interest. Please check other ticket options or follow us for updates.</span>
+            </div>
+          </div>
+        )}
+        {emailUsed && (
+          <div className="fixed top-0 left-0 w-full z-50">
+            <div className="w-full text-center py-4 bg-gradient-to-r from-pink-600 via-red-500 to-yellow-500 text-white font-extrabold text-xl shadow-2xl animate-fade-in rounded-b-2xl border-b-4 border-pink-300">
+              🚫 This email has already been used to book a ticket.<br />
+              <span className="text-lg font-medium">Each attendee can only book one ticket per email.</span>
+            </div>
           </div>
         )}
 
@@ -838,7 +869,7 @@ export default function DoctorTicket() {
             <div className="pt-8">
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || soldOut || emailUsed}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
               >
                 {isSubmitting ? (
