@@ -479,7 +479,7 @@ export default function AdminDashboard() {
                             <button
                               onClick={() => {
                                 const downloadUrl = ticket.headshotUrl?.startsWith("http")
-                                  ? ticket.headshotUrl
+                                  ? ticket.headshotUrl + (ticket.headshotUrl.includes("cloudinary.com") ? "?fl_attachment" : "")
                                   : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl}`
                                 console.log("Download button clicked for", ticket.fullName, "URL:", downloadUrl)
                                 handleDownload(downloadUrl, `headshot-${ticket.fullName}.png`)
@@ -500,7 +500,7 @@ export default function AdminDashboard() {
                             onClick={() =>
                                                       handleDownload(
                           ticket.paymentProofUrl?.startsWith("http")
-                            ? ticket.paymentProofUrl
+                            ? ticket.paymentProofUrl + (ticket.paymentProofUrl.includes("cloudinary.com") ? "?fl_attachment" : "")
                             : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl}`,
                           `payment-${ticket.fullName}.pdf`
                         )
@@ -560,7 +560,7 @@ export default function AdminDashboard() {
                                               onClick={() =>
                                                 handleDownload(
                                                   attendee.headshotUrl?.startsWith("http")
-                                                    ? attendee.headshotUrl
+                                                    ? attendee.headshotUrl + (attendee.headshotUrl.includes("cloudinary.com") ? "?fl_attachment" : "")
                                                     : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${attendee.headshotUrl.replace(/^\/?uploads\//, "")}`,
                                                   `headshot-${attendee.name}.png`
                                                 )
@@ -656,7 +656,7 @@ export default function AdminDashboard() {
                       onClick={() =>
                         handleDownload(
                           ticket.headshotUrl?.startsWith("http")
-                            ? ticket.headshotUrl
+                            ? ticket.headshotUrl + (ticket.headshotUrl.includes("cloudinary.com") ? "?fl_attachment" : "")
                             : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.headshotUrl}`,
                           `headshot-${ticket.fullName}.png`
                         )
@@ -672,7 +672,7 @@ export default function AdminDashboard() {
                       onClick={() =>
                         handleDownload(
                           ticket.paymentProofUrl?.startsWith("http")
-                            ? ticket.paymentProofUrl
+                            ? ticket.paymentProofUrl + (ticket.paymentProofUrl.includes("cloudinary.com") ? "?fl_attachment" : "")
                             : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}/uploads/${ticket.paymentProofUrl}`,
                           `payment-${ticket.fullName}.pdf`
                         )
