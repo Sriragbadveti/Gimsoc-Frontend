@@ -288,24 +288,18 @@ export default function InternationalTicket() {
                     <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6 group-hover:bg-blue-200 transition-colors">
                       <Calendar className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">3 Days Package</h3>
-                    <p className="text-white mb-6">Perfect for conference attendance</p>
-
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center text-green-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                        Conference Access
-                      </div>
-                      <div className="flex items-center text-green-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                        Workshop Selection
-                      </div>
-                      <div className="flex items-center text-green-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                        Student ID Required
-                      </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">International 3-Day Package</h3>
+                    <p className="text-white mb-6">Perfect for international delegates seeking a compact yet immersive MEDCON experience across 3 days.</p>
+                    <div className="space-y-3 mb-6 text-left">
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>2-day conference access</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Gala Dinner on Day 3</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Access to interactive workshops</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Academic, research, and activities fairs</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Exclusive networking opportunities</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Certificate of attendance</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>CPD certification</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Special hotel promo codes/discounts will be provided after registration</div>
                     </div>
-
                     <div className="text-center">
                       <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select 3 Days
@@ -324,24 +318,21 @@ export default function InternationalTicket() {
                     <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6 group-hover:bg-purple-200 transition-colors">
                       <Users className="w-8 h-8 text-purple-600" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">7 Days Package</h3>
-                    <p className="text-white mb-6">Extended experience with accommodation</p>
-
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center text-green-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                        Full Conference + Stay
-                      </div>
-                      <div className="flex items-center text-green-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                        Friend Accommodation
-                      </div>
-                      <div className="flex items-center text-green-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                        Extended Workshops
-                      </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">International 7-Day All-Inclusive Package</h3>
+                    <p className="text-white mb-6">The ultimate MEDCON experience, combining academics, cultural immersion, and comfort. Everything is taken care of so you can focus on learning, networking, and exploring Georgia.</p>
+                    <div className="space-y-3 mb-6 text-left">
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Full conference access</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Access to interactive workshops</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Gala Dinner</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Academic, research, and activities fairs</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Poster presentations</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Hotel stay (shared 2-bedroom accommodation) for 7 days</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Daily transport to/from the conference venue</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Tour of Tbilisi on Day 2</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Travel and excursion outside Tbilisi on Day 6</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Certificate of attendance</div>
+                      <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>CPD certification</div>
                     </div>
-
                     <div className="text-center">
                       <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select 7 Days
