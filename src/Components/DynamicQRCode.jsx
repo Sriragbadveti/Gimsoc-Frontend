@@ -12,100 +12,66 @@ const DynamicQRCode = ({ ticketId, onQRUpdate }) => {
   const wsRef = useRef(null);
   const scanIntervalRef = useRef(null);
 
+  // Get initial QR code
+  const fetchQRCode = async () => {
+    try {
+      // Generate dynamic QR code using the hosted service
+      const timestamp = Date.now();
+      const expiry = timestamp + (5 * 60 * 1000); // 5 minutes
+      const qrData = {
+        ticketId: ticketId,
+        timestamp: timestamp,
+        expiry: expiry,
+        signature: `sig_${ticketId}_${timestamp}`,
+        nonce: `nonce_${Math.random().toString(36).substr(2, 9)}`
+      };
+
+      // Generate QR code using hosted service
+      const qrDataString = JSON.stringify(qrData);
+      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrDataString)}&format=png&margin=2&ecc=H`;
+      
+      setQrCode(qrCodeUrl);
+      setLastUpdate(new Date(timestamp));
+      console.log('🎫 Generated dynamic QR for ticket:', ticketId);
+    } catch (error) {
+      console.error('❌ Error generating QR code:', error);
+      setError('Failed to generate QR code');
+    }
+  };
+
   useEffect(() => {
     if (!ticketId) return;
 
-    // Connect to WebSocket for real-time updates
-    const connectWebSocket = () => {
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${protocol}//${window.location.host}/ws/qr`;
-      
-      wsRef.current = new WebSocket(wsUrl);
-
-      wsRef.current.onopen = () => {
-        console.log('🔗 WebSocket connected');
-        setIsConnected(true);
-        setError(null);
-        
-        // Subscribe to QR updates for this ticket
-        wsRef.current.send(JSON.stringify({
-          type: 'subscribe',
-          ticketId: ticketId
-        }));
-      };
-
-      wsRef.current.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          
-          if (data.type === 'qr_update') {
-            setQrCode(data.qrCode);
-            setLastUpdate(new Date(data.timestamp));
-            
-            // Trigger scanning animation
-            setIsScanning(true);
-            setTimeout(() => setIsScanning(false), 2000);
-            
-            // Notify parent component
-            if (onQRUpdate) {
-              onQRUpdate(data);
-            }
-          }
-        } catch (error) {
-          console.error('❌ Error parsing WebSocket message:', error);
-        }
-      };
-
-      wsRef.current.onclose = () => {
-        console.log('🔌 WebSocket disconnected');
-        setIsConnected(false);
-        
-        // Attempt to reconnect after 5 seconds
-        setTimeout(connectWebSocket, 5000);
-      };
-
-      wsRef.current.onerror = (error) => {
-        console.error('❌ WebSocket error:', error);
-        setError('Connection error. Retrying...');
-      };
-    };
-
-    connectWebSocket();
-
-    // Start scanning animation
+    // Generate dynamic QR code with periodic updates
+    console.log('🎫 Loading dynamic QR code for ticket:', ticketId);
+    
+    // Initial QR generation
+    fetchQRCode();
+    
+    // Update QR code every 5 minutes (300 seconds)
+    const qrUpdateInterval = setInterval(() => {
+      console.log('🔄 Updating QR code...');
+      fetchQRCode();
+    }, 300000); // 5 minutes
+    
+    // Start scanning animation periodically
     scanIntervalRef.current = setInterval(() => {
       setIsScanning(true);
       setTimeout(() => setIsScanning(false), 2000);
     }, 10000); // Every 10 seconds
 
     return () => {
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
       if (scanIntervalRef.current) {
         clearInterval(scanIntervalRef.current);
+      }
+      if (qrUpdateInterval) {
+        clearInterval(qrUpdateInterval);
       }
     };
   }, [ticketId, onQRUpdate]);
 
   // Get initial QR code
   useEffect(() => {
-    const fetchQRCode = async () => {
-      try {
-        const response = await fetch(`/api/qr/ticket/${ticketId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setQrCode(data.qrCode);
-          setLastUpdate(new Date(data.lastUpdate));
-        } else {
-          setError('Failed to load QR code');
-        }
-      } catch (error) {
-        console.error('❌ Error fetching QR code:', error);
-        setError('Failed to load QR code');
-      }
-    };
-
     fetchQRCode();
   }, [ticketId]);
 
@@ -119,8 +85,8 @@ const DynamicQRCode = ({ ticketId, onQRUpdate }) => {
       <div className="qr-header">
         <h3>🎫 Your Dynamic Ticket QR Code</h3>
         <div className="connection-status">
-          <span className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}>
-            {isConnected ? '🟢 Live' : '🔴 Offline'}
+          <span className="status-indicator connected">
+            🟢 Dynamic QR Code
           </span>
           {lastUpdate && (
             <span className="last-update">

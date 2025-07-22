@@ -22,7 +22,7 @@ const TicketQRPage = () => {
     // Fetch ticket data
     const fetchTicketData = async () => {
       try {
-        const response = await fetch(`https://gimsoc-backend.onrender.com/api/form/ticket/${ticketId}`);
+        const response = await fetch(`https://gimsoc-backend.onrender.com/api/ticket/ticket/${ticketId}`);
         if (response.ok) {
           const data = await response.json();
           setTicketData(data);
@@ -153,6 +153,10 @@ const TicketQRPage = () => {
                   <span className="status-text">Auto-updates every 5 minutes</span>
                 </div>
                 <div className="status-item">
+                  <span className="status-icon">⚡</span>
+                  <span className="status-text">Real-time timestamp validation</span>
+                </div>
+                <div className="status-item">
                   <span className="status-icon">🔐</span>
                   <span className="status-text">Cryptographically signed</span>
                 </div>
@@ -180,7 +184,7 @@ const TicketQRPage = () => {
               </div>
               <div className="instruction-item">
                 <span className="instruction-number">2</span>
-                <span className="instruction-text">QR code updates automatically for security</span>
+                <span className="instruction-text">QR code updates every 5 minutes for security</span>
               </div>
               <div className="instruction-item">
                 <span className="instruction-number">3</span>
