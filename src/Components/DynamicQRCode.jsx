@@ -133,11 +133,28 @@ const DynamicQRCode = ({ ticketId, onQRUpdate }) => {
       <div className="qr-display">
         <div className={`qr-code-container ${isScanning ? 'scanning' : ''}`}>
           {qrCode ? (
-            <img 
-              src={qrCode} 
-              alt="Dynamic QR Code" 
-              className="qr-code-image"
-            />
+            <>
+              <img 
+                src={qrCode} 
+                alt="Dynamic QR Code" 
+                className="qr-code-image"
+                onError={(e) => {
+                  console.error('❌ QR code image failed to load:', e);
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <div className="qr-fallback" style={{ display: 'none', textAlign: 'center', padding: '20px' }}>
+                <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px', marginTop: '10px' }}>
+                  <p style={{ margin: '0 0 10px 0', color: '#6c757d', fontSize: '14px' }}>
+                    <strong>QR Code Unavailable</strong>
+                  </p>
+                  <p style={{ margin: '0', color: '#6c757d', fontSize: '12px' }}>
+                    Please use your Ticket ID for check-in
+                  </p>
+                </div>
+              </div>
+            </>
           ) : (
             <div className="qr-loading">
               <div className="loading-spinner"></div>
