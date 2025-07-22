@@ -22,15 +22,21 @@ const TicketQRPage = () => {
     // Fetch ticket data
     const fetchTicketData = async () => {
       try {
-        const response = await fetch(`https://gimsoc-backend.onrender.com/api/ticket/ticket/${ticketId}`);
+        console.log('🔍 Fetching ticket data for:', ticketId);
+        const response = await fetch(`https://gimsoc-backend.onrender.com/api/form/ticket/${ticketId}`);
+        console.log('📡 Response status:', response.status);
+        
         if (response.ok) {
           const data = await response.json();
+          console.log('✅ Ticket data received:', data);
           setTicketData(data);
         } else {
+          const errorData = await response.json();
+          console.error('❌ Ticket not found:', errorData);
           setError('Ticket not found');
         }
       } catch (error) {
-        console.error('Error fetching ticket:', error);
+        console.error('❌ Error fetching ticket:', error);
         setError('Failed to load ticket data');
       } finally {
         setLoading(false);
@@ -63,7 +69,7 @@ const TicketQRPage = () => {
     );
   }
 
-  if (error) {
+  if (error && !ticketData) {
     return (
       <div className="qr-page-error">
         <div className="error-container">
@@ -117,11 +123,11 @@ const TicketQRPage = () => {
               <div className="info-grid">
                 <div className="info-item">
                   <span className="label">Name:</span>
-                  <span className="value">{ticketData?.fullName || 'N/A'}</span>
+                  <span className="value">{ticketData?.fullName || 'Loading...'}</span>
                 </div>
                 <div className="info-item">
                   <span className="label">Ticket Type:</span>
-                  <span className="value">{ticketData?.ticketType || 'N/A'}</span>
+                  <span className="value">{ticketData?.ticketType || 'Loading...'}</span>
                 </div>
                 <div className="info-item">
                   <span className="label">Ticket ID:</span>
