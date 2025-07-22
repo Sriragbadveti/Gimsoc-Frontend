@@ -92,7 +92,7 @@
 
 .scan-line.active {
   opacity: 1;
-  animation: scanAnimation 2s ease-in-out;
+  animation: scanAnimation 2s ease-in-out infinite;
 }
 
 @keyframes scanAnimation {
@@ -127,7 +127,7 @@
 }
 
 .pulse-ring.active {
-  animation: pulseAnimation 2s ease-in-out;
+  animation: pulseAnimation 2s ease-in-out infinite;
 }
 
 @keyframes pulseAnimation {

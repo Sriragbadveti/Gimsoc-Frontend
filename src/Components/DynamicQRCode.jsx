@@ -10,7 +10,6 @@ const DynamicQRCode = ({ ticketId, onQRUpdate }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState(null);
   const wsRef = useRef(null);
-  const scanIntervalRef = useRef(null);
 
   // Get initial QR code
   const fetchQRCode = async () => {
@@ -54,16 +53,11 @@ const DynamicQRCode = ({ ticketId, onQRUpdate }) => {
       fetchQRCode();
     }, 300000); // 5 minutes
     
-    // Start scanning animation periodically
-    scanIntervalRef.current = setInterval(() => {
-      setIsScanning(true);
-      setTimeout(() => setIsScanning(false), 2000);
-    }, 10000); // Every 10 seconds
+    // Start continuous scanning animation immediately
+    setIsScanning(true);
+    console.log('🔍 Continuous scanning animation started');
 
     return () => {
-      if (scanIntervalRef.current) {
-        clearInterval(scanIntervalRef.current);
-      }
       if (qrUpdateInterval) {
         clearInterval(qrUpdateInterval);
       }
