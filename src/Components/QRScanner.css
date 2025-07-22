@@ -314,4 +314,140 @@
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
+}
+
+/* New styles for ticket details */
+.error-message {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px 0;
+  color: #721c24;
+}
+
+.error-message p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  background: #e3f2fd;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.loading-message .loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #e9ecef;
+  border-top: 3px solid #2196f3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px;
+}
+
+.scanned-data, .ticket-details {
+  margin: 20px 0;
+}
+
+.scanned-data h3, .ticket-details h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.data-card, .ticket-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.data-item, .ticket-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.data-item:last-child, .ticket-item:last-child {
+  border-bottom: none;
+}
+
+.data-item .label, .ticket-item .label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.data-item .value, .ticket-item .value {
+  color: #212529;
+  font-size: 0.9rem;
+}
+
+.status-valid {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.scanner-actions {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.qr-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 12px;
+  resize: vertical;
+  background: white;
+  color: #333;
+}
+
+.qr-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.submit-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background: #5a67d8;
+  transform: translateY(-2px);
+}
+
+.stop-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.stop-button:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
 } 

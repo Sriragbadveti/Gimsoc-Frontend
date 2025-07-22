@@ -1,41 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './QRScanner.css';
 
-const QRScanner = ({ onScanResult }) => {
+const QRScanner = () => {
   const [isScanning, setIsScanning] = useState(false);
-  const [scanResult, setScanResult] = useState(null);
+  const [scannedData, setScannedData] = useState(null);
+  const [ticketDetails, setTicketDetails] = useState(null);
   const [error, setError] = useState(null);
-  const [isValidating, setIsValidating] = useState(false);
+  const [loading, setLoading] = useState(false);
   const videoRef = useRef(null);
-  const canvasRef = useRef(null);
   const streamRef = useRef(null);
-
-  useEffect(() => {
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, []);
 
   const startScanning = async () => {
     try {
       setError(null);
-      setIsScanning(true);
-      
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
       });
       
-      streamRef.current = stream;
-      videoRef.current.srcObject = stream;
-      
-      // Start QR detection
-      detectQRCode();
-    } catch (error) {
-      console.error('❌ Error accessing camera:', error);
-      setError('Camera access denied. Please allow camera permissions.');
-      setIsScanning(false);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        setIsScanning(true);
+      }
+    } catch (err) {
+      setError('Camera access denied. Please allow camera access to scan QR codes.');
     }
   };
 
@@ -45,198 +33,206 @@ const QRScanner = ({ onScanResult }) => {
       streamRef.current = null;
     }
     setIsScanning(false);
-    setScanResult(null);
   };
 
-  const detectQRCode = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    const scanFrame = () => {
-      if (!isScanning) return;
-
-      // Draw video frame to canvas
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
-      // Get image data for QR detection
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      
-      // Simple QR detection (you can use a library like jsQR for better detection)
-      // For now, we'll simulate QR detection
-      setTimeout(() => {
-        if (isScanning) {
-          scanFrame();
-        }
-      }, 100);
-    };
-
-    scanFrame();
-  };
-
-  const validateQRCode = async (qrData) => {
+  const fetchTicketDetails = async (ticketId) => {
     try {
-      setIsValidating(true);
+      setLoading(true);
       setError(null);
-
-      const response = await fetch('/api/qr/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ qrData }),
-      });
-
-      const result = await response.json();
       
-      setScanResult(result);
+      console.log('🔍 Fetching ticket details for:', ticketId);
+      const response = await fetch(`https://gimsoc-backend.onrender.com/api/form/ticket/${ticketId}`);
       
-      if (result.valid) {
-        // Success feedback
-        playSuccessSound();
-        if (onScanResult) {
-          onScanResult(result);
-        }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Ticket details received:', data);
+        setTicketDetails(data);
       } else {
-        // Error feedback
-        playErrorSound();
-        setError(result.message || 'Invalid QR code');
+        const errorData = await response.json();
+        console.error('❌ Ticket not found:', errorData);
+        setError('Ticket not found in database');
       }
     } catch (error) {
-      console.error('❌ Error validating QR code:', error);
-      setError('Network error. Please try again.');
+      console.error('❌ Error fetching ticket details:', error);
+      setError('Failed to fetch ticket details');
     } finally {
-      setIsValidating(false);
+      setLoading(false);
     }
   };
 
-  const playSuccessSound = () => {
-    // You can add a success sound here
-    console.log('🎉 QR code validated successfully!');
-  };
-
-  const playErrorSound = () => {
-    // You can add an error sound here
-    console.log('❌ QR code validation failed!');
-  };
-
-  const handleManualQRInput = (event) => {
-    const qrData = event.target.value;
-    if (qrData) {
-      validateQRCode(qrData);
+  const handleQRScan = (qrData) => {
+    try {
+      console.log('📱 QR Code scanned:', qrData);
+      setScannedData(qrData);
+      
+      // Extract ticket ID from QR data
+      const ticketId = qrData.ticketId;
+      if (ticketId) {
+        console.log('🎫 Ticket ID extracted:', ticketId);
+        fetchTicketDetails(ticketId);
+      } else {
+        setError('Invalid QR code format');
+      }
+    } catch (error) {
+      console.error('❌ Error processing QR data:', error);
+      setError('Invalid QR code');
     }
   };
 
-  const resetScanner = () => {
-    setScanResult(null);
+  const handleManualInput = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const qrDataString = formData.get('qrData');
+    
+    try {
+      const qrData = JSON.parse(qrDataString);
+      handleQRScan(qrData);
+    } catch (error) {
+      setError('Invalid JSON format');
+    }
+  };
+
+  const resetScan = () => {
+    setScannedData(null);
+    setTicketDetails(null);
     setError(null);
-    if (isScanning) {
-      stopScanning();
-    }
+    stopScanning();
   };
+
+  useEffect(() => {
+    return () => {
+      stopScanning();
+    };
+  }, []);
 
   return (
     <div className="qr-scanner-container">
       <div className="scanner-header">
-        <h2>📱 QR Code Scanner</h2>
-        <p>Scan attendee QR codes for conference check-in</p>
+        <h2>🎫 MEDCON QR Scanner</h2>
+        <p>Scan QR codes to validate tickets and view details</p>
       </div>
 
-      <div className="scanner-controls">
-        {!isScanning ? (
-          <button 
-            className="scan-button start"
-            onClick={startScanning}
-            disabled={isValidating}
-          >
-            🎥 Start Scanning
+      {!isScanning && !scannedData && (
+        <div className="scanner-controls">
+          <button onClick={startScanning} className="scan-button">
+            📱 Start Camera Scan
           </button>
-        ) : (
-          <button 
-            className="scan-button stop"
-            onClick={stopScanning}
-            disabled={isValidating}
-          >
-            ⏹️ Stop Scanning
-          </button>
-        )}
-        
-        <button 
-          className="reset-button"
-          onClick={resetScanner}
-          disabled={isValidating}
-        >
-          🔄 Reset
-        </button>
-      </div>
-
-      <div className="scanner-view">
-        {isScanning ? (
-          <div className="camera-container">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="camera-feed"
-            />
-            <canvas
-              ref={canvasRef}
-              width="640"
-              height="480"
-              style={{ display: 'none' }}
-            />
-            
-            {/* Scanning overlay */}
-            <div className="scan-overlay">
-              <div className="scan-frame"></div>
-              <div className="scan-line"></div>
-            </div>
-          </div>
-        ) : (
-          <div className="scanner-placeholder">
-            <div className="placeholder-icon">📱</div>
-            <p>Click "Start Scanning" to begin</p>
-          </div>
-        )}
-      </div>
-
-      {/* Manual QR input */}
-      <div className="manual-input">
-        <h3>Manual QR Input</h3>
-        <textarea
-          placeholder="Paste QR code data here..."
-          onChange={handleManualQRInput}
-          disabled={isValidating}
-          rows="3"
-        />
-      </div>
-
-      {/* Validation results */}
-      {isValidating && (
-        <div className="validation-status">
-          <div className="loading-spinner"></div>
-          <p>Validating QR code...</p>
         </div>
       )}
 
-      {scanResult && (
-        <div className={`scan-result ${scanResult.valid ? 'valid' : 'invalid'}`}>
-          <h3>{scanResult.valid ? '✅ Valid' : '❌ Invalid'}</h3>
-          <p>{scanResult.message}</p>
-          {scanResult.valid && (
-            <div className="ticket-info">
-              <p><strong>Ticket ID:</strong> {scanResult.ticketId}</p>
-              <p><strong>Scanned at:</strong> {new Date(scanResult.scannedAt).toLocaleString()}</p>
-            </div>
-          )}
+      {isScanning && (
+        <div className="camera-container">
+          <video 
+            ref={videoRef} 
+            autoPlay 
+            playsInline 
+            className="camera-feed"
+          />
+          <div className="scan-frame">
+            <div className="scan-line"></div>
+          </div>
+          <button onClick={stopScanning} className="stop-button">
+            ⏹️ Stop Scanning
+          </button>
+        </div>
+      )}
+
+      {!isScanning && (
+        <div className="manual-input">
+          <h3>📝 Manual QR Data Input</h3>
+          <form onSubmit={handleManualInput}>
+            <textarea
+              name="qrData"
+              placeholder="Paste QR code JSON data here..."
+              rows="4"
+              className="qr-input"
+            />
+            <button type="submit" className="submit-button">
+              🔍 Validate QR Code
+            </button>
+          </form>
         </div>
       )}
 
       {error && (
-        <div className="scanner-error">
-          <p>⚠️ {error}</p>
+        <div className="error-message">
+          <p>❌ {error}</p>
+          <button onClick={resetScan} className="reset-button">
+            🔄 Try Again
+          </button>
+        </div>
+      )}
+
+      {loading && (
+        <div className="loading-message">
+          <div className="loading-spinner"></div>
+          <p>🔍 Fetching ticket details...</p>
+        </div>
+      )}
+
+      {scannedData && (
+        <div className="scanned-data">
+          <h3>📱 Scanned QR Data</h3>
+          <div className="data-card">
+            <div className="data-item">
+              <span className="label">Ticket ID:</span>
+              <span className="value">{scannedData.ticketId}</span>
+            </div>
+            <div className="data-item">
+              <span className="label">Timestamp:</span>
+              <span className="value">{new Date(scannedData.timestamp).toLocaleString()}</span>
+            </div>
+            <div className="data-item">
+              <span className="label">Expiry:</span>
+              <span className="value">{new Date(scannedData.expiry).toLocaleString()}</span>
+            </div>
+            <div className="data-item">
+              <span className="label">Status:</span>
+              <span className="value">
+                {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {ticketDetails && (
+        <div className="ticket-details">
+          <h3>🎫 Ticket Details</h3>
+          <div className="ticket-card">
+            <div className="ticket-item">
+              <span className="label">Name:</span>
+              <span className="value">{ticketDetails.fullName}</span>
+            </div>
+            <div className="ticket-item">
+              <span className="label">Email:</span>
+              <span className="value">{ticketDetails.email}</span>
+            </div>
+            <div className="ticket-item">
+              <span className="label">Ticket Type:</span>
+              <span className="value">{ticketDetails.ticketType}</span>
+            </div>
+            <div className="ticket-item">
+              <span className="label">Category:</span>
+              <span className="value">{ticketDetails.ticketCategory}</span>
+            </div>
+            <div className="ticket-item">
+              <span className="label">Registration Date:</span>
+              <span className="value">{new Date(ticketDetails.createdAt).toLocaleDateString()}</span>
+            </div>
+            <div className="ticket-item">
+              <span className="label">Status:</span>
+              <span className="value status-valid">✅ Valid Ticket</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {(scannedData || ticketDetails) && (
+        <div className="scanner-actions">
+          <button onClick={resetScan} className="reset-button">
+            🔄 Scan Another QR Code
+          </button>
         </div>
       )}
     </div>
