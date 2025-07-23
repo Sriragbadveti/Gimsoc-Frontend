@@ -85,6 +85,7 @@ const LightRays = ({
   }, []);
 
   useEffect(() => {
+    console.log('LightRays: isVisible =', isVisible, 'containerRef =', !!containerRef.current);
     if (!isVisible || !containerRef.current) return;
 
     if (cleanupFunctionRef.current) {
@@ -412,6 +413,10 @@ void main() {
     <div
       ref={containerRef}
       className={`light-rays-container ${className}`.trim()}
+      style={{
+        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+        minHeight: '100%'
+      }}
     />
   );
 };

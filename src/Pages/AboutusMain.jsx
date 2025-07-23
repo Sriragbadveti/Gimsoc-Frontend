@@ -5,60 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { Users, Globe, Award, Microscope, Heart, Zap, Sparkles, ArrowRight, Star, Ticket } from "lucide-react"
 import LightRays from '../Components/LightRays'
 
-const FallingStars = () => {
-  const [stars, setStars] = useState([])
 
-  useEffect(() => {
-    const generateStars = () => {
-      const newStars = Array.from({ length: 15 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        delay: Math.random() * 10,
-        duration: 8 + Math.random() * 4,
-        size: 0.5 + Math.random() * 1,
-        opacity: 0.2 + Math.random() * 0.3,
-      }))
-      setStars(newStars)
-    }
-
-    generateStars()
-  }, [])
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {stars.map((star) => (
-        <motion.div
-          key={star.id}
-          className="absolute"
-          style={{
-            left: `${star.x}%`,
-            top: "-20px",
-          }}
-          animate={{
-            y: ["0vh", "120vh"],
-            rotate: [0, 360],
-            opacity: [0, star.opacity, star.opacity, 0],
-          }}
-          transition={{
-            duration: star.duration,
-            delay: star.delay,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
-        >
-          <Star
-            className="text-blue-300"
-            style={{
-              width: `${star.size}rem`,
-              height: `${star.size}rem`,
-              filter: "drop-shadow(0 0 4px rgba(147, 197, 253, 0.3))",
-            }}
-          />
-        </motion.div>
-      ))}
-    </div>
-  )
-}
 
 const AboutusMain = () => {
   const [hoveredCard, setHoveredCard] = useState(null)
@@ -88,34 +35,31 @@ const AboutusMain = () => {
         left: 0, 
         width: '100%', 
         height: '100%',
-        zIndex: 1
+        zIndex: 2
       }}>
         <LightRays
           raysOrigin="top-center"
           raysColor="#667eea"
-          raysSpeed={0.6}
-          lightSpread={0.8}
-          rayLength={1.8}
+          raysSpeed={1.0}
+          lightSpread={1.0}
+          rayLength={2.0}
           followMouse={true}
-          mouseInfluence={0.03}
-          noiseAmount={0.01}
-          distortion={0.01}
+          mouseInfluence={0.1}
+          noiseAmount={0.05}
+          distortion={0.02}
           className="about-main-light-rays"
         />
       </div>
       
-      {/* Falling Stars Background */}
-      <FallingStars />
-
       {/* Subtle Background Elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-1">
         <div className="absolute top-20 left-20 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl"></div>
         <div className="absolute top-40 right-20 w-80 h-80 bg-purple-600/10 rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-20 left-40 w-72 h-72 bg-indigo-600/10 rounded-full filter blur-3xl"></div>
       </div>
 
       {/* Subtle Grid Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5 z-1">
         <div
           className="absolute inset-0"
           style={{
