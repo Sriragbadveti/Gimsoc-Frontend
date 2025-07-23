@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Users, Globe, Award, Microscope, Heart, Zap, Sparkles, ArrowRight, Star, Ticket } from "lucide-react"
+import LightRays from '../Components/LightRays'
 
 const FallingStars = () => {
   const [stars, setStars] = useState([])
@@ -80,6 +81,29 @@ const AboutusMain = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 relative overflow-hidden">
+      {/* Light Rays Background */}
+      <div style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%',
+        zIndex: 1
+      }}>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#667eea"
+          raysSpeed={0.6}
+          lightSpread={0.8}
+          rayLength={1.8}
+          followMouse={true}
+          mouseInfluence={0.03}
+          noiseAmount={0.01}
+          distortion={0.01}
+          className="about-main-light-rays"
+        />
+      </div>
+      
       {/* Falling Stars Background */}
       <FallingStars />
 
@@ -102,7 +126,7 @@ const AboutusMain = () => {
       </div>
 
       {/* Main Content */}
-      <motion.div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16" style={{ y }}>
+      <motion.div className="relative z-20 px-4 sm:px-6 lg:px-8 py-16" style={{ y }}>
         <div className="max-w-7xl mx-auto">
           {/* Professional Header */}
           <motion.div
