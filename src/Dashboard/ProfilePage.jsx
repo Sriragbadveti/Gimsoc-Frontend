@@ -5,34 +5,15 @@ import axios from "axios"
 import { Edit, Download, Calendar, MapPin, Mail, Phone, Building, Globe, User } from "lucide-react"
 import Card from "./Card"
 
-const ProfilePage = () => {
-  const [userData, setUserData] = useState(null)
-  const [loading, setLoading] = useState(true)
+const ProfilePage = ({ userData }) => {
   const [isEditing, setIsEditing] = useState(false)
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get("https://gimsoc-backend.onrender.com/api/info/getprofileinfo", {
-          withCredentials: true,
-        })
-        setUserData(res.data)
-      } catch (err) {
-        console.error("❌ Error fetching profile info:", err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchProfile()
-  }, [])
 
   const handleSave = () => {
     setIsEditing(false)
     // Here you would typically save to a backend
   }
 
-  if (loading) {
+  if (!userData) {
     return (
       <div className="space-y-6">
         <div className="grid md:grid-cols-3 gap-6">
@@ -81,14 +62,8 @@ const ProfilePage = () => {
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-red-600" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to Load Profile</h3>
-            <p className="text-gray-600 mb-4">We couldn't load your profile information. Please try again.</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Retry
-            </button>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Profile Not Available</h3>
+            <p className="text-gray-600 mb-4">Your profile information is not available.</p>
           </div>
         </Card>
       </div>

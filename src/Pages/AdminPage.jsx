@@ -38,6 +38,7 @@ export default function AdminDashboard() {
   const [ticketsError, setTicketsError] = useState(null)
   const [approvingTickets, setApprovingTickets] = useState(new Set())
   const [expandedGroups, setExpandedGroups] = useState(new Set())
+  const [expandedTickets, setExpandedTickets] = useState(new Set())
 
   // Abstracts state
   const [abstracts, setAbstracts] = useState([])
@@ -143,6 +144,7 @@ export default function AdminDashboard() {
       setTickets((prevTickets) =>
         prevTickets.map((ticket) => (ticket._id === ticketId ? { ...ticket, paymentStatus: "completed" } : ticket)),
       )
+      alert("Ticket approved successfully! Email sent to the user.")
     } catch (err) {
       console.error("Error approving ticket:", err)
       alert("Failed to approve ticket. Please try again.")
@@ -166,6 +168,7 @@ export default function AdminDashboard() {
       setTickets((prevTickets) =>
         prevTickets.map((ticket) => (ticket._id === ticketId ? { ...ticket, paymentStatus: "rejected" } : ticket)),
       )
+      alert("Ticket rejected successfully! Email sent to the user.")
     } catch (err) {
       console.error("Error rejecting ticket:", err)
       alert("Failed to reject ticket. Please try again.")
@@ -180,6 +183,18 @@ export default function AdminDashboard() {
 
   const toggleGroupExpansion = (ticketId) => {
     setExpandedGroups((prev) => {
+      const newSet = new Set(prev)
+      if (newSet.has(ticketId)) {
+        newSet.delete(ticketId)
+      } else {
+        newSet.add(ticketId)
+      }
+      return newSet
+    })
+  }
+
+  const toggleTicketDetails = (ticketId) => {
+    setExpandedTickets((prev) => {
       const newSet = new Set(prev)
       if (newSet.has(ticketId)) {
         newSet.delete(ticketId)
@@ -427,6 +442,9 @@ export default function AdminDashboard() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Date
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Details
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -461,7 +479,12 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">{ticket.ticketType}</div>
-                          <div className="text-sm text-gray-500">{ticket.workshopPackage}</div>
+                          <div className="text-sm text-gray-500">
+                            {ticket.subType && `${ticket.subType} • `}{ticket.workshopPackage}
+                          </div>
+                          {ticket.ticketCategory && (
+                            <div className="text-xs text-gray-400">{ticket.ticketCategory}</div>
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -551,6 +574,19 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(ticket.createdAt)}
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => toggleTicketDetails(ticket._id)}
+                          className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
+                        >
+                          {expandedTickets.has(ticket._id) ? (
+                            <ChevronDown className="h-4 w-4" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4" />
+                          )}
+                          Details
+                        </button>
+                      </td>
                     </tr>
 
                     {ticket.ticketType === "Group" && ticket.attendees && expandedGroups.has(ticket._id) && (
@@ -613,6 +649,95 @@ export default function AdminDashboard() {
                                   ))}
                                 </tbody>
                               </table>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+
+                    {/* Expanded Ticket Details */}
+                    {expandedTickets.has(ticket._id) && (
+                      <tr>
+                        <td colSpan="7" className="px-6 py-4 bg-gray-50">
+                          <div className="ml-6">
+                            <h4 className="text-sm font-medium text-gray-900 mb-3">Ticket Details</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {/* Personal Information */}
+                              <div className="bg-white rounded border border-gray-200 p-4">
+                                <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Personal Information</h5>
+                                <div className="space-y-1 text-sm">
+                                  <div><span className="font-medium">Name:</span> {ticket.fullName}</div>
+                                  <div><span className="font-medium">Email:</span> {ticket.email}</div>
+                                  <div><span className="font-medium">WhatsApp:</span> {ticket.whatsapp || 'Not provided'}</div>
+                                  <div><span className="font-medium">Dashboard Password:</span> {ticket.dashboardPassword || 'Not set'}</div>
+                                  {ticket.nationality && <div><span className="font-medium">Nationality:</span> {ticket.nationality}</div>}
+                                  {ticket.countryOfResidence && <div><span className="font-medium">Country of Residence:</span> {ticket.countryOfResidence}</div>}
+                                  {ticket.passportNumber && <div><span className="font-medium">Passport Number:</span> {ticket.passportNumber}</div>}
+                                  {ticket.needsVisaSupport && <div><span className="font-medium">Visa Support:</span> {ticket.needsVisaSupport}</div>}
+                                </div>
+                              </div>
+
+                              {/* Academic/Professional Information */}
+                              <div className="bg-white rounded border border-gray-200 p-4">
+                                <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Academic/Professional</h5>
+                                <div className="space-y-1 text-sm">
+                                  {ticket.universityName && <div><span className="font-medium">University:</span> {ticket.universityName}</div>}
+                                  {ticket.semester && <div><span className="font-medium">Semester:</span> {ticket.semester}</div>}
+                                  {ticket.medicalQualification && <div><span className="font-medium">Qualification:</span> {ticket.medicalQualification}</div>}
+                                  {ticket.specialty && <div><span className="font-medium">Specialty:</span> {ticket.specialty}</div>}
+                                  {ticket.currentWorkplace && <div><span className="font-medium">Workplace:</span> {ticket.currentWorkplace}</div>}
+                                  {ticket.countryOfPractice && <div><span className="font-medium">Country of Practice:</span> {ticket.countryOfPractice}</div>}
+                                </div>
+                              </div>
+
+                              {/* Ticket Information */}
+                              <div className="bg-white rounded border border-gray-200 p-4">
+                                <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Ticket Information</h5>
+                                <div className="space-y-1 text-sm">
+                                  <div><span className="font-medium">Type:</span> {ticket.ticketType}</div>
+                                  <div><span className="font-medium">Category:</span> {ticket.ticketCategory}</div>
+                                  <div><span className="font-medium">Sub Type:</span> {ticket.subType}</div>
+                                  <div><span className="font-medium">Workshop Package:</span> {ticket.workshopPackage}</div>
+                                  {ticket.isTsuStudent && <div><span className="font-medium">TSU Student:</span> Yes</div>}
+                                  {ticket.tsuEmail && <div><span className="font-medium">TSU Email:</span> {ticket.tsuEmail}</div>}
+                                  {ticket.isGimsocMember && <div><span className="font-medium">GIMSOC Member:</span> Yes</div>}
+                                  {ticket.membershipCode && <div><span className="font-medium">Membership Code:</span> {ticket.membershipCode}</div>}
+                                </div>
+                              </div>
+
+                              {/* Preferences */}
+                              <div className="bg-white rounded border border-gray-200 p-4">
+                                <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Preferences</h5>
+                                <div className="space-y-1 text-sm">
+                                  {ticket.foodPreference && <div><span className="font-medium">Food Preference:</span> {ticket.foodPreference}</div>}
+                                  {ticket.dietaryRestrictions && <div><span className="font-medium">Dietary Restrictions:</span> {ticket.dietaryRestrictions}</div>}
+                                  {ticket.accessibilityNeeds && <div><span className="font-medium">Accessibility Needs:</span> {ticket.accessibilityNeeds}</div>}
+                                  {ticket.paymentMethod && <div><span className="font-medium">Payment Method:</span> {ticket.paymentMethod}</div>}
+                                </div>
+                              </div>
+
+                              {/* Emergency Contact */}
+                              <div className="bg-white rounded border border-gray-200 p-4">
+                                <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Emergency Contact</h5>
+                                <div className="space-y-1 text-sm">
+                                  {ticket.emergencyContactName && <div><span className="font-medium">Name:</span> {ticket.emergencyContactName}</div>}
+                                  {ticket.emergencyContactRelationship && <div><span className="font-medium">Relationship:</span> {ticket.emergencyContactRelationship}</div>}
+                                  {ticket.emergencyContactPhone && <div><span className="font-medium">Phone:</span> {ticket.emergencyContactPhone}</div>}
+                                </div>
+                              </div>
+
+                              {/* Consent Information */}
+                              <div className="bg-white rounded border border-gray-200 p-4">
+                                <h5 className="text-xs font-medium text-gray-500 uppercase mb-2">Consent</h5>
+                                <div className="space-y-1 text-sm">
+                                  <div><span className="font-medium">Info Accurate:</span> {ticket.infoAccurate ? 'Yes' : 'No'}</div>
+                                  <div><span className="font-medium">Media Consent:</span> {ticket.mediaConsent ? 'Yes' : 'No'}</div>
+                                  <div><span className="font-medium">Policies:</span> {ticket.policies ? 'Yes' : 'No'}</div>
+                                  <div><span className="font-medium">Email Consent:</span> {ticket.emailConsent ? 'Yes' : 'No'}</div>
+                                  <div><span className="font-medium">WhatsApp Consent:</span> {ticket.whatsappConsent ? 'Yes' : 'No'}</div>
+                                  <div><span className="font-medium">Discount Confirmation:</span> {ticket.discountConfirmation ? 'Yes' : 'No'}</div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </td>

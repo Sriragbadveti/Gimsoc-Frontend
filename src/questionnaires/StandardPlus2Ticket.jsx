@@ -18,89 +18,23 @@ import {
 } from "lucide-react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import CreditCardAnimation from "../Components/CreditCardAnimation"
 
-// Balloon Animation Component
-const BalloonAnimation = ({ onComplete }) => {
-  const balloons = [
-    { id: 1, color: "bg-red-500", delay: 0, x: "10%", size: "w-10 h-12" },
-    { id: 2, color: "bg-blue-500", delay: 0.1, x: "20%", size: "w-8 h-10" },
-    { id: 3, color: "bg-green-500", delay: 0.2, x: "30%", size: "w-12 h-14" },
-    { id: 4, color: "bg-yellow-500", delay: 0.3, x: "40%", size: "w-9 h-11" },
-    { id: 5, color: "bg-purple-500", delay: 0.4, x: "50%", size: "w-11 h-13" },
-    { id: 6, color: "bg-pink-500", delay: 0.5, x: "60%", size: "w-8 h-10" },
-    { id: 7, color: "bg-indigo-500", delay: 0.6, x: "70%", size: "w-10 h-12" },
-    { id: 8, color: "bg-orange-500", delay: 0.7, x: "80%", size: "w-9 h-11" },
-    { id: 9, color: "bg-teal-500", delay: 0.8, x: "90%", size: "w-12 h-14" },
-    { id: 10, color: "bg-rose-500", delay: 0.9, x: "95%", size: "w-8 h-10" },
-  ]
-
+// Success Animation Component
+const SuccessAnimation = ({ onComplete }) => {
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-4xl font-bold text-white mb-8 animate-bounce">🎉 Ticket Submitted Successfully! 🎉</h2>
-        {/* Balloons */}
-        <div className="relative h-96 w-full overflow-hidden">
-          {balloons.map((balloon) => (
-            <div
-              key={balloon.id}
-              className={`absolute ${balloon.color} ${balloon.size} rounded-full balloon-float-fast`}
-              style={{
-                left: balloon.x,
-                bottom: "-40px",
-                animationDelay: `${balloon.delay}s`,
-              }}
-            >
-              {/* Balloon string */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-px h-8 bg-gray-400"></div>
-            </div>
-          ))}
-        </div>
-        <p className="text-white text-xl mt-8 animate-pulse">Redirecting to success page...</p>
+      <div className="text-center bg-white rounded-2xl p-8 shadow-2xl max-w-md">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">🎉 Payment Successful! 🎉</h2>
+        <CreditCardAnimation className="mb-6" />
+        <p className="text-gray-600 text-lg mb-4">Your ticket has been confirmed</p>
+        <p className="text-gray-500 animate-pulse">Redirecting to success page...</p>
       </div>
     </div>
   )
 }
 
-// Add custom CSS for balloon animations
-const balloonStyles = `
-  @keyframes float-up {
-    0% {
-      transform: translateY(100vh) scale(0.5);
-      opacity: 0;
-    }
-    20% {
-      opacity: 1;
-    }
-    80% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-100px) scale(1);
-      opacity: 0;
-    }
-  }
-  @keyframes balloon-bounce {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-  .balloon-float {
-    animation: float-up 4s ease-out forwards;
-  }
-  .balloon-bounce {
-    animation: balloon-bounce 2s ease-in-out infinite;
-  }
-`
 
-// Inject styles
-if (typeof document !== "undefined") {
-  const style = document.createElement("style")
-  style.textContent = balloonStyles
-  document.head.appendChild(style)
-}
 
 export default function StandardPlus2Ticket() {
   const [memberType, setMemberType] = useState("")
@@ -111,6 +45,7 @@ export default function StandardPlus2Ticket() {
     fullName: "",
     email: "",
     whatsapp: "",
+    dashboardPassword: "",
     // Academic Information
     universityName: "",
     semester: "",
@@ -162,7 +97,7 @@ export default function StandardPlus2Ticket() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [fadeIn, setFadeIn] = useState(false)
-  const [showBalloons, setShowBalloons] = useState(false)
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
@@ -260,8 +195,8 @@ export default function StandardPlus2Ticket() {
     setEmailUsed(false)
 
     // Validate required fields
-    if (!formData.email || !formData.fullName) {
-      alert("Please fill in all required fields (Email and Full Name)")
+    if (!formData.email || !formData.fullName || !formData.dashboardPassword) {
+      alert("Please fill in all required fields (Email, Full Name, and Dashboard Password)")
       setIsSubmitting(false)
       return
     }
@@ -356,7 +291,7 @@ export default function StandardPlus2Ticket() {
       })
 
       console.log("✅ Submitted successfully:", response.data)
-      setShowBalloons(true)
+              setShowSuccessAnimation(true)
 
       // Navigate to success page after 3.5 seconds
       setTimeout(() => {
@@ -431,7 +366,7 @@ export default function StandardPlus2Ticket() {
           fadeIn ? "opacity-100" : "opacity-0"
         }`}
       >
-        {showBalloons && <BalloonAnimation />}
+        {showSuccessAnimation && <SuccessAnimation />}
         {isSubmitting && (
           <div className="fixed top-0 left-0 w-full z-50">
             <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
@@ -600,7 +535,7 @@ export default function StandardPlus2Ticket() {
         fadeIn ? "opacity-100" : "opacity-0"
       }`}
     >
-      {showBalloons && <BalloonAnimation />}
+      {showSuccessAnimation && <SuccessAnimation />}
       {isSubmitting && (
         <div className="fixed top-0 left-0 w-full z-50">
           <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
@@ -730,6 +665,20 @@ export default function StandardPlus2Ticket() {
                     required
                   />
                   <p className="text-xs text-gray-300 mt-1">For all official conference communication</p>
+                </div>
+
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Password for Dashboard *</label>
+                  <input
+                    type="password"
+                    name="dashboardPassword"
+                    value={formData.dashboardPassword}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="Create a password for dashboard access"
+                    required
+                  />
+                  <p className="text-xs text-gray-300 mt-1">You'll use this password to access your dashboard after ticket approval</p>
                 </div>
 
                 <div className="transform hover:scale-105 transition-transform duration-300">

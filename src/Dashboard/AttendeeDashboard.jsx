@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
 import Sidebar from "./Sidebar"
 import UserProfile from "./ProfilePage"
 import PersonalizedSchedule from "./SchedulePage"
@@ -121,6 +123,59 @@ const navItems = [
 function AttendeeDashboard() {
   const [activeSection, setActiveSection] = useState("profile")
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [userData, setUserData] = useState(null)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/profile", {
+          withCredentials: true,
+        })
+        
+        console.log("✅ Dashboard authentication successful:", response.data)
+        setIsAuthenticated(true)
+        setUserData(response.data.user)
+      } catch (error) {
+        console.error("❌ Dashboard authentication failed:", error)
+        navigate("/dashboard-login")
+        return
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [navigate])
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen bg-gray-50 items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("https://gimsoc-backend.onrender.com/api/dashboard/logout", {}, {
+        withCredentials: true,
+      })
+      navigate("/dashboard-login")
+    } catch (error) {
+      console.error("❌ Logout failed:", error)
+      navigate("/dashboard-login")
+    }
+  }
 
   const renderActiveSection = () => {
     switch (activeSection) {
