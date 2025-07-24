@@ -131,6 +131,9 @@ function AttendeeDashboard() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log("🔍 Checking dashboard authentication...")
+        console.log("🔍 Request URL:", "https://gimsoc-backend.onrender.com/api/dashboard/profile")
+        
         const response = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/profile", {
           withCredentials: true,
         })
@@ -140,6 +143,8 @@ function AttendeeDashboard() {
         setUserData(response.data.user)
       } catch (error) {
         console.error("❌ Dashboard authentication failed:", error)
+        console.error("❌ Error response:", error.response?.data)
+        console.error("❌ Error status:", error.response?.status)
         navigate("/dashboard-login")
         return
       } finally {
