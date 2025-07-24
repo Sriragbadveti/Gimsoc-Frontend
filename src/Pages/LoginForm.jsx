@@ -31,10 +31,12 @@ export default function LoginForm() {
     try {
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login", formData, { withCredentials: true });
       console.log("Successfully logged in the user", response.data.message);
-      navigate("/tickets");
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
-      toast.error("Login failed. Please check your email or password.");
+      console.error("Error response:", error.response?.data);
+      const errorMessage = error.response?.data?.message || "Login failed. Please check your email or password.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -48,14 +50,7 @@ export default function LoginForm() {
 
   
 
-      {/* Import Google Fonts */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-        
-        body {
-          font-family: 'Inter', sans-serif;
-        }
-      `}</style>
+      {/* Google Fonts are imported in index.css */}
 
       <div className="w-full max-w-md">
         <div className="text-center mb-8">

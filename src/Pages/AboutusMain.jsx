@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { Users, Globe, Award, Microscope, Heart, Zap, Sparkles, ArrowRight, Star, Ticket } from "lucide-react"
 import LightRays from '../Components/LightRays'
 
+console.log('AboutusMain: LightRays component imported:', !!LightRays);
+
 
 
 const AboutusMain = () => {
@@ -50,7 +52,7 @@ const AboutusMain = () => {
           className="about-main-light-rays"
         />
       </div>
-      
+
       {/* Subtle Background Elements */}
       <div className="absolute inset-0 z-1">
         <div className="absolute top-20 left-20 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl"></div>

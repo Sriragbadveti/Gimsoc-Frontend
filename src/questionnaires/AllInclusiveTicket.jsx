@@ -195,8 +195,8 @@ export default function AllInclusiveTicket() {
       gimsoc: "GIMSOC",
       "non-gimsoc": "Non-GIMSOC",
       tsu: "TSU",
-      exec: "GIMSOC", // Executive & Subcommittee maps to GIMSOC
-      geomedi: "Non-GIMSOC",
+      exec: "Executive", // Executive & Subcommittee maps to Executive
+      geomedi: "GEOMEDI", // GEOMEDI maps to GEOMEDI
     }
 
     const mappedType = typeMapping[type] || type
@@ -223,6 +223,9 @@ export default function AllInclusiveTicket() {
       case "GEOMEDI":
         basePrice = 50 // 75 - 25 discount
         break
+      case "Executive":
+        basePrice = 65 // 75 - 10 discount (same as GIMSOC)
+        break
       case "Non-GIMSOC":
         basePrice = 75 // Regular price
         break
@@ -244,6 +247,8 @@ export default function AllInclusiveTicket() {
         return "TSU Student"
       case "GEOMEDI":
         return "GEOMEDI Student"
+      case "Executive":
+        return "Executive & Subcommittee"
       default:
         return ""
     }
@@ -360,7 +365,12 @@ export default function AllInclusiveTicket() {
       }, 3500)
     } catch (err) {
       setErrorBooking(true)
-      if (err.response?.status === 409 && err.response?.data?.message?.includes("sold out")) {
+      if (err.response?.status === 409 && (
+        err.response?.data?.message?.includes("sold out") ||
+        err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
+        err.response?.data?.message?.includes("TSU student tickets are sold out") ||
+        err.response?.data?.message?.includes("GEOMEDI student tickets for Standard+2 are sold out")
+      )) {
         setSoldOut(true)
       } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
         setEmailUsed(true)
@@ -932,7 +942,7 @@ export default function AllInclusiveTicket() {
               </section>
             )}
 
-            {memberType === "exec" && (
+            {memberType === "Executive" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">

@@ -4,6 +4,7 @@ import { CheckIcon } from "@heroicons/react/20/solid"
 import { ScrollReveal } from "../Pages/ScrollReveal"
 import Navbar from "../Components/Navbar"
 import { Link } from "react-router-dom" // ✅ Add this line
+import LightRays from '../Components/LightRays'
 
 const ticketTiers = [
   {
@@ -47,7 +48,7 @@ const ticketTiers = [
   
   {
     name: "Standard Ticket + 4",
-    id: "tier-international3",
+    id: "tier-standard-plus-4",
     href: "/standard-plus-4",
     price: "",
     description: "Available for GIMSOC members, non-GIMSOC members, TSU students and GEOMEDI students This ticket gives you full access to MEDCON along with 4 workshops of your choice. Ideal for delegates who want the most hands-on, interactive experience",
@@ -65,7 +66,7 @@ const ticketTiers = [
   },
 {
     name: "Doctor Ticket",
-    id: "tier-international3",
+    id: "tier-doctor",
     href: "/doctor-ticket",
     price: "",
     description: "Ideal for international attendees joining for the core conference.",
@@ -85,7 +86,7 @@ const ticketTiers = [
   
   {
     name: "International Ticket",
-    id: "tier-doctor",
+    id: "tier-international",
     href: "/international-ticket",
     price: "",
     description: `Experience MEDCON your way with two flexible options tailored for international attendees:\n 3-Day Package – A compact option with 2 days of conference, workshops, and a Gala Dinner\n7-Day All-Inclusive – A complete experience with full access, accommodation, transport, tours, and more\nBoth packages include:\nConference access\nInteractive workshops\nAcademic, research & activity fairs\nGala Dinner\nNetworking opportunities\nCertificate of attendance & CPD certification\nPoster presentations (7-Day only)\n7-Day Exclusives:\n7-night hotel stay (shared 2-bedroom)\nDaily venue transport\nGuided Tbilisi tour (Day 2)\nExcursion outside Tbilisi (Day 6)\n 3-Day package excludes accommodation, but hotel discount codes will be provided post-registration.`,
@@ -116,32 +117,46 @@ function classNames(...classes) {
 
 export default function Tickets() {
   return (
-    <div className="bg-white">
-      <Navbar textColor="black" />
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      <Navbar textColor="white" />
 
-      <div className="relative isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
-        {/* Background gradient */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl"
-        >
-          <div
-            style={{
-              clipPath:
-                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-            }}
-            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-          />
-        </div>
+      {/* Light Rays Background */}
+      <div style={{ 
+        width: '100%', 
+        height: '100vh', 
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 1
+      }}>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={3.0}
+          lightSpread={2.0}
+          rayLength={3.0}
+          pulsating={true}
+          fadeDistance={1.5}
+          saturation={1.6}
+          followMouse={true}
+          mouseInfluence={0.4}
+          noiseAmount={0.0}
+          distortion={0.0}
+          className="tickets-light-rays"
+        />
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-50 px-6 py-24 sm:py-32 lg:px-8">
 
         <ScrollReveal animation="fadeInUp">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-base font-semibold leading-7 text-indigo-600">Pricing</h2>
-            <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            <h2 className="text-base font-semibold leading-7 text-blue-400">Pricing</h2>
+            <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Choose your MEDCON'25 ticket
             </p>
           </div>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
+          <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-300">
             Select the perfect ticket option that fits your needs and budget. Early bird pricing available for a limited
             time.
           </p>
@@ -153,30 +168,30 @@ export default function Tickets() {
               <div
                 className={classNames(
                   tier.featured
-                    ? "ring-2 ring-indigo-600 scale-105 shadow-xl z-10 hover:ring-purple-500"
-                    : "ring-1 ring-gray-200 hover:ring-2 hover:ring-purple-500",
+                    ? "ring-2 ring-blue-400 scale-105 shadow-xl z-10 hover:ring-blue-300 bg-black/20 backdrop-blur-md border border-blue-400/30"
+                    : "ring-1 ring-white/20 hover:ring-2 hover:ring-blue-400 bg-black/10 backdrop-blur-md border border-white/20",
                   "rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
                 )}
               >
                 <h3
                   id={tier.id}
                   className={classNames(
-                    tier.featured ? "text-indigo-600" : `text-${tier.color}-600`,
+                    tier.featured ? "text-blue-400" : "text-white",
                     "text-lg font-semibold leading-8",
                   )}
                 >
                   {tier.name}
                 </h3>
                 <p className="mt-4 flex items-baseline gap-x-2">
-                  <span className="text-4xl font-bold tracking-tight text-gray-900">{tier.price}</span>
+                  <span className="text-4xl font-bold tracking-tight text-white">{tier.price}</span>
                 </p>
-                <p className="mt-6 text-base leading-7 text-gray-600">{tier.description}</p>
-                <ul role="list" className="mt-8 space-y-3 text-sm leading-6 text-gray-600">
+                <p className="mt-6 text-base leading-7 text-gray-300">{tier.description}</p>
+                <ul role="list" className="mt-8 space-y-3 text-sm leading-6 text-gray-300">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
                       <CheckIcon
                         className={classNames(
-                          tier.featured ? "text-indigo-600" : `text-${tier.color}-500`,
+                          tier.featured ? "text-blue-400" : "text-blue-300",
                           "h-6 w-5 flex-none",
                         )}
                         aria-hidden="true"
@@ -190,9 +205,9 @@ export default function Tickets() {
                   aria-describedby={tier.id}
                   className={classNames(
                     tier.featured
-                      ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500"
-                      : "text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300",
-                    "mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+                      ? "bg-blue-500 text-black shadow-sm hover:bg-blue-400 font-bold"
+                      : "text-white ring-1 ring-inset ring-white/30 hover:ring-blue-400 hover:bg-blue-500/20",
+                    "mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 transition-all duration-300",
                   )}
                 >
                   {tier.featured ? "Register Now" : "Get Started"}
@@ -201,8 +216,6 @@ export default function Tickets() {
             </ScrollReveal>
           ))}
         </div>
-
-        
       </div>
     </div>
   )

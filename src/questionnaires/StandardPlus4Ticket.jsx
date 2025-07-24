@@ -124,6 +124,8 @@ export default function StandardPlus4Ticket() {
   const [fadeIn, setFadeIn] = useState(false)
   const [showBalloons, setShowBalloons] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
+  const [soldOut, setSoldOut] = useState(false)
+  const [emailUsed, setEmailUsed] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -152,8 +154,7 @@ export default function StandardPlus4Ticket() {
       "gimsoc": "GIMSOC",
       "non-gimsoc": "Non-GIMSOC", 
       "tsu": "TSU",
-      "exec": "GIMSOC", // Executive & Subcommittee maps to GIMSOC
-      "geomedi": "Non-GIMSOC" // GEOMEDI maps to Non-GIMSOC
+      "exec": "Executive", // Executive & Subcommittee maps to Executive
     }
     
     const mappedType = typeMapping[type] || type
@@ -178,6 +179,9 @@ export default function StandardPlus4Ticket() {
       case "TSU":
         discount = 30
         break
+      case "Executive":
+        discount = 10
+        break
       case "Non-GIMSOC":
         discount = 0
         break
@@ -198,6 +202,8 @@ export default function StandardPlus4Ticket() {
         return "Non-GIMSOC Member"
       case "TSU":
         return "TSU Student"
+      case "Executive":
+        return "Executive & Subcommittee"
       default:
         return ""
     }
@@ -206,6 +212,8 @@ export default function StandardPlus4Ticket() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSoldOut(false)
+    setEmailUsed(false)
 
     // Validate required fields
     if (!formData.email || !formData.fullName) {
@@ -315,6 +323,16 @@ export default function StandardPlus4Ticket() {
       } else if (err.response) {
         // Server responded with error
         alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+        if (err.response?.status === 409 && (
+          err.response?.data?.message?.includes("sold out") ||
+          err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
+          err.response?.data?.message?.includes("TSU student tickets are sold out") ||
+          err.response?.data?.message?.includes("GEOMEDI student tickets for Standard+2 are sold out")
+        )) {
+          setSoldOut(true)
+        } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
+          setEmailUsed(true)
+        }
       } else if (err.request) {
         // Network error
         alert("Network error: Unable to reach the server. Please check your connection.")
@@ -473,24 +491,7 @@ export default function StandardPlus4Ticket() {
                   </div>
                 </div>
 
-                {/* GEOMEDI Student */}
-                <div 
-                  onClick={() => handleMemberTypeSelect("geomedi")}
-                  className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.4s' }}
-                >
-                  <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
-                    <div className="flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4 group-hover:bg-orange-200 transition-colors">
-                      <Award className="w-8 h-8 text-orange-600" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">GEOMEDI Student</h3>
-                    <p className="text-white mb-4">GEOMEDI Faculty of Medicine</p>
-                    <div className="text-center">
-                      <span className="text-2xl font-bold text-orange-600">50 GEL</span>
-                      <div className="text-sm text-gray-500">25 GEL discount</div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -736,32 +737,9 @@ export default function StandardPlus4Ticket() {
               </section>
             )}
 
-            {memberType === "geomedi" && (
-              <section className="space-y-6 animate-fade-in-delay">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 bg-orange-100 rounded-xl">
-                    <Award className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <h2 className="text-2xl font-semibold text-white">GEOMEDI Student Verification</h2>
-                </div>
 
-                <div className="transform hover:scale-105 transition-transform duration-300">
-                  <label className="block text-sm font-medium text-white mb-2">GEOMEDI Email Address *</label>
-                  <input
-                    type="email"
-                    name="geomediEmail"
-                    value={formData.geomediEmail}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
-                    placeholder="Enter your GEOMEDI email ID"
-                    required
-                  />
-                  <p className="text-xs text-gray-300 mt-1">Please enter your official GEOMEDI email address for verification</p>
-                </div>
-              </section>
-            )}
 
-            {memberType === "exec" && (
+            {memberType === "Executive" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">

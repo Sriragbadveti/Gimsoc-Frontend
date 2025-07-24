@@ -19,6 +19,12 @@ const ProfilePage = () => {
         setUserData(res.data)
       } catch (err) {
         console.error("❌ Error fetching profile info:", err)
+        
+        // Check if it's a "no ticket" error
+        if (err.response?.data?.code === "NO_TICKET") {
+          console.log("User needs to book a ticket first")
+          // This will be handled by the parent component
+        }
       } finally {
         setLoading(false)
       }

@@ -33,6 +33,8 @@ import StandardPlus4Ticket from "./questionnaires/StandardPlus4Ticket"
 import StandardPlus3Ticket from "./questionnaires/StandardPlus3Ticket"
 import StandardPlus2Ticket from "./questionnaires/StandardPlus2Ticket"
 import TicketQRPage from "./Pages/TicketQRPage"
+import SoldOut from "./Pages/SoldOut"
+
 
 
 
@@ -126,6 +128,8 @@ const App = () => {
           <Route path="/standard-plus-3" element={<StandardPlus3Ticket/>}/>
           <Route path="/standard-plus-2" element={<StandardPlus2Ticket/>}/>
           <Route path="/ticket-qr/:ticketId" element={<TicketQRPage/>}/>
+          <Route path="/soldout" element={<SoldOut/>}/>
+
           
           
 

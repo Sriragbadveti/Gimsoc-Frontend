@@ -164,6 +164,8 @@ export default function StandardPlus2Ticket() {
   const [fadeIn, setFadeIn] = useState(false)
   const [showBalloons, setShowBalloons] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
+  const [soldOut, setSoldOut] = useState(false)
+  const [emailUsed, setEmailUsed] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -192,8 +194,8 @@ export default function StandardPlus2Ticket() {
       gimsoc: "GIMSOC",
       "non-gimsoc": "Non-GIMSOC",
       tsu: "TSU",
-      exec: "GIMSOC", // Executive & Subcommittee maps to GIMSOC
-      geomedi: "Non-GIMSOC",
+      exec: "Executive", // Executive & Subcommittee maps to Executive
+      geomedi: "GEOMEDI", // GEOMEDI maps to GEOMEDI
     }
 
     const mappedType = typeMapping[type] || type
@@ -220,6 +222,9 @@ export default function StandardPlus2Ticket() {
       case "GEOMEDI":
         basePrice = 50 // 75 - 25 discount
         break
+      case "Executive":
+        basePrice = 65 // 75 - 10 discount (same as GIMSOC)
+        break
       case "Non-GIMSOC":
         basePrice = 75 // Regular price
         break
@@ -241,6 +246,8 @@ export default function StandardPlus2Ticket() {
         return "TSU Student"
       case "GEOMEDI":
         return "GEOMEDI Student"
+      case "Executive":
+        return "Executive & Subcommittee"
       default:
         return ""
     }
@@ -249,6 +256,8 @@ export default function StandardPlus2Ticket() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSoldOut(false)
+    setEmailUsed(false)
 
     // Validate required fields
     if (!formData.email || !formData.fullName) {
@@ -367,6 +376,16 @@ export default function StandardPlus2Ticket() {
       } else if (err.response) {
         // Server responded with error
         alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+        if (err.response?.status === 409 && (
+          err.response?.data?.message?.includes("sold out") ||
+          err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
+          err.response?.data?.message?.includes("TSU student tickets are sold out") ||
+          err.response?.data?.message?.includes("GEOMEDI student tickets for Standard+2 are sold out")
+        )) {
+          setSoldOut(true)
+        } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
+          setEmailUsed(true)
+        }
       } else if (err.request) {
         // Network error
         alert("Network error: Unable to reach the server. Please check your connection.")
@@ -906,7 +925,7 @@ export default function StandardPlus2Ticket() {
               </section>
             )}
 
-            {memberType === "exec" && (
+            {memberType === "Executive" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">

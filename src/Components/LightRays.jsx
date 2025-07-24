@@ -1,6 +1,9 @@
 import { useRef, useEffect, useState } from "react";
-import { Renderer, Program, Triangle, Mesh } from "ogl";
 import "./LightRays.css";
+
+// Import OGL using ES6 imports
+import { Renderer, Program, Triangle, Mesh } from "ogl";
+console.log("LightRays: OGL imported successfully");
 
 const DEFAULT_COLOR = "#ffffff";
 
@@ -94,17 +97,31 @@ const LightRays = ({
     }
 
     const initializeWebGL = async () => {
-      if (!containerRef.current) return;
+      console.log('LightRays: Initializing WebGL...');
+      if (!containerRef.current) {
+        console.log('LightRays: No container ref');
+        return;
+      }
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      if (!containerRef.current) return;
+      if (!containerRef.current) {
+        console.log('LightRays: Container ref lost after delay');
+        return;
+      }
 
-      const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
-        alpha: true,
-      });
-      rendererRef.current = renderer;
+      let renderer;
+      try {
+        renderer = new Renderer({
+          dpr: Math.min(window.devicePixelRatio, 2),
+          alpha: true,
+        });
+        rendererRef.current = renderer;
+        console.log('LightRays: WebGL renderer created successfully');
+      } catch (error) {
+        console.error('LightRays: Failed to create WebGL renderer:', error);
+        return;
+      }
 
       const gl = renderer.gl;
       gl.canvas.style.width = "100%";
@@ -166,7 +183,7 @@ float rayStrength(vec2 raySource, vec2 rayRefDirection, vec2 coord,
   float pulse = pulsating > 0.5 ? (0.8 + 0.2 * sin(iTime * speed * 3.0)) : 1.0;
 
   float baseStrength = clamp(
-    (0.45 + 0.15 * sin(distortedAngle * seedA + iTime * speed)) +
+    (0.4 + 0.1 * sin(distortedAngle * seedA + iTime * speed)) +
     (0.3 + 0.2 * cos(-distortedAngle * seedB + iTime * speed)),
     0.0, 1.0
   );
@@ -184,14 +201,24 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     finalRayDir = normalize(mix(rayDir, mouseDirection, mouseInfluence));
   }
 
+  // Create multiple distinct rays
   vec4 rays1 = vec4(1.0) *
                rayStrength(rayPos, finalRayDir, coord, 36.2214, 21.11349,
                            1.5 * raysSpeed);
   vec4 rays2 = vec4(1.0) *
                rayStrength(rayPos, finalRayDir, coord, 22.3991, 18.0234,
                            1.1 * raysSpeed);
+  vec4 rays3 = vec4(1.0) *
+               rayStrength(rayPos, finalRayDir, coord, 15.6789, 33.4567,
+                           1.3 * raysSpeed);
+  vec4 rays4 = vec4(1.0) *
+               rayStrength(rayPos, finalRayDir, coord, 44.1234, 12.3456,
+                           0.9 * raysSpeed);
+  vec4 rays5 = vec4(1.0) *
+               rayStrength(rayPos, finalRayDir, coord, 28.9012, 45.6789,
+                           1.7 * raysSpeed);
 
-  fragColor = rays1 * 0.5 + rays2 * 0.4;
+  fragColor = rays1 * 0.3 + rays2 * 0.25 + rays3 * 0.2 + rays4 * 0.15 + rays5 * 0.1;
 
   if (noiseAmount > 0.0) {
     float n = noise(coord * 0.01 + iTime * 0.1);
@@ -199,9 +226,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   }
 
   float brightness = 1.0 - (coord.y / iResolution.y);
-  fragColor.x *= 0.1 + brightness * 0.8;
-  fragColor.y *= 0.3 + brightness * 0.6;
-  fragColor.z *= 0.5 + brightness * 0.5;
+  fragColor.x *= 0.1 + brightness * 0.5;
+  fragColor.y *= 0.2 + brightness * 0.5;
+  fragColor.z *= 0.3 + brightness * 0.5;
 
   if (saturation != 1.0) {
     float gray = dot(fragColor.rgb, vec3(0.299, 0.587, 0.114));
@@ -248,14 +275,14 @@ void main() {
       meshRef.current = mesh;
 
       const updatePlacement = () => {
-        if (!containerRef.current || !renderer) return;
+        if (!containerRef.current || !rendererRef.current) return;
 
-        renderer.dpr = Math.min(window.devicePixelRatio, 2);
+        rendererRef.current.dpr = Math.min(window.devicePixelRatio, 2);
 
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
-        renderer.setSize(wCSS, hCSS);
+        rendererRef.current.setSize(wCSS, hCSS);
 
-        const dpr = renderer.dpr;
+        const dpr = rendererRef.current.dpr;
         const w = wCSS * dpr;
         const h = hCSS * dpr;
 
@@ -290,10 +317,10 @@ void main() {
         }
 
         try {
-          renderer.render({ scene: mesh });
+          rendererRef.current.render({ scene: mesh });
           animationIdRef.current = requestAnimationFrame(loop);
         } catch (error) {
-          console.warn("WebGL rendering error:", error);
+          console.error("LightRays: WebGL rendering error:", error);
           return;
         }
       };
@@ -310,11 +337,11 @@ void main() {
 
         window.removeEventListener("resize", updatePlacement);
 
-        if (renderer) {
+        if (rendererRef.current) {
           try {
-            const canvas = renderer.gl.canvas;
+            const canvas = rendererRef.current.gl.canvas;
             const loseContextExt =
-              renderer.gl.getExtension("WEBGL_lose_context");
+              rendererRef.current.gl.getExtension("WEBGL_lose_context");
             if (loseContextExt) {
               loseContextExt.loseContext();
             }
@@ -412,11 +439,7 @@ void main() {
   return (
     <div
       ref={containerRef}
-      className={`light-rays-container ${className}`.trim()}
-      style={{
-        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-        minHeight: '100%'
-      }}
+      className={`w-full h-full pointer-events-none overflow-hidden relative ${className}`.trim()}
     />
   );
 };

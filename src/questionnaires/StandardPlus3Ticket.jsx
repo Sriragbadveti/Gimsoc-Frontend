@@ -223,8 +223,7 @@ export default function StandardPlus3Ticket() {
       gimsoc: "GIMSOC",
       "non-gimsoc": "Non-GIMSOC",
       tsu: "TSU",
-      exec: "GIMSOC", // Executive & Subcommittee maps to GIMSOC
-      geomedi: "Non-GIMSOC",
+      exec: "Executive", // Executive & Subcommittee maps to Executive
     }
 
     const mappedType = typeMapping[type] || type
@@ -233,7 +232,6 @@ export default function StandardPlus3Ticket() {
       ...prev,
       memberType: mappedType,
       isTsuStudent: mappedType === "TSU",
-      isGeomediStudent: mappedType === "GEOMEDI",
     }))
     setCurrentStep(2)
   }
@@ -249,8 +247,8 @@ export default function StandardPlus3Ticket() {
       case "TSU":
         basePrice = 45 // 75 - 30 discount
         break
-      case "GEOMEDI":
-        basePrice = 50 // 75 - 25 discount
+      case "Executive":
+        basePrice = 65 // 75 - 10 discount (same as GIMSOC)
         break
       case "Non-GIMSOC":
         basePrice = 75 // Regular price
@@ -271,8 +269,8 @@ export default function StandardPlus3Ticket() {
         return "Non-GIMSOC Member"
       case "TSU":
         return "TSU Student"
-      case "GEOMEDI":
-        return "GEOMEDI Student"
+      case "Executive":
+        return "Executive & Subcommittee"
       default:
         return ""
     }
@@ -398,7 +396,12 @@ export default function StandardPlus3Ticket() {
       } else if (err.response) {
         // Server responded with error
         alert(`Form submission failed: ${err.response.data?.message || err.message}`)
-        if (err.response?.status === 409 && err.response?.data?.message?.includes("sold out")) {
+        if (err.response?.status === 409 && (
+          err.response?.data?.message?.includes("sold out") ||
+          err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
+          err.response?.data?.message?.includes("TSU student tickets are sold out") ||
+          err.response?.data?.message?.includes("GEOMEDI student tickets for Standard+2 are sold out")
+        )) {
           setSoldOut(true)
         } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
           setEmailUsed(true)
@@ -582,24 +585,7 @@ export default function StandardPlus3Ticket() {
                   </div>
                 </div>
 
-                {/* GEOMEDI Student */}
-                <div
-                  onClick={() => handleMemberTypeSelect("geomedi")}
-                  className="group cursor-pointer card-hover animate-fade-in"
-                  style={{ animationDelay: '0.4s' }}
-                >
-                  <div className="bg-gradient-to-br from-orange-600/20 to-amber-600/20 border-2 border-orange-300/50 rounded-2xl p-6 hover:border-orange-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
-                    <div className="flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4 group-hover:bg-orange-200 transition-colors">
-                      <Award className="w-8 h-8 text-orange-600" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">GEOMEDI Student</h3>
-                    <p className="text-white mb-4">GEOMEDI Faculty of Medicine</p>
-                    <div className="text-center">
-                      <span className="text-2xl font-bold text-orange-400">50 GEL</span>
-                      <div className="text-sm text-gray-400">25 GEL discount</div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -678,8 +664,8 @@ export default function StandardPlus3Ticket() {
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-8">
-            {/* Eligibility Check for TSU and GEOMEDI */}
-            {(memberType === "TSU" || memberType === "GEOMEDI") && (
+            {/* Eligibility Check for TSU */}
+            {memberType === "TSU" && (
               <section className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-yellow-100 rounded-xl">
@@ -690,10 +676,7 @@ export default function StandardPlus3Ticket() {
                 <div className="bg-yellow-50/10 border border-yellow-200/30 rounded-xl p-6">
                   <p className="text-white mb-4">
                     Are you a currently enrolled student at{" "}
-                    {memberType === "TSU"
-                      ? "Ivane Javakhishvili Tbilisi State University – Faculty of Medicine"
-                      : "GEOMEDI – Faculty of Medicine"}
-                    ?
+                    Ivane Javakhishvili Tbilisi State University – Faculty of Medicine?
                   </p>
                   <div className="space-y-3">
                     <label className="flex items-center space-x-3 cursor-pointer">
@@ -932,33 +915,9 @@ export default function StandardPlus3Ticket() {
               </section>
             )}
 
-            {memberType === "GEOMEDI" && (
-              <section className="space-y-6 animate-fade-in-delay">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 bg-orange-100 rounded-xl">
-                    <Award className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <h2 className="text-2xl font-semibold text-white">GEOMEDI Student Verification</h2>
-                </div>
-                <div className="transform hover:scale-105 transition-transform duration-300">
-                  <label className="block text-sm font-medium text-white mb-2">GEOMEDI Email Address *</label>
-                  <input
-                    type="email"
-                    name="geomediEmail"
-                    value={formData.geomediEmail}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
-                    placeholder="Enter your GEOMEDI email ID"
-                    required
-                  />
-                  <p className="text-xs text-gray-300 mt-1">
-                    Please enter your official GEOMEDI email address for verification
-                  </p>
-                </div>
-              </section>
-            )}
 
-            {memberType === "exec" && (
+
+            {memberType === "Executive" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">
@@ -1402,8 +1361,8 @@ export default function StandardPlus3Ticket() {
               </div>
             </section>
 
-            {/* Discount Confirmation for TSU and GEOMEDI */}
-            {(memberType === "TSU" || memberType === "GEOMEDI") && (
+            {/* Discount Confirmation for TSU */}
+            {memberType === "TSU" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-yellow-100 rounded-xl">
@@ -1422,7 +1381,7 @@ export default function StandardPlus3Ticket() {
                       required
                     />
                     <span className="text-white">
-                      I acknowledge that I am eligible for the discounted {memberType} student ticket and understand
+                      I acknowledge that I am eligible for the discounted TSU student ticket and understand
                       that this rate applies only with valid proof of enrollment.
                     </span>
                   </label>

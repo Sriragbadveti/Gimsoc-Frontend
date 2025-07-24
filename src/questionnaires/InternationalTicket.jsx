@@ -299,7 +299,7 @@ export default function InternationalTicket() {
                       <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Certificate of attendance</div>
                       <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>CPD certification</div>
                       <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Special hotel promo codes/discounts will be provided after registration</div>
-                    </div>
+                      </div>
                     <div className="text-center">
                       <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select 3 Days
@@ -332,7 +332,7 @@ export default function InternationalTicket() {
                       <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Travel and excursion outside Tbilisi on Day 6</div>
                       <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>Certificate of attendance</div>
                       <div className="flex items-center text-green-300"><span className="w-2 h-2 bg-green-400 rounded-full mr-3"></span>CPD certification</div>
-                    </div>
+                      </div>
                     <div className="text-center">
                       <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select 7 Days
