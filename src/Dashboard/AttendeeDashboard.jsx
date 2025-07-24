@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import { useState } from "react"
 import Sidebar from "./Sidebar"
 import UserProfile from "./ProfilePage"
 import PersonalizedSchedule from "./SchedulePage"
@@ -123,56 +121,6 @@ const navItems = [
 function AttendeeDashboard() {
   const [activeSection, setActiveSection] = useState("profile")
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check if user is authenticated by making a test call to the dashboard API
-        await axios.get("https://gimsoc-backend.onrender.com/api/info/getprofileinfo", {
-          withCredentials: true,
-        })
-        setIsAuthenticated(true)
-      } catch (error) {
-        console.error("❌ Authentication check failed:", error)
-        
-        // Check if it's a "no ticket" error
-        if (error.response?.data?.code === "NO_TICKET") {
-          // User is authenticated but doesn't have a ticket
-          alert("You need to book a ticket first to access the dashboard. Redirecting to tickets page...")
-          navigate("/tickets")
-          return
-        }
-        
-        // For other errors, redirect to login
-        navigate("/login")
-        return
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    checkAuth()
-  }, [navigate])
-
-  // Show loading while checking authentication
-  if (isLoading) {
-    return (
-      <div className="flex h-screen bg-gray-50 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Don't render dashboard if not authenticated
-  if (!isAuthenticated) {
-    return null
-  }
 
   const renderActiveSection = () => {
     switch (activeSection) {
