@@ -343,7 +343,7 @@ export default function StandardPlus4Ticket() {
   if (currentStep === 1) {
     return (
       <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
-        {showBalloons && <BalloonAnimation />}
+        {showSuccessAnimation && <SuccessAnimation />}
         {/* Floating particles background - reduced for performance */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           {[...Array(5)].map((_, i) => (
@@ -472,7 +472,7 @@ export default function StandardPlus4Ticket() {
   // Form Step
   return (
     <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
-      {showBalloons && <BalloonAnimation />}
+      {showSuccessAnimation && <SuccessAnimation />}
       {isSubmitting && (
         <div className="fixed top-0 left-0 w-full z-50">
           <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
@@ -1124,46 +1124,3 @@ export default function StandardPlus4Ticket() {
   )
 }
 
-// Add custom CSS for balloon animations
-const balloonStyles = `
-  @keyframes float-up {
-    0% {
-      transform: translateY(100vh) scale(0.5);
-      opacity: 0;
-    }
-    20% {
-      opacity: 1;
-    }
-    80% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-100px) scale(1);
-      opacity: 0;
-    }
-  }
-  
-  @keyframes balloon-bounce {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-  
-  .balloon-float {
-    animation: float-up 4s ease-out forwards;
-  }
-  
-  .balloon-bounce {
-    animation: balloon-bounce 2s ease-in-out infinite;
-  }
-`
-
-// Inject styles
-if (typeof document !== 'undefined') {
-  const style = document.createElement('style')
-  style.textContent = balloonStyles
-  document.head.appendChild(style)
-}
