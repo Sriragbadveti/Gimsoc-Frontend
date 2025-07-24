@@ -7,7 +7,7 @@ export default function TicketsSoon() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [timeLeft, setTimeLeft] = useState({})
-  const countdownDate = useRef(new Date("2025-07-28T00:00:00+04:00")) // Georgian time (UTC+4)
+  const countdownDate = useRef(new Date("2025-07-29T00:00:00+04:00")) // Georgian time (UTC+4)
 
   const calculateTimeLeft = () => {
     const now = new Date()
