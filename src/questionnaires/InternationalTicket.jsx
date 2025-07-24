@@ -592,7 +592,7 @@ export default function InternationalTicket() {
                     type="file"
                     onChange={handleFileChange}
                     name="enrollmentProof"
-                    accept="image/*,.pdf"
+                    accept=".jpg,.jpeg,.png"
                     className="hidden"
                     id="enrollment-upload"
                     required
@@ -651,7 +651,7 @@ export default function InternationalTicket() {
                     type="file"
                     onChange={handleFileChange}
                     name="headshot"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png"
                     className="hidden"
                     id="headshot-upload"
                     required
@@ -926,7 +926,7 @@ export default function InternationalTicket() {
                         type="file"
                         onChange={handleFileChange}
                         name="paymentProof"
-                        accept=".pdf"
+                                                  accept=".jpg,.jpeg,.png"
                         className="hidden"
                         id="payment-upload"
                         required

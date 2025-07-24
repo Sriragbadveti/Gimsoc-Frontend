@@ -42,7 +42,7 @@ export default function DashboardLogin() {
       console.log("✅ Dashboard login successful:", response.data)
       
       // Redirect to dashboard
-      navigate("/dashboard")
+      navigate("/attendeedashboard")
     } catch (error) {
       console.error("❌ Dashboard login failed:", error)
       

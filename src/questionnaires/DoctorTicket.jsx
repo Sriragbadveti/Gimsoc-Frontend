@@ -565,7 +565,7 @@ export default function DoctorTicket() {
                     type="file"
                     onChange={handleFileChange}
                     name="headshot"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png"
                     className="hidden"
                     id="headshot-upload"
                     required
@@ -697,7 +697,7 @@ export default function DoctorTicket() {
                         type="file"
                         onChange={handleFileChange}
                         name="paymentProof"
-                        accept="*"
+                                                  accept=".jpg,.jpeg,.png"
                         className="hidden"
                         id="payment-upload"
                         required

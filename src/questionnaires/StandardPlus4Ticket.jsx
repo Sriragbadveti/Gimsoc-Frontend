@@ -805,7 +805,7 @@ export default function StandardPlus4Ticket() {
                       type="file"
                       onChange={handleFileChange}
                       name="headshot"
-                      accept="image/*"
+                      accept=".jpg,.jpeg,.png"
                       className="hidden"
                       id="headshot-upload"
                     />
@@ -1081,7 +1081,7 @@ export default function StandardPlus4Ticket() {
                           type="file"
                           onChange={handleFileChange}
                           name="paymentProof"
-                          accept=".pdf,.jpg,.jpeg,.png"
+                          accept=".jpg,.jpeg,.png"
                           className="hidden"
                           id="payment-upload"
                         />
@@ -1089,7 +1089,7 @@ export default function StandardPlus4Ticket() {
                           <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
                           <span className="text-gray-300"> or drag and drop</span>
                         </label>
-                        <p className="text-xs text-gray-300 mt-1">Please upload a screenshot or PDF of your bank transfer confirmation</p>
+                        <p className="text-xs text-gray-300 mt-1">Please upload a screenshot (JPEG/PNG) of your bank transfer confirmation</p>
                         {formData.paymentProof && (
                           <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
                         )}
