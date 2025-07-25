@@ -5,6 +5,7 @@ import { ScrollReveal } from "../Pages/ScrollReveal"
 import Navbar from "../Components/Navbar"
 import { Link } from "react-router-dom" // ✅ Add this line
 import LightRays from '../Components/LightRays'
+import { PointerHighlight } from "../Components/PointerHighlight"
 
 const ticketTiers = [
   {
@@ -153,7 +154,12 @@ export default function Tickets() {
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-base font-semibold leading-7 text-blue-400">Pricing</h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Choose your MEDCON'25 ticket
+              <PointerHighlight
+                rectangleClassName="bg-blue-500/20 border-blue-400/50"
+                pointerClassName="text-yellow-400"
+              >
+                <span className="relative z-10">Choose your MEDCON'25 ticket</span>
+              </PointerHighlight>
             </p>
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-300">

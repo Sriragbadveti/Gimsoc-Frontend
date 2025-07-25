@@ -6,7 +6,7 @@ import Card from "./Card"
 
 const SchedulePage = () => {
   const [selectedDay, setSelectedDay] = useState(1)
-  const [viewMode, setViewMode] = useState("agenda") // agenda or calendar
+  const [viewMode, setViewMode] = useState("agenda") 
 
   const scheduleData = {
     1: [
