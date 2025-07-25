@@ -37,51 +37,56 @@ export function PointerHighlight({
 
   return (
     <div
-      className={`relative w-fit ${containerClassName}`}
+      className={`relative w-fit mx-auto ${containerClassName}`}
       ref={containerRef}
     >
       {children}
       {dimensions.width > 0 && dimensions.height > 0 && (
         <motion.div
           className="pointer-events-none absolute inset-0 z-0"
-          initial={{ opacity: 0, scale: 0.95, originX: 0, originY: 0 }}
+          initial={{ opacity: 0, scale: 0.95, originX: 0.5, originY: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <motion.div
-            className={`absolute inset-0 border border-gray-800 dark:border-gray-200 ${rectangleClassName}`}
+            className={`absolute inset-0 border-2 border-gray-800 dark:border-gray-200 rounded-lg ${rectangleClassName}`}
             initial={{
               width: 0,
               height: 0,
+              borderRadius: "0px",
             }}
             whileInView={{
-              width: dimensions.width,
-              height: dimensions.height,
+              width: dimensions.width + 32,
+              height: dimensions.height + 24,
+              borderRadius: "12px",
             }}
             transition={{
-              duration: 1,
+              duration: 1.2,
               ease: "easeInOut",
+              borderRadius: { duration: 0.8, ease: "easeOut" }
             }}
           />
           <motion.div
             className="pointer-events-none absolute"
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{
               opacity: 1,
-              x: dimensions.width + 4,
-              y: dimensions.height + 4,
+              scale: 1,
+              x: dimensions.width + 36,
+              y: dimensions.height + 12,
             }}
             style={{
               rotate: -90,
             }}
             transition={{
-              opacity: { duration: 0.1, ease: "easeInOut" },
-              duration: 1,
+              opacity: { duration: 0.3, ease: "easeInOut" },
+              scale: { duration: 0.4, ease: "easeOut" },
+              duration: 1.2,
               ease: "easeInOut",
             }}
           >
             <Pointer
-              className={`h-5 w-5 text-blue-500 ${pointerClassName}`}
+              className={`h-6 w-6 text-blue-500 ${pointerClassName}`}
             />
           </motion.div>
         </motion.div>
