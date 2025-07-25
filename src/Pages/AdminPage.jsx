@@ -548,8 +548,9 @@ export default function AdminDashboard() {
                           >
                             {ticket.paymentStatus || "pending"}
                           </span>
-                          {(!ticket.paymentStatus || ticket.paymentStatus === "pending") && (
+                          {(ticket.paymentStatus === "pending" || !ticket.paymentStatus) && (
                             <>
+                            {console.log("Showing buttons for ticket:", ticket._id, "Status:", ticket.paymentStatus)}
                             <button
                               onClick={() => approveTicket(ticket._id)}
                               disabled={approvingTickets.has(ticket._id)}
@@ -835,8 +836,9 @@ export default function AdminDashboard() {
                   >
                     {ticket.paymentStatus || "pending"}
                   </span>
-                  {(!ticket.paymentStatus || ticket.paymentStatus === "pending") && (
+                  {(ticket.paymentStatus === "pending" || !ticket.paymentStatus) && (
                     <>
+                    {console.log("Mobile: Showing buttons for ticket:", ticket._id, "Status:", ticket.paymentStatus)}
                     <button
                       onClick={() => approveTicket(ticket._id)}
                       disabled={approvingTickets.has(ticket._id)}
