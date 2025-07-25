@@ -160,14 +160,24 @@ export default function AdminDashboard() {
   const rejectTicket = async (ticketId) => {
     try {
       setApprovingTickets((prev) => new Set([...prev, ticketId]))
+      console.log("Rejecting ticket:", ticketId)
+      
       await axios.patch(
         `https://gimsoc-backend.onrender.com/api/admin/approveticket/${ticketId}`,
         { paymentStatus: "rejected" },
         { withCredentials: true },
       )
-      setTickets((prevTickets) =>
-        prevTickets.map((ticket) => (ticket._id === ticketId ? { ...ticket, paymentStatus: "rejected" } : ticket)),
-      )
+      
+      console.log("Ticket rejected successfully on backend")
+      
+      setTickets((prevTickets) => {
+        const updatedTickets = prevTickets.map((ticket) => 
+          ticket._id === ticketId ? { ...ticket, paymentStatus: "rejected" } : ticket
+        )
+        console.log("Updated tickets state:", updatedTickets.find(t => t._id === ticketId))
+        return updatedTickets
+      })
+      
       alert("Ticket rejected successfully! Email sent to the user.")
     } catch (err) {
       console.error("Error rejecting ticket:", err)
@@ -324,6 +334,12 @@ export default function AdminDashboard() {
     setAbstractSearchQuery("")
   }
 
+  // Force refresh tickets data
+  const refreshTickets = () => {
+    console.log("Force refreshing tickets data...")
+    fetchTickets()
+  }
+
   const renderTicketsTab = () => {
     if (ticketsLoading) {
       return (
@@ -358,9 +374,17 @@ export default function AdminDashboard() {
       <>
         {/* Tickets Filter Bar */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Filter className="h-5 w-5 text-gray-500" />
-            <h3 className="text-lg font-medium text-gray-900">Filters</h3>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Filter className="h-5 w-5 text-gray-500" />
+              <h3 className="text-lg font-medium text-gray-900">Filters</h3>
+            </div>
+            <button
+              onClick={refreshTickets}
+              className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+              Refresh Data
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -780,6 +804,8 @@ export default function AdminDashboard() {
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       ticket.paymentStatus === "completed"
                         ? "bg-green-100 text-green-800"
+                        : ticket.paymentStatus === "rejected"
+                        ? "bg-red-100 text-red-800"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
