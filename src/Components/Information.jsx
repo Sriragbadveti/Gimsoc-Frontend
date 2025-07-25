@@ -46,20 +46,20 @@ export default function Information() {
                   Date & Time
                 </dt>
                 <dd className="mt-1 text-base text-gray-400">
-                  October  | Soon to be announced
+                  24th , 25th October 2025
                 </dd>
               </div>
             </div>
             <div className="flex items-start gap-x-4">
-              {/* <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
+              <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
                 <MapPinIcon aria-hidden="true" className="h-6 w-6 text-white" />
-              </div> */}
+              </div>
               <div>
-                {/* <dt className="text-base font-semibold text-white">Location</dt>
+                <dt className="text-base font-semibold text-white">Location</dt>
                 <dd className="mt-1 text-base text-gray-400">
                   Ivane Javakhishvili Tbilisi State University (1 Ilia
                   Chavchavadze Avenue, Tbilisi 0179, Georgia) TSU Main Campus
-                </dd> */}
+                </dd>
               </div>
             </div>
           </dl>

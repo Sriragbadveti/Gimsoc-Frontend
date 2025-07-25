@@ -19,6 +19,7 @@ import {
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
+import { StatefulButton } from "../Components/StatefulButton"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -256,7 +257,7 @@ export default function AllInclusiveTicket() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault()
     setIsSubmitting(true)
     setSoldOut(false)
     setEmailUsed(false)
@@ -1425,20 +1426,14 @@ export default function AllInclusiveTicket() {
 
             {/* Submit Button */}
             <div className="pt-8">
-              <button
+              <StatefulButton
                 type="submit"
                 disabled={isSubmitting || soldOut || emailUsed}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
+                className="w-full py-4 px-8 rounded-xl font-semibold text-lg"
+                onClick={handleSubmit}
               >
-                {isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-2"></div>
-                    Submitting...
-                  </div>
-                ) : (
-                  `Complete Registration - ${calculatePrice()} GEL`
-                )}
-              </button>
+                Complete Registration - {calculatePrice()} GEL
+              </StatefulButton>
             </div>
           </form>
         </div>

@@ -4,6 +4,8 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
+import { TypewriterEffectSmooth } from "../Components/TypewriterEffect"
+import { BackgroundBeams } from "../Components/BackgroundBeams"
 
 export default function DashboardLogin() {
   const [formData, setFormData] = useState({
@@ -61,21 +63,47 @@ export default function DashboardLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-black relative flex items-center justify-center px-4 overflow-hidden">
+      {/* Background Beams Animation */}
+      <BackgroundBeams className="opacity-80" />
+      
+      <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm">
             <User className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Dashboard Access</h1>
-          <p className="text-gray-300">
+          <div className="flex justify-center">
+            <TypewriterEffectSmooth
+              words={[
+                {
+                  text: "Login",
+                },
+                {
+                  text: "to",
+                },
+                {
+                  text: "your",
+                },
+                {
+                  text: "MEDCON'25",
+                  className: "text-blue-400",
+                },
+                {
+                  text: "dashboard",
+                },
+              ]}
+              className="text-white font-bold"
+              cursorClassName="bg-blue-400"
+            />
+          </div>
+          <p className="text-gray-300 mt-4">
             Enter your ticket credentials to access your dashboard
           </p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-xl">
+        <div className="bg-black/40 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
@@ -89,7 +117,7 @@ export default function DashboardLogin() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-black/50 backdrop-blur-sm text-white placeholder-gray-400"
                   placeholder="Enter your email address"
                   required
                 />
@@ -108,14 +136,14 @@ export default function DashboardLogin() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-black/50 backdrop-blur-sm text-white placeholder-gray-400"
                   placeholder="Enter your dashboard password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -137,7 +165,7 @@ export default function DashboardLogin() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center backdrop-blur-sm"
             >
               {isLoading ? (
                 <>

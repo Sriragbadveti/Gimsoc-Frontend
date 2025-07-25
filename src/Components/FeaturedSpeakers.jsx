@@ -57,7 +57,7 @@ export default function FeaturedSpeakers() {
     },
 
     {
-      name: " Annam Rafique",
+      name: " Annam Jan",
       title: "Histology",
       institution: "University of Georgia",
       image: "/Anaam.jpg",
