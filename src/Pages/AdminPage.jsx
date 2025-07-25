@@ -124,6 +124,13 @@ export default function AdminDashboard() {
       setAbstractsLoading(true)
       setAbstractsError(null)
       const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getallabstracts", { withCredentials: true })
+      console.log("Fetched abstracts:", response.data)
+      
+      // Debug: Check date formats
+      response.data.forEach((abstract, index) => {
+        console.log(`Abstract ${index + 1} createdAt:`, abstract.createdAt, "Type:", typeof abstract.createdAt)
+      })
+      
       setAbstracts(response.data)
     } catch (err) {
       console.error("Error fetching abstracts:", err)
@@ -314,13 +321,30 @@ export default function AdminDashboard() {
   }
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
+    if (!dateString) {
+      return "No date"
+    }
+    
+    try {
+      const date = new Date(dateString)
+      
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+        console.warn("Invalid date string:", dateString)
+        return "Invalid date"
+      }
+      
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    } catch (error) {
+      console.error("Error formatting date:", error, "Date string:", dateString)
+      return "Invalid date"
+    }
   }
 
   const clearTicketFilters = () => {
