@@ -18,6 +18,7 @@ import {
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import CreditCardAnimation from "../Components/CreditCardAnimation"
+import PaypalButton from "../Components/PaypalButton";
 
 // Success Animation Component
 const SuccessAnimation = ({ onComplete }) => {
@@ -84,6 +85,7 @@ export default function InternationalTicket() {
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
   const navigate = useNavigate()
+  const [paypalPaid, setPaypalPaid] = useState(false);
 
   useEffect(() => {
     setFadeIn(true)
@@ -917,6 +919,20 @@ export default function InternationalTicket() {
                   </div>
                 </div>
 
+                {formData.paymentMethod === "Credit/Debit Card" && (
+                  <div className="mt-4">
+                    {!paypalPaid ? (
+                      <PaypalButton
+                        amount={packageType === "7Days" ? "650.00" : "350.00"}
+                        onSuccess={() => setPaypalPaid(true)}
+                        onError={() => alert("PayPal payment failed. Please try again.")}
+                      />
+                    ) : (
+                      <div className="text-green-500 font-semibold text-center">Payment successful! You can now complete registration.</div>
+                    )}
+                  </div>
+                )}
+
                 {formData.paymentMethod === "Bank Transfer" && (
                   <div className="transform hover:scale-105 transition-transform duration-300">
                     <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
@@ -949,7 +965,7 @@ export default function InternationalTicket() {
             <div className="pt-8">
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || (formData.paymentMethod === "Credit/Debit Card" && !paypalPaid)}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed animate-button-pulse"
               >
                 {isSubmitting ? (
