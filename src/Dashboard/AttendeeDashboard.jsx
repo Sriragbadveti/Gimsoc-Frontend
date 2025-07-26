@@ -13,110 +13,15 @@ import Resources from "./ResourcesPage"
 import Booths from "./BoothsPage"
 import ContactUs from "./ContactPage"
 
-// Mock data
-const userData = {
-  name: "Dr. Sarah Johnson",
-  email: "sarah.johnson@university.edu",
-  affiliation: "Stanford University",
-  photo: "/placeholder.svg?height=100&width=100&text=SJ",
-  qrCode: "/placeholder.svg?height=150&width=150&text=QR",
-  ticketId: "CONF2024-001234",
-  ticketType: "Premium Access",
-}
-
-const scheduleData = [
-  {
-    day: "Day 1 - March 15",
-    sessions: [
-      { time: "09:00", title: "Opening Keynote", speaker: "Dr. Michael Chen", location: "Main Hall", type: "keynote" },
-      {
-        time: "10:30",
-        title: "AI in Healthcare Workshop",
-        speaker: "Dr. Sarah Johnson",
-        location: "Room A",
-        type: "workshop",
-      },
-      {
-        time: "14:00",
-        title: "Panel Discussion: Future of Medicine",
-        speaker: "Multiple Speakers",
-        location: "Main Hall",
-        type: "panel",
-      },
-      { time: "16:00", title: "Networking Session", speaker: "", location: "Lobby", type: "networking" },
-    ],
-  },
-  {
-    day: "Day 2 - March 16",
-    sessions: [
-      { time: "09:00", title: "Research Presentations", speaker: "Various", location: "Room B", type: "presentation" },
-      {
-        time: "11:00",
-        title: "Innovation Showcase",
-        speaker: "Tech Companies",
-        location: "Exhibition Hall",
-        type: "showcase",
-      },
-      {
-        time: "15:00",
-        title: "Closing Ceremony",
-        speaker: "Conference Committee",
-        location: "Main Hall",
-        type: "ceremony",
-      },
-    ],
-  },
-]
-
-const speakersData = [
-  {
-    id: 1,
-    name: "Dr. Michael Chen",
-    title: "Chief Medical Officer",
-    company: "MedTech Innovations",
-    bio: "Leading expert in medical technology with 15+ years of experience in healthcare innovation.",
-    photo: "/placeholder.svg?height=80&width=80&text=MC",
-    sessions: ["Opening Keynote", "Future of Digital Health"],
-  },
-  {
-    id: 2,
-    name: "Dr. Sarah Johnson",
-    title: "Research Director",
-    company: "Stanford University",
-    bio: "Pioneering researcher in AI applications for healthcare diagnostics and treatment.",
-    photo: "/placeholder.svg?height=80&width=80&text=SJ",
-    sessions: ["AI in Healthcare Workshop", "Machine Learning Panel"],
-  },
-]
-
-const boothsData = [
-  {
-    id: 1,
-    name: "MedTech Solutions",
-    type: "sponsor",
-    description: "Leading provider of medical technology solutions",
-    logo: "/placeholder.svg?height=60&width=60&text=MTS",
-    resources: ["Product Catalog", "Demo Videos", "White Papers"],
-  },
-  {
-    id: 2,
-    name: "University Research Lab",
-    type: "academic",
-    description: "Cutting-edge research in biomedical engineering",
-    logo: "/placeholder.svg?height=60&width=60&text=URL",
-    resources: ["Research Papers", "Lab Tour Video", "Contact Info"],
-  },
-]
-
 // Navigation items
 const navItems = [
   { id: "profile", label: "Profile", icon: "User" },
   { id: "schedule", label: "Schedule", icon: "Calendar" },
   { id: "speakers", label: "Speakers", icon: "Users" },
-  { id: "live", label: "Live Sessions", icon: "Video" },
-  { id: "venue", label: "Venue Map", icon: "Map" },
-  { id: "resources", label: "Resources", icon: "Download" },
-  { id: "booths", label: "Booths", icon: "Store" },
+  { id: "live", label: "Live Features", icon: "Radio" },
+  { id: "venue", label: "Venue", icon: "MapPin" },
+  { id: "resources", label: "Resources", icon: "FileText" },
+  { id: "booths", label: "Exhibition", icon: "Building" },
   { id: "contact", label: "Contact", icon: "Mail" },
 ]
 
@@ -195,9 +100,9 @@ function AttendeeDashboard() {
       case "profile":
         return <UserProfile userData={userData} />
       case "schedule":
-        return <PersonalizedSchedule scheduleData={scheduleData} />
+        return <PersonalizedSchedule scheduleData={[]} />
       case "speakers":
-        return <SpeakerInfo speakersData={speakersData} />
+        return <SpeakerInfo speakersData={[]} />
       case "live":
         return <LiveFeatures />
       case "venue":
@@ -205,7 +110,7 @@ function AttendeeDashboard() {
       case "resources":
         return <Resources />
       case "booths":
-        return <Booths boothsData={boothsData} />
+        return <Booths boothsData={[]} />
       case "contact":
         return <ContactUs />
       default:
