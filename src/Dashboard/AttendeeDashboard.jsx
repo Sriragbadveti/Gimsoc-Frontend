@@ -132,27 +132,25 @@ function AttendeeDashboard() {
     const checkAuth = async () => {
       try {
         console.log("🔍 Checking dashboard authentication...")
-        console.log("🔍 Request URL:", "https://gimsoc-backend.onrender.com/api/dashboard/check-auth")
         
-        const response = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/check-auth", {
+        // Get user email from localStorage or sessionStorage (set during login)
+        const userEmail = localStorage.getItem('dashboardUserEmail') || sessionStorage.getItem('dashboardUserEmail');
+        
+        if (!userEmail) {
+          console.log("❌ No user email found, redirecting to login");
+          navigate("/dashboard-login");
+          return;
+        }
+        
+        console.log("🔍 Request URL:", `https://gimsoc-backend.onrender.com/api/dashboard/profile?email=${userEmail}`)
+        
+        const response = await axios.get(`https://gimsoc-backend.onrender.com/api/dashboard/profile?email=${userEmail}`, {
           withCredentials: true,
         })
         
         console.log("✅ Dashboard authentication successful:", response.data)
         setIsAuthenticated(true)
-        
-        // After successful authentication, fetch full profile data
-        try {
-          const profileResponse = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/profile", {
-            withCredentials: true,
-          })
-          console.log("✅ Profile data fetched:", profileResponse.data)
-          setUserData(profileResponse.data.user)
-        } catch (profileError) {
-          console.error("❌ Failed to fetch profile data:", profileError)
-          // Fallback to basic user data from auth check
-          setUserData(response.data.user)
-        }
+        setUserData(response.data.user)
       } catch (error) {
         console.error("❌ Dashboard authentication failed:", error)
         console.error("❌ Error response:", error.response?.data)
