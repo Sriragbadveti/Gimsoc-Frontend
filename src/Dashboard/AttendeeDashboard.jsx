@@ -38,26 +38,29 @@ function AttendeeDashboard() {
       try {
         console.log("🔍 Checking dashboard authentication...")
         
-        // Get user data from localStorage (set during login)
-        const storedUserData = localStorage.getItem('dashboardUserData');
-        const userEmail = localStorage.getItem('dashboardUserEmail');
+        // Check authentication via API call
+        const response = await axios.get(
+          "https://gimsoc-backend.onrender.com/api/dashboard/check-auth",
+          { withCredentials: true }
+        )
         
-        if (!storedUserData || !userEmail) {
-          console.log("❌ No user data found, redirecting to login");
-          navigate("/dashboard-login");
-          return;
+        if (response.data.authenticated) {
+          console.log("✅ Dashboard authentication successful")
+          setIsAuthenticated(true)
+          setUserData(response.data.user)
+        } else {
+          console.log("❌ Authentication failed, redirecting to login")
+          navigate("/dashboard-login")
+          return
         }
-        
-        // Parse the stored user data
-        const userData = JSON.parse(storedUserData);
-        
-        console.log("✅ Dashboard authentication successful with stored data")
-        setIsAuthenticated(true)
-        setUserData(userData)
       } catch (error) {
         console.error("❌ Dashboard authentication failed:", error)
         console.error("❌ Error response:", error.response?.data)
         console.error("❌ Error status:", error.response?.status)
+        
+        // Clear any stored data and redirect to login
+        localStorage.removeItem('dashboardUserData')
+        localStorage.removeItem('dashboardUserEmail')
         navigate("/dashboard-login")
         return
       } finally {
@@ -88,9 +91,15 @@ function AttendeeDashboard() {
       await axios.post("https://gimsoc-backend.onrender.com/api/dashboard/logout", {}, {
         withCredentials: true,
       })
+      // Clear localStorage data
+      localStorage.removeItem('dashboardUserData')
+      localStorage.removeItem('dashboardUserEmail')
       navigate("/dashboard-login")
     } catch (error) {
       console.error("❌ Logout failed:", error)
+      // Clear localStorage data even if logout API fails
+      localStorage.removeItem('dashboardUserData')
+      localStorage.removeItem('dashboardUserEmail')
       navigate("/dashboard-login")
     }
   }
