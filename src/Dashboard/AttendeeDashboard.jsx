@@ -38,57 +38,26 @@ function AttendeeDashboard() {
       try {
         console.log("🔍 Checking dashboard authentication...")
         
-        // Check if user has stored data (quick check)
+        // Get user data from localStorage (set during login)
         const storedUserData = localStorage.getItem('dashboardUserData');
-        if (!storedUserData) {
-          console.log("❌ No stored user data, redirecting to login");
-          alert("Please log in to access the dashboard.");
+        const userEmail = localStorage.getItem('dashboardUserEmail');
+        
+        if (!storedUserData || !userEmail) {
+          console.log("❌ No user data found, redirecting to login");
           navigate("/dashboard-login");
           return;
         }
         
-        // Check authentication via API call
-        const response = await axios.get(
-          "https://gimsoc-backend.onrender.com/api/dashboard/check-auth",
-          { withCredentials: true }
-        )
+        // Parse the stored user data
+        const userData = JSON.parse(storedUserData);
         
-        if (response.data.authenticated) {
-          console.log("✅ Dashboard authentication successful")
-          setIsAuthenticated(true)
-          setUserData(response.data.user)
-        } else {
-          console.log("❌ Authentication failed, redirecting to login")
-          navigate("/dashboard-login")
-          return
-        }
+        console.log("✅ Dashboard authentication successful with stored data")
+        setIsAuthenticated(true)
+        setUserData(userData)
       } catch (error) {
         console.error("❌ Dashboard authentication failed:", error)
         console.error("❌ Error response:", error.response?.data)
         console.error("❌ Error status:", error.response?.status)
-        
-        // Handle different error types
-        if (error.response?.status === 403) {
-          // Ticket not approved - show specific message
-          console.log("❌ Ticket not approved, redirecting to login with message")
-          alert("Your ticket is not yet approved. Please wait for approval email before accessing the dashboard.")
-        } else if (error.response?.status === 401) {
-          // Authentication failed - clear data and show message
-          console.log("❌ Authentication failed, clearing data")
-          if (error.response?.data?.message === "No token found") {
-            alert("Please log in to access the dashboard. You will be redirected to the login page.")
-          } else {
-            alert("Your session has expired or you need to log in again. Please log in with your ticket credentials.")
-          }
-        } else {
-          // Other errors
-          console.log("❌ Other error occurred")
-          alert("There was an issue accessing the dashboard. Please try logging in again.")
-        }
-        
-        // Clear any stored data and redirect to login
-        localStorage.removeItem('dashboardUserData')
-        localStorage.removeItem('dashboardUserEmail')
         navigate("/dashboard-login")
         return
       } finally {
@@ -119,15 +88,9 @@ function AttendeeDashboard() {
       await axios.post("https://gimsoc-backend.onrender.com/api/dashboard/logout", {}, {
         withCredentials: true,
       })
-      // Clear localStorage data
-      localStorage.removeItem('dashboardUserData')
-      localStorage.removeItem('dashboardUserEmail')
       navigate("/dashboard-login")
     } catch (error) {
       console.error("❌ Logout failed:", error)
-      // Clear localStorage data even if logout API fails
-      localStorage.removeItem('dashboardUserData')
-      localStorage.removeItem('dashboardUserEmail')
       navigate("/dashboard-login")
     }
   }
