@@ -140,7 +140,19 @@ function AttendeeDashboard() {
         
         console.log("✅ Dashboard authentication successful:", response.data)
         setIsAuthenticated(true)
-        setUserData(response.data.user)
+        
+        // After successful authentication, fetch full profile data
+        try {
+          const profileResponse = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/profile", {
+            withCredentials: true,
+          })
+          console.log("✅ Profile data fetched:", profileResponse.data)
+          setUserData(profileResponse.data.user)
+        } catch (profileError) {
+          console.error("❌ Failed to fetch profile data:", profileError)
+          // Fallback to basic user data from auth check
+          setUserData(response.data.user)
+        }
       } catch (error) {
         console.error("❌ Dashboard authentication failed:", error)
         console.error("❌ Error response:", error.response?.data)

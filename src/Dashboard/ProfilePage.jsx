@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { Edit, Calendar, MapPin, Mail, Phone, Building, Globe, User } from "lucide-react"
 import Card from "./Card"
 
@@ -11,23 +10,11 @@ const ProfilePage = ({ userData }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/profile", {
-          withCredentials: true,
-        })
-        // Extract the user data from the nested structure
-        const userData = response.data.user || response.data
-        setUserProfile(userData)
-      } catch (error) {
-        console.error("Error fetching user profile:", error)
-        setUserProfile(userData) // Fallback to passed userData
-      } finally {
-        setLoading(false)
-      }
+    // Use the userData passed from parent component instead of making API call
+    if (userData) {
+      setUserProfile(userData)
     }
-
-    fetchUserProfile()
+    setLoading(false)
   }, [userData])
 
   const handleSave = () => {
