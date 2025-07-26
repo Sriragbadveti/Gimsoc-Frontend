@@ -176,19 +176,19 @@ export default function StandardPlus3Ticket() {
 
     switch (memberType) {
       case "GIMSOC":
-        basePrice = 65 // 75 - 10 discount
+        basePrice = 65 // GIMSOC Members - 65 GEL
         break
       case "TSU":
-        basePrice = 45 // 75 - 30 discount
+        basePrice = 60 // TSU Students - 60 GEL
         break
       case "Executive":
-        basePrice = 65 // 75 - 10 discount (same as GIMSOC)
+        basePrice = 55 // Executive & Subcommittee - 55 GEL
         break
       case "Non-GIMSOC":
-        basePrice = 75 // Regular price
+        basePrice = 65 // Non-GIMSOC Members - 65 GEL
         break
       default:
-        basePrice = 75
+        basePrice = 65 // Default to Non-GIMSOC price
     }
 
     const galaPrice = formData.galaDinner && formData.galaDinner.includes("Yes") ? 40 : 0

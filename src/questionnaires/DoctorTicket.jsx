@@ -99,10 +99,23 @@ export default function DoctorTicket() {
     setFormData((prev) => ({
       ...prev,
       passType: type,
-      ticketType: `Doctor-${type}`,
-      workshopPackage: `Doctor-${type}`,
+      ticketType: type === "Basic" ? "Doctor" : "Doctor",
+      ticketCategory: type === "Basic" ? "Doctor" : "Doctor",
+      workshopPackage: type === "AllInclusive" ? "All-Inclusive" : "Basic",
     }))
     setCurrentStep(2)
+  }
+
+  // Calculate pricing based on pass type
+  const calculatePrice = () => {
+    switch (passType) {
+      case "Basic":
+        return 90 // Basic Pass - 90 GEL
+      case "AllInclusive":
+        return 130 // All-Inclusive Pass - 130 GEL
+      default:
+        return 0
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -277,6 +290,7 @@ export default function DoctorTicket() {
                     </div>
 
                     <div className="text-center">
+                      <div className="text-2xl font-bold text-blue-400 mb-2">90 GEL</div>
                       <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select Basic Pass
                       </button>
@@ -321,6 +335,7 @@ export default function DoctorTicket() {
                     </div>
 
                     <div className="text-center">
+                      <div className="text-2xl font-bold text-purple-400 mb-2">130 GEL</div>
                       <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select All-Inclusive
                       </button>

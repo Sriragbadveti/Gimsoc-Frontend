@@ -931,7 +931,7 @@ export default function InternationalTicket() {
                     {!paypalPaid ? (
                       <PaypalButton
                         key={`paypal-${packageType}-${formData.paymentMethod}`}
-                        amount={packageType === "7Days" ? "650.00" : "350.00"}
+                        amount={packageType === "7Days" ? "325.00" : "100.00"}
                         onSuccess={() => setPaypalPaid(true)}
                         onError={() => alert("PayPal payment failed. Please try again.")}
                       />
