@@ -133,24 +133,22 @@ function AttendeeDashboard() {
       try {
         console.log("🔍 Checking dashboard authentication...")
         
-        // Get user email from localStorage or sessionStorage (set during login)
-        const userEmail = localStorage.getItem('dashboardUserEmail') || sessionStorage.getItem('dashboardUserEmail');
+        // Get user data from localStorage (set during login)
+        const storedUserData = localStorage.getItem('dashboardUserData');
+        const userEmail = localStorage.getItem('dashboardUserEmail');
         
-        if (!userEmail) {
-          console.log("❌ No user email found, redirecting to login");
+        if (!storedUserData || !userEmail) {
+          console.log("❌ No user data found, redirecting to login");
           navigate("/dashboard-login");
           return;
         }
         
-        console.log("🔍 Request URL:", `https://gimsoc-backend.onrender.com/api/dashboard/profile?email=${userEmail}`)
+        // Parse the stored user data
+        const userData = JSON.parse(storedUserData);
         
-        const response = await axios.get(`https://gimsoc-backend.onrender.com/api/dashboard/profile?email=${userEmail}`, {
-          withCredentials: true,
-        })
-        
-        console.log("✅ Dashboard authentication successful:", response.data)
+        console.log("✅ Dashboard authentication successful with stored data")
         setIsAuthenticated(true)
-        setUserData(response.data.user)
+        setUserData(userData)
       } catch (error) {
         console.error("❌ Dashboard authentication failed:", error)
         console.error("❌ Error response:", error.response?.data)

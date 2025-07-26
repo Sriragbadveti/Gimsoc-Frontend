@@ -43,7 +43,8 @@ export default function DashboardLogin() {
 
       console.log("✅ Dashboard login successful:", response.data)
       
-      // Store user email in localStorage for dashboard access
+      // Store user data in localStorage for dashboard access
+      localStorage.setItem('dashboardUserData', JSON.stringify(response.data.user))
       localStorage.setItem('dashboardUserEmail', formData.email)
       
       // Redirect to dashboard

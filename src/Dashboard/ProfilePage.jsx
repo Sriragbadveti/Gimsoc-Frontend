@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import axios from "axios"
 import { Edit, Calendar, MapPin, Mail, Phone, Building, Globe, User } from "lucide-react"
 import Card from "./Card"
 
@@ -10,11 +11,39 @@ const ProfilePage = ({ userData }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Use the userData passed from parent component instead of making API call
-    if (userData) {
-      setUserProfile(userData)
+    const fetchUserProfile = async () => {
+      try {
+        // Get email from the userData passed from login
+        const userEmail = userData?.email
+        
+        if (!userEmail) {
+          console.error("❌ No user email found in userData")
+          setLoading(false)
+          return
+        }
+
+        console.log("🔍 Fetching profile for email:", userEmail)
+        
+        const response = await axios.get(`https://gimsoc-backend.onrender.com/api/dashboard/profile?email=${userEmail}`, {
+          withCredentials: true,
+        })
+        
+        console.log("✅ Profile data fetched:", response.data)
+        setUserProfile(response.data.user)
+      } catch (error) {
+        console.error("❌ Error fetching user profile:", error)
+        // Fallback to basic userData if API fails
+        setUserProfile(userData)
+      } finally {
+        setLoading(false)
+      }
     }
-    setLoading(false)
+
+    if (userData) {
+      fetchUserProfile()
+    } else {
+      setLoading(false)
+    }
   }, [userData])
 
   const handleSave = () => {
