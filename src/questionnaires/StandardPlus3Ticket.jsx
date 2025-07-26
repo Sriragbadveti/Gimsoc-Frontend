@@ -212,6 +212,13 @@ export default function StandardPlus3Ticket() {
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault()
+    
+    // Prevent double submission
+    if (isSubmitting) {
+      console.log("⚠️ Submission already in progress, ignoring duplicate click")
+      return
+    }
+    
     setIsSubmitting(true)
     setSoldOut(false)
     setEmailUsed(false)
@@ -312,10 +319,19 @@ export default function StandardPlus3Ticket() {
       })
 
       console.log("✅ Submitted successfully:", response.data)
-              setShowSuccessAnimation(true)
+      
+      // Only show success animations and navigate on successful submission
+      // Check if the response indicates a successful submission
+      if (response.data.message === "Ticket submitted successfully") {
+        setShowSuccessAnimation(true)
+        
         setTimeout(() => {
           navigate("/ticket-success")
         }, 3500)
+      } else {
+        // If there's an unexpected response, treat it as an error
+        throw new Error("Unexpected response from server")
+      }
     } catch (err) {
       setErrorBooking(true)
       console.error("❌ Submission failed:", err.response?.data || err.message)
@@ -1331,7 +1347,6 @@ export default function StandardPlus3Ticket() {
                 type="submit"
                 disabled={isSubmitting || soldOut || emailUsed}
                 className="w-full py-4 px-8 rounded-xl font-semibold text-lg"
-                onClick={handleSubmit}
               >
                 Complete Registration
               </StatefulButton>

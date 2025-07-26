@@ -43,12 +43,18 @@ export default function DashboardLogin() {
 
       console.log("✅ Dashboard login successful:", response.data)
       
-      // Store user data in localStorage for dashboard access
-      localStorage.setItem('dashboardUserData', JSON.stringify(response.data.user))
-      localStorage.setItem('dashboardUserEmail', formData.email)
-      
-      // Redirect to dashboard
-      navigate("/attendeedashboard")
+      // Verify that the login was successful and user has access
+      if (response.data.message === "Login successful") {
+        // Store user data in localStorage for dashboard access
+        localStorage.setItem('dashboardUserData', JSON.stringify(response.data.user))
+        localStorage.setItem('dashboardUserEmail', formData.email)
+        
+        // Redirect to dashboard
+        navigate("/attendeedashboard")
+      } else {
+        // Unexpected response
+        setError("Login failed. Please try again.")
+      }
     } catch (error) {
       console.error("❌ Dashboard login failed:", error)
       

@@ -38,6 +38,15 @@ function AttendeeDashboard() {
       try {
         console.log("🔍 Checking dashboard authentication...")
         
+        // Check if user has stored data (quick check)
+        const storedUserData = localStorage.getItem('dashboardUserData');
+        if (!storedUserData) {
+          console.log("❌ No stored user data, redirecting to login");
+          alert("Please log in to access the dashboard.");
+          navigate("/dashboard-login");
+          return;
+        }
+        
         // Check authentication via API call
         const response = await axios.get(
           "https://gimsoc-backend.onrender.com/api/dashboard/check-auth",
@@ -57,6 +66,25 @@ function AttendeeDashboard() {
         console.error("❌ Dashboard authentication failed:", error)
         console.error("❌ Error response:", error.response?.data)
         console.error("❌ Error status:", error.response?.status)
+        
+        // Handle different error types
+        if (error.response?.status === 403) {
+          // Ticket not approved - show specific message
+          console.log("❌ Ticket not approved, redirecting to login with message")
+          alert("Your ticket is not yet approved. Please wait for approval email before accessing the dashboard.")
+        } else if (error.response?.status === 401) {
+          // Authentication failed - clear data and show message
+          console.log("❌ Authentication failed, clearing data")
+          if (error.response?.data?.message === "No token found") {
+            alert("Please log in to access the dashboard. You will be redirected to the login page.")
+          } else {
+            alert("Your session has expired or you need to log in again. Please log in with your ticket credentials.")
+          }
+        } else {
+          // Other errors
+          console.log("❌ Other error occurred")
+          alert("There was an issue accessing the dashboard. Please try logging in again.")
+        }
         
         // Clear any stored data and redirect to login
         localStorage.removeItem('dashboardUserData')
