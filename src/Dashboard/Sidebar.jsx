@@ -23,7 +23,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
 
       if (res.status === 200) {
         console.log("✅ Logged out successfully");
-        navigate("/login");
+        navigate("/dashboard-login");
       } else {
         console.error("Logout failed", res);
         alert("Logout failed. Please try again.");
@@ -53,7 +53,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
           <div className="px-6 py-8 border-b border-gray-100 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-xl font-bold text-white">Conference 2024</h1>
+                <h1 className="text-xl font-bold text-white">MEDCON'25</h1>
                 <p className="text-blue-100 text-sm mt-1">Professional Dashboard</p>
               </div>
               <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white hover:text-blue-100">
@@ -97,8 +97,8 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
             <div className="space-y-3">
               {/* Conference Info */}
               <div className="text-center">
-                <p className="text-xs text-gray-500">June 15-17, 2024</p>
-                <p className="text-xs text-gray-500">Grand Convention Center</p>
+                <p className="text-xs text-gray-500">October 24th, 2025</p>
+                <p className="text-xs text-gray-500">Ivane Javakhishvili Tbilisi State University</p>
               </div>
 
               {/* Action Buttons */}
