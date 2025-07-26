@@ -52,9 +52,12 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
           {/* Header */}
           <div className="px-6 py-8 border-b border-gray-100 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-bold text-white">MEDCON'25</h1>
-                <p className="text-blue-100 text-sm mt-1">Professional Dashboard</p>
+              <div className="flex items-center">
+                <img 
+                  src="/medcon-logo.png" 
+                  alt="MEDCON Logo" 
+                  className="h-12 w-auto"
+                />
               </div>
               <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white hover:text-blue-100">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

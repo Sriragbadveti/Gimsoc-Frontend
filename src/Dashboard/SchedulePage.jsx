@@ -6,7 +6,6 @@ import Card from "./Card"
 
 const SchedulePage = () => {
   const [selectedDay, setSelectedDay] = useState(1)
-  const [viewMode, setViewMode] = useState("agenda") 
 
   const scheduleData = {
     1: [
@@ -327,26 +326,6 @@ const SchedulePage = () => {
           <h1 className="text-3xl font-bold text-gray-900">Conference Schedule</h1>
           <p className="text-gray-600 mt-2">Your personalized 2-day conference itinerary</p>
         </div>
-        <div className="mt-4 sm:mt-0 flex items-center space-x-3">
-          <div className="flex bg-gray-100 rounded-lg p-1">
-            <button
-              onClick={() => setViewMode("agenda")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === "agenda" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600"
-              }`}
-            >
-              Agenda View
-            </button>
-            <button
-              onClick={() => setViewMode("calendar")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === "calendar" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600"
-              }`}
-            >
-              Calendar View
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Day Selector */}
@@ -377,52 +356,65 @@ const SchedulePage = () => {
       {/* Schedule Content */}
       <Card>
         <div className="p-6">
-          <div className="space-y-4">
+          <div className="space-y-6">
             {scheduleData[selectedDay].map((session, index) => {
               const typeConfig = getTypeConfig(session.type)
               return (
                 <div
                   key={index}
-                  className="p-6 rounded-lg border-l-4 bg-white border-l-gray-200 border border-gray-100 hover:shadow-md transition-all"
+                  className="group relative overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 hover:from-gray-50 hover:to-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="flex items-center space-x-2">
-                            <Clock className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm font-mono text-gray-600">{session.time}</span>
-                            <span className="text-sm text-gray-500">({session.duration})</span>
+                  {/* Left border accent */}
+                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${typeConfig.color.replace('bg-', 'bg-').replace(' text-', '')}`}></div>
+                  
+                  <div className="p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+                      <div className="flex-1">
+                        {/* Header with time and type */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full">
+                              <Clock className="w-4 h-4 text-gray-600" />
+                              <span className="text-sm font-semibold text-gray-700">{session.time}</span>
+                              <span className="text-xs text-gray-500">({session.duration})</span>
+                            </div>
+                            <span
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border-2 ${typeConfig.color}`}
+                            >
+                              <span className="mr-1">{typeConfig.icon}</span>
+                              {session.type.charAt(0).toUpperCase() + session.type.slice(1)}
+                            </span>
                           </div>
-                          <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${typeConfig.color}`}
-                          >
-                            <span className="mr-1">{typeConfig.icon}</span>
-                            {session.type.charAt(0).toUpperCase() + session.type.slice(1)}
-                          </span>
                         </div>
-                      </div>
 
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">{session.title}</h3>
-                      
-                      {session.description && (
-                        <p className="text-sm text-gray-600 mb-3 italic">{session.description}</p>
-                      )}
-
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                        {session.speaker && (
-                          <div className="flex items-center">
-                            <Users className="w-4 h-4 mr-1" />
-                            <span>{session.speaker}</span>
-                          </div>
+                        {/* Session title */}
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                          {session.title}
+                        </h3>
+                        
+                        {/* Description */}
+                        {session.description && (
+                          <p className="text-sm text-gray-600 mb-4 leading-relaxed bg-blue-50 p-3 rounded-lg border-l-4 border-blue-200">
+                            {session.description}
+                          </p>
                         )}
-                        <div className="flex items-center">
-                          <MapPin className="w-4 h-4 mr-1" />
-                          <span>{session.location}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <Calendar className="w-4 h-4 mr-1" />
-                          <span>{session.attendees} attendees</span>
+
+                        {/* Session details */}
+                        <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
+                          {session.speaker && (
+                            <div className="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
+                              <Users className="w-4 h-4 mr-2 text-blue-600" />
+                              <span className="font-medium">{session.speaker}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
+                            <MapPin className="w-4 h-4 mr-2 text-green-600" />
+                            <span className="font-medium">{session.location}</span>
+                          </div>
+                          <div className="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
+                            <Calendar className="w-4 h-4 mr-2 text-purple-600" />
+                            <span className="font-medium">{session.attendees} attendees</span>
+                          </div>
                         </div>
                       </div>
                     </div>
