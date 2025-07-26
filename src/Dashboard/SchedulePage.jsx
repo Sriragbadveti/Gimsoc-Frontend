@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Calendar, Clock, MapPin, Users, Star, ChevronRight } from "lucide-react"
+import { Calendar, Clock, MapPin, Users } from "lucide-react"
 import Card from "./Card"
 
 const SchedulePage = () => {
@@ -18,7 +18,6 @@ const SchedulePage = () => {
         type: "keynote",
         duration: "90 min",
         attendees: 500,
-        registered: true,
       },
       {
         time: "10:30",
@@ -28,7 +27,6 @@ const SchedulePage = () => {
         type: "break",
         duration: "30 min",
         attendees: 500,
-        registered: false,
       },
       {
         time: "11:00",
@@ -38,7 +36,6 @@ const SchedulePage = () => {
         type: "workshop",
         duration: "90 min",
         attendees: 80,
-        registered: true,
       },
       {
         time: "12:30",
@@ -48,7 +45,6 @@ const SchedulePage = () => {
         type: "break",
         duration: "90 min",
         attendees: 500,
-        registered: false,
       },
       {
         time: "14:00",
@@ -58,7 +54,6 @@ const SchedulePage = () => {
         type: "panel",
         duration: "75 min",
         attendees: 300,
-        registered: true,
       },
       {
         time: "15:15",
@@ -68,7 +63,6 @@ const SchedulePage = () => {
         type: "break",
         duration: "30 min",
         attendees: 500,
-        registered: false,
       },
       {
         time: "15:45",
@@ -78,7 +72,6 @@ const SchedulePage = () => {
         type: "showcase",
         duration: "90 min",
         attendees: 150,
-        registered: false,
       },
     ],
     2: [
@@ -90,7 +83,6 @@ const SchedulePage = () => {
         type: "keynote",
         duration: "60 min",
         attendees: 500,
-        registered: true,
       },
       {
         time: "10:00",
@@ -100,7 +92,6 @@ const SchedulePage = () => {
         type: "workshop",
         duration: "120 min",
         attendees: 40,
-        registered: true,
       },
       {
         time: "12:00",
@@ -110,7 +101,6 @@ const SchedulePage = () => {
         type: "break",
         duration: "90 min",
         attendees: 500,
-        registered: false,
       },
       {
         time: "13:30",
@@ -120,7 +110,6 @@ const SchedulePage = () => {
         type: "session",
         duration: "60 min",
         attendees: 120,
-        registered: false,
       },
       {
         time: "15:00",
@@ -130,39 +119,15 @@ const SchedulePage = () => {
         type: "poster",
         duration: "120 min",
         attendees: 200,
-        registered: true,
-      },
-    ],
-    3: [
-      {
-        time: "09:00",
-        title: "Future of Technology & Society",
-        speaker: "Dr. David Lee",
-        location: "Grand Auditorium",
-        type: "keynote",
-        duration: "60 min",
-        attendees: 500,
-        registered: true,
       },
       {
-        time: "10:30",
-        title: "Startup Pitch Competition",
-        speaker: "Various Entrepreneurs",
-        location: "Innovation Hub",
-        type: "showcase",
-        duration: "120 min",
-        attendees: 200,
-        registered: false,
-      },
-      {
-        time: "12:30",
-        title: "Closing Lunch & Awards",
+        time: "17:00",
+        title: "Closing Ceremony & Awards",
         speaker: "Conference Organizers",
-        location: "Main Dining Hall",
+        location: "Grand Auditorium",
         type: "ceremony",
         duration: "90 min",
         attendees: 500,
-        registered: true,
       },
     ],
   }
@@ -188,7 +153,7 @@ const SchedulePage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Conference Schedule</h1>
-          <p className="text-gray-600 mt-2">Your personalized 3-day conference itinerary</p>
+          <p className="text-gray-600 mt-2">Your personalized 2-day conference itinerary</p>
         </div>
         <div className="mt-4 sm:mt-0 flex items-center space-x-3">
           <div className="flex bg-gray-100 rounded-lg p-1">
@@ -219,7 +184,6 @@ const SchedulePage = () => {
             {[
               { day: 1, date: "June 15", label: "Day 1" },
               { day: 2, date: "June 16", label: "Day 2" },
-              { day: 3, date: "June 17", label: "Day 3" },
             ].map((dayInfo) => (
               <button
                 key={dayInfo.day}
@@ -247,9 +211,7 @@ const SchedulePage = () => {
               return (
                 <div
                   key={index}
-                  className={`p-6 rounded-lg border-l-4 transition-all hover:shadow-md ${
-                    session.registered ? "bg-blue-50 border-l-blue-500" : "bg-white border-l-gray-200"
-                  } border border-gray-100`}
+                  className="p-6 rounded-lg border-l-4 bg-white border-l-gray-200 border border-gray-100 hover:shadow-md transition-all"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1">
@@ -267,12 +229,6 @@ const SchedulePage = () => {
                             {session.type.charAt(0).toUpperCase() + session.type.slice(1)}
                           </span>
                         </div>
-                        {session.registered && (
-                          <div className="flex items-center text-blue-600">
-                            <Star className="w-4 h-4 fill-current" />
-                            <span className="text-xs ml-1 font-medium">Registered</span>
-                          </div>
-                        )}
                       </div>
 
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">{session.title}</h3>
@@ -294,25 +250,6 @@ const SchedulePage = () => {
                         </div>
                       </div>
                     </div>
-
-                    <div className="mt-4 lg:mt-0 lg:ml-6 flex items-center space-x-3">
-                      {session.type !== "break" && (
-                        <>
-                          {session.registered ? (
-                            <button className="px-4 py-2 bg-green-100 text-green-800 rounded-lg font-medium text-sm">
-                              Registered
-                            </button>
-                          ) : (
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
-                              Register
-                            </button>
-                          )}
-                          <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                            <ChevronRight className="w-5 h-5" />
-                          </button>
-                        </>
-                      )}
-                    </div>
                   </div>
                 </div>
               )
@@ -326,9 +263,9 @@ const SchedulePage = () => {
         <Card>
           <div className="p-6 text-center">
             <div className="text-2xl font-bold text-blue-600 mb-2">
-              {scheduleData[selectedDay].filter((s) => s.registered).length}
+              {scheduleData[selectedDay].filter((s) => s.type !== "break").length}
             </div>
-            <div className="text-sm text-gray-600">Sessions Registered</div>
+            <div className="text-sm text-gray-600">Total Sessions</div>
           </div>
         </Card>
         <Card>
