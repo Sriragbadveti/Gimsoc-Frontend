@@ -53,7 +53,7 @@ export default function FeaturedSpeakers() {
       name: " Chisomo (Mark) Kanthanga",
       title: "Microbiologist",
       institution: "Malawi Liverpool Wellcome Research Programme",
-      image: "/flat.webp",
+      image: "/Chisomo.jpeg",
     },
 
     {
@@ -74,7 +74,7 @@ export default function FeaturedSpeakers() {
       name: "Dr. Tahseen J. Siddiqui",
       title: "Board Certified in Internal Medicine & Infectious Diseases",
       institution: "IMG Unity",
-      image: "/flat.webp",
+      image: "/Tahseen.png",
     },
     {
       name: "Dr. Giorgi Derevenskikh",
@@ -87,6 +87,30 @@ export default function FeaturedSpeakers() {
       title: "-",
       institution: "Geomedi",
       image: "/flat.webp",
+    },
+    {
+      name: "Dr. Ketevan Papaliashvili MD, MSc",
+      title: "MD Program Head Assistant, Lecturer",
+      institution: "Georgian-American University",
+      image: "/Ketevan.png",
+    },
+    {
+      name: "Dr. Nana Chkhikvadze MD",
+      title: "Allergiologist, Immunologist",
+      institution: "Center of Allergy and Immunology, Tbilisi",
+      image: "/Nana.jpg",
+    },
+    {
+      name: "Dr. Nayab Mustafa MD",
+      title: "Family Medicine Resident ",
+      institution: "Mohammed Bin Rashid University of Medicine and Health Sciences (MBRU) and Dubai Health",
+      image: "/unnamed.png",
+    },
+    {
+      name: "Dr. Aby Joseph",
+      title: "Academician | Forensic Science Consultant | CSI & Forensic Facility Designer | Forensic Technical Assessor | Molecular Biologist (Forensic DNA) | PhD Candidate (Forensic QMS)",
+      institution: "",
+      image: "/Aby.png",
     },
   ];
 
