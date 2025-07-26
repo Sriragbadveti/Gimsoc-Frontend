@@ -1,9 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function FAQSection() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false)
+  const navigate = useNavigate()
 
   const openContactModal = () => setIsContactModalOpen(true)
   const closeContactModal = () => setIsContactModalOpen(false)
@@ -56,6 +58,17 @@ export default function FAQSection() {
                   </button>
                   .
                 </p>
+                <div className="mt-6">
+                  <button
+                    onClick={() => navigate('/faq')}
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    For more FAQ's click here
+                    <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div className="grid grid-cols-1 gap-6">
                 {faqs.map((faq, index) => (
