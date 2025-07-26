@@ -132,9 +132,9 @@ function AttendeeDashboard() {
     const checkAuth = async () => {
       try {
         console.log("🔍 Checking dashboard authentication...")
-        console.log("🔍 Request URL:", "https://gimsoc-backend.onrender.com/api/dashboard/profile")
+        console.log("🔍 Request URL:", "https://gimsoc-backend.onrender.com/api/dashboard/check-auth")
         
-        const response = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/profile", {
+        const response = await axios.get("https://gimsoc-backend.onrender.com/api/dashboard/check-auth", {
           withCredentials: true,
         })
         
