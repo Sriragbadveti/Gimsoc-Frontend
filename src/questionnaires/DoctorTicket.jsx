@@ -687,19 +687,6 @@ export default function DoctorTicket() {
                       />
                       <span className="text-white font-medium">Bank Transfer</span>
                     </label>
-
-                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="Credit/Debit Card"
-                        checked={formData.paymentMethod === "Credit/Debit Card"}
-                        onChange={handleInputChange}
-                        className="text-green-600 focus:ring-green-500"
-                        required
-                      />
-                      <span className="text-white font-medium">Credit/Debit Card</span>
-                    </label>
                   </div>
                 </div>
 
