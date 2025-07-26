@@ -17,7 +17,7 @@ export default function FeaturedSpeakers() {
 
     let animationId;
     let scrollPos = 0;
-    const speed = 0.5; // Adjust speed as needed
+    const speed = 1.5; // Increased speed for faster movement
 
     const scroll = () => {
       scrollPos += speed;
