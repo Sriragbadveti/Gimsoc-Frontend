@@ -1,13 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 
 export default function PayPalButton({ amount, onSuccess, onError }) {
-  useEffect(() => {
-    if (!window.paypal) return;
+  const containerRef = useRef(null);
+  const buttonRef = useRef(null);
 
-    window.paypal
+  useEffect(() => {
+    if (!window.paypal || !containerRef.current) return;
+
+    // Clear any existing buttons
+    if (buttonRef.current) {
+      buttonRef.current.close();
+    }
+
+    // Create unique container ID
+    const containerId = `paypal-button-container-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    containerRef.current.id = containerId;
+
+    buttonRef.current = window.paypal
       .Buttons({
         createOrder: async () => {
           try {
@@ -38,12 +50,19 @@ export default function PayPalButton({ amount, onSuccess, onError }) {
           onError && onError(err);
         },
       })
-      .render("#paypal-button-container");
+      .render(`#${containerId}`);
+
+    // Cleanup function
+    return () => {
+      if (buttonRef.current) {
+        buttonRef.current.close();
+      }
+    };
   }, [amount, onSuccess, onError]);
 
   return (
     <div className="mt-4">
-      <div id="paypal-button-container" className="w-full"></div>
+      <div ref={containerRef} className="w-full"></div>
       <p className="text-xs text-brand-dark-gray/70 mt-2 text-center">
         Secure payment processed by PayPal. Your transaction is protected.
       </p>

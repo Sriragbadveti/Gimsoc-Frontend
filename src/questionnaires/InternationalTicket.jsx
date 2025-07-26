@@ -91,6 +91,13 @@ export default function InternationalTicket() {
     setFadeIn(true)
   }, [])
 
+  // Reset PayPal payment status when payment method changes
+  useEffect(() => {
+    if (formData.paymentMethod !== "Credit/Debit Card") {
+      setPaypalPaid(false)
+    }
+  }, [formData.paymentMethod])
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
@@ -923,6 +930,7 @@ export default function InternationalTicket() {
                   <div className="mt-4">
                     {!paypalPaid ? (
                       <PaypalButton
+                        key={`paypal-${packageType}-${formData.paymentMethod}`}
                         amount={packageType === "7Days" ? "650.00" : "350.00"}
                         onSuccess={() => setPaypalPaid(true)}
                         onError={() => alert("PayPal payment failed. Please try again.")}
