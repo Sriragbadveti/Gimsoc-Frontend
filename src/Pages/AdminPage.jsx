@@ -31,6 +31,9 @@ const ABSTRACT_CATEGORIES = [
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("tickets")
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [adminData, setAdminData] = useState(null)
+  const [authLoading, setAuthLoading] = useState(true)
 
   // Tickets state
   const [tickets, setTickets] = useState([])
@@ -58,6 +61,52 @@ export default function AdminDashboard() {
   // Ticket count state
   const [ticketCounts, setTicketCounts] = useState(null)
   const [countsLoading, setCountsLoading] = useState(false)
+
+  // Check admin authentication on component mount
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      try {
+        const storedAdminData = localStorage.getItem('adminData')
+        const storedAdminEmail = localStorage.getItem('adminEmail')
+        
+        if (!storedAdminData || !storedAdminEmail) {
+          console.log("❌ No admin data found in localStorage")
+          setIsAuthenticated(false)
+          setAuthLoading(false)
+          return
+        }
+
+        const adminData = JSON.parse(storedAdminData)
+        console.log("🔍 Checking admin authentication for:", adminData.email)
+
+        // Verify with backend
+        const response = await axios.get(
+          'https://gimsoc-backend.onrender.com/api/admin-auth/check-auth',
+          { withCredentials: true }
+        )
+
+        if (response.data.message === "Admin authenticated") {
+          console.log("✅ Admin authenticated:", adminData.email)
+          setIsAuthenticated(true)
+          setAdminData(adminData)
+        } else {
+          console.log("❌ Admin authentication failed")
+          setIsAuthenticated(false)
+          localStorage.removeItem('adminData')
+          localStorage.removeItem('adminEmail')
+        }
+      } catch (error) {
+        console.error("❌ Admin auth check error:", error)
+        setIsAuthenticated(false)
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+      } finally {
+        setAuthLoading(false)
+      }
+    }
+
+    checkAdminAuth()
+  }, [])
 
   useEffect(() => {
     if (activeTab === "tickets") {
@@ -385,6 +434,23 @@ export default function AdminDashboard() {
   const refreshTickets = () => {
     console.log("Force refreshing tickets data...")
     fetchTickets()
+  }
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        'https://gimsoc-backend.onrender.com/api/admin-auth/logout',
+        {},
+        { withCredentials: true }
+      )
+    } catch (error) {
+      console.error("Logout error:", error)
+    } finally {
+      localStorage.removeItem('adminData')
+      localStorage.removeItem('adminEmail')
+      setIsAuthenticated(false)
+      setAdminData(null)
+    }
   }
 
   const renderTicketsTab = () => {
@@ -1556,13 +1622,55 @@ export default function AdminDashboard() {
     )
   }
 
+  // Show loading state while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show login redirect if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+          <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-500" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600 mb-6">You need to be logged in as an admin to access this dashboard.</p>
+          <button
+            onClick={() => window.location.href = '/admin-login'}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Go to Admin Login
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage tickets and abstracts for MEDCON 2025</p>
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-gray-600 mt-2">Manage tickets and abstracts for MEDCON 2025</p>
+            {adminData && (
+              <p className="text-sm text-gray-500 mt-1">Logged in as: {adminData.email} ({adminData.role})</p>
+            )}
+          </div>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Logout
+          </button>
         </div>
 
         {/* Tab Navigation */}
