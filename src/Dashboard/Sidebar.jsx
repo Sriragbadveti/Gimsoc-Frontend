@@ -56,7 +56,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
                 <img 
                   src="/medcon-logo.png" 
                   alt="MEDCON Logo" 
-                  className="h-12 w-auto"
+                  className="h-24 w-auto"
                 />
               </div>
               <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white hover:text-blue-100">
