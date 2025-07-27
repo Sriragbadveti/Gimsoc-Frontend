@@ -14,6 +14,7 @@ import {
   Filter,
   BookOpen,
   Eye,
+  RefreshCw,
 } from "lucide-react"
 
 const TICKET_TYPES = ["All", "Individual", "Group", "International", "Doctor", "TSU", "TSU All Inclusive"]
@@ -58,6 +59,9 @@ export default function AdminDashboard() {
   // Ticket count state
   const [ticketCounts, setTicketCounts] = useState(null)
   const [countsLoading, setCountsLoading] = useState(false)
+  
+  // Last updated timestamp
+  const [lastUpdated, setLastUpdated] = useState(null)
 
   useEffect(() => {
     if (activeTab === "tickets") {
@@ -65,6 +69,19 @@ export default function AdminDashboard() {
       fetchTicketCounts()
     } else if (activeTab === "abstracts") {
       fetchAbstracts()
+    }
+  }, [activeTab])
+
+  // Auto-refresh tickets every 30 seconds when on tickets tab
+  useEffect(() => {
+    if (activeTab === "tickets") {
+      const interval = setInterval(() => {
+        console.log("🔄 Auto-refreshing tickets...")
+        fetchTickets()
+        fetchTicketCounts()
+      }, 30000) // Refresh every 30 seconds
+
+      return () => clearInterval(interval)
     }
   }, [activeTab])
 
@@ -116,6 +133,7 @@ export default function AdminDashboard() {
       const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getalltickets", { withCredentials: true })
       console.log("Fetched tickets:", response.data)
       setTickets(response.data)
+      setLastUpdated(new Date())
     } catch (err) {
       console.error("Error fetching tickets:", err)
       setTicketsError(err.response?.data?.message || err.message || "Failed to fetch tickets.")
@@ -385,6 +403,7 @@ export default function AdminDashboard() {
   const refreshTickets = () => {
     console.log("Force refreshing tickets data...")
     fetchTickets()
+    fetchTicketCounts()
   }
 
 
@@ -428,12 +447,30 @@ export default function AdminDashboard() {
               <Filter className="h-5 w-5 text-gray-500" />
               <h3 className="text-lg font-medium text-gray-900">Filters</h3>
             </div>
-            <button
-              onClick={refreshTickets}
-              className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-            >
-              Refresh Data
-            </button>
+            <div className="flex items-center gap-4">
+              {lastUpdated && (
+                <span className="text-sm text-gray-500">
+                  Last updated: {lastUpdated.toLocaleTimeString()}
+                </span>
+              )}
+              <button
+                onClick={refreshTickets}
+                disabled={ticketsLoading}
+                className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {ticketsLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Refreshing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4" />
+                    Refresh Data
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1568,6 +1605,14 @@ export default function AdminDashboard() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
             <p className="text-gray-600 mt-2">Manage tickets and abstracts for MEDCON 2025</p>
+            {activeTab === "tickets" && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  💡 <strong>Auto-refresh enabled:</strong> Data refreshes every 30 seconds. 
+                  Manual deletions from the database will be reflected automatically.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
