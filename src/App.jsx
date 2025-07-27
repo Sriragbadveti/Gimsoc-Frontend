@@ -35,7 +35,7 @@ import StandardPlus2Ticket from "./questionnaires/StandardPlus2Ticket"
 import TicketQRPage from "./Pages/TicketQRPage"
 import SoldOut from "./Pages/SoldOut"
 import DashboardLogin from "./Pages/DashboardLogin"
-import AdminLogin from "./Pages/AdminLogin"
+
 import FAQ from "./Pages/FAQ"
 
 
@@ -130,7 +130,7 @@ const App = () => {
           <Route path="/ticket-qr/:ticketId" element={<TicketQRPage/>}/>
           <Route path="/soldout" element={<SoldOut/>}/>
           <Route path="/dashboard-login" element={<DashboardLogin/>}/>
-          <Route path="/admin-login" element={<AdminLogin/>}/>
+
           <Route path="/faq" element={<FAQ/>}/>
 
           
