@@ -98,6 +98,7 @@ export default function StandardPlus4Ticket() {
   const [showLoading, setShowLoading] = useState(false)
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
+  const [bankTransferKey, setBankTransferKey] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -121,12 +122,9 @@ export default function StandardPlus4Ticket() {
         [name]: type === "checkbox" ? checked : value,
       }))
       
-      // Force re-render only when switching TO Bank Transfer to fix white screen issue
+      // Force re-render when switching TO Bank Transfer to fix white screen issue
       if (name === "paymentMethod" && value === "Bank Transfer") {
-        // Add a small delay to ensure state update
-        setTimeout(() => {
-          setFormData((prev) => ({ ...prev }))
-        }, 100)
+        setBankTransferKey(prev => prev + 1)
       }
     }
   }
@@ -252,9 +250,7 @@ export default function StandardPlus4Ticket() {
     if (memberType === "GIMSOC" && !formData.gimsocMembershipCode) {
       missingFields.push("gimsocMembershipCode")
     }
-    if (memberType === "TSU" && !formData.tsuEmail) {
-      missingFields.push("tsuEmail")
-    }
+    // TSU email validation removed as it's not always required
     if (memberType === "GEOMEDI" && !formData.geomediEmail) {
       missingFields.push("geomediEmail")
     }
@@ -294,7 +290,7 @@ export default function StandardPlus4Ticket() {
           headshot: "Profile Photo",
           paymentProof: "Payment Proof",
           gimsocMembershipCode: "GIMSOC Membership Code",
-          tsuEmail: "TSU Email",
+          // tsuEmail: "TSU Email", // Removed as not always required
           geomediEmail: "GEOMEDI Email"
         }
         return fieldMap[field] || field
@@ -863,7 +859,7 @@ export default function StandardPlus4Ticket() {
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
                     placeholder="Enter your TSU email ID (e.g., student@tsu.ge)"
-                    required
+                    // required - made optional
                   />
                   <p className="text-xs text-gray-300 mt-1">Please enter your official TSU email address for verification</p>
                 </div>
@@ -1190,7 +1186,7 @@ export default function StandardPlus4Ticket() {
                 </div>
 
                 {formData.paymentMethod === "Bank Transfer" && (
-                  <div className="space-y-6">
+                  <div key={`bank-transfer-${bankTransferKey}`} className="space-y-6">
                     {/* Bank Details */}
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
                       <h3 className="text-lg font-semibold text-green-800 mb-4">Bank Transfer Details</h3>

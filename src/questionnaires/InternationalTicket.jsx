@@ -88,6 +88,7 @@ export default function InternationalTicket() {
   const [showLoading, setShowLoading] = useState(false)
   const navigate = useNavigate()
   const [paypalPaid, setPaypalPaid] = useState(false);
+  const [bankTransferKey, setBankTransferKey] = useState(0);
 
   useEffect(() => {
     setFadeIn(true)
@@ -107,12 +108,9 @@ export default function InternationalTicket() {
       [name]: type === "checkbox" ? checked : value,
     }))
     
-    // Force re-render only when switching TO Bank Transfer to fix white screen issue
+    // Force re-render when switching TO Bank Transfer to fix white screen issue
     if (name === "paymentMethod" && value === "Bank Transfer") {
-      // Add a small delay to ensure state update
-      setTimeout(() => {
-        setFormData((prev) => ({ ...prev }))
-      }, 100)
+      setBankTransferKey(prev => prev + 1)
     }
   }
 
@@ -1057,7 +1055,7 @@ export default function InternationalTicket() {
                 )}
 
                 {formData.paymentMethod === "Bank Transfer" && (
-                  <div>
+                  <div key={`bank-transfer-${bankTransferKey}`}>
                     {/* Bank Transfer Images Section */}
                     <div className="mb-6">
                       <h3 className="text-lg font-semibold text-white mb-4 text-center">
