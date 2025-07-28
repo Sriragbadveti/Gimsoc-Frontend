@@ -58,7 +58,7 @@ const VenuePage = () => {
                   <p><strong>Address:</strong> Tbilisi, Georgia</p>
                   <p><strong>Conference Center:</strong> Main Conference Hall</p>
                   <p><strong>Capacity:</strong> 500+ attendees</p>
-                  <p><strong>Parking:</strong> Available on-site</p>
+                  
                 </div>
               </div>
 

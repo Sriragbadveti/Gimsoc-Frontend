@@ -174,7 +174,7 @@ const ProfilePage = ({ userData }) => {
                 </div>
                 <div className="flex items-center text-gray-600 sm:col-span-2">
                   <Calendar className="w-5 h-5 mr-3 text-gray-400" />
-                  <span>Conference: June 15-17, 2025</span>
+                  <span>Conference: October 24th , 25th, 2025</span>
                 </div>
               </div>
             </div>

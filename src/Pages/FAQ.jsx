@@ -339,11 +339,7 @@ export default function FAQ() {
         question: "Will CPD points be awarded for attending the conference?",
         answer: "Yes, CPD points will be awarded only if you: Are officially registered, Attend all required sessions. ❗ Incomplete attendance or unregistered participants will not be eligible for CPD certification."
       },
-      {
-        id: "workshop4",
-        question: "Will CME points be awarded?",
-        answer: "CME point details will be announced soon. Stay tuned to our official channels for updates."
-      },
+      
       {
         id: "workshop5",
         question: "What should I do if I don't receive my certificate?",
