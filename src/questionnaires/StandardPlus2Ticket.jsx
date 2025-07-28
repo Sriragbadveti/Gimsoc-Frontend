@@ -162,6 +162,9 @@ export default function StandardPlus2Ticket() {
       memberType: mappedType,
       isTsuStudent: mappedType === "TSU",
       isGeomediStudent: mappedType === "GEOMEDI",
+      // Auto-set university name for TSU and GEOMEDI students
+      universityName: mappedType === "TSU" ? "Ivane Javakhishvili Tbilisi State University (TSU – Faculty of Medicine)" : 
+                     mappedType === "GEOMEDI" ? "University Geomedi" : prev.universityName,
     }))
     setCurrentStep(2)
   }
