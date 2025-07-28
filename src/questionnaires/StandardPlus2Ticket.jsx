@@ -22,6 +22,7 @@ import CreditCardAnimation from "../Components/CreditCardAnimation"
 import { StatefulButton } from "../Components/StatefulButton"
 import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
 import ErrorAnimation from "../Components/ErrorAnimation"
+import LoadingAnimation from "../Components/LoadingAnimation"
 
 // Success Animation Component
 const SuccessAnimation = ({ onComplete }) => {
@@ -102,6 +103,7 @@ export default function StandardPlus2Ticket() {
   const [fadeIn, setFadeIn] = useState(false)
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
+  const [showLoading, setShowLoading] = useState(false)
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
   const [galaSoldOut, setGalaSoldOut] = useState(false)
@@ -218,6 +220,7 @@ export default function StandardPlus2Ticket() {
     }
     
     setIsSubmitting(true)
+    setShowLoading(true)
     setSoldOut(false)
     setEmailUsed(false)
 
@@ -241,9 +244,78 @@ export default function StandardPlus2Ticket() {
       }
     }
 
-    // Validate required fields
-    if (!formData.email || !formData.fullName || !formData.dashboardPassword) {
-      alert("Please fill in all required fields (Email, Full Name, and Dashboard Password)")
+    // Comprehensive validation for all required fields
+    const requiredFields = {
+      email: formData.email,
+      fullName: formData.fullName,
+      dashboardPassword: formData.dashboardPassword,
+      whatsapp: formData.whatsapp,
+      universityName: formData.universityName,
+      semester: formData.semester,
+      foodPreference: formData.foodPreference,
+      dietaryRestrictions: formData.dietaryRestrictions,
+      accessibilityNeeds: formData.accessibilityNeeds,
+      galaDinner: formData.galaDinner,
+      paymentMethod: formData.paymentMethod,
+      infoAccurate: formData.infoAccurate,
+      mediaConsent: formData.mediaConsent,
+      policies: formData.policies,
+      emailConsent: formData.emailConsent,
+      whatsappConsent: formData.whatsappConsent,
+      headshot: formData.headshot,
+      paymentProof: formData.paymentProof
+    }
+
+    // Check for missing required fields
+    const missingFields = []
+    for (const [field, value] of Object.entries(requiredFields)) {
+      if (!value || (typeof value === 'string' && value.trim() === '') || 
+          (typeof value === 'boolean' && !value) || 
+          (Array.isArray(value) && value.length === 0)) {
+        missingFields.push(field)
+      }
+    }
+
+    // Special validation for member-specific fields
+    if (memberType === "GIMSOC" && !formData.gimsocMembershipCode) {
+      missingFields.push("gimsocMembershipCode")
+    }
+    if (memberType === "TSU" && !formData.tsuEmail) {
+      missingFields.push("tsuEmail")
+    }
+    if (memberType === "GEOMEDI" && !formData.geomediEmail) {
+      missingFields.push("geomediEmail")
+    }
+
+    if (missingFields.length > 0) {
+      const fieldNames = missingFields.map(field => {
+        const fieldMap = {
+          email: "Email",
+          fullName: "Full Name",
+          dashboardPassword: "Dashboard Password",
+          whatsapp: "WhatsApp Number",
+          universityName: "University Name",
+          semester: "Semester",
+          foodPreference: "Food Preference",
+          dietaryRestrictions: "Dietary Restrictions",
+          accessibilityNeeds: "Accessibility Needs",
+          galaDinner: "Gala Dinner Selection",
+          paymentMethod: "Payment Method",
+          infoAccurate: "Information Accuracy Confirmation",
+          mediaConsent: "Media Consent",
+          policies: "Policies Agreement",
+          emailConsent: "Email Consent",
+          whatsappConsent: "WhatsApp Consent",
+          headshot: "Profile Photo",
+          paymentProof: "Payment Proof",
+          gimsocMembershipCode: "GIMSOC Membership Code",
+          tsuEmail: "TSU Email",
+          geomediEmail: "GEOMEDI Email"
+        }
+        return fieldMap[field] || field
+      }).join(", ")
+      
+      alert(`Please fill in all required fields: ${fieldNames}`)
       setIsSubmitting(false)
       return
     }
@@ -347,17 +419,22 @@ export default function StandardPlus2Ticket() {
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
       if (response.data.message === "Ticket submitted successfully") {
-              setShowSuccessAnimation(true)
-
-      // Navigate to success page after 3.5 seconds
-      setTimeout(() => {
-        navigate("/ticket-success")
-      }, 3500)
+        // Let the loading animation complete naturally, then show success
+        setTimeout(() => {
+          setShowLoading(false)
+          setShowSuccessAnimation(true)
+          
+          // Navigate to success page after success animation
+          setTimeout(() => {
+            navigate("/ticket-success")
+          }, 3500)
+        }, 1000) // Wait for loading animation to complete
       } else {
         // If there's an unexpected response, treat it as an error
         throw new Error("Unexpected response from server")
       }
     } catch (err) {
+      setShowLoading(false)
       console.error("❌ Submission failed:", err.response?.data || err.message)
       console.error("❌ Full error response:", err.response)
       console.error("❌ Error status:", err.response?.status)
@@ -452,6 +529,7 @@ export default function StandardPlus2Ticket() {
         }`}
       >
         {showSuccessAnimation && <SuccessAnimation />}
+        {showLoading && <LoadingAnimation isVisible={showLoading} onComplete={() => setShowLoading(false)} />}
         {isSubmitting && (
           <div className="fixed top-0 left-0 w-full z-50">
             <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
@@ -661,6 +739,16 @@ export default function StandardPlus2Ticket() {
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-8">
+            {/* Mandatory Fields Notice */}
+            <div className="bg-red-50/10 border border-red-200/30 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                <span className="text-red-300 font-semibold">Important Notice</span>
+              </div>
+              <p className="text-red-200 text-sm">
+                All fields marked with * are mandatory and must be completed. This includes profile photos and payment proof uploads.
+              </p>
+            </div>
             {/* Eligibility Check for TSU and GEOMEDI */}
             {(memberType === "TSU" || memberType === "GEOMEDI") && (
               <section className="space-y-6">

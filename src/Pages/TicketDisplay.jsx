@@ -86,11 +86,11 @@ const ticketTiers = [
   
   
   {
-    name: "International Ticket",
+    name: "International Delegate Package",
     id: "tier-international",
     href: "/international-ticket",
     price: "",
-    description: `Experience MEDCON your way with two flexible options tailored for international attendees:\n 3-Day Package – A compact option with 2 days of conference, workshops, and a Gala Dinner\n7-Day All-Inclusive – A complete experience with full access, accommodation, transport, tours, and more\nBoth packages include:\nConference access\nInteractive workshops\nAcademic, research & activity fairs\nGala Dinner\nNetworking opportunities\nCertificate of attendance & CPD certification\nPoster presentations (7-Day only)\n7-Day Exclusives:\n7-night hotel stay (shared 2-bedroom)\nDaily venue transport\nGuided Tbilisi tour (Day 2)\nExcursion outside Tbilisi (Day 6)\n 3-Day package excludes accommodation, but hotel discount codes will be provided post-registration.`,
+    description: `Tailored for international attendees — choose between:\n3-Day Package: 2-day conference + Gala Night\n7-Day All-Inclusive: Full access + accommodation, tours, transport\nBoth Include: Workshops, fairs, Gala Night, networking, certificates\n7-Day Extras: 7-night hotel stay, Tbilisi tour (Day 2), excursion (Day 6)`,
     features: [
       "Conference access",
       "Interactive workshops",

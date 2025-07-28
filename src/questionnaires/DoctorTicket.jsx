@@ -17,6 +17,7 @@ import {
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import CreditCardAnimation from "../Components/CreditCardAnimation"
+import LoadingAnimation from "../Components/LoadingAnimation"
 
 // Success Animation Component
 const SuccessAnimation = ({ onComplete }) => {
@@ -72,6 +73,7 @@ export default function DoctorTicket() {
   const [fadeIn, setFadeIn] = useState(false)
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   const [errorBooking, setErrorBooking] = useState(false)
+  const [showLoading, setShowLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -138,9 +140,66 @@ export default function DoctorTicket() {
     }
     
     setIsSubmitting(true)
+    setShowLoading(true)
 
-    if (!formData.email || !formData.fullName) {
-      alert("Please fill in all required fields (Email and Full Name)")
+    // Comprehensive validation for all required fields
+    const requiredFields = {
+      email: formData.email,
+      fullName: formData.fullName,
+      whatsapp: formData.whatsapp,
+      medicalQualification: formData.medicalQualification,
+      specialty: formData.specialty,
+      currentWorkplace: formData.currentWorkplace,
+      countryOfPractice: formData.countryOfPractice,
+      foodPreference: formData.foodPreference,
+      dietaryRestrictions: formData.dietaryRestrictions,
+      accessibilityNeeds: formData.accessibilityNeeds,
+      paymentMethod: formData.paymentMethod,
+      infoAccurate: formData.infoAccurate,
+      mediaConsent: formData.mediaConsent,
+      policies: formData.policies,
+      emailConsent: formData.emailConsent,
+      whatsappConsent: formData.whatsappConsent,
+      headshot: formData.headshot,
+      paymentProof: formData.paymentProof
+    }
+
+    // Check for missing required fields
+    const missingFields = []
+    for (const [field, value] of Object.entries(requiredFields)) {
+      if (!value || (typeof value === 'string' && value.trim() === '') || 
+          (typeof value === 'boolean' && !value) || 
+          (Array.isArray(value) && value.length === 0)) {
+        missingFields.push(field)
+      }
+    }
+
+    if (missingFields.length > 0) {
+      const fieldNames = missingFields.map(field => {
+        const fieldMap = {
+          email: "Email",
+          fullName: "Full Name",
+          whatsapp: "WhatsApp Number",
+          medicalQualification: "Medical Qualification",
+          specialty: "Specialty",
+          currentWorkplace: "Current Workplace",
+          countryOfPractice: "Country of Practice",
+          foodPreference: "Food Preference",
+          dietaryRestrictions: "Dietary Restrictions",
+          accessibilityNeeds: "Accessibility Needs",
+          paymentMethod: "Payment Method",
+          infoAccurate: "Information Accuracy Confirmation",
+          mediaConsent: "Media Consent",
+          policies: "Policies Agreement",
+          emailConsent: "Email Consent",
+          whatsappConsent: "WhatsApp Consent",
+          headshot: "Profile Photo",
+          paymentProof: "Payment Proof"
+        }
+        return fieldMap[field] || field
+      }).join(", ")
+      
+      alert(`Please fill in all required fields: ${fieldNames}`)
       setIsSubmitting(false)
       return
     }
@@ -191,16 +250,22 @@ export default function DoctorTicket() {
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
       if (response.data.message === "Ticket submitted successfully") {
-              setShowSuccessAnimation(true)
-
-      setTimeout(() => {
-        navigate("/ticket-success")
-      }, 3500)
+        // Let the loading animation complete naturally, then show success
+        setTimeout(() => {
+          setShowLoading(false)
+          setShowSuccessAnimation(true)
+          
+          // Navigate to success page after success animation
+          setTimeout(() => {
+            navigate("/ticket-success")
+          }, 3500)
+        }, 1000) // Wait for loading animation to complete
       } else {
         // If there's an unexpected response, treat it as an error
         throw new Error("Unexpected response from server")
       }
     } catch (err) {
+      setShowLoading(false)
       setErrorBooking(true)
       console.error("❌ Submission failed:", err)
       if (err.code === "ECONNABORTED") {
@@ -226,6 +291,7 @@ export default function DoctorTicket() {
         }`}
       >
         {showSuccessAnimation && <SuccessAnimation />}
+        {showLoading && <LoadingAnimation isVisible={showLoading} onComplete={() => setShowLoading(false)} />}
         {isSubmitting && (
           <div className="fixed top-0 left-0 w-full z-50">
             <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
@@ -444,6 +510,16 @@ export default function DoctorTicket() {
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-8">
+            {/* Mandatory Fields Notice */}
+            <div className="bg-red-50/10 border border-red-200/30 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                <span className="text-red-300 font-semibold">Important Notice</span>
+              </div>
+              <p className="text-red-200 text-sm">
+                All fields marked with * are mandatory and must be completed. This includes profile photos and payment proof uploads.
+              </p>
+            </div>
             {/* Personal Information */}
             <section className="space-y-6 animate-fade-in">
               <div className="flex items-center gap-3 mb-6">
