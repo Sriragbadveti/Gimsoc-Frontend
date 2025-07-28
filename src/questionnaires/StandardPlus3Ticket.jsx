@@ -171,7 +171,6 @@ export default function StandardPlus3Ticket() {
       "non-gimsoc": "Non-GIMSOC",
       tsu: "TSU",
       exec: "Executive", // Executive & Subcommittee maps to Executive
-      geomedi: "GEOMEDI", // GEOMEDI maps to GEOMEDI
     }
 
     const mappedType = typeMapping[type] || type
@@ -180,10 +179,6 @@ export default function StandardPlus3Ticket() {
       ...prev,
       memberType: mappedType,
       isTsuStudent: mappedType === "TSU",
-      isGeomediStudent: mappedType === "GEOMEDI",
-      // Auto-set university name for TSU and GEOMEDI students
-      universityName: mappedType === "TSU" ? "Ivane Javakhishvili Tbilisi State University (TSU – Faculty of Medicine)" : 
-                     mappedType === "GEOMEDI" ? "University Geomedi" : prev.universityName,
     }))
     setCurrentStep(2)
   }

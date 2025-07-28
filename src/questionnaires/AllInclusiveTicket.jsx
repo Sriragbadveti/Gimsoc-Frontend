@@ -229,9 +229,6 @@ export default function AllInclusiveTicket() {
       memberType: mappedType,
       isTsuStudent: mappedType === "TSU",
       isGeomediStudent: mappedType === "GEOMEDI",
-      // Auto-set university name for TSU and GEOMEDI students
-      universityName: mappedType === "TSU" ? "Ivane Javakhishvili Tbilisi State University (TSU – Faculty of Medicine)" : 
-                     mappedType === "GEOMEDI" ? "University Geomedi" : prev.universityName,
     }))
     setCurrentStep(2)
   }
@@ -297,7 +294,7 @@ export default function AllInclusiveTicket() {
     // Check gala availability if user selected gala dinner
     if (formData.galaDinner && formData.galaDinner.includes("Yes")) {
       try {
-        const galaResponse = await axios.get('https://gimsoc-backend.onrender.com/api/ticket/gala-availability', {
+        const galaResponse = await axios.get('https://gimsoc-backend.onrender.com/api/form/gala-availability', {
           timeout: 10000
         });
         

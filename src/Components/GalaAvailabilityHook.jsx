@@ -15,7 +15,7 @@ export const useGalaAvailability = () => {
     try {
       setGalaAvailability(prev => ({ ...prev, isLoading: true, error: null }));
       
-      const response = await axios.get('https://gimsoc-backend.onrender.com/api/ticket/gala-availability', {
+      const response = await axios.get('https://gimsoc-backend.onrender.com/api/form/gala-availability', {
         timeout: 10000
       });
       
