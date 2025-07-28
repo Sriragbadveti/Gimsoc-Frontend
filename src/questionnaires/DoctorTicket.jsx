@@ -78,12 +78,22 @@ export default function DoctorTicket() {
     setFadeIn(true)
   }, [])
 
+  // Debug payment method changes
+  useEffect(() => {
+    console.log("🎯 Payment method changed:", formData.paymentMethod)
+  }, [formData.paymentMethod])
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
+    console.log("🔄 Input change:", { name, value, type, checked })
+    setFormData((prev) => {
+      const newData = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }
+      console.log("📝 New form data:", newData)
+      return newData
+    })
   }
 
   const handleFileChange = (e) => {
@@ -706,8 +716,8 @@ export default function DoctorTicket() {
                   </div>
                 </div>
 
-                {formData.paymentMethod === "Bank Transfer" && (
-                  <>
+                {formData.paymentMethod && formData.paymentMethod === "Bank Transfer" ? (
+                  <div key="bank-transfer-section">
                     {/* Bank Transfer Images Section */}
                     <div className="mb-6">
                       <h3 className="text-lg font-semibold text-white mb-4 text-center">
@@ -756,8 +766,8 @@ export default function DoctorTicket() {
                         )}
                       </div>
                     </div>
-                  </>
-                )}
+                  </div>
+                ) : null}
               </div>
             </section>
 
