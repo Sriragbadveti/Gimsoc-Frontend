@@ -250,10 +250,8 @@ export default function StandardPlus2Ticket() {
       fullName: formData.fullName,
       dashboardPassword: formData.dashboardPassword,
       whatsapp: formData.whatsapp,
-      universityName: formData.universityName,
       semester: formData.semester,
       foodPreference: formData.foodPreference,
-      dietaryRestrictions: formData.dietaryRestrictions,
       accessibilityNeeds: formData.accessibilityNeeds,
       galaDinner: formData.galaDinner,
       paymentMethod: formData.paymentMethod,
@@ -265,6 +263,12 @@ export default function StandardPlus2Ticket() {
       headshot: formData.headshot,
       paymentProof: formData.paymentProof
     }
+
+    // Debug logging for university name
+    console.log("🔍 Validation debug:");
+    console.log("🔍 Member type:", memberType);
+    console.log("🔍 University name:", formData.universityName);
+    console.log("🔍 Form data keys:", Object.keys(formData));
 
     // Check for missing required fields
     const missingFields = []
@@ -287,6 +291,21 @@ export default function StandardPlus2Ticket() {
       missingFields.push("geomediEmail")
     }
 
+    // Special handling for TSU and GEOMEDI university names
+    if ((memberType === "TSU" || memberType === "GEOMEDI") && !formData.universityName) {
+      console.log("⚠️ Auto-setting university name for", memberType);
+      if (memberType === "TSU") {
+        formData.universityName = "Ivane Javakhishvili Tbilisi State University (TSU – Faculty of Medicine)";
+      } else if (memberType === "GEOMEDI") {
+        formData.universityName = "University Geomedi";
+      }
+      // Remove universityName from missing fields if it was there
+      const universityIndex = missingFields.indexOf("universityName");
+      if (universityIndex > -1) {
+        missingFields.splice(universityIndex, 1);
+      }
+    }
+
     if (missingFields.length > 0) {
       const fieldNames = missingFields.map(field => {
         const fieldMap = {
@@ -294,10 +313,8 @@ export default function StandardPlus2Ticket() {
           fullName: "Full Name",
           dashboardPassword: "Dashboard Password",
           whatsapp: "WhatsApp Number",
-          universityName: "University Name",
           semester: "Semester",
           foodPreference: "Food Preference",
-          dietaryRestrictions: "Dietary Restrictions",
           accessibilityNeeds: "Accessibility Needs",
           galaDinner: "Gala Dinner Selection",
           paymentMethod: "Payment Method",
