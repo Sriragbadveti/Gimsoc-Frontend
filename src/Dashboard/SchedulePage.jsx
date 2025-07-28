@@ -353,80 +353,26 @@ const SchedulePage = () => {
         </div>
       </Card>
 
-      {/* Schedule Content */}
+      {/* Coming Soon Message */}
       <Card>
-        <div className="p-6">
-          <div className="space-y-6">
-            {scheduleData[selectedDay].map((session, index) => {
-              const typeConfig = getTypeConfig(session.type)
-              return (
-                <div
-                  key={index}
-                  className="group relative overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 hover:from-gray-50 hover:to-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  {/* Left border accent */}
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${typeConfig.color.replace('bg-', 'bg-').replace(' text-', '')}`}></div>
-                  
-                  <div className="p-6">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
-                      <div className="flex-1">
-                        {/* Header with time and type */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-full">
-                              <Clock className="w-4 h-4 text-gray-600" />
-                              <span className="text-sm font-semibold text-gray-700">{session.time}</span>
-                              <span className="text-xs text-gray-500">({session.duration})</span>
-                            </div>
-                            <span
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border-2 ${typeConfig.color}`}
-                            >
-                              <span className="mr-1">{typeConfig.icon}</span>
-                              {session.type.charAt(0).toUpperCase() + session.type.slice(1)}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Session title */}
-                        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                          {session.title}
-                        </h3>
-                        
-                        {/* Description */}
-                        {session.description && (
-                          <p className="text-sm text-gray-600 mb-4 leading-relaxed bg-blue-50 p-3 rounded-lg border-l-4 border-blue-200">
-                            {session.description}
-                          </p>
-                        )}
-
-                        {/* Session details */}
-                        <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
-                          {session.speaker && (
-                            <div className="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
-                              <Users className="w-4 h-4 mr-2 text-blue-600" />
-                              <span className="font-medium">{session.speaker}</span>
-                            </div>
-                          )}
-                          <div className="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
-                            <MapPin className="w-4 h-4 mr-2 text-green-600" />
-                            <span className="font-medium">{session.location}</span>
-                          </div>
-                          <div className="flex items-center bg-white px-3 py-1 rounded-full shadow-sm">
-                            <Calendar className="w-4 h-4 mr-2 text-purple-600" />
-                            <span className="font-medium">{session.attendees} attendees</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+        <div className="p-12 text-center">
+          <div className="max-w-md mx-auto">
+            <div className="text-6xl mb-6">📅</div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Schedule Coming Soon</h2>
+            <p className="text-lg text-gray-600 mb-6">
+              The complete conference schedule will be available in September 2024.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">
+                <strong>Stay tuned!</strong> We're finalizing the schedule with our speakers and will share the detailed program soon.
+              </p>
+            </div>
           </div>
         </div>
       </Card>
 
-      {/* Schedule Summary */}
+      {/* Schedule Summary - Commented out until schedule is ready */}
+      {/*
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <div className="p-6 text-center">
@@ -453,6 +399,7 @@ const SchedulePage = () => {
           </div>
         </Card>
       </div>
+      */}
     </div>
   )
 }

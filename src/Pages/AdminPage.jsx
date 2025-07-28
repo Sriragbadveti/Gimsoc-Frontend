@@ -15,6 +15,7 @@ import {
   BookOpen,
   Eye,
   RefreshCw,
+  Upload,
 } from "lucide-react"
 
 const TICKET_TYPES = ["All", "Individual", "Group", "International", "Doctor", "TSU", "TSU All Inclusive"]
@@ -62,6 +63,9 @@ export default function AdminDashboard() {
   
   // Last updated timestamp
   const [lastUpdated, setLastUpdated] = useState(null)
+  
+  // Google Sheets export state
+  const [exportingToSheets, setExportingToSheets] = useState(false)
 
   useEffect(() => {
     if (activeTab === "tickets") {
@@ -406,6 +410,31 @@ export default function AdminDashboard() {
     fetchTicketCounts()
   }
 
+  const exportToGoogleSheets = async () => {
+    try {
+      setExportingToSheets(true)
+      console.log("📊 Starting Google Sheets export...")
+      
+      const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/export-to-sheets', {
+        tickets: tickets,
+        date: new Date().toISOString().split('T')[0] // Today's date
+      }, {
+        timeout: 30000 // 30 second timeout
+      })
+      
+      if (response.data.success) {
+        alert(`✅ Successfully exported ${response.data.exportedCount} tickets to Google Sheets!\n\nSheet URL: ${response.data.sheetUrl}`)
+      } else {
+        alert(`❌ Export failed: ${response.data.message}`)
+      }
+    } catch (error) {
+      console.error("❌ Error exporting to Google Sheets:", error)
+      alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
+    } finally {
+      setExportingToSheets(false)
+    }
+  }
+
 
 
   const renderTicketsTab = () => {
@@ -453,23 +482,43 @@ export default function AdminDashboard() {
                   Last updated: {lastUpdated.toLocaleTimeString()}
                 </span>
               )}
-              <button
-                onClick={refreshTickets}
-                disabled={ticketsLoading}
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {ticketsLoading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Refreshing...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="h-4 w-4" />
-                    Refresh Data
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={refreshTickets}
+                  disabled={ticketsLoading}
+                  className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {ticketsLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Refreshing...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="h-4 w-4" />
+                      Refresh Data
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  onClick={exportToGoogleSheets}
+                  disabled={exportingToSheets || tickets.length === 0}
+                  className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {exportingToSheets ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Exporting...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4" />
+                      Export to Sheets
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
