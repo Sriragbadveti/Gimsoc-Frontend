@@ -1301,6 +1301,31 @@ export default function StandardPlus3Ticket() {
                       </div>
                     </div>
 
+                    {/* Bank Transfer Images Section */}
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white mb-4 text-center">
+                        📸 These are the images which needs to be submitted
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                          <img 
+                            src="/ab8cedda-965c-424e-9ba4-18e837fcaadf.JPG" 
+                            alt="Bank Transfer Example 1" 
+                            className="w-full h-auto rounded-lg shadow-lg"
+                          />
+                          <p className="text-sm text-gray-300 mt-2 text-center">Payment Order Example</p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                          <img 
+                            src="/1fedc4b1-f480-44cf-9351-b43895491c94.JPG" 
+                            alt="Bank Transfer Example 2" 
+                            className="w-full h-auto rounded-lg shadow-lg"
+                          />
+                          <p className="text-sm text-gray-300 mt-2 text-center">External Transfer Example</p>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Upload Section */}
                     <div className="transform hover:scale-105 transition-transform duration-300">
                       <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>

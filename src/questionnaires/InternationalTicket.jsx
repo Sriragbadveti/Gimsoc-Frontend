@@ -958,27 +958,54 @@ export default function InternationalTicket() {
                 )}
 
                 {formData.paymentMethod === "Bank Transfer" && (
-                  <div className="transform hover:scale-105 transition-transform duration-300">
-                    <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors bg-white/20 backdrop-blur-sm">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <input
-                        type="file"
-                        onChange={handleFileChange}
-                        name="paymentProof"
+                  <div>
+                    {/* Bank Transfer Images Section */}
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white mb-4 text-center">
+                        📸 These are the images which needs to be submitted
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                          <img 
+                            src="/ab8cedda-965c-424e-9ba4-18e837fcaadf.JPG" 
+                            alt="Bank Transfer Example 1" 
+                            className="w-full h-auto rounded-lg shadow-lg"
+                          />
+                          <p className="text-sm text-gray-300 mt-2 text-center">Payment Order Example</p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                          <img 
+                            src="/1fedc4b1-f480-44cf-9351-b43895491c94.JPG" 
+                            alt="Bank Transfer Example 2" 
+                            className="w-full h-auto rounded-lg shadow-lg"
+                          />
+                          <p className="text-sm text-gray-300 mt-2 text-center">External Transfer Example</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="transform hover:scale-105 transition-transform duration-300">
+                      <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors bg-white/20 backdrop-blur-sm">
+                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <input
+                          type="file"
+                          onChange={handleFileChange}
+                          name="paymentProof"
                                                   accept=".jpg,.jpeg,.png"
-                        className="hidden"
-                        id="payment-upload"
-                        required
-                      />
-                      <label htmlFor="payment-upload" className="cursor-pointer">
-                        <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
-                        <span className="text-gray-300"> or drag and drop</span>
-                      </label>
-                      <p className="text-xs text-gray-300 mt-1">Screenshot or document of your payment (PDF only)</p>
-                      {formData.paymentProof && (
-                        <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
-                      )}
+                          className="hidden"
+                          id="payment-upload"
+                          required
+                        />
+                        <label htmlFor="payment-upload" className="cursor-pointer">
+                          <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
+                          <span className="text-gray-300"> or drag and drop</span>
+                        </label>
+                        <p className="text-xs text-gray-300 mt-1">Screenshot or document of your payment (PDF only)</p>
+                        {formData.paymentProof && (
+                          <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}

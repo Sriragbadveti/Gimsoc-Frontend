@@ -273,4 +273,20 @@ input:focus + .input-icon {
   animation: button-pulse 2s infinite;
 }
 
+/* Error animation */
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%) translateX(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.5s ease-out forwards;
+}
+
 

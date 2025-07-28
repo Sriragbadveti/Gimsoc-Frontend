@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { StatefulButton } from "../Components/StatefulButton"
 import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
+import ErrorAnimation from "../Components/ErrorAnimation"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -171,6 +172,9 @@ export default function AllInclusiveTicket() {
   const navigate = useNavigate()
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
+  const [galaSoldOut, setGalaSoldOut] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const [errorType, setErrorType] = useState("general")
   
   // Gala availability hook
   const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
@@ -292,7 +296,9 @@ export default function AllInclusiveTicket() {
         });
         
         if (!galaResponse.data.isAvailable) {
-          alert("Gala dinner tickets are now sold out. Please remove gala dinner from your selection and try again.");
+          setGalaSoldOut(true)
+          setErrorMessage("Gala dinner tickets are now sold out. Please remove gala dinner from your selection and try again.")
+          setErrorType("gala_sold_out")
           setIsSubmitting(false);
           return;
         }
@@ -419,17 +425,6 @@ export default function AllInclusiveTicket() {
         throw new Error("Unexpected response from server")
       }
     } catch (err) {
-      setErrorBooking(true)
-      if (err.response?.status === 409 && (
-        err.response?.data?.message?.includes("sold out") ||
-        err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
-        err.response?.data?.message?.includes("TSU student tickets are sold out") ||
-        err.response?.data?.message?.includes("GEOMEDI student tickets for Standard+2 are sold out")
-      )) {
-        setSoldOut(true)
-      } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
-        setEmailUsed(true)
-      }
       console.error("❌ Submission failed:", err.response?.data || err.message)
       console.error("❌ Full error response:", err.response)
       console.error("❌ Error status:", err.response?.status)
@@ -438,16 +433,52 @@ export default function AllInclusiveTicket() {
       console.error("❌ Request config:", err.config)
 
       if (err.code === "ECONNABORTED") {
-        alert("Request timed out. The server is not responding. Please try again later.")
+        setErrorBooking(true)
+        setErrorMessage("Request timed out. The server is not responding. Please try again later.")
+        setErrorType("general")
       } else if (err.response) {
         // Server responded with error
-        alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+        const errorMsg = err.response.data?.message || err.message
+        
+        if (err.response?.status === 409) {
+          if (errorMsg.includes("already been used") || errorMsg.includes("email has already been used")) {
+            setEmailUsed(true)
+            setErrorMessage("This email has already been used to book a ticket. Please use a different email address.")
+            setErrorType("email_used")
+          } else if (
+            errorMsg.includes("sold out") ||
+            errorMsg.includes("Executive & Subcommittee tickets are sold out") ||
+            errorMsg.includes("TSU student tickets are sold out") ||
+            errorMsg.includes("GEOMEDI student tickets for Standard+2 are sold out") ||
+            errorMsg.includes("Tickets for this category are sold out")
+          ) {
+            setSoldOut(true)
+            setErrorMessage("Tickets for this category are sold out. Please try a different ticket type.")
+            setErrorType("sold_out")
+          } else if (errorMsg.includes("Gala dinner tickets are sold out")) {
+            setGalaSoldOut(true)
+            setErrorMessage("Gala dinner tickets are sold out. Please remove gala dinner from your selection.")
+            setErrorType("gala_sold_out")
+          } else {
+            setErrorBooking(true)
+            setErrorMessage(errorMsg)
+            setErrorType("general")
+          }
+        } else {
+          setErrorBooking(true)
+          setErrorMessage(errorMsg)
+          setErrorType("general")
+        }
       } else if (err.request) {
         // Network error
-        alert("Network error: Unable to reach the server. Please check your connection.")
+        setErrorBooking(true)
+        setErrorMessage("Network error: Unable to reach the server. Please check your connection and try again.")
+        setErrorType("general")
       } else {
         // Other error
-        alert(`Error: ${err.message}`)
+        setErrorBooking(true)
+        setErrorMessage(`Error: ${err.message}`)
+        setErrorType("general")
       }
     } finally {
       setIsSubmitting(false)
@@ -1451,6 +1482,31 @@ export default function AllInclusiveTicket() {
                       </div>
                     </div>
 
+                    {/* Bank Transfer Images Section */}
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white mb-4 text-center">
+                        📸 These are the images which needs to be submitted
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                          <img 
+                            src="/ab8cedda-965c-424e-9ba4-18e837fcaadf.JPG" 
+                            alt="Bank Transfer Example 1" 
+                            className="w-full h-auto rounded-lg shadow-lg"
+                          />
+                          <p className="text-sm text-gray-300 mt-2 text-center">Payment Order Example</p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                          <img 
+                            src="/1fedc4b1-f480-44cf-9351-b43895491c94.JPG" 
+                            alt="Bank Transfer Example 2" 
+                            className="w-full h-auto rounded-lg shadow-lg"
+                          />
+                          <p className="text-sm text-gray-300 mt-2 text-center">External Transfer Example</p>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Upload Section */}
                     <div className="transform hover:scale-105 transition-transform duration-300">
                       <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
@@ -1514,7 +1570,7 @@ export default function AllInclusiveTicket() {
             <div className="pt-8">
               <StatefulButton
                 type="submit"
-                disabled={isSubmitting || soldOut || emailUsed}
+                disabled={isSubmitting || soldOut || emailUsed || galaSoldOut}
                 className="w-full py-4 px-8 rounded-xl font-semibold text-lg"
               >
                 Complete Registration - {calculatePrice()} GEL
@@ -1524,13 +1580,50 @@ export default function AllInclusiveTicket() {
         </div>
       </div>
 
-      {errorBooking && (
-        <div className="fixed top-0 left-0 w-full z-50">
-          <div className="w-full text-center py-2 bg-red-600 text-white font-bold text-lg shadow-lg animate-fade-in">
-            Error booking the ticket
-          </div>
-        </div>
-      )}
+      {/* Error Animations */}
+      <ErrorAnimation
+        errorType="email_used"
+        message={errorMessage}
+        isVisible={emailUsed}
+        onClose={() => setEmailUsed(false)}
+        onRetry={() => {
+          setEmailUsed(false)
+          setErrorMessage("")
+        }}
+      />
+      
+      <ErrorAnimation
+        errorType="sold_out"
+        message={errorMessage}
+        isVisible={soldOut}
+        onClose={() => setSoldOut(false)}
+        onRetry={() => {
+          setSoldOut(false)
+          setErrorMessage("")
+        }}
+      />
+      
+      <ErrorAnimation
+        errorType="gala_sold_out"
+        message={errorMessage}
+        isVisible={galaSoldOut}
+        onClose={() => setGalaSoldOut(false)}
+        onRetry={() => {
+          setGalaSoldOut(false)
+          setErrorMessage("")
+        }}
+      />
+      
+      <ErrorAnimation
+        errorType="general"
+        message={errorMessage}
+        isVisible={errorBooking}
+        onClose={() => setErrorBooking(false)}
+        onRetry={() => {
+          setErrorBooking(false)
+          setErrorMessage("")
+        }}
+      />
     </div>
   )
 }

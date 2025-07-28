@@ -122,7 +122,15 @@ export default function TicketsSoon() {
                 {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
               </div>
             ) : (
-              <div className="text-3xl font-bold text-green-400">🎟️ Tickets are now live!</div>
+              <div className="space-y-4">
+                <div className="text-3xl font-bold text-green-400 mb-4">🎟️ Tickets are now live!</div>
+                <button
+                  onClick={() => (window.location.href = "/tickets")}
+                  className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl rounded-full shadow-2xl hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300 animate-pulse"
+                >
+                  🎫 Get Tickets Now
+                </button>
+              </div>
             )}
           </div>
 
