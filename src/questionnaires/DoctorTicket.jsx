@@ -605,6 +605,7 @@ export default function DoctorTicket() {
                     <span className="text-gray-300"> or drag and drop</span>
                   </label>
                   <p className="text-xs text-gray-300 mt-2">Image formats only</p>
+                  <p className="text-xs text-yellow-300 mt-1">📁 Only JPEG and PNG files are allowed</p>
                   {formData.headshot && (
                     <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
                   )}

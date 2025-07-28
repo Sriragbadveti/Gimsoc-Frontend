@@ -65,7 +65,7 @@ export default function StandardPlus3Ticket() {
     // Academic Information
     universityName: "",
     semester: "",
-    examPrep: "",
+    examPrep: [], // Changed to array for multiple selections
     examOther: "",
     // TSU/GEOMEDI Specific
     tsuEmail: "",
@@ -127,10 +127,21 @@ export default function StandardPlus3Ticket() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
+    
+    // Handle multiple selections for examPrep
+    if (name === "examPrep") {
+      setFormData((prev) => ({
+        ...prev,
+        examPrep: checked 
+          ? [...prev.examPrep, value]
+          : prev.examPrep.filter(exam => exam !== value)
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }))
+    }
   }
 
   const handleFileChange = async (e) => {
@@ -274,6 +285,11 @@ export default function StandardPlus3Ticket() {
           form.append(key, value)
           console.log(`📁 File field ${key}: ${value.name}`)
           }
+        }
+        // Handle examPrep array
+        else if (key === "examPrep" && Array.isArray(value)) {
+          form.append(key, value.join(", "))
+          console.log(`📄 Exam prep field ${key}: ${value.join(", ")}`)
         }
         // Regular fields
         else {
@@ -797,7 +813,7 @@ export default function StandardPlus3Ticket() {
               </div>
 
               <div className="transform hover:scale-105 transition-transform duration-300">
-                <label className="block text-sm font-medium text-white mb-3">Which exam are you preparing for?</label>
+                <label className="block text-sm font-medium text-white mb-3">Which exam(s) are you preparing for? (Select all that apply)</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {exams.map((exam) => (
                     <label
@@ -805,12 +821,12 @@ export default function StandardPlus3Ticket() {
                       className="flex items-center space-x-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-white/50 transition-colors bg-white/20 backdrop-blur-sm"
                     >
                       <input
-                        type="radio"
+                        type="checkbox"
                         name="examPrep"
                         value={exam}
-                        checked={formData.examPrep === exam}
+                        checked={formData.examPrep.includes(exam)}
                         onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
+                        className="text-blue-600 focus:ring-blue-500 rounded"
                       />
                       <span className="text-sm text-white font-medium">{exam}</span>
                     </label>
@@ -823,9 +839,16 @@ export default function StandardPlus3Ticket() {
                     value={formData.examOther}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
-                    placeholder="Specify other exam"
+                    placeholder="Specify other exam(s)"
                   />
                 </div>
+                {formData.examPrep.length > 0 && (
+                  <div className="mt-3 p-3 bg-blue-100/20 rounded-lg">
+                    <p className="text-sm text-blue-300">
+                      <strong>Selected exams:</strong> {formData.examPrep.join(", ")}
+                    </p>
+                  </div>
+                )}
               </div>
             </section>
 
@@ -975,6 +998,7 @@ export default function StandardPlus3Ticket() {
                     <span className="text-gray-300"> or drag and drop</span>
                   </label>
                   <p className="text-xs text-gray-300 mt-2">Clear, front-facing photo with plain background</p>
+                  <p className="text-xs text-yellow-300 mt-1">📁 Only JPEG and PNG files are allowed</p>
                   {formData.headshot && (
                     <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
                   )}

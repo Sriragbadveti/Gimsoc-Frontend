@@ -20,6 +20,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { StatefulButton } from "../Components/StatefulButton"
+import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -117,7 +118,7 @@ export default function AllInclusiveTicket() {
     // Academic Information
     universityName: "",
     semester: "",
-    examPrep: "",
+    examPrep: [], // Changed to array for multiple selections
     examOther: "",
     // TSU/GEOMEDI Specific
     tsuEmail: "",
@@ -170,6 +171,9 @@ export default function AllInclusiveTicket() {
   const navigate = useNavigate()
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
+  
+  // Gala availability hook
+  const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
 
   // Remove useEffect that checks for id_token/cookies and redirects to /login.
 
@@ -177,10 +181,21 @@ export default function AllInclusiveTicket() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
+    
+    // Handle multiple selections for examPrep
+    if (name === "examPrep") {
+      setFormData((prev) => ({
+        ...prev,
+        examPrep: checked 
+          ? [...prev.examPrep, value]
+          : prev.examPrep.filter(exam => exam !== value)
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }))
+    }
   }
 
   const handleFileChange = (e) => {
@@ -269,6 +284,24 @@ export default function AllInclusiveTicket() {
     setSoldOut(false)
     setEmailUsed(false)
 
+    // Check gala availability if user selected gala dinner
+    if (formData.galaDinner && formData.galaDinner.includes("Yes")) {
+      try {
+        const galaResponse = await axios.get('https://gimsoc-backend.onrender.com/api/ticket/gala-availability', {
+          timeout: 10000
+        });
+        
+        if (!galaResponse.data.isAvailable) {
+          alert("Gala dinner tickets are now sold out. Please remove gala dinner from your selection and try again.");
+          setIsSubmitting(false);
+          return;
+        }
+      } catch (error) {
+        console.error('Error checking gala availability:', error);
+        // Continue with submission if we can't check availability
+      }
+    }
+
     // Validate required fields
     if (!formData.email || !formData.fullName || !formData.dashboardPassword) {
       alert("Please fill in all required fields (Email, Full Name, and Dashboard Password)")
@@ -321,6 +354,11 @@ export default function AllInclusiveTicket() {
           form.append(key, value)
           console.log(`📁 File field ${key}: ${value.name}`)
           }
+        }
+        // Handle examPrep array
+        else if (key === "examPrep" && Array.isArray(value)) {
+          form.append(key, value.join(", "))
+          console.log(`📄 Exam prep field ${key}: ${value.join(", ")}`)
         }
         // Regular fields
         else {
@@ -862,7 +900,7 @@ export default function AllInclusiveTicket() {
               </div>
 
               <div className="transform hover:scale-105 transition-transform duration-300">
-                <label className="block text-sm font-medium text-white mb-3">Which exam are you preparing for?</label>
+                <label className="block text-sm font-medium text-white mb-3">Which exam(s) are you preparing for? (Select all that apply)</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {exams.map((exam) => (
                     <label
@@ -870,12 +908,12 @@ export default function AllInclusiveTicket() {
                       className="flex items-center space-x-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-white/50 transition-colors bg-white/20 backdrop-blur-sm"
                     >
                       <input
-                        type="radio"
+                        type="checkbox"
                         name="examPrep"
                         value={exam}
-                        checked={formData.examPrep === exam}
+                        checked={formData.examPrep.includes(exam)}
                         onChange={handleInputChange}
-                        className="text-blue-600 focus:ring-blue-500"
+                        className="text-blue-600 focus:ring-blue-500 rounded"
                       />
                       <span className="text-sm text-white font-medium">{exam}</span>
                     </label>
@@ -888,9 +926,16 @@ export default function AllInclusiveTicket() {
                     value={formData.examOther}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
-                    placeholder="Specify other exam"
+                    placeholder="Specify other exam(s)"
                   />
                 </div>
+                {formData.examPrep.length > 0 && (
+                  <div className="mt-3 p-3 bg-blue-100/20 rounded-lg">
+                    <p className="text-sm text-blue-300">
+                      <strong>Selected exams:</strong> {formData.examPrep.join(", ")}
+                    </p>
+                  </div>
+                )}
               </div>
             </section>
 
@@ -1065,6 +1110,7 @@ export default function AllInclusiveTicket() {
                     <span className="text-gray-300"> or drag and drop</span>
                   </label>
                   <p className="text-xs text-gray-300 mt-2">Clear, front-facing photo with plain background</p>
+                  <p className="text-xs text-yellow-300 mt-1">📁 Only JPEG and PNG files are allowed</p>
                   {formData.headshot && (
                     <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
                   )}
@@ -1140,6 +1186,11 @@ export default function AllInclusiveTicket() {
                   <Crown className="w-6 h-6 text-purple-600" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Gala Dinner Add-On</h2>
+                {galaLoading && (
+                  <div className="ml-auto">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-400"></div>
+                  </div>
+                )}
               </div>
 
               <div className="bg-gradient-to-r from-purple-50/10 to-pink-50/10 border border-purple-200/30 rounded-xl p-6">
@@ -1150,6 +1201,26 @@ export default function AllInclusiveTicket() {
                     The Gala is the grand finale of MEDCON, an elegant evening designed to celebrate the success of the
                     conference, reflect on inspiring moments shared, and strengthen the connections formed.
                   </p>
+                  
+                  {/* Gala Availability Status */}
+                  {!galaLoading && (
+                    <div className={`rounded-lg p-4 mb-6 ${
+                      galaAvailable 
+                        ? 'bg-green-100/20 border border-green-300/30' 
+                        : 'bg-red-100/20 border border-red-300/30'
+                    }`}>
+                      <p className={`text-sm ${
+                        galaAvailable ? 'text-green-300' : 'text-red-300'
+                      }`}>
+                        <strong>Status:</strong> {
+                          galaAvailable 
+                            ? `${galaAvailableCount} gala tickets available` 
+                            : 'Gala dinner tickets are sold out'
+                        }
+                      </p>
+                    </div>
+                  )}
+                  
                   <div className="bg-purple-100/20 rounded-lg p-4 mb-6">
                     <p className="text-sm text-purple-300">
                       <strong>Note:</strong> Gala access is optional and costs an additional 40 GEL.
@@ -1161,23 +1232,36 @@ export default function AllInclusiveTicket() {
                   {[
                     "Yes, I would like to attend the Gala Dinner (+40 GEL)",
                     "No, I will not attend the Gala Dinner",
-                  ].map((option) => (
-                    <label
-                      key={option}
-                      className="flex items-center space-x-3 p-4 border border-gray-200/30 rounded-lg hover:bg-white/10 cursor-pointer transition-all bg-white/5 backdrop-blur-sm"
-                    >
-                      <input
-                        type="radio"
-                        name="galaDinner"
-                        value={option}
-                        checked={formData.galaDinner === option}
-                        onChange={handleInputChange}
-                        className="text-purple-600 focus:ring-purple-500"
-                        required
-                      />
-                      <span className="text-white font-medium">{option}</span>
-                    </label>
-                  ))}
+                  ].map((option) => {
+                    const isGalaOption = option.includes("Yes");
+                    const isDisabled = isGalaOption && !galaAvailable;
+                    
+                    return (
+                      <label
+                        key={option}
+                        className={`flex items-center space-x-3 p-4 border rounded-lg transition-all bg-white/5 backdrop-blur-sm ${
+                          isDisabled 
+                            ? 'border-gray-500/30 bg-gray-500/20 cursor-not-allowed opacity-50' 
+                            : 'border-gray-200/30 hover:bg-white/10 cursor-pointer'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="galaDinner"
+                          value={option}
+                          checked={formData.galaDinner === option}
+                          onChange={handleInputChange}
+                          disabled={isDisabled}
+                          className="text-purple-600 focus:ring-purple-500 disabled:opacity-50"
+                          required={!isDisabled}
+                        />
+                        <span className={`font-medium ${isDisabled ? 'text-gray-400' : 'text-white'}`}>
+                          {option}
+                          {isDisabled && <span className="ml-2 text-red-400">(Sold Out)</span>}
+                        </span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             </section>

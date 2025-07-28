@@ -687,6 +687,7 @@ export default function InternationalTicket() {
                   <p className="text-xs text-gray-300 mt-2">
                     A clear, front-facing photo (passport-style) with a plain background
                   </p>
+                  <p className="text-xs text-yellow-300 mt-1">📁 Only JPEG and PNG files are allowed</p>
                   {formData.headshot && (
                     <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
                   )}
