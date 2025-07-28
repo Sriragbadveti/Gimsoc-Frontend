@@ -323,7 +323,7 @@ export default function StandardPlus3Ticket() {
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
       if (response.data.message === "Ticket submitted successfully") {
-        setShowSuccessAnimation(true)
+              setShowSuccessAnimation(true)
         
         setTimeout(() => {
           navigate("/ticket-success")

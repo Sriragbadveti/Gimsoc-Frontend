@@ -303,12 +303,12 @@ export default function StandardPlus2Ticket() {
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
       if (response.data.message === "Ticket submitted successfully") {
-        setShowSuccessAnimation(true)
-        
-        // Navigate to success page after 3.5 seconds
-        setTimeout(() => {
-          navigate("/ticket-success")
-        }, 3500)
+              setShowSuccessAnimation(true)
+
+      // Navigate to success page after 3.5 seconds
+      setTimeout(() => {
+        navigate("/ticket-success")
+      }, 3500)
       } else {
         // If there's an unexpected response, treat it as an error
         throw new Error("Unexpected response from server")
