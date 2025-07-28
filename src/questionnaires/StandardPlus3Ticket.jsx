@@ -143,6 +143,14 @@ export default function StandardPlus3Ticket() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       }))
+      
+      // Force re-render when payment method changes to fix white screen issue
+      if (name === "paymentMethod") {
+        // Add a small delay to ensure state update
+        setTimeout(() => {
+          setFormData((prev) => ({ ...prev }))
+        }, 100)
+      }
     }
   }
 

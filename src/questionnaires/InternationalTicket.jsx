@@ -106,6 +106,14 @@ export default function InternationalTicket() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
+    
+    // Force re-render when payment method changes to fix white screen issue
+    if (name === "paymentMethod") {
+      // Add a small delay to ensure state update
+      setTimeout(() => {
+        setFormData((prev) => ({ ...prev }))
+      }, 100)
+    }
   }
 
   const handleFileChange = (e) => {
@@ -155,7 +163,6 @@ export default function InternationalTicket() {
       dietaryRestrictions: formData.dietaryRestrictions,
       accessibilityNeeds: formData.accessibilityNeeds,
       emergencyContactName: formData.emergencyContactName,
-      emergencyContactRelationship: formData.emergencyContactRelationship,
       emergencyContactPhone: formData.emergencyContactPhone,
       paymentMethod: formData.paymentMethod,
       infoAccurate: formData.infoAccurate,
@@ -177,15 +184,8 @@ export default function InternationalTicket() {
       }
     }
 
-    // Special validation for 7-day package friends
-    if (packageType === "7Days") {
-      if (!formData.friend1Name) {
-        missingFields.push("friend1Name")
-      }
-      if (!formData.friend2Name) {
-        missingFields.push("friend2Name")
-      }
-    }
+    // Special validation for 7-day package friends (optional)
+    // Removed mandatory validation for friend names
 
     if (missingFields.length > 0) {
       const fieldNames = missingFields.map(field => {
@@ -204,7 +204,6 @@ export default function InternationalTicket() {
           dietaryRestrictions: "Dietary Restrictions",
           accessibilityNeeds: "Accessibility Needs",
           emergencyContactName: "Emergency Contact Name",
-          emergencyContactRelationship: "Emergency Contact Relationship",
           emergencyContactPhone: "Emergency Contact Phone",
           paymentMethod: "Payment Method",
           infoAccurate: "Information Accuracy Confirmation",
