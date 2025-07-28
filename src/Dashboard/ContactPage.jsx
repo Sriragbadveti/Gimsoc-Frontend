@@ -7,8 +7,8 @@ const ContactPage = () => {
   const departments = [
     {
       title: "General Information",
-      email: "info@medcon25.com",
-      phone: "+995 123 456 789",
+      email: "medconconferencegimsoc@gmail.com",
+      
       icon: Mail,
       color: "bg-blue-500",
       borderColor: "border-blue-200",
@@ -19,8 +19,8 @@ const ContactPage = () => {
     },
     {
       title: "Technical Support",
-      email: "tech@medcon25.com",
-      phone: "+995 123 456 790",
+      email: "badvetisrirag@gmail.com",
+      
       icon: AlertCircle,
       color: "bg-orange-500",
       borderColor: "border-orange-200",
@@ -31,7 +31,7 @@ const ContactPage = () => {
     },
     {
       title: "Registration & Billing",
-      email: "registration@medcon25.com",
+      email: "nupuraajesh@gmail.com",
       phone: "+995 123 456 791",
       icon: CheckCircle,
       color: "bg-green-500",
@@ -42,8 +42,8 @@ const ContactPage = () => {
       features: ["Ticket Registration", "Payment Issues", "Billing Support"]
     },
     {
-      title: "Partnership & Media",
-      email: "partnerships@medcon25.com",
+      title: "Finance",
+      email: "mandrika311@gmail.com",
       phone: "+995 123 456 792",
       icon: Users,
       color: "bg-purple-500",
