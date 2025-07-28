@@ -121,8 +121,8 @@ export default function StandardPlus4Ticket() {
         [name]: type === "checkbox" ? checked : value,
       }))
       
-      // Force re-render when payment method changes to fix white screen issue
-      if (name === "paymentMethod") {
+      // Force re-render only when switching TO Bank Transfer to fix white screen issue
+      if (name === "paymentMethod" && value === "Bank Transfer") {
         // Add a small delay to ensure state update
         setTimeout(() => {
           setFormData((prev) => ({ ...prev }))
