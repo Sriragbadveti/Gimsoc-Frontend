@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import {
   Download,
@@ -16,6 +17,7 @@ import {
   Eye,
   RefreshCw,
   Upload,
+  LogOut,
 } from "lucide-react"
 
 const TICKET_TYPES = ["All", "Individual", "Group", "International", "Doctor", "TSU", "TSU All Inclusive"]
@@ -32,7 +34,11 @@ const ABSTRACT_CATEGORIES = [
 ]
 
 export default function AdminDashboard() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("tickets")
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [adminData, setAdminData] = useState(null)
 
   // Tickets state
   const [tickets, setTickets] = useState([])
@@ -66,6 +72,40 @@ export default function AdminDashboard() {
   
   // Google Sheets export state
   const [exportingToSheets, setExportingToSheets] = useState(false)
+
+  // Check admin authentication on component mount
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      try {
+        console.log("🔍 Checking admin authentication...")
+        
+        // Get admin data from localStorage (set during login)
+        const storedAdminData = localStorage.getItem('adminData');
+        const adminEmail = localStorage.getItem('adminEmail');
+        
+        if (!storedAdminData || !adminEmail) {
+          console.log("❌ No admin data found, redirecting to admin login");
+          navigate("/admin-login");
+          return;
+        }
+        
+        // Parse the stored admin data
+        const adminData = JSON.parse(storedAdminData);
+        
+        console.log("✅ Admin authentication successful with stored data")
+        setIsAuthenticated(true)
+        setAdminData(adminData)
+      } catch (error) {
+        console.error("❌ Admin authentication failed:", error)
+        navigate("/admin-login")
+        return
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAdminAuth()
+  }, [navigate])
 
   useEffect(() => {
     if (activeTab === "tickets") {
@@ -432,6 +472,26 @@ export default function AdminDashboard() {
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingToSheets(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("https://gimsoc-backend.onrender.com/api/admin-auth/logout", {}, { withCredentials: true })
+      localStorage.removeItem('adminData')
+      localStorage.removeItem('adminEmail')
+      setIsAuthenticated(false)
+      setAdminData(null)
+      console.log("Admin logged out successfully")
+      navigate("/admin-login")
+    } catch (error) {
+      console.error("Admin logout failed:", error)
+      // Still remove data and redirect even if API call fails
+      localStorage.removeItem('adminData')
+      localStorage.removeItem('adminEmail')
+      setIsAuthenticated(false)
+      setAdminData(null)
+      navigate("/admin-login")
     }
   }
 
@@ -1675,22 +1735,52 @@ export default function AdminDashboard() {
 
 
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen bg-gray-50 items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading admin dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-2">Manage tickets and abstracts for MEDCON 2025</p>
-            {activeTab === "tickets" && (
-              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  💡 <strong>Auto-refresh enabled:</strong> Data refreshes every 30 seconds. 
-                  Manual deletions from the database will be reflected automatically.
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+              <p className="text-gray-600 mt-2">Manage tickets and abstracts for MEDCON 2025</p>
+              {adminData && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Logged in as: <span className="font-medium">{adminData.email}</span> 
+                  ({adminData.role === 'super_admin' ? 'Super Admin' : 'Admin'})
                 </p>
-              </div>
-            )}
+              )}
+              {activeTab === "tickets" && (
+                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    💡 <strong>Auto-refresh enabled:</strong> Data refreshes every 30 seconds. 
+                    Manual deletions from the database will be reflected automatically.
+                  </p>
+                </div>
+              )}
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </button>
           </div>
         </div>
 
