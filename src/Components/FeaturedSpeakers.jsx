@@ -47,7 +47,7 @@ export default function FeaturedSpeakers() {
       name: "Dr. Abhishek Ray",
       title: "Gastroenterologist",
       institution: "UK",
-      image: "/Abhishek.jpeg",
+      image: "/Abhi.png",
     },
     {
       name: "Mr. Chisomo (Mark) Kanthanga",
@@ -79,7 +79,7 @@ export default function FeaturedSpeakers() {
     {
       name: "Dr. Giorgi Derevenskikh",
       title: "Pulmonology, Internal Medicine, USA Fellowship",
-      institution: "-",
+      institution: "USA",
       image: "/Giorgi.png",
     },
     {
@@ -92,7 +92,7 @@ export default function FeaturedSpeakers() {
       name: "Dr. Ketevan Papaliashvili MD, MSc",
       title: "MD Program Head Assistant, Lecturer",
       institution: "Georgian-American University",
-      image: "/Ketevan.jpg",
+      image: "/Keti.png",
     },
     {
       name: "Dr. Nana Chkhikvadze MD",

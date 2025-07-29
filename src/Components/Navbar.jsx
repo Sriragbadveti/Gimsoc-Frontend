@@ -11,7 +11,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Register for MEDCON", href: "/comingsoon" },
   {
-    name: "About us",
+    name: "About Us",
     href: "#",
     subItems: [
       {
