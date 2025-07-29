@@ -96,13 +96,14 @@ const ticketTiers = [
       "Choose between 3-Day or 7-Day packages",
       "3-Day Package: 2-day conference + Gala Night",
       "7-Day All-Inclusive: Full access + accommodation",
+      "7-Day Extras: 7-night hotel stay , Tbilisi tour (Day 2) , Excursion (Day 6)",
+      "Perks of both packages :",
       "Workshops and fairs",
       "Gala Night access",
       "Networking opportunities",
       "Certificate of attendance",
-      "7-Day Extras: 7-night hotel stay",
-      "Tbilisi tour (Day 2)",
-      "Excursion (Day 6)"
+      
+      
     ],
     featured: false,
     color: "blue",
