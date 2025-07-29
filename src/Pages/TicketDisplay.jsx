@@ -9,77 +9,41 @@ import LightRays from '../Components/LightRays'
 
 const ticketTiers = [
   {
-    name: "Standard Ticket + 2",
+    name: "Standard +2 Workshops Ticket",
     id: "tier-standard",
     href: "/standard-plus-2",
-    price: "",
-    description: "Available for GIMSOC members, non-GIMSOC members, TSU students and GEOMEDI students This ticket gives you full access to MEDCON along with 2 workshops of your choice. Ideal for delegates who want the most hands-on, interactive experience",
-    features: [
-      "Access to all keynote sessions",
-      "Entry to 2 registered workshops",
-      "Meals and refreshments",
-      "Academic, research and activities fair",
-      "Goodie bag with exclusive MEDCON merchandise",
-      "Certificate of attendance",
-      "CPD certificate",
-    ],
+    price: "30-60 GEL",
+    description: "A flexible option with full MEDCON access + 2 workshops. Includes: All keynote sessions, 2 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
     featured: false,
     color: "green",
   },
   
   
   {
-    name: "Standard Ticket + 3",
+    name: "Standard +3 Workshops Ticket",
     id: "tier-allinclusive",
     href: "/standard-plus-3",
-    price: "",
-    description: "Available for GIMSOC members, non-GIMSOC members, TSU students and GEOMEDI students This ticket gives you full access to MEDCON along with 3 workshops of your choice. Ideal for delegates who want the most hands-on, interactive experience",
-    features: [
-     "Access to all keynote sessions",
-      "Entry to 3 registered workshops",
-      "Meals and refreshments",
-      "Academic, research and activities fair",
-      "Goodie bag with exclusive MEDCON merchandise",
-      "Certificate of attendance",
-      "CPD certificate",
-    ],
+    price: "55-75 GEL",
+    description: "Full MEDCON access + 3 workshops. Ideal for a balanced academic experience. Includes: All keynote sessions, 3 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
     featured: false,
     color: "purple",
   },
   
   {
-    name: "Standard Ticket + 4",
+    name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
     href: "/standard-plus-4",
-    price: "",
-    description: "Available for GIMSOC members, non-GIMSOC members, TSU students and GEOMEDI students This ticket gives you full access to MEDCON along with 4 workshops of your choice. Ideal for delegates who want the most hands-on, interactive experience",
-    features: [
-      "Access to all keynote sessions",
-      "Entry to 4 registered workshops",
-      "Meals and refreshments",
-      "Academic, research and activities fair",
-      "Goodie bag with exclusive MEDCON merchandise",
-      "Certificate of attendance",
-      "CPD certificate",
-    ],
+    price: "60-75 GEL",
+    description: "Access MEDCON + 4 workshops of your choice. Perfect for those seeking the most interactive experience. Includes: All keynote sessions, 4 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
     featured: false,
     color: "teal",
   },
 {
-    name: "Doctor Ticket",
+    name: "Doctor Basic Ticket",
     id: "tier-doctor",
     href: "/doctor-ticket",
-    price: "",
-    description: "Ideal for international attendees joining for the core conference.",
-    features: [
-      "Full 3-day conference access",
-      "Interactive Workshops",
-      "Academic, research and activities fairs",
-      "Gala Dinner",
-      "Networking opportunities",
-      "Certificate of attendance",
-      "CPD Certification",
-    ],
+    price: "95-135 GEL",
+    description: "Academic-focused access for medical professionals. Includes: Full conference, keynote sessions, meals, fairs, goodie bag, attendance & CPD certificates",
     featured: false,
     color: "teal",
   },
@@ -89,22 +53,8 @@ const ticketTiers = [
     name: "International Delegate Package",
     id: "tier-international",
     href: "/international-ticket",
-    price: "",
-    description: `Tailored for international attendees — choose between:\n3-Day Package: 2-day conference + Gala Night\n7-Day All-Inclusive: Full access + accommodation, tours, transport\nBoth Include: Workshops, fairs, Gala Night, networking, certificates\n7-Day Extras: 7-night hotel stay, Tbilisi tour (Day 2), excursion (Day 6)`,
-    features: [
-      "Conference access",
-      "Interactive workshops",
-      "Academic, research & activity fairs",
-      "Gala Dinner",
-      "Networking opportunities",
-      "Certificate of attendance & CPD certification",
-      "Poster presentations (7-Day only)",
-      "7-night hotel stay (shared 2-bedroom) [7-Day only]",
-      "Daily venue transport [7-Day only]",
-      "Guided Tbilisi tour (Day 2) [7-Day only]",
-      "Excursion outside Tbilisi (Day 6) [7-Day only]",
-      "Hotel discount codes for 3-Day package (no accommodation included)",
-    ],
+    price: "100-325 USD",
+    description: "Tailored for international attendees — choose between: 3-Day Package: 2-day conference + Gala Night. 7-Day All-Inclusive: Full access + accommodation, tours, transport. Both Include: Workshops, fairs, Gala Night, networking, certificates. 7-Day Extras: 7-night hotel stay, Tbilisi tour (Day 2), excursion (Day 6)",
     featured: false,
     color: "blue",
   },
@@ -187,20 +137,6 @@ export default function Tickets() {
                   <span className="text-4xl font-bold tracking-tight text-white">{tier.price}</span>
                 </p>
                 <p className="mt-6 text-base leading-7 text-gray-300">{tier.description}</p>
-                <ul role="list" className="mt-8 space-y-3 text-sm leading-6 text-gray-300">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="flex gap-x-3">
-                      <CheckIcon
-                        className={classNames(
-                          tier.featured ? "text-blue-400" : "text-blue-300",
-                          "h-6 w-5 flex-none",
-                        )}
-                        aria-hidden="true"
-                      />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
                 <Link
                   to={tier.href}
                   aria-describedby={tier.id}

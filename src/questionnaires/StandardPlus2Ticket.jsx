@@ -1497,12 +1497,7 @@ export default function StandardPlus2Ticket() {
                           <p className="text-sm text-gray-300">
                             <strong>Account:</strong> GE94BG0000000608342766
                           </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Phone:</strong> (+995 32) 2 444 444
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>E-mail:</strong> welcome@bog.ge
-                          </p>
+                         
                         </div>
                       </div>
                     </div>

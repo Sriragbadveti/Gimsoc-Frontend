@@ -1210,8 +1210,7 @@ export default function StandardPlus4Ticket() {
                           <p className="text-sm text-gray-700"><strong>SWIFT:</strong> BAGAGE22</p>
                           <p className="text-sm text-gray-700"><strong>Beneficiary:</strong> FERNANDO MANDRIKA SANTOSH U.</p>
                           <p className="text-sm text-gray-700"><strong>Account:</strong> GE94BG0000000608342766</p>
-                          <p className="text-sm text-gray-700"><strong>Phone:</strong> (+995 32) 2 444 444</p>
-                          <p className="text-sm text-gray-700"><strong>E-mail:</strong> welcome@bog.ge</p>
+                          
                         </div>
                       </div>
                     </div>

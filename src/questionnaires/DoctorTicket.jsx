@@ -807,6 +807,54 @@ export default function DoctorTicket() {
 
                 {formData.paymentMethod && formData.paymentMethod === "Bank Transfer" ? (
                   <div key="bank-transfer-section">
+                    {/* Bank Details */}
+                    <div className="bg-gradient-to-r from-green-50/10 to-emerald-50/10 border-2 border-green-200/30 rounded-xl p-6 mb-6">
+                      <h3 className="text-lg font-semibold text-green-400 mb-4">Bank Transfer Details</h3>
+
+                      {/* TBC Bank Details */}
+                      <div className="mb-6">
+                        <h4 className="text-md font-semibold text-green-300 mb-3">FOR LARI TRANSFER</h4>
+                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
+                          <p className="text-sm text-gray-300">
+                            <strong>Beneficiary's Bank:</strong> JSC TBC Bank
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Location:</strong> Tbilisi, Georgia
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Swift:</strong> TBCBGE22
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Beneficiary's IBAN:</strong> GE31TB7724245061200012
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Name of Beneficiary:</strong> Mandrika Santosh Umanga Fernando
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Bank of Georgia Details */}
+                      <div>
+                        <h4 className="text-md font-semibold text-green-300 mb-3">
+                          BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)
+                        </h4>
+                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
+                          <p className="text-sm text-gray-300">
+                            <strong>Account with institution:</strong> Bank of Georgia
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>SWIFT:</strong> BAGAGE22
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Beneficiary:</strong> FERNANDO MANDRIKA SANTOSH U.
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Account:</strong> GE94BG0000000608342766
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Bank Transfer Images Section */}
                     <div className="mb-6">
                       <h3 className="text-lg font-semibold text-white mb-4 text-center">
