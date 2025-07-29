@@ -89,14 +89,35 @@ export default function AdminDashboard() {
           return;
         }
         
-        // Parse the stored admin data
-        const adminData = JSON.parse(storedAdminData);
+        // Verify authentication with backend
+        try {
+          const response = await axios.get('https://gimsoc-backend.onrender.com/api/admin-auth/check-auth', {
+            withCredentials: true
+          });
+          
+          if (response.data.authenticated) {
+            console.log("✅ Admin authentication verified with backend")
+            setIsAuthenticated(true)
+            setAdminData(response.data.admin)
+          } else {
+            console.log("❌ Admin authentication failed with backend")
+            localStorage.removeItem('adminData')
+            localStorage.removeItem('adminEmail')
+            navigate("/admin-login")
+            return
+          }
+        } catch (authError) {
+          console.error("❌ Backend auth check failed:", authError)
+          localStorage.removeItem('adminData')
+          localStorage.removeItem('adminEmail')
+          navigate("/admin-login")
+          return
+        }
         
-        console.log("✅ Admin authentication successful with stored data")
-        setIsAuthenticated(true)
-        setAdminData(adminData)
       } catch (error) {
         console.error("❌ Admin authentication failed:", error)
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
         navigate("/admin-login")
         return
       } finally {
@@ -108,17 +129,17 @@ export default function AdminDashboard() {
   }, [navigate])
 
   useEffect(() => {
-    if (activeTab === "tickets") {
+    if (isAuthenticated && activeTab === "tickets") {
       fetchTickets()
       fetchTicketCounts()
-    } else if (activeTab === "abstracts") {
+    } else if (isAuthenticated && activeTab === "abstracts") {
       fetchAbstracts()
     }
-  }, [activeTab])
+  }, [activeTab, isAuthenticated])
 
   // Auto-refresh tickets every 30 seconds when on tickets tab
   useEffect(() => {
-    if (activeTab === "tickets") {
+    if (isAuthenticated && activeTab === "tickets") {
       const interval = setInterval(() => {
         console.log("🔄 Auto-refreshing tickets...")
         fetchTickets()
@@ -127,7 +148,7 @@ export default function AdminDashboard() {
 
       return () => clearInterval(interval)
     }
-  }, [activeTab])
+  }, [activeTab, isAuthenticated])
 
   // Filtered tickets
   const filteredTickets = useMemo(() => {
@@ -180,6 +201,13 @@ export default function AdminDashboard() {
       setLastUpdated(new Date())
     } catch (err) {
       console.error("Error fetching tickets:", err)
+      if (err.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        navigate("/admin-login")
+        return
+      }
       setTicketsError(err.response?.data?.message || err.message || "Failed to fetch tickets.")
     } finally {
       setTicketsLoading(false)
@@ -201,6 +229,13 @@ export default function AdminDashboard() {
       setAbstracts(response.data)
     } catch (err) {
       console.error("Error fetching abstracts:", err)
+      if (err.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        navigate("/admin-login")
+        return
+      }
       setAbstractsError(err.response?.data?.message || err.message || "Failed to fetch abstracts.")
     } finally {
       setAbstractsLoading(false)
@@ -216,6 +251,13 @@ export default function AdminDashboard() {
       setTicketCounts(response.data)
     } catch (err) {
       console.error("Error fetching ticket counts:", err)
+      if (err.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        navigate("/admin-login")
+        return
+      }
     } finally {
       setCountsLoading(false)
     }
@@ -237,6 +279,13 @@ export default function AdminDashboard() {
       alert("Ticket approved successfully! Email sent to the user.")
     } catch (err) {
       console.error("Error approving ticket:", err)
+      if (err.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        navigate("/admin-login")
+        return
+      }
       alert("Failed to approve ticket. Please try again.")
     } finally {
       setApprovingTickets((prev) => {
@@ -273,6 +322,13 @@ export default function AdminDashboard() {
       alert("Ticket rejected successfully! Email sent to the user.")
     } catch (err) {
       console.error("Error rejecting ticket:", err)
+      if (err.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        navigate("/admin-login")
+        return
+      }
       alert("Failed to reject ticket. Please try again.")
     } finally {
       setApprovingTickets((prev) => {
@@ -469,6 +525,13 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error("❌ Error exporting to Google Sheets:", error)
+      if (error.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        navigate("/admin-login")
+        return
+      }
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingToSheets(false)
