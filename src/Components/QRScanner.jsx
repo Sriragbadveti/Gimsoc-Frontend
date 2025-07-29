@@ -209,26 +209,18 @@ const QRScanner = () => {
 
       {scannedData && (
         <div className="scanned-data">
-          <h3>📱 Scanned QR Data</h3>
+          <h3>📱 QR Code Scanned Successfully</h3>
           <div className="data-card">
-            <div className="data-item">
-              <span className="label">Raw Data:</span>
-              <span className="value">{JSON.stringify(scannedData, null, 2)}</span>
-            </div>
-            <div className="data-item">
-              <span className="label">Ticket ID:</span>
-              <span className="value">{scannedData.ticketId || 'Not found'}</span>
-            </div>
-            {scannedData.timestamp && (
+            {scannedData.fullName && (
               <div className="data-item">
-                <span className="label">Timestamp:</span>
-                <span className="value">{new Date(scannedData.timestamp).toLocaleString()}</span>
+                <span className="label">Name:</span>
+                <span className="value">{scannedData.fullName}</span>
               </div>
             )}
-            {scannedData.expiry && (
+            {scannedData.ticketType && (
               <div className="data-item">
-                <span className="label">Expiry:</span>
-                <span className="value">{new Date(scannedData.expiry).toLocaleString()}</span>
+                <span className="label">Ticket Type:</span>
+                <span className="value">{scannedData.ticketType}</span>
               </div>
             )}
             {scannedData.expiry && (
@@ -237,24 +229,6 @@ const QRScanner = () => {
                 <span className="value">
                   {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
                 </span>
-              </div>
-            )}
-            {scannedData.fullName && (
-              <div className="data-item">
-                <span className="label">Name:</span>
-                <span className="value">{scannedData.fullName}</span>
-              </div>
-            )}
-            {scannedData.email && (
-              <div className="data-item">
-                <span className="label">Email:</span>
-                <span className="value">{scannedData.email}</span>
-              </div>
-            )}
-            {scannedData.ticketType && (
-              <div className="data-item">
-                <span className="label">Ticket Type:</span>
-                <span className="value">{scannedData.ticketType}</span>
               </div>
             )}
           </div>
@@ -276,26 +250,13 @@ const QRScanner = () => {
               <span className="value">{ticketDetails.fullName}</span>
             </div>
             <div className="ticket-item">
-              <span className="label">Email:</span>
-              <span className="value">{ticketDetails.email}</span>
-            </div>
-            <div className="ticket-item">
               <span className="label">Ticket Type:</span>
               <span className="value">{ticketDetails.ticketType}</span>
-            </div>
-            <div className="ticket-item">
-              <span className="label">Category:</span>
-              <span className="value">{ticketDetails.ticketCategory}</span>
-            </div>
-            <div className="ticket-item">
-              <span className="label">Registration Date:</span>
-              <span className="value">{new Date(ticketDetails.createdAt).toLocaleDateString()}</span>
             </div>
             <div className="ticket-item">
               <span className="label">Status:</span>
               <span className="value status-valid">✅ Valid Ticket</span>
             </div>
-
           </div>
         </div>
       )}
