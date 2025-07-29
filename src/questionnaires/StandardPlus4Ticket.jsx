@@ -641,7 +641,7 @@ export default function StandardPlus4Ticket() {
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
                 <span className="text-white text-lg font-medium">Total Price: </span>
                 <span className="text-white text-3xl font-bold">{calculatePrice()} GEL</span>
-                {formData.galaDinner === "Yes" && (
+                {formData.galaDinner === "Yes, I would like to attend the Gala Dinner (+40 GEL)" && (
                   <div className="text-yellow-300 text-sm mt-1">✓ Gala Dinner Included (+40 GEL)</div>
                 )}
               </div>
