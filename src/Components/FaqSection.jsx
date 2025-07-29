@@ -13,7 +13,7 @@ export default function FAQSection() {
   const contactEmails = [
     { department: "General", email: "medconconferencegimsoc@gmail.com" },
     { department: "IT", email: "badvetisrirag@gmail.com" },
-    { department: "Media", email: "workmail.hadeshchaudhary@gmail.com" },
+    
     { department: "Ticketing", email: "nupuraajesh@gmail.com" },
   ]
 

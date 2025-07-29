@@ -46,7 +46,7 @@ export default function Information() {
                   Date & Time
                 </dt>
                 <dd className="mt-1 text-base text-gray-400">
-                  24th , 25th October 2025
+                  24th, 25th October 2025
                 </dd>
               </div>
             </div>

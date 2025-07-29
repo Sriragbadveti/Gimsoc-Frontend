@@ -11,7 +11,7 @@ export default function Footer() {
   const contactEmails = [
     { department: "General", email: "medconconferencegimsoc@gmail.com" },
     { department: "IT", email: "badvetisrirag@gmail.com" },
-    { department: "Media", email: "workmail.hadeshchaudhary@gmail.com" },
+   
     { department: "Ticketing", email: "nupuraajesh@gmail.com" },
   ]
 
@@ -39,7 +39,7 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="/abstract" className="text-gray-300 hover:text-white transition-colors">
+                  <a href="/comingsoon" className="text-gray-300 hover:text-white transition-colors">
                     Registration
                   </a>
                 </li>

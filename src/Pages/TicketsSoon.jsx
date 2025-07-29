@@ -9,7 +9,7 @@ export default function TicketsSoon() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [timeLeft, setTimeLeft] = useState({})
-  const countdownDate = useRef(new Date("2025-07-29T21:00:00Z")) // 9 PM GMT on July 29th
+  const countdownDate = useRef(new Date("2025-07-29T17:00:00Z")) // 9 PM GST (UTC+4) on July 29th
 
   const calculateTimeLeft = () => {
     const now = new Date()
@@ -117,7 +117,7 @@ export default function TicketsSoon() {
           <div className="mb-12 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl">
             <div className="flex items-center justify-center mb-4">
               <Calendar className="w-6 h-6 text-purple-300 mr-3" />
-              <span className="text-purple-300 font-medium">Countdown to Ticket Release (July 29th, 9 PM GMT)</span>
+              <span className="text-purple-300 font-medium">Countdown to Ticket Release (July 29th, 9 PM GST)</span>
             </div>
             {timeLeft ? (
               <div className="text-3xl md:text-4xl font-mono text-white mb-2">
