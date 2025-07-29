@@ -84,9 +84,9 @@ export default function FeaturedSpeakers() {
     },
     {
       name: "Dr. Otar Chokoshvili",
-      title: "-",
-      institution: "Geomedi",
-      image: "/flat.webp",
+      title: "PhD, CDC-Certified Epidemiologist ",
+      institution: "Tbilisi , Georgia",
+      image: "/otar.jpg",
     },
     {
       name: "Dr. Ketevan Papaliashvili MD, MSc",
@@ -133,7 +133,7 @@ export default function FeaturedSpeakers() {
           <div ref={containerRef} className="flex space-x-8 overflow-x-hidden">
             {allSpeakers.map((speaker, index) => (
               <div key={index} className="flex-none w-64">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center text-center">
                   <div className="w-48 h-48 rounded-full bg-gray-200 overflow-hidden mb-4">
                     <img
                       src={speaker.image || "/placeholder.svg"}
@@ -141,11 +141,11 @@ export default function FeaturedSpeakers() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-900 text-center">
                     {speaker.name}
                   </h3>
-                  <p className="text-sm text-gray-600">{speaker.title}</p>
-                  <p className="text-sm text-gray-600">{speaker.institution}</p>
+                  <p className="text-sm text-gray-600 text-center">{speaker.title}</p>
+                  <p className="text-sm text-gray-600 text-center">{speaker.institution}</p>
                 </div>
               </div>
             ))}

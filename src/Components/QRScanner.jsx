@@ -70,23 +70,42 @@ const QRScanner = () => {
       
       // Extract ticket ID from QR data - handle both string and object formats
       let ticketId = null;
+      let userData = null;
       
       if (typeof qrData === 'string') {
         // Try to parse as JSON if it's a string
         try {
           const parsedData = JSON.parse(qrData);
           ticketId = parsedData.ticketId;
+          userData = parsedData;
         } catch (e) {
           // If it's not JSON, treat as direct ticket ID
           ticketId = qrData;
         }
       } else if (typeof qrData === 'object') {
         ticketId = qrData.ticketId;
+        userData = qrData;
       }
       
       if (ticketId) {
         console.log('🎫 Ticket ID extracted:', ticketId);
-        fetchTicketDetails(ticketId);
+        
+        // If QR data contains user information, use it directly
+        if (userData && userData.fullName) {
+          console.log('✅ User data found in QR code:', userData);
+          setTicketDetails({
+            ticketId: userData.ticketId,
+            fullName: userData.fullName,
+            email: userData.email,
+            ticketType: userData.ticketType,
+            ticketCategory: userData.ticketCategory,
+            createdAt: new Date(userData.timestamp)
+          });
+        } else {
+          // Fall back to fetching from database
+          console.log('🔍 No user data in QR, fetching from database');
+          fetchTicketDetails(ticketId);
+        }
       } else {
         console.error('❌ No ticket ID found in QR data:', qrData);
         setError('Invalid QR code format - no ticket ID found');
@@ -218,6 +237,24 @@ const QRScanner = () => {
                 <span className="value">
                   {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
                 </span>
+              </div>
+            )}
+            {scannedData.fullName && (
+              <div className="data-item">
+                <span className="label">Name:</span>
+                <span className="value">{scannedData.fullName}</span>
+              </div>
+            )}
+            {scannedData.email && (
+              <div className="data-item">
+                <span className="label">Email:</span>
+                <span className="value">{scannedData.email}</span>
+              </div>
+            )}
+            {scannedData.ticketType && (
+              <div className="data-item">
+                <span className="label">Ticket Type:</span>
+                <span className="value">{scannedData.ticketType}</span>
               </div>
             )}
           </div>
