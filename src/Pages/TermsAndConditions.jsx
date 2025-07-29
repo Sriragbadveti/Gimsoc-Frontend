@@ -67,7 +67,7 @@ export default function TermsAndConditions() {
       title: "Use of Likeness",
       icon: <Camera className="w-6 h-6 text-pink-600" />,
       items: [
-        "By attending the event, you consent to being photographed, filmed, or recorded.",
+        "In the ticketing process every attendee has the option to give consent to being photographed , filmed or recorded",
         "These materials may be used by MEDCON'25 GIMSOC for promotional, educational, or archival purposes without compensation."
       ]
     },
@@ -156,7 +156,7 @@ export default function TermsAndConditions() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-                  onClick={() => navigate("/tickets")}
+                  onClick={() => navigate("/comingsoon")}
                   className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-lg"
                 >
                   Proceed to Tickets

@@ -131,16 +131,24 @@ export default function AbstractPage() {
                         Once abstracts are accepted, participants must purchase a ticket. If you have not purchased a
                         ticket, your abstract will be disqualified.
                       </li>
-                                         <li>
-                       Make sure to follow the MEDCON'25 Author guidelines (In order to access the guidelines please click<a
-                         href="/pdfs/medcon25-author-guidelines.pdf"
-                         download="MEDCON25_Author_Guidelines.pdf"
-                         className="text-blue-600 hover:underline ml-1"
-                       >
-                         Here
-                       </a>)
-                       
-                     </li>
+                      <li>
+                        Make sure to follow the MEDCON'25 Author guidelines (In order to access the guidelines please click<a
+                          href="/pdfs/medcon25-author-guidelines.pdf"
+                          download="MEDCON25_Author_Guidelines.pdf"
+                          className="text-blue-600 hover:underline ml-1"
+                        >
+                          Here
+                        </a>)
+                      </li>
+                      <li>
+                        <a
+                          href="/Abstract Template - MEDCON'25.docx"
+                          download="Abstract_Template_MEDCON25.docx"
+                          className="text-blue-600 hover:underline"
+                        >
+                          Click here to download the template for abstract
+                        </a>
+                      </li>
                       <li>
                         For any questions feel free to reach out by email to nikhilalizaby@gmail.com and CC
                         medconconferencegimsoc@gmail.com

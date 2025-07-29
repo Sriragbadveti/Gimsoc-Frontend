@@ -28,12 +28,12 @@ export default function FAQ() {
       {
         id: "reg1",
         question: "How do I register for the conference?",
-        answer: "You can register online via our official conference website (Website link), or access it through the Link in Bio on our Instagram page (@medcon_gimsoc)."
+        answer: "You can register online via our official conference website , or access it through the Link in Bio on our Instagram page ."
       },
       {
         id: "reg2",
         question: "What are the registration fees?",
-        answer: "Fees vary depending on the ticket category (All-Inclusive, Standard, etc.). A detailed fee structure is available on the registration page."
+        answer: "Fees vary depending on the ticket category. A detailed fee structure is available on the registration page."
       },
       {
         id: "reg3",
@@ -48,7 +48,7 @@ export default function FAQ() {
       {
         id: "reg5",
         question: "Can I register on behalf of someone else?",
-        answer: "No. All participants must register individually using their own details. Registrations made on behalf of others will not be valid. However, for group ticket registrations, one participant may complete the registration on behalf of themselves and one or two additional group members."
+        answer: "No. All participants must register individually using their own details. Registrations made on behalf of others will not be valid."
       },
       {
         id: "reg6",
@@ -72,8 +72,8 @@ export default function FAQ() {
       },
       {
         id: "reg10",
-        question: "Do I need to print my ticket/confirmation?",
-        answer: "No, showing your confirmation email or unique ID code on your phone at check-in is sufficient."
+        question: "Do I need to print my ticket/acceptance?",
+        answer: "No , showing your acceptance email , ticket or QR code on your phone at the check-in"
       },
       {
         id: "reg11",
@@ -93,34 +93,26 @@ export default function FAQ() {
       {
         id: "reg14",
         question: "What is the Gala and what does it include?",
-        answer: "The Gala is the grand finale of MEDCON—an elegant evening designed to celebrate the success of the conference, reflect on inspiring moments shared, and strengthen the connections formed. It is a social and networking event that brings together delegates, speakers, and organizers in a relaxed, festive atmosphere. You'll enjoy: Live entertainment and music, A buffet-style dinner, A formal celebration of the MEDCON journey, Networking and photo opportunities, A chance to celebrate achievements and create lasting memories. (Gala access is included only with All-Inclusive and Doctor-All Inclusive tickets by default.)"
+        answer: "The Gala is the grand finale of MEDCON'25—an elegant evening designed to celebrate the success of the conference, reflect on inspiring moments shared, and strengthen the connections formed. It is a social and networking event that brings together delegates, speakers, and organizers in a relaxed, festive atmosphere. You'll enjoy Live entertainment and music, A buffet-style dinner, A formal celebration of the MEDCON journey, Networking and photo opportunities, A chance to celebrate achievements and create lasting memories. (Gala access is an add-on on every ticket type except the international delegate tickets and all-inclusive doctors where it is included by default)"
       }
     ],
     "Ticket Categories": [
       {
         id: "ticket1",
         question: "What is included in the Standard ticket?",
-        answer: "Access to all speaker sessions, Workshops (separate registration may be required), Meals and refreshments, Academic and research fairs, Goodie bag, Certificate of participation"
+        answer: "Access to all speaker sessions, Workshops (separate registration will be opened in september), Meals and refreshments, Academic and research fairs, Goodie bag, Certificate of participation"
       },
-      {
-        id: "ticket2",
-        question: "What is included in the All-Inclusive ticket?",
-        answer: "Everything in the Standard ticket, plus: Gala Dinner access: Formal evening celebration, Live entertainment, Dinner buffet, Networking with speakers and delegates"
-      },
+      
       {
         id: "ticket3",
         question: "What is included in the Basic ticket? (To be released later)",
-        answer: "Access to speaker sessions, Research fairs and poster presentations. ❗ Does NOT include: workshops, meals, gala, or goodie bags."
+        answer: "Access to speaker sessions, Research fairs and poster presentations and all fairs. ❗ Does NOT include: workshops, gala, or goodie bags."
       },
-      {
-        id: "ticket4",
-        question: "What is a Group ticket?",
-        answer: "Available for 2–3 participants registering under the Standard ticket, No Gala access, All group members must register via the designated group form, Not available for All-Inclusive tickets"
-      },
+      
       {
         id: "ticket5",
         question: "What is the Doctor ticket?",
-        answer: "A special category for licensed medical doctors that includes: Full access to speaker sessions, Workshops, Meals and refreshments, Academic fairs and posters, Gala Dinner, Goodie bags, Certificate of participation"
+        answer: "A special category for licensed medical doctors that includes: Full access to speaker sessions, Meals and refreshments, Academic fairs and posters, Gala Dinner, Goodie bags, Certificate of participation"
       },
       {
         id: "ticket6",
@@ -138,13 +130,18 @@ export default function FAQ() {
         id: "discount2",
         question: "Do TSU students receive a discounted fee?",
         answer: "Yes. TSU students can register under designated ticket categories at a reduced rate. Use your TSU-registered email to access this benefit."
+      },
+      {
+        id: "discount3",
+        question: "Do Geomedi students receive a discounted fee?",
+        answer: "Yes. Geomedi students can register under designated ticket categories at a reduced rate. Use your Geomedi-registered email to access this benefit."
       }
     ],
     "International Attendees": [
       {
         id: "int1",
-        question: "Who can attend MEDCON as an international delegate?",
-        answer: "All international medical students, graduates, and healthcare professionals are welcome to attend MEDCON. A valid passport and registration confirmation are required."
+        question: "Who can attend MEDCON'25 as an international delegate?",
+        answer: "All international medical students, graduates, and healthcare professionals are welcome to attend MEDCON'25. A valid passport and registration confirmation are required."
       },
       {
         id: "int2",
@@ -159,7 +156,7 @@ export default function FAQ() {
       {
         id: "int4",
         question: "What packages are available for international attendees?",
-        answer: "3-Day Conference Package: Access to all conference events, workshops, keynotes, and social night. 7-Day Full Experience Package: Includes the 3-day conference plus a 2-day guided tour of Georgia, covering major destinations, accommodation, transport, and some meals."
+        answer: "3-Day Conference Package: Access to all conference events, workshops, keynotes, and Gala night. 7-Day Full Experience Package: Includes the 2-day conference plus a 2-day guided tour of Georgia, covering major destinations, accommodation(7 day hotel stay),transport(From and To airport , From hotel and To conference venue and to all guided tour locations ), and some meals."
       },
       {
         id: "int5",
@@ -169,7 +166,7 @@ export default function FAQ() {
       {
         id: "int6",
         question: "What does the 7-Day Conference Package include?",
-        answer: "Access to all keynote sessions and panel discussions, Research, academic and activity fairs, Entry to hands-on workshops (pre-registration required), Participation in the MEDCON social night (Gala), Conference materials and delegate kit, CPD certification (where applicable), Accommodation, Breakfast (from the hotel), lunch (from the conference), Transportation."
+        answer: "Access to all keynote sessions and panel discussions, Research, academic and activity fairs, Entry to hands-on workshops (pre-registration required), Participation in the MEDCON social night (Gala), Conference materials and delegate kit, CPD certification (where applicable), Accommodation(7 day hotel stay), Breakfast (from the hotel), lunch (from the conference), Transportation."
       },
       {
         id: "int7",
@@ -179,18 +176,14 @@ export default function FAQ() {
       {
         id: "int8",
         question: "When does the 7-day package start and end?",
-        answer: "XXXXXXXXXXXXXXX"
+        answer: "22nd October 2025 (arrival day) to 28th October 2025(departure day)"
       },
       {
         id: "int9",
         question: "Do both packages include accommodation?",
         answer: "No, only the 7-day package includes accommodation and breakfast provided by the hotel, along with lunch from the conference. For the 3-day package, accommodation is not included, but we will recommend the hotel we are collaborating with to offer the best possible prices for attendees."
       },
-      {
-        id: "int10",
-        question: "What kind of places will we visit in the 7-day package tour?",
-        answer: "XXXXXXXXXXXXXXXX"
-      },
+      
       {
         id: "int11",
         question: "Is transportation within Georgia included?",
@@ -219,7 +212,7 @@ export default function FAQ() {
       {
         id: "int16",
         question: "Do I need a visa to attend?",
-        answer: "It depends on your nationality — please check Georgia's visa policy."
+        answer: "It depends on your nationality — please check Georgia's visa policy. To check all the details about visa please refer to this Instagram post as well as the link mentioned in it: https://www.threads.com/@medcon_gimsoc?xmt=AQF0AIPyBCHUV4pIZPzaAPXMv1Ykw2q1puiOzCkLAOAAVEg"
       },
       {
         id: "int17",
@@ -246,11 +239,11 @@ export default function FAQ() {
       {
         id: "cpd1",
         question: "Will I receive CPD points for attending MEDCON?",
-        answer: "Yes, MEDCON is accredited, and eligible attendees will receive Continuing Professional Development (CPD) points for participating in conference sessions and selected workshops."
+        answer: "Yes, MEDCON'25 is accredited, and eligible attendees will receive Continuing Professional Development (CPD) points for participating in conference sessions and selected workshops."
       },
       {
         id: "cpd2",
-        question: "How many CPD points can I earn at MEDCON?",
+        question: "How many CPD points can I earn at MEDCON'25?",
         answer: "The total number of CPD points varies depending on the sessions and workshops attended. A detailed breakdown will be available in the delegate handbook prior to the event."
       },
       {
@@ -271,19 +264,19 @@ export default function FAQ() {
       {
         id: "cpd6",
         question: "Will I get a certificate of attendance?",
-        answer: "Yes, all registered attendees will receive a Certificate of Attendance indicating their participation in MEDCON."
+        answer: "Yes, all registered attendees will receive a Certificate of Attendance indicating their participation in MEDCON'25."
       }
     ],
     "Abstract Submission": [
       {
         id: "abs1",
         question: "How can I submit an abstract?",
-        answer: "Visit the Abstract Submission page, log in or create an account, fill in the required fields, upload your abstract file, and click submit. You'll receive a confirmation email after successful submission."
+        answer: "Visit the Abstract Submission page, read the author guidelines,download the abstract template,fill in the requried fields , upload the completed abstract file depending on the abstract template and click submit."
       },
       {
         id: "abs2",
         question: "What is the deadline for abstract submission?",
-        answer: "The abstract submission deadline is XXXXXXXXXXX. Late submissions will not be accepted unless explicitly stated."
+        answer: "The abstract submission deadline is August 30th 2025. Late submissions will not be accepted unless explicitly stated."
       },
       {
         id: "abs3",
@@ -293,41 +286,38 @@ export default function FAQ() {
       {
         id: "abs4",
         question: "What are the abstract guidelines (word count, format, etc.)?",
-        answer: "Please refer to our Abstract Guidelines page for formatting requirements, word count limits, and template downloads."
+        answer: "Please refer to our Author Guidelines page for formatting requirements, word count limits, and template downloads."
       },
       {
         id: "abs5",
         question: "How will I know if my abstract is accepted?",
-        answer: "All submitters will be notified via email by XXXXXXXX. Accepted abstracts will also be listed on your account dashboard."
+        answer: "All submitters will be notified via email by middle of september. Accepted abstracts will also be listed on your account dashboard."
       },
       {
         id: "abs6",
         question: "Can I submit more than one abstract?",
-        answer: "Yes, you may submit multiple abstracts, but each must be submitted separately and meet the guidelines."
+        answer: "Yes, you may submit multiple abstracts, but each must be submitted separately and meet the guidelines.Please note that you can be a poster presenter and oral presenter if you submit 2 abstracts that are accepted"
       },
       {
         id: "abs7",
         question: "How can I find out the reason for my abstract's rejection?",
-        answer: "If your abstract is not accepted and you would like to receive feedback, you may email us at medconconferencegimsoc@gmail.com by XXXXXXXX. We will do our best to respond with the reason for rejection within a few working days."
+        answer: "If your abstract is not accepted and you would like to receive feedback, make sure your subject is Request for abstract rejection feedback and attach your abstract in the email ,you may email us at medconconferencegimsoc@gmail.com by end of september. We will do our best to respond with the reason for rejection within a few working days. You will receive feedback and a score for your abstract given by our scientific doctor"
       }
     ],
     "Account & Technical Support": [
       {
         id: "acc1",
-        question: "What should I do if I forget my password?",
-        answer: "XXXXXXXXXXX"
+        question: "What should I do if I forget my dashboard password?",
+        answer: "Just reach out to medconconferencegimsoc@gmail.com and CC badvetisrirag@gmail.com , Your subject should be Request for password retrieval and add in your email the email you used to signup , the ticket type and the phone number you listen on the website "
+
       },
-      {
-        id: "acc2",
-        question: "I didn't receive my confirmation or reset email. What should I do?",
-        answer: "Please check your spam or junk folder. If it's not there, ensure that you entered the correct email address. Still having issues? Contact our support team for assistance."
-      }
+     
     ],
     "Workshops, Certificates, and CPD Points": [
       {
         id: "workshop1",
         question: "Are workshops included in the conference?",
-        answer: "Yes, but only with Standard and All-Inclusive tickets. Some workshops may require separate registration."
+        answer: "Yes, for all the standard and International ticket types"
       },
       {
         id: "workshop2",
@@ -367,7 +357,7 @@ export default function FAQ() {
               </h1>
             </div>
             <p className="text-xl text-gray-300 max-w-3xl">
-              Find answers to all your questions about MEDCON conference registration, tickets, workshops, and more.
+              Find answers to all your questions about MEDCON'25 conference registration, tickets, workshops, and more.
             </p>
           </div>
         </div>
