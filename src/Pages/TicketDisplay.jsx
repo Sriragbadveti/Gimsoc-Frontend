@@ -12,7 +12,7 @@ const ticketTiers = [
     name: "Standard +2 Workshops Ticket",
     id: "tier-standard",
     href: "/standard-plus-2",
-    price: "30-60 GEL",
+    
     description: [
       "Full MEDCON access + 2 workshops",
       "All keynote sessions",
@@ -32,7 +32,7 @@ const ticketTiers = [
     name: "Standard +3 Workshops Ticket",
     id: "tier-allinclusive",
     href: "/standard-plus-3",
-    price: "55-75 GEL",
+    
     description: [
       "Full MEDCON access + 3 workshops",
       "All keynote sessions",
@@ -52,7 +52,7 @@ const ticketTiers = [
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
     href: "/standard-plus-4",
-    price: "60-75 GEL",
+    
     description: [
       "Full MEDCON access + 4 workshops",
       "All keynote sessions",
@@ -71,7 +71,7 @@ const ticketTiers = [
     name: "Doctor Ticket",
     id: "tier-doctor",
     href: "/doctor-ticket",
-    price: "95-135 GEL",
+    
     description: [
       "Academic-focused access for medical professionals",
       "Full conference access",
@@ -90,7 +90,7 @@ const ticketTiers = [
     name: "International Delegate Package",
     id: "tier-international",
     href: "/international-ticket",
-    price: "100-325 USD",
+    
     description: [
       "Tailored for international attendees",
       "Choose between 3-Day or 7-Day packages",
