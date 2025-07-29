@@ -306,7 +306,7 @@ export default function StandardPlus4Ticket() {
     // Set ticket classification - map to backend schema
     form.append("ticketCategory", "Standard")
     form.append("subType", memberType)
-    form.append("ticketType", "Standard") // Backend expects this field
+    form.append("ticketType", "Standard+4") // Backend expects this field
 
     // Convert form data according to schema
     console.log("🔍 Form data being processed:", formData)

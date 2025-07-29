@@ -31,7 +31,7 @@ export default function LoginForm() {
     try {
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/auth/login", formData, { withCredentials: true });
       console.log("Successfully logged in the user", response.data.message);
-      navigate("/");
+      navigate("/dashboard-login");
     } catch (error) {
       console.error("Login failed:", error);
       console.error("Error response:", error.response?.data);
@@ -175,12 +175,7 @@ export default function LoginForm() {
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-              Register for MEDCON'25
-            </a>
-          </p>
+         
         </div>
       </div>
     </div>
