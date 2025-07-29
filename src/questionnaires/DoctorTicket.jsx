@@ -114,6 +114,8 @@ export default function DoctorTicket() {
       ticketType: type === "Basic" ? "Doctor" : "Doctor",
       ticketCategory: type === "Basic" ? "Doctor" : "Doctor",
       workshopPackage: type === "AllInclusive" ? "All-Inclusive" : "Basic",
+      // Automatically include gala dinner for all-inclusive doctor tickets
+      galaDinner: type === "AllInclusive" ? "Yes, I would like to attend the Gala Dinner (+40 GEL)" : "",
     }))
     setCurrentStep(2)
   }
@@ -162,6 +164,17 @@ export default function DoctorTicket() {
       whatsappConsent: formData.whatsappConsent,
       headshot: formData.headshot,
       paymentProof: formData.paymentProof
+    }
+
+    // For all-inclusive doctor tickets, gala dinner is automatically included
+    if (passType === "AllInclusive") {
+      // Ensure gala dinner is set for all-inclusive tickets
+      if (!formData.galaDinner || !formData.galaDinner.includes("Yes")) {
+        setFormData(prev => ({
+          ...prev,
+          galaDinner: "Yes, I would like to attend the Gala Dinner (+40 GEL)"
+        }))
+      }
     }
 
     // Check for missing required fields
@@ -668,6 +681,38 @@ export default function DoctorTicket() {
                     <div className="bg-yellow-100/20 rounded-lg p-4">
                       <p className="text-sm text-yellow-300">
                         <strong>Note:</strong> Workshop spots are limited and will be confirmed based on availability.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Gala Dinner Information - Only for All-Inclusive */}
+            {passType === "AllInclusive" && (
+              <section className="space-y-6 animate-fade-in-delay">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 bg-purple-100 rounded-xl">
+                    <Crown className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h2 className="text-2xl font-semibold text-white">Gala Dinner - Automatically Included</h2>
+                </div>
+
+                <div className="bg-gradient-to-r from-purple-50/10 to-pink-50/10 border border-purple-200/30 rounded-xl p-6">
+                  <div className="text-center">
+                    <Crown className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-white mb-2">Gala Dinner Included!</h3>
+                    <p className="text-gray-300 mb-4">
+                      Your All-Inclusive Doctor ticket automatically includes access to the Gala Dinner - the grand finale of MEDCON.
+                    </p>
+                    <div className="bg-green-100/20 rounded-lg p-4">
+                      <p className="text-sm text-green-300">
+                        <strong>✓ Included:</strong> Gala Dinner access is automatically included in your All-Inclusive Doctor ticket.
+                      </p>
+                    </div>
+                    <div className="bg-purple-100/20 rounded-lg p-4 mt-4">
+                      <p className="text-sm text-purple-300">
+                        <strong>Note:</strong> The gala dinner cost (+40 GEL) is already included in your ticket price.
                       </p>
                     </div>
                   </div>

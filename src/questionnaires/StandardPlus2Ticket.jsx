@@ -1258,24 +1258,7 @@ export default function StandardPlus2Ticket() {
                     conference, reflect on inspiring moments shared, and strengthen the connections formed.
                   </p>
                   
-                  {/* Gala Availability Status */}
-                  {!galaLoading && (
-                    <div className={`rounded-lg p-4 mb-6 ${
-                      galaAvailable 
-                        ? 'bg-green-100/20 border border-green-300/30' 
-                        : 'bg-red-100/20 border border-red-300/30'
-                    }`}>
-                      <p className={`text-sm ${
-                        galaAvailable ? 'text-green-300' : 'text-red-300'
-                      }`}>
-                        <strong>Status:</strong> {
-                          galaAvailable 
-                            ? `${galaAvailableCount} gala tickets available` 
-                            : 'Gala dinner tickets are sold out'
-                        }
-                      </p>
-                    </div>
-                  )}
+                  
                   
                   <div className="bg-purple-100/20 rounded-lg p-4 mb-6">
                     <p className="text-sm text-purple-300">

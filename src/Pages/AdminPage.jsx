@@ -747,6 +747,35 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
+
+              {/* Gala Dinner Tickets */}
+              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Gala Dinner</h4>
+                    <p className="text-sm text-purple-700">
+                      {ticketCounts.galaTickets} / {ticketCounts.galaLimit} sold
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-purple-900">
+                      {Math.round((ticketCounts.galaTickets / ticketCounts.galaLimit) * 100)}%
+                    </div>
+                    <div className="text-xs text-purple-600">
+                      {ticketCounts.galaLimit - ticketCounts.galaTickets} remaining
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 w-full bg-purple-200 rounded-full h-2">
+                  <div 
+                    className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${Math.min((ticketCounts.galaTickets / ticketCounts.galaLimit) * 100, 100)}%` }}
+                  ></div>
+                </div>
+                <div className="mt-2 text-xs text-purple-600">
+                  <strong>Note:</strong> Includes automatic gala access for All-Inclusive Doctor tickets
+                </div>
+              </div>
             </div>
 
             {/* Summary Stats */}
