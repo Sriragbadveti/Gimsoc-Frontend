@@ -195,7 +195,7 @@ export default function StandardPlus3Ticket() {
 
     switch (memberType) {
       case "GIMSOC":
-        basePrice = 65 // GIMSOC Members - 65 GEL
+        basePrice = 60 // GIMSOC Members - 65 GEL
         break
       case "TSU":
         basePrice = 60 // TSU Students - 60 GEL
@@ -567,8 +567,7 @@ export default function StandardPlus3Ticket() {
                   Choose your membership type to continue
                 </p>
                 <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4 animate-glow">
-                  <span className="text-white text-lg font-medium">Base Price: </span>
-                  <span className="text-white text-3xl font-bold">75 GEL</span>
+                  
                   <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (3 workshops)</div>
                 </div>
               </div>
@@ -588,8 +587,8 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">GIMSOC Member</h3>
                     <p className="text-white mb-4">Active GIMSOC membership required</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-400">65 GEL</span>
-                      <div className="text-sm text-gray-400">10 GEL discount</div>
+                      <span className="text-2xl font-bold text-green-400">60 GEL</span>
+                      <div className="text-sm text-gray-400">5 GEL discount</div>
                     </div>
                   </div>
                 </div>
@@ -607,7 +606,7 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-gray-400">75 GEL</span>
+                      <span className="text-2xl font-bold text-gray-400">65 GEL</span>
                       <div className="text-sm text-gray-400">Regular price</div>
                     </div>
                   </div>
@@ -626,8 +625,8 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">TSU Student</h3>
                     <p className="text-white mb-4">TSU Faculty of Medicine</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-400">45 GEL</span>
-                      <div className="text-sm text-gray-400">30 GEL discount</div>
+                      <span className="text-2xl font-bold text-green-400">60 GEL</span>
+                      <div className="text-sm text-gray-400">5 GEL discount</div>
                     </div>
                   </div>
                 </div>
@@ -645,8 +644,8 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">Executive & Subcommittee</h3>
                     <p className="text-white mb-4">GIMSOC leadership team</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-purple-400">50 GEL</span>
-                      <div className="text-sm text-gray-400">25 GEL discount</div>
+                      <span className="text-2xl font-bold text-purple-400">55 GEL</span>
+                      <div className="text-sm text-gray-400">10 GEL discount</div>
                     </div>
                   </div>
                 </div>

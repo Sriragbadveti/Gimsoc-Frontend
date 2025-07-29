@@ -602,8 +602,7 @@ export default function StandardPlus2Ticket() {
                   Choose your membership type to continue
                 </p>
                 <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4 animate-glow">
-                  <span className="text-white text-lg font-medium">Base Price: </span>
-                  <span className="text-white text-3xl font-bold">60 GEL</span>
+                  
                   <div className="text-blue-100 text-sm mt-2">+ Workshop Selection (2 workshops)</div>
                 </div>
               </div>

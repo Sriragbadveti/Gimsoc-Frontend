@@ -162,7 +162,7 @@ export default function StandardPlus4Ticket() {
 
     switch (memberType) {
       case "GIMSOC":
-        basePrice = 75 // GIMSOC Members - 75 GEL
+        basePrice = 65 // GIMSOC Members - 75 GEL
         break
       case "TSU":
         basePrice = 65 // TSU Students - 65 GEL
@@ -527,7 +527,7 @@ export default function StandardPlus4Ticket() {
                     <p className="text-white mb-4">Active GIMSOC membership required</p>
                     <div className="text-center">
                       <span className="text-2xl font-bold text-green-600">65 GEL</span>
-                      <div className="text-sm text-gray-500">10 GEL discount</div>
+                      <div className="text-sm text-gray-500">5 GEL discount</div>
                     </div>
                   </div>
                 </div>
@@ -545,7 +545,7 @@ export default function StandardPlus4Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-gray-600">75 GEL</span>
+                      <span className="text-2xl font-bold text-gray-600">70 GEL</span>
                       <div className="text-sm text-gray-500">Regular price</div>
                     </div>
                   </div>
@@ -564,8 +564,8 @@ export default function StandardPlus4Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">TSU Student</h3>
                     <p className="text-white mb-4">TSU Faculty of Medicine</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-600">45 GEL</span>
-                      <div className="text-sm text-gray-500">30 GEL discount</div>
+                      <span className="text-2xl font-bold text-green-600">65 GEL</span>
+                      <div className="text-sm text-gray-500">5 GEL discount</div>
                     </div>
                   </div>
                 </div>
@@ -583,8 +583,8 @@ export default function StandardPlus4Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">Executive & Subcommittee</h3>
                     <p className="text-white mb-4">GIMSOC leadership team</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-purple-600">50 GEL</span>
-                      <div className="text-sm text-gray-500">25 GEL discount</div>
+                      <span className="text-2xl font-bold text-purple-600">60 GEL</span>
+                      <div className="text-sm text-gray-500">10 GEL discount</div>
                     </div>
                   </div>
                 </div>
