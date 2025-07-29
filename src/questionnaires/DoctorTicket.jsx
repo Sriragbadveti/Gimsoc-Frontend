@@ -394,7 +394,7 @@ export default function DoctorTicket() {
                     </div>
 
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-400 mb-2">90 GEL</div>
+                      <div className="text-2xl font-bold text-blue-400 mb-2">95 GEL</div>
                       <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select Basic Pass
                       </button>
@@ -439,7 +439,7 @@ export default function DoctorTicket() {
                     </div>
 
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-purple-400 mb-2">130 GEL</div>
+                      <div className="text-2xl font-bold text-purple-400 mb-2">135 GEL</div>
                       <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Select All-Inclusive
                       </button>
@@ -711,9 +711,7 @@ export default function DoctorTicket() {
                       </p>
                     </div>
                     <div className="bg-purple-100/20 rounded-lg p-4 mt-4">
-                      <p className="text-sm text-purple-300">
-                        <strong>Note:</strong> The gala dinner cost (+40 GEL) is already included in your ticket price.
-                      </p>
+                     
                     </div>
                   </div>
                 </div>
