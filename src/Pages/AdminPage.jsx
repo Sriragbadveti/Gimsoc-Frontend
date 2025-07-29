@@ -1247,6 +1247,7 @@ export default function AdminDashboard() {
                                   {ticket.dietaryRestrictions && <div><span className="font-medium">Dietary Restrictions:</span> {ticket.dietaryRestrictions}</div>}
                                   {ticket.accessibilityNeeds && <div><span className="font-medium">Accessibility Needs:</span> {ticket.accessibilityNeeds}</div>}
                                   {ticket.paymentMethod && <div><span className="font-medium">Payment Method:</span> {ticket.paymentMethod}</div>}
+                                  {ticket.galaDinner && <div><span className="font-medium">Gala Dinner:</span> {ticket.galaDinner}</div>}
                                 </div>
                               </div>
 
@@ -1352,6 +1353,12 @@ export default function AdminDashboard() {
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Workshop</p>
                   <p className="text-sm text-gray-900 mt-1">{ticket.workshopPackage}</p>
                 </div>
+                {ticket.galaDinner && (
+                  <div className="col-span-2">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Gala Dinner</p>
+                    <p className="text-sm text-gray-900 mt-1">{ticket.galaDinner}</p>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-gray-200">
