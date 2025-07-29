@@ -122,9 +122,9 @@ export default function DoctorTicket() {
   const calculatePrice = () => {
     switch (passType) {
       case "Basic":
-        return 90 // Basic Pass - 90 GEL
+        return 95 // Basic Pass - 90 GEL
       case "AllInclusive":
-        return 130 // All-Inclusive Pass - 130 GEL
+        return 135 // All-Inclusive Pass - 130 GEL
       default:
         return 0
     }
@@ -484,6 +484,19 @@ export default function DoctorTicket() {
             <div className="relative z-10 text-center">
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Doctor {passType} Pass Registration</h1>
               <p className="text-blue-100 mb-4">Complete your professional registration</p>
+              
+              {/* Price Display */}
+              {passType && (
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4 mb-4 border border-white/30">
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="text-white text-lg font-semibold">Ticket Price:</span>
+                    <span className="text-3xl font-bold text-yellow-400">{calculatePrice()} GEL</span>
+                  </div>
+                  <p className="text-blue-100 text-sm mt-1">
+                    {passType === "Basic" ? "Basic conference access" : "All-inclusive with workshops and gala"}
+                  </p>
+                </div>
+              )}
 
               {/* Access Information */}
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4 mb-4">

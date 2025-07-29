@@ -133,6 +133,18 @@ export default function InternationalTicket() {
     setCurrentStep(2)
   }
 
+  // Calculate pricing based on package type
+  const calculatePrice = () => {
+    switch (packageType) {
+      case "3-Day":
+        return 100 // 3-Day Package - 100 USD
+      case "7-Day":
+        return 325 // 7-Day Package - 325 USD
+      default:
+        return 0
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     
@@ -478,6 +490,19 @@ export default function InternationalTicket() {
                 International {packageType} Package Registration
               </h1>
               <p className="text-blue-100 mb-4">Complete your international registration</p>
+              
+              {/* Price Display */}
+              {packageType && (
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4 mb-4 border border-white/30">
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="text-white text-lg font-semibold">Package Price:</span>
+                    <span className="text-3xl font-bold text-yellow-400">${calculatePrice()} USD</span>
+                  </div>
+                  <p className="text-blue-100 text-sm mt-1">
+                    {packageType === "3-Day" ? "3-Day conference access with gala night" : "7-Day all-inclusive with accommodation and tours"}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
