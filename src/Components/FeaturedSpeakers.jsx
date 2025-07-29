@@ -50,21 +50,21 @@ export default function FeaturedSpeakers() {
       image: "/Abhishek.jpeg",
     },
     {
-      name: " Chisomo (Mark) Kanthanga",
+      name: "Mr. Chisomo (Mark) Kanthanga",
       title: "Microbiologist",
       institution: "Malawi Liverpool Wellcome Research Programme",
       image: "/Chisomo.jpeg",
     },
 
     {
-      name: " Annam Jan",
+      name: "Dr. Annam Jan",
       title: "Histology",
       institution: "University of Georgia",
       image: "/Anaam.jpg",
     },
 
     {
-      name: " Salome Tasaria",
+      name: "Dr. Salome Tasaria",
       title: "Epidemiologist and Dean of UG",
       institution: "University of Georgia",
       image: "/flat.webp",
@@ -134,11 +134,11 @@ export default function FeaturedSpeakers() {
             {allSpeakers.map((speaker, index) => (
               <div key={index} className="flex-none w-64">
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-48 h-48 rounded-full bg-gray-200 overflow-hidden mb-4">
+                  <div className="w-48 h-48 rounded-full bg-gray-200 overflow-hidden mb-4 flex items-center justify-center">
                     <img
                       src={speaker.image || "/placeholder.svg"}
                       alt={`${speaker.name}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 text-center">
