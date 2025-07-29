@@ -139,22 +139,7 @@ const ContactPage = () => {
               </div>
             </div>
             
-            <div>
-              <h3 className="font-medium text-gray-900 mb-3">Phone Numbers</h3>
-              <div className="space-y-2">
-                {departments.map((dept, index) => (
-                  <div key={index} className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">{dept.title}:</span>
-                    <a 
-                      href={`tel:${dept.phone}`}
-                      className="text-sm text-gray-700 hover:text-gray-900 font-medium"
-                    >
-                      {dept.phone}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
+            
           </div>
         </div>
       </Card>

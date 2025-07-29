@@ -146,13 +146,7 @@ const ProfilePage = ({ userData }) => {
                   <p className="text-lg text-gray-600 mt-1">{userProfile.medicalQualification || "Conference Attendee"}</p>
                   <p className="text-gray-500">{userProfile.universityName || "No Affiliation"}</p>
                 </div>
-                <button
-                  onClick={() => setIsEditing(!isEditing)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg font-medium"
-                >
-                  <Edit className="w-4 h-4" />
-                  {isEditing ? "Save" : "Edit Profile"}
-                </button>
+               
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -43,18 +43,21 @@ const QRScanner = () => {
       console.log('🔍 Fetching ticket details for:', ticketId);
       const response = await fetch(`https://gimsoc-backend.onrender.com/api/form/ticket/${ticketId}`);
       
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response headers:', response.headers);
+      
       if (response.ok) {
         const data = await response.json();
         console.log('✅ Ticket details received:', data);
         setTicketDetails(data);
       } else {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
         console.error('❌ Ticket not found:', errorData);
-        setError('Ticket not found in database');
+        setError(`Ticket not found in database (Status: ${response.status})`);
       }
     } catch (error) {
       console.error('❌ Error fetching ticket details:', error);
-      setError('Failed to fetch ticket details');
+      setError(`Failed to fetch ticket details: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -65,13 +68,28 @@ const QRScanner = () => {
       console.log('📱 QR Code scanned:', qrData);
       setScannedData(qrData);
       
-      // Extract ticket ID from QR data
-      const ticketId = qrData.ticketId;
+      // Extract ticket ID from QR data - handle both string and object formats
+      let ticketId = null;
+      
+      if (typeof qrData === 'string') {
+        // Try to parse as JSON if it's a string
+        try {
+          const parsedData = JSON.parse(qrData);
+          ticketId = parsedData.ticketId;
+        } catch (e) {
+          // If it's not JSON, treat as direct ticket ID
+          ticketId = qrData;
+        }
+      } else if (typeof qrData === 'object') {
+        ticketId = qrData.ticketId;
+      }
+      
       if (ticketId) {
         console.log('🎫 Ticket ID extracted:', ticketId);
         fetchTicketDetails(ticketId);
       } else {
-        setError('Invalid QR code format');
+        console.error('❌ No ticket ID found in QR data:', qrData);
+        setError('Invalid QR code format - no ticket ID found');
       }
     } catch (error) {
       console.error('❌ Error processing QR data:', error);
@@ -175,23 +193,33 @@ const QRScanner = () => {
           <h3>📱 Scanned QR Data</h3>
           <div className="data-card">
             <div className="data-item">
+              <span className="label">Raw Data:</span>
+              <span className="value">{JSON.stringify(scannedData, null, 2)}</span>
+            </div>
+            <div className="data-item">
               <span className="label">Ticket ID:</span>
-              <span className="value">{scannedData.ticketId}</span>
+              <span className="value">{scannedData.ticketId || 'Not found'}</span>
             </div>
-            <div className="data-item">
-              <span className="label">Timestamp:</span>
-              <span className="value">{new Date(scannedData.timestamp).toLocaleString()}</span>
-            </div>
-            <div className="data-item">
-              <span className="label">Expiry:</span>
-              <span className="value">{new Date(scannedData.expiry).toLocaleString()}</span>
-            </div>
-            <div className="data-item">
-              <span className="label">Status:</span>
-              <span className="value">
-                {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
-              </span>
-            </div>
+            {scannedData.timestamp && (
+              <div className="data-item">
+                <span className="label">Timestamp:</span>
+                <span className="value">{new Date(scannedData.timestamp).toLocaleString()}</span>
+              </div>
+            )}
+            {scannedData.expiry && (
+              <div className="data-item">
+                <span className="label">Expiry:</span>
+                <span className="value">{new Date(scannedData.expiry).toLocaleString()}</span>
+              </div>
+            )}
+            {scannedData.expiry && (
+              <div className="data-item">
+                <span className="label">Status:</span>
+                <span className="value">
+                  {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       )}
