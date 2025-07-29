@@ -37,6 +37,7 @@ import SoldOut from "./Pages/SoldOut"
 import DashboardLogin from "./Pages/DashboardLogin"
 
 import FAQ from "./Pages/FAQ"
+import TermsAndConditions from "./Pages/TermsAndConditions"
 
 
 const HomePage = () => (
@@ -132,6 +133,7 @@ const App = () => {
           <Route path="/dashboard-login" element={<DashboardLogin/>}/>
 
           <Route path="/faq" element={<FAQ/>}/>
+          <Route path="/terms" element={<TermsAndConditions/>}/>
 
           
           
