@@ -88,7 +88,7 @@ export default function InternationalTicket() {
   const [showLoading, setShowLoading] = useState(false)
   const navigate = useNavigate()
   const [paypalPaid, setPaypalPaid] = useState(false);
-  const [bankTransferKey, setBankTransferKey] = useState(0);
+
 
   useEffect(() => {
     setFadeIn(true)
@@ -107,11 +107,6 @@ export default function InternationalTicket() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
-    
-    // Force re-render when switching TO Bank Transfer to fix white screen issue
-    if (name === "paymentMethod" && value === "Bank Transfer") {
-      setBankTransferKey(prev => prev + 1)
-    }
   }
 
   const handleFileChange = (e) => {
@@ -1049,18 +1044,7 @@ export default function InternationalTicket() {
                       <span className="text-white font-medium">Credit/Debit Card</span>
                     </label>
 
-                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="Bank Transfer"
-                        checked={formData.paymentMethod === "Bank Transfer"}
-                        onChange={handleInputChange}
-                        className="text-green-600 focus:ring-green-500"
-                        required
-                      />
-                      <span className="text-white font-medium">Bank Transfer</span>
-                    </label>
+
                   </div>
                 </div>
 
@@ -1079,106 +1063,7 @@ export default function InternationalTicket() {
                   </div>
                 )}
 
-                {formData.paymentMethod === "Bank Transfer" && (
-                  <div key={`bank-transfer-${bankTransferKey}`}>
-                    {/* Bank Details */}
-                    <div className="bg-gradient-to-r from-green-50/10 to-emerald-50/10 border-2 border-green-200/30 rounded-xl p-6 mb-6">
-                      <h3 className="text-lg font-semibold text-green-400 mb-4">Bank Transfer Details</h3>
-
-                      {/* TBC Bank Details */}
-                      <div className="mb-6">
-                        <h4 className="text-md font-semibold text-green-300 mb-3">FOR LARI TRANSFER</h4>
-                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
-                          <p className="text-sm text-gray-300">
-                            <strong>Beneficiary's Bank:</strong> JSC TBC Bank
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Location:</strong> Tbilisi, Georgia
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Swift:</strong> TBCBGE22
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Beneficiary's IBAN:</strong> GE31TB7724245061200012
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Name of Beneficiary:</strong> Mandrika Santosh Umanga Fernando
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Bank of Georgia Details */}
-                      <div>
-                        <h4 className="text-md font-semibold text-green-300 mb-3">
-                          BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)
-                        </h4>
-                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
-                          <p className="text-sm text-gray-300">
-                            <strong>Account with institution:</strong> Bank of Georgia
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>SWIFT:</strong> BAGAGE22
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Beneficiary:</strong> FERNANDO MANDRIKA SANTOSH U.
-                          </p>
-                          <p className="text-sm text-gray-300">
-                            <strong>Account:</strong> GE94BG0000000608342766
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bank Transfer Images Section */}
-                    <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-white mb-4 text-center">
-                        📸 These are the images which needs to be submitted
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                          <img 
-                            src="/ab8cedda-965c-424e-9ba4-18e837fcaadf.JPG" 
-                            alt="Bank Transfer Example 1" 
-                            className="w-full h-auto rounded-lg shadow-lg"
-                          />
-                          <p className="text-sm text-gray-300 mt-2 text-center">Payment Order Example</p>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                          <img 
-                            src="/1fedc4b1-f480-44cf-9351-b43895491c94.JPG" 
-                            alt="Bank Transfer Example 2" 
-                            className="w-full h-auto rounded-lg shadow-lg"
-                          />
-                          <p className="text-sm text-gray-300 mt-2 text-center">External Transfer Example</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="transform hover:scale-105 transition-transform duration-300">
-                      <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
-                      <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors bg-white/20 backdrop-blur-sm">
-                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                        <input
-                          type="file"
-                          onChange={handleFileChange}
-                          name="paymentProof"
-                                                  accept=".jpg,.jpeg,.png"
-                          className="hidden"
-                          id="payment-upload"
-                          required
-                        />
-                        <label htmlFor="payment-upload" className="cursor-pointer">
-                          <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
-                          <span className="text-gray-300"> or drag and drop</span>
-                        </label>
-                        <p className="text-xs text-gray-300 mt-1">Screenshot or document of your payment (PDF only)</p>
-                        {formData.paymentProof && (
-                          <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                
               </div>
             </section>
 

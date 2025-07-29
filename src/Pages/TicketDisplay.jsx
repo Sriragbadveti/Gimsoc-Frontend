@@ -12,7 +12,7 @@ const ticketTiers = [
     name: "Standard +2 Workshops Ticket",
     id: "tier-standard",
     href: "/standard-plus-2",
-    price: "30-60 GEL",
+    
     description: "A flexible option with full MEDCON access + 2 workshops. Includes: All keynote sessions, 2 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
     featured: false,
     color: "green",
@@ -23,7 +23,7 @@ const ticketTiers = [
     name: "Standard +3 Workshops Ticket",
     id: "tier-allinclusive",
     href: "/standard-plus-3",
-    price: "55-75 GEL",
+    
     description: "Full MEDCON access + 3 workshops. Ideal for a balanced academic experience. Includes: All keynote sessions, 3 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
     featured: false,
     color: "purple",
@@ -33,7 +33,7 @@ const ticketTiers = [
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
     href: "/standard-plus-4",
-    price: "60-75 GEL",
+   
     description: "Access MEDCON + 4 workshops of your choice. Perfect for those seeking the most interactive experience. Includes: All keynote sessions, 4 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
     featured: false,
     color: "teal",
@@ -42,7 +42,7 @@ const ticketTiers = [
     name: "Doctor Basic Ticket",
     id: "tier-doctor",
     href: "/doctor-ticket",
-    price: "95-135 GEL",
+   
     description: "Academic-focused access for medical professionals. Includes: Full conference, keynote sessions, meals, fairs, goodie bag, attendance & CPD certificates",
     featured: false,
     color: "teal",
@@ -53,7 +53,7 @@ const ticketTiers = [
     name: "International Delegate Package",
     id: "tier-international",
     href: "/international-ticket",
-    price: "100-325 USD",
+    
     description: "Tailored for international attendees — choose between: 3-Day Package: 2-day conference + Gala Night. 7-Day All-Inclusive: Full access + accommodation, tours, transport. Both Include: Workshops, fairs, Gala Night, networking, certificates. 7-Day Extras: 7-night hotel stay, Tbilisi tour (Day 2), excursion (Day 6)",
     featured: false,
     color: "blue",
