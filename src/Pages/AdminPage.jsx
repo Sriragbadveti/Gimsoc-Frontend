@@ -73,26 +73,35 @@ export default function AdminDashboard() {
   // Google Sheets export state
   const [exportingToSheets, setExportingToSheets] = useState(false)
 
+  // Helper function to get auth headers
+  const getAuthHeaders = () => {
+    const adminToken = localStorage.getItem('adminToken');
+    return adminToken ? { 'Authorization': `Bearer ${adminToken}` } : {};
+  };
+
   // Check admin authentication on component mount
   useEffect(() => {
     const checkAdminAuth = async () => {
       try {
         console.log("🔍 Checking admin authentication...")
         
-        // Get admin data from localStorage (set during login)
+        // Get admin data and token from localStorage (set during login)
         const storedAdminData = localStorage.getItem('adminData');
         const adminEmail = localStorage.getItem('adminEmail');
+        const adminToken = localStorage.getItem('adminToken');
         
-        if (!storedAdminData || !adminEmail) {
-          console.log("❌ No admin data found, redirecting to admin login");
+        if (!storedAdminData || !adminEmail || !adminToken) {
+          console.log("❌ No admin data or token found, redirecting to admin login");
           navigate("/admin-login");
           return;
         }
         
-        // Verify authentication with backend
+        // Verify authentication with backend using token
         try {
           const response = await axios.get('https://gimsoc-backend.onrender.com/api/admin-auth/check-auth', {
-            withCredentials: true
+            headers: {
+              'Authorization': `Bearer ${adminToken}`
+            }
           });
           
           if (response.data.authenticated) {
@@ -103,6 +112,7 @@ export default function AdminDashboard() {
             console.log("❌ Admin authentication failed with backend")
             localStorage.removeItem('adminData')
             localStorage.removeItem('adminEmail')
+            localStorage.removeItem('adminToken')
             navigate("/admin-login")
             return
           }
@@ -110,6 +120,7 @@ export default function AdminDashboard() {
           console.error("❌ Backend auth check failed:", authError)
           localStorage.removeItem('adminData')
           localStorage.removeItem('adminEmail')
+          localStorage.removeItem('adminToken')
           navigate("/admin-login")
           return
         }
@@ -195,7 +206,9 @@ export default function AdminDashboard() {
     try {
       setTicketsLoading(true)
       setTicketsError(null)
-      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getalltickets", { withCredentials: true })
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getalltickets", { 
+        headers: getAuthHeaders()
+      })
       console.log("Fetched tickets:", response.data)
       setTickets(response.data)
       setLastUpdated(new Date())
@@ -205,6 +218,7 @@ export default function AdminDashboard() {
         console.log("❌ Unauthorized access, redirecting to admin login")
         localStorage.removeItem('adminData')
         localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
         navigate("/admin-login")
         return
       }
@@ -218,7 +232,9 @@ export default function AdminDashboard() {
     try {
       setAbstractsLoading(true)
       setAbstractsError(null)
-      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getallabstracts", { withCredentials: true })
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getallabstracts", { 
+        headers: getAuthHeaders()
+      })
       console.log("Fetched abstracts:", response.data)
       
       // Debug: Check date formats
@@ -233,6 +249,7 @@ export default function AdminDashboard() {
         console.log("❌ Unauthorized access, redirecting to admin login")
         localStorage.removeItem('adminData')
         localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
         navigate("/admin-login")
         return
       }
@@ -246,7 +263,7 @@ export default function AdminDashboard() {
     try {
       setCountsLoading(true)
       const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/ticket-summary", {
-        withCredentials: true,
+        headers: getAuthHeaders(),
       })
       setTicketCounts(response.data)
     } catch (err) {
@@ -255,6 +272,7 @@ export default function AdminDashboard() {
         console.log("❌ Unauthorized access, redirecting to admin login")
         localStorage.removeItem('adminData')
         localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
         navigate("/admin-login")
         return
       }
@@ -269,7 +287,7 @@ export default function AdminDashboard() {
       await axios.patch(
         `https://gimsoc-backend.onrender.com/api/admin/approveticket/${ticketId}`,
         { paymentStatus: "completed" },
-        { withCredentials: true },
+        { headers: getAuthHeaders() },
       )
       setTickets((prevTickets) =>
         prevTickets.map((ticket) => (ticket._id === ticketId ? { ...ticket, paymentStatus: "completed" } : ticket)),
@@ -283,6 +301,7 @@ export default function AdminDashboard() {
         console.log("❌ Unauthorized access, redirecting to admin login")
         localStorage.removeItem('adminData')
         localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
         navigate("/admin-login")
         return
       }
@@ -304,7 +323,7 @@ export default function AdminDashboard() {
       await axios.patch(
         `https://gimsoc-backend.onrender.com/api/admin/approveticket/${ticketId}`,
         { paymentStatus: "rejected" },
-        { withCredentials: true },
+        { headers: getAuthHeaders() },
       )
       
       console.log("Ticket rejected successfully on backend")
@@ -326,6 +345,7 @@ export default function AdminDashboard() {
         console.log("❌ Unauthorized access, redirecting to admin login")
         localStorage.removeItem('adminData')
         localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
         navigate("/admin-login")
         return
       }
@@ -515,6 +535,7 @@ export default function AdminDashboard() {
         tickets: tickets,
         date: new Date().toISOString().split('T')[0] // Today's date
       }, {
+        headers: getAuthHeaders(),
         timeout: 30000 // 30 second timeout
       })
       
@@ -529,6 +550,7 @@ export default function AdminDashboard() {
         console.log("❌ Unauthorized access, redirecting to admin login")
         localStorage.removeItem('adminData')
         localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
         navigate("/admin-login")
         return
       }
@@ -540,9 +562,12 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("https://gimsoc-backend.onrender.com/api/admin-auth/logout", {}, { withCredentials: true })
+      await axios.post("https://gimsoc-backend.onrender.com/api/admin-auth/logout", {}, { 
+        headers: getAuthHeaders()
+      })
       localStorage.removeItem('adminData')
       localStorage.removeItem('adminEmail')
+      localStorage.removeItem('adminToken')
       setIsAuthenticated(false)
       setAdminData(null)
       console.log("Admin logged out successfully")
@@ -552,6 +577,7 @@ export default function AdminDashboard() {
       // Still remove data and redirect even if API call fails
       localStorage.removeItem('adminData')
       localStorage.removeItem('adminEmail')
+      localStorage.removeItem('adminToken')
       setIsAuthenticated(false)
       setAdminData(null)
       navigate("/admin-login")

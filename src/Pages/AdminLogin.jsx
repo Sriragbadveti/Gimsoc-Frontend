@@ -45,9 +45,10 @@ export default function AdminLogin() {
       
       // Verify that the login was successful
       if (response.data.message === "Admin login successful") {
-        // Store admin data in localStorage for admin dashboard access
+        // Store admin data and token in localStorage for admin dashboard access
         localStorage.setItem('adminData', JSON.stringify(response.data.admin))
         localStorage.setItem('adminEmail', formData.email)
+        localStorage.setItem('adminToken', response.data.token) // Store the token
         
         // Redirect to admin dashboard
         navigate("/adminpage")
