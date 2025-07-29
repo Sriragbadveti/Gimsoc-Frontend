@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Calendar, Clock, Bell, Star, Sparkles } from "lucide-react"
+import { Calendar, Clock, Bell, Star, Sparkles, Ticket } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export default function TicketsSoon() {
+  const navigate = useNavigate()
   const [isVisible, setIsVisible] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [timeLeft, setTimeLeft] = useState({})
@@ -122,14 +124,30 @@ export default function TicketsSoon() {
                 {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
               </div>
             ) : (
-              <div className="space-y-4">
-                <div className="text-3xl font-bold text-green-400 mb-4">🎟️ Tickets are now live!</div>
-                <button
-                  onClick={() => (window.location.href = "/tickets")}
-                  className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl rounded-full shadow-2xl hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300 animate-pulse"
-                >
-                  🎫 Get Tickets Now
-                </button>
+              <div className="space-y-6">
+                <div className="text-4xl font-bold text-green-400 mb-6 animate-pulse">
+                  🎟️ Tickets are now live!
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <button
+                    onClick={() => navigate("/tickets")}
+                    className="group px-10 py-5 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-2xl rounded-full shadow-2xl hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300 animate-bounce"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Ticket className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+                      <span>Get Tickets Now</span>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigate("/")}
+                    className="px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-semibold text-lg rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300"
+                  >
+                    Back to Home
+                  </button>
+                </div>
+                <div className="text-lg text-green-300 font-medium">
+                  Don't miss out on this incredible opportunity!
+                </div>
               </div>
             )}
           </div>
@@ -146,7 +164,7 @@ export default function TicketsSoon() {
           {/* Back to Home Button */}
           <div className="mt-8">
             <button
-              onClick={() => (window.location.href = "/")}
+              onClick={() => navigate("/")}
               className="px-6 py-3 bg-white text-purple-700 font-semibold rounded-full shadow-lg hover:bg-purple-100 transition"
             >
               Back to Home

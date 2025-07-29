@@ -12,19 +12,38 @@ const ticketTiers = [
     name: "Standard +2 Workshops Ticket",
     id: "tier-standard",
     href: "/standard-plus-2",
-    
-    description: "A flexible option with full MEDCON access + 2 workshops. Includes: All keynote sessions, 2 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
+    price: "30-60 GEL",
+    description: [
+      "Full MEDCON access + 2 workshops",
+      "All keynote sessions",
+      "2 workshops of your choice",
+      "Meals and refreshments",
+      "Academic, research and activities fair",
+      "Goodie bag with exclusive MEDCON merchandise",
+      "Certificate of attendance",
+      "CPD certificate",
+      "Add-on: Gala Night (+40₾)"
+    ],
     featured: false,
     color: "green",
   },
-  
   
   {
     name: "Standard +3 Workshops Ticket",
     id: "tier-allinclusive",
     href: "/standard-plus-3",
-    
-    description: "Full MEDCON access + 3 workshops. Ideal for a balanced academic experience. Includes: All keynote sessions, 3 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
+    price: "55-75 GEL",
+    description: [
+      "Full MEDCON access + 3 workshops",
+      "All keynote sessions",
+      "3 workshops of your choice",
+      "Meals and refreshments",
+      "Academic, research and activities fair",
+      "Goodie bag with exclusive MEDCON merchandise",
+      "Certificate of attendance",
+      "CPD certificate",
+      "Add-on: Gala Night (+40₾)"
+    ],
     featured: false,
     color: "purple",
   },
@@ -33,28 +52,58 @@ const ticketTiers = [
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
     href: "/standard-plus-4",
-   
-    description: "Access MEDCON + 4 workshops of your choice. Perfect for those seeking the most interactive experience. Includes: All keynote sessions, 4 workshops, meals, fairs, goodie bag, attendance & CPD certificates. Add-on: Gala Night (+40₾)",
+    price: "60-75 GEL",
+    description: [
+      "Full MEDCON access + 4 workshops",
+      "All keynote sessions",
+      "4 workshops of your choice",
+      "Meals and refreshments",
+      "Academic, research and activities fair",
+      "Goodie bag with exclusive MEDCON merchandise",
+      "Certificate of attendance",
+      "CPD certificate",
+      "Add-on: Gala Night (+40₾)"
+    ],
     featured: false,
     color: "teal",
   },
-{
-    name: "Doctor Basic Ticket",
+  {
+    name: "Doctor Ticket",
     id: "tier-doctor",
     href: "/doctor-ticket",
-   
-    description: "Academic-focused access for medical professionals. Includes: Full conference, keynote sessions, meals, fairs, goodie bag, attendance & CPD certificates",
+    price: "95-135 GEL",
+    description: [
+      "Academic-focused access for medical professionals",
+      "Full conference access",
+      "All keynote sessions",
+      "Meals and refreshments",
+      "Academic, research and activities fair",
+      "Goodie bag with exclusive MEDCON merchandise",
+      "Certificate of attendance",
+      "CPD certificate"
+    ],
     featured: false,
     color: "teal",
   },
-  
   
   {
     name: "International Delegate Package",
     id: "tier-international",
     href: "/international-ticket",
-    
-    description: "Tailored for international attendees — choose between: 3-Day Package: 2-day conference + Gala Night. 7-Day All-Inclusive: Full access + accommodation, tours, transport. Both Include: Workshops, fairs, Gala Night, networking, certificates. 7-Day Extras: 7-night hotel stay, Tbilisi tour (Day 2), excursion (Day 6)",
+    price: "100-325 USD",
+    description: [
+      "Tailored for international attendees",
+      "Choose between 3-Day or 7-Day packages",
+      "3-Day Package: 2-day conference + Gala Night",
+      "7-Day All-Inclusive: Full access + accommodation",
+      "Workshops and fairs",
+      "Gala Night access",
+      "Networking opportunities",
+      "Certificate of attendance",
+      "7-Day Extras: 7-night hotel stay",
+      "Tbilisi tour (Day 2)",
+      "Excursion (Day 6)"
+    ],
     featured: false,
     color: "blue",
   },
@@ -104,12 +153,11 @@ export default function Tickets() {
           <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-base font-semibold leading-7 text-blue-400">Pricing</h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Choose your MEDCON'25 ticket
+              Choose your MEDCON'25 Ticket
             </p>
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-300">
-            Select the perfect ticket option that fits your needs and budget. Early bird pricing available for a limited
-            time.
+            Select the perfect ticket option that fits your needs and budget. 
           </p>
         </ScrollReveal>
 
@@ -136,7 +184,20 @@ export default function Tickets() {
                 <p className="mt-4 flex items-baseline gap-x-2">
                   <span className="text-4xl font-bold tracking-tight text-white">{tier.price}</span>
                 </p>
-                <p className="mt-6 text-base leading-7 text-gray-300">{tier.description}</p>
+                <ul className="mt-6 space-y-2 text-sm leading-6 text-gray-300">
+                  {tier.description.map((item, index) => (
+                    <li key={index} className="flex gap-x-3">
+                      <CheckIcon
+                        className={classNames(
+                          tier.featured ? "text-blue-400" : "text-blue-300",
+                          "h-5 w-5 flex-none"
+                        )}
+                        aria-hidden="true"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
                 <Link
                   to={tier.href}
                   aria-describedby={tier.id}
