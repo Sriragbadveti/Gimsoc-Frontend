@@ -146,7 +146,7 @@ export default function AbstractPage() {
                           download="Abstract_Template_MEDCON25.docx"
                           className="text-blue-600 hover:underline"
                         >
-                          Click here to download the template for abstract
+                          Important Note: Kindly download the Official MEDCON'25 Abstract Template . All abstracts must be submitted using this document and strictly follow the provided format.
                         </a>
                       </li>
                       <li>
