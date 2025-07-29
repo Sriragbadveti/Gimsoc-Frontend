@@ -446,6 +446,10 @@ export default function AllInclusiveTicket() {
       }
     })
 
+    // Always append gala dinner field (even if empty)
+    form.append("galaDinner", formData.galaDinner || "")
+    console.log(`🎭 Gala dinner field: ${formData.galaDinner || ""}`)
+
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
 

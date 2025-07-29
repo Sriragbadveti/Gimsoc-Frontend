@@ -310,19 +310,29 @@ export default function StandardPlus4Ticket() {
 
     // Convert form data according to schema
     console.log("🔍 Form data being processed:", formData)
-    
+
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         console.log(`📝 Adding field: ${key} = ${value} (type: ${typeof value})`)
-        
+
         // Boolean conversions
-        if (["infoAccurate", "policies", "emailConsent", "whatsappConsent", "discountConfirmation", "isTsuStudent"].includes(key)) {
+        if (
+          [
+            "infoAccurate",
+            "policies",
+            "emailConsent",
+            "whatsappConsent",
+            "discountConfirmation",
+            "isTsuStudent",
+            "isGeomediStudent",
+          ].includes(key)
+        ) {
           const boolValue = value === true || value === "true" || value === "Yes"
-          form.append(key, boolValue.toString()) // Send as string, backend will convert
+          form.append(key, boolValue.toString())
           console.log(`✅ Boolean field ${key}: ${boolValue}`)
         } else if (["mediaConsent"].includes(key)) {
           const boolValue = value === "Yes"
-          form.append(key, boolValue.toString()) // Send as string, backend will convert
+          form.append(key, boolValue.toString())
           console.log(`✅ Media consent ${key}: ${boolValue}`)
         }
         // File fields
@@ -349,6 +359,10 @@ export default function StandardPlus4Ticket() {
         }
       }
     })
+
+    // Always append gala dinner field (even if empty)
+    form.append("galaDinner", formData.galaDinner || "")
+    console.log(`🎭 Gala dinner field: ${formData.galaDinner || ""}`)
 
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
@@ -641,7 +655,7 @@ export default function StandardPlus4Ticket() {
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
                 <span className="text-white text-lg font-medium">Total Price: </span>
                 <span className="text-white text-3xl font-bold">{calculatePrice()} GEL</span>
-                {formData.galaDinner === "Yes, I would like to attend the Gala Dinner (+40 GEL)" && (
+                {formData.galaDinner === "Yes" && (
                   <div className="text-yellow-300 text-sm mt-1">✓ Gala Dinner Included (+40 GEL)</div>
                 )}
               </div>

@@ -400,6 +400,10 @@ export default function StandardPlus2Ticket() {
       }
     })
 
+    // Always append gala dinner field (even if empty)
+    form.append("galaDinner", formData.galaDinner || "")
+    console.log(`🎭 Gala dinner field: ${formData.galaDinner || ""}`)
+
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
 
@@ -424,6 +428,13 @@ export default function StandardPlus2Ticket() {
       for (const [key, value] of form.entries()) {
         console.log(`${key}: ${value}`)
       }
+      
+      // Debug gala dinner specifically
+      console.log("🎭 Gala dinner debug:", {
+        formDataGalaDinner: formData.galaDinner,
+        type: typeof formData.galaDinner,
+        hasValue: !!formData.galaDinner
+      });
 
       // Test backend connectivity
       console.log("🔍 Testing backend connectivity...")

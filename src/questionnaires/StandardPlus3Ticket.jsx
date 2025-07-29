@@ -343,6 +343,7 @@ export default function StandardPlus3Ticket() {
 
     // Convert form data according to schema
     console.log("🔍 Form data being processed:", formData)
+
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         console.log(`📝 Adding field: ${key} = ${value} (type: ${typeof value})`)
@@ -391,6 +392,10 @@ export default function StandardPlus3Ticket() {
         }
       }
     })
+
+    // Always append gala dinner field (even if empty)
+    form.append("galaDinner", formData.galaDinner || "")
+    console.log(`🎭 Gala dinner field: ${formData.galaDinner || ""}`)
 
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
