@@ -64,7 +64,7 @@ export default function Footer() {
                   </button>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                  <a href="/terms" className="text-gray-300 hover:text-white transition-colors">
                     Terms of Service
                   </a>
                 </li>
