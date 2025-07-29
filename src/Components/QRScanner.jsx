@@ -68,25 +68,40 @@ const QRScanner = () => {
       console.log('📱 QR Code scanned:', qrData);
       setScannedData(qrData);
       
-      // Extract ticket ID from QR data - handle both string and object formats
-      let ticketId = null;
+      // Parse QR data - handle both string and object formats
+      let parsedData = null;
       
       if (typeof qrData === 'string') {
         // Try to parse as JSON if it's a string
         try {
-          const parsedData = JSON.parse(qrData);
-          ticketId = parsedData.ticketId;
+          parsedData = JSON.parse(qrData);
         } catch (e) {
           // If it's not JSON, treat as direct ticket ID
-          ticketId = qrData;
+          parsedData = { ticketId: qrData };
         }
       } else if (typeof qrData === 'object') {
-        ticketId = qrData.ticketId;
+        parsedData = qrData;
       }
       
-      if (ticketId) {
-        console.log('🎫 Ticket ID extracted:', ticketId);
-        fetchTicketDetails(ticketId);
+      if (parsedData && parsedData.ticketId) {
+        console.log('🎫 Ticket data extracted:', parsedData);
+        
+        // If QR contains user details, display them directly
+        if (parsedData.fullName && parsedData.ticketType) {
+          console.log('✅ QR contains user details, displaying directly');
+          setTicketDetails({
+            ticketId: parsedData.ticketId,
+            fullName: parsedData.fullName,
+            ticketType: parsedData.ticketType,
+            ticketCategory: parsedData.ticketCategory,
+            email: parsedData.email,
+            createdAt: new Date(parsedData.timestamp).toISOString()
+          });
+        } else {
+          // Fallback to fetching from server
+          console.log('🔄 Fetching ticket details from server');
+          fetchTicketDetails(parsedData.ticketId);
+        }
       } else {
         console.error('❌ No ticket ID found in QR data:', qrData);
         setError('Invalid QR code format - no ticket ID found');
@@ -200,24 +215,28 @@ const QRScanner = () => {
               <span className="label">Ticket ID:</span>
               <span className="value">{scannedData.ticketId || 'Not found'}</span>
             </div>
+            {scannedData.fullName && (
+              <div className="data-item">
+                <span className="label">Name:</span>
+                <span className="value">{scannedData.fullName}</span>
+              </div>
+            )}
+            {scannedData.ticketType && (
+              <div className="data-item">
+                <span className="label">Ticket Type:</span>
+                <span className="value">{scannedData.ticketType}</span>
+              </div>
+            )}
+            {scannedData.email && (
+              <div className="data-item">
+                <span className="label">Email:</span>
+                <span className="value">{scannedData.email}</span>
+              </div>
+            )}
             {scannedData.timestamp && (
               <div className="data-item">
-                <span className="label">Timestamp:</span>
+                <span className="label">Generated:</span>
                 <span className="value">{new Date(scannedData.timestamp).toLocaleString()}</span>
-              </div>
-            )}
-            {scannedData.expiry && (
-              <div className="data-item">
-                <span className="label">Expiry:</span>
-                <span className="value">{new Date(scannedData.expiry).toLocaleString()}</span>
-              </div>
-            )}
-            {scannedData.expiry && (
-              <div className="data-item">
-                <span className="label">Status:</span>
-                <span className="value">
-                  {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
-                </span>
               </div>
             )}
           </div>
@@ -251,6 +270,10 @@ const QRScanner = () => {
             <div className="ticket-item">
               <span className="label">Status:</span>
               <span className="value status-valid">✅ Valid Ticket</span>
+            </div>
+            <div className="ticket-item">
+              <span className="label">Scanned At:</span>
+              <span className="value">{new Date().toLocaleString()}</span>
             </div>
           </div>
         </div>
