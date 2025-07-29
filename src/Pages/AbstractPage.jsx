@@ -150,8 +150,8 @@ export default function AbstractPage() {
                         </a>
                       </li>
                       <li>
-                        For any questions feel free to reach out by email to nikhilalizaby@gmail.com and CC
-                        medconconferencegimsoc@gmail.com
+                        For any questions feel free to reach out by email to medconconferencegimsoc@gmail.com and CC
+                        nikhilalizaby@gmail.com
                       </li>
                     </ul>
                   </div>
