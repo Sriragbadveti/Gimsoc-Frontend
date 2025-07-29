@@ -20,7 +20,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import CreditCardAnimation from "../Components/CreditCardAnimation"
 import { StatefulButton } from "../Components/StatefulButton"
-import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
+
 import ErrorAnimation from "../Components/ErrorAnimation"
 import LoadingAnimation from "../Components/LoadingAnimation"
 
@@ -112,8 +112,7 @@ export default function StandardPlus2Ticket() {
   const [errorType, setErrorType] = useState("general")
   const navigate = useNavigate()
   
-  // Gala availability hook
-  const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
+
 
   useEffect(() => {
     setFadeIn(true)
@@ -1258,24 +1257,7 @@ export default function StandardPlus2Ticket() {
                     conference, reflect on inspiring moments shared, and strengthen the connections formed.
                   </p>
                   
-                  {/* Gala Availability Status */}
-                  {!galaLoading && (
-                    <div className={`rounded-lg p-4 mb-6 ${
-                      galaAvailable 
-                        ? 'bg-green-100/20 border border-green-300/30' 
-                        : 'bg-red-100/20 border border-red-300/30'
-                    }`}>
-                      <p className={`text-sm ${
-                        galaAvailable ? 'text-green-300' : 'text-red-300'
-                      }`}>
-                        <strong>Status:</strong> {
-                          galaAvailable 
-                            ? `${galaAvailableCount} gala tickets available` 
-                            : 'Gala dinner tickets are sold out'
-                        }
-                      </p>
-                    </div>
-                  )}
+
                   
                   <div className="bg-purple-100/20 rounded-lg p-4 mb-6">
                     <p className="text-sm text-purple-300">
@@ -1288,36 +1270,25 @@ export default function StandardPlus2Ticket() {
                   {[
                     "Yes, I would like to attend the Gala Dinner (+40 GEL)",
                     "No, I will not attend the Gala Dinner",
-                  ].map((option) => {
-                    const isGalaOption = option.includes("Yes");
-                    const isDisabled = isGalaOption && !galaAvailable;
-                    
-                    return (
-                      <label
-                        key={option}
-                        className={`flex items-center space-x-3 p-4 border rounded-lg transition-all bg-white/5 backdrop-blur-sm ${
-                          isDisabled 
-                            ? 'border-gray-500/30 bg-gray-500/20 cursor-not-allowed opacity-50' 
-                            : 'border-gray-200/30 hover:bg-white/10 cursor-pointer'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="galaDinner"
-                          value={option}
-                          checked={formData.galaDinner === option}
-                          onChange={handleInputChange}
-                          disabled={isDisabled}
-                          className="text-purple-600 focus:ring-purple-500 disabled:opacity-50"
-                          required={!isDisabled}
-                        />
-                        <span className={`font-medium ${isDisabled ? 'text-gray-400' : 'text-white'}`}>
-                          {option}
-                          {isDisabled && <span className="ml-2 text-red-400">(Sold Out)</span>}
-                        </span>
-                      </label>
-                    );
-                  })}
+                  ].map((option) => (
+                    <label
+                      key={option}
+                      className="flex items-center space-x-3 p-4 border rounded-lg transition-all bg-white/5 backdrop-blur-sm border-gray-200/30 hover:bg-white/10 cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        name="galaDinner"
+                        value={option}
+                        checked={formData.galaDinner === option}
+                        onChange={handleInputChange}
+                        className="text-purple-600 focus:ring-purple-500"
+                        required
+                      />
+                      <span className="font-medium text-white">
+                        {option}
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </section>

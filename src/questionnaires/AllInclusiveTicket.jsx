@@ -20,7 +20,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { StatefulButton } from "../Components/StatefulButton"
-import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
+
 import ErrorAnimation from "../Components/ErrorAnimation"
 import LoadingAnimation from "../Components/LoadingAnimation"
 
@@ -179,8 +179,7 @@ export default function AllInclusiveTicket() {
   const [errorType, setErrorType] = useState("general")
   const [bankTransferKey, setBankTransferKey] = useState(0)
   
-  // Gala availability hook
-  const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
+
 
   // Remove useEffect that checks for id_token/cookies and redirects to /login.
 
@@ -1321,24 +1320,7 @@ export default function AllInclusiveTicket() {
                     conference, reflect on inspiring moments shared, and strengthen the connections formed.
                   </p>
                   
-                  {/* Gala Availability Status */}
-                  {!galaLoading && (
-                    <div className={`rounded-lg p-4 mb-6 ${
-                      galaAvailable 
-                        ? 'bg-green-100/20 border border-green-300/30' 
-                        : 'bg-red-100/20 border border-red-300/30'
-                    }`}>
-                      <p className={`text-sm ${
-                        galaAvailable ? 'text-green-300' : 'text-red-300'
-                      }`}>
-                        <strong>Status:</strong> {
-                          galaAvailable 
-                            ? `${galaAvailableCount} gala tickets available` 
-                            : 'Gala dinner tickets are sold out'
-                        }
-                      </p>
-                    </div>
-                  )}
+
                   
                   <div className="bg-purple-100/20 rounded-lg p-4 mb-6">
                     <p className="text-sm text-purple-300">
