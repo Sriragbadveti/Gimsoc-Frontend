@@ -1,154 +1,125 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
 import './DynamicQRCode.css';
 
-// Note: Using native WebSocket API, no additional imports needed
-
-const DynamicQRCode = ({ ticketId, onQRUpdate }) => {
-  const [qrCode, setQrCode] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState(null);
-  const [isScanning, setIsScanning] = useState(false);
+const DynamicQRCode = ({ ticketId, userData }) => {
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const wsRef = useRef(null);
-
-  // Get initial QR code
-  const fetchQRCode = async () => {
-    try {
-      // Generate dynamic QR code using the hosted service
-      const timestamp = Date.now();
-      const expiry = timestamp + (5 * 60 * 1000); // 5 minutes
-      const qrData = {
-        ticketId: ticketId,
-        timestamp: timestamp,
-        expiry: expiry,
-        signature: `sig_${ticketId}_${timestamp}`,
-        nonce: `nonce_${Math.random().toString(36).substr(2, 9)}`
-      };
-
-      // Generate QR code using hosted service
-      const qrDataString = JSON.stringify(qrData);
-      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrDataString)}&format=png&margin=2&ecc=H`;
-      
-      setQrCode(qrCodeUrl);
-      setLastUpdate(new Date(timestamp));
-      console.log('🎫 Generated dynamic QR for ticket:', ticketId);
-    } catch (error) {
-      console.error('❌ Error generating QR code:', error);
-      setError('Failed to generate QR code');
-    }
-  };
 
   useEffect(() => {
-    if (!ticketId) return;
+    const generateQRCode = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    // Generate dynamic QR code with periodic updates
-    console.log('🎫 Loading dynamic QR code for ticket:', ticketId);
-    
-    // Initial QR generation
-    fetchQRCode();
-    
-    // Update QR code every 5 minutes (300 seconds)
-    const qrUpdateInterval = setInterval(() => {
-      console.log('🔄 Updating QR code...');
-      fetchQRCode();
-    }, 300000); // 5 minutes
-    
-    // Start continuous scanning animation immediately
-    setIsScanning(true);
-    console.log('🔍 Continuous scanning animation started');
+        // Create QR data with user information
+        const qrData = {
+          ticketId: ticketId,
+          timestamp: Date.now(),
+          expiry: Date.now() + (5 * 60 * 1000), // 5 minutes
+          signature: `sig_${ticketId}_${Date.now()}`,
+          nonce: `nonce_${Math.random().toString(36).substring(2, 15)}`
+        };
 
-    return () => {
-      if (qrUpdateInterval) {
-        clearInterval(qrUpdateInterval);
+        // Add user information if provided
+        if (userData) {
+          qrData.fullName = userData.fullName;
+          qrData.email = userData.email;
+          qrData.ticketType = userData.ticketType;
+          qrData.ticketCategory = userData.ticketCategory;
+        }
+
+        // Generate QR code locally
+        const qrDataString = JSON.stringify(qrData);
+        const dataUrl = await QRCode.toDataURL(qrDataString, {
+          errorCorrectionLevel: 'H',
+          type: 'image/png',
+          quality: 0.92,
+          margin: 1,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        });
+
+        setQrCodeDataUrl(dataUrl);
+        console.log('✅ QR Code generated with user data:', userData ? 'Yes' : 'No');
+      } catch (error) {
+        console.error('❌ Error generating QR code:', error);
+        setError('Failed to generate QR code');
+      } finally {
+        setLoading(false);
       }
     };
-  }, [ticketId, onQRUpdate]);
 
-  // Get initial QR code
-  useEffect(() => {
-    fetchQRCode();
-  }, [ticketId]);
+    if (ticketId) {
+      generateQRCode();
+    }
+  }, [ticketId, userData]);
 
-  const formatTime = (date) => {
-    if (!date) return 'Never';
-    return new Date(date).toLocaleTimeString();
-  };
-
-  return (
-    <div className="dynamic-qr-container">
-      <div className="qr-header">
-        <h3>🎫 Your Dynamic Ticket QR Code</h3>
-        <div className="connection-status">
-          <span className="status-indicator connected">
-            🟢 Dynamic QR Code
-          </span>
-          {lastUpdate && (
-            <span className="last-update">
-              Last updated: {formatTime(lastUpdate)}
-            </span>
-          )}
+  if (loading) {
+    return (
+      <div className="qr-container">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Generating QR Code...</p>
         </div>
       </div>
+    );
+  }
 
-      <div className="qr-display">
-        <div className={`qr-code-container ${isScanning ? 'scanning' : ''}`}>
-          {qrCode ? (
-            <>
-              <img 
-                src={qrCode} 
-                alt="Dynamic QR Code" 
-                className="qr-code-image"
-                onError={(e) => {
-                  console.error('❌ QR code image failed to load:', e);
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'block';
-                }}
-              />
-              <div className="qr-fallback" style={{ display: 'none', textAlign: 'center', padding: '20px' }}>
-                <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '8px', marginTop: '10px' }}>
-                  <p style={{ margin: '0 0 10px 0', color: '#6c757d', fontSize: '14px' }}>
-                    <strong>QR Code Unavailable</strong>
-                  </p>
-                  <p style={{ margin: '0', color: '#6c757d', fontSize: '12px' }}>
-                    Please use your Ticket ID for check-in
-                  </p>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="qr-loading">
-              <div className="loading-spinner"></div>
-              <p>Loading QR Code...</p>
-            </div>
-          )}
-          
-          {/* Scanning animation overlay */}
-          <div className={`scan-line ${isScanning ? 'active' : ''}`}></div>
-          
-          {/* Pulse effect */}
-          <div className={`pulse-ring ${isScanning ? 'active' : ''}`}></div>
+  if (error) {
+    return (
+      <div className="qr-container">
+        <div className="error-message">
+          <p>❌ {error}</p>
         </div>
+      </div>
+    );
+  }
 
-        {error && (
-          <div className="qr-error">
-            <p>⚠️ {error}</p>
-            <button onClick={() => window.location.reload()}>
-              Retry
-            </button>
+  return (
+    <div className="qr-container">
+      <div className="qr-header">
+        <h3>🎫 Your MEDCON Ticket QR Code</h3>
+        <p>Scan this QR code for entry</p>
+      </div>
+      
+      <div className="qr-code-section">
+        <div className="qr-code-wrapper">
+          <img 
+            src={qrCodeDataUrl} 
+            alt="MEDCON Ticket QR Code" 
+            className="qr-code-image"
+          />
+        </div>
+        
+        {userData && (
+          <div className="ticket-info">
+            <div className="info-item">
+              <span className="label">Name:</span>
+              <span className="value">{userData.fullName}</span>
+            </div>
+            <div className="info-item">
+              <span className="label">Ticket Type:</span>
+              <span className="value">{userData.ticketType}</span>
+            </div>
+            <div className="info-item">
+              <span className="label">Status:</span>
+              <span className="value status-valid">✅ Valid</span>
+            </div>
           </div>
         )}
-
-        <div className="qr-info">
-          <p className="qr-description">
-            This QR code updates automatically every 5 minutes for enhanced security.
-            Scan it at the conference for quick check-in.
-          </p>
-          <div className="qr-features">
-            <span className="feature">🔒 Time-based security</span>
-            <span className="feature">🔄 Auto-updates</span>
-            <span className="feature">📱 Mobile-friendly</span>
-          </div>
-        </div>
+      </div>
+      
+      <div className="qr-footer">
+        <p className="qr-note">
+          <strong>Note:</strong> This QR code updates every 5 minutes for security.
+        </p>
+        <p className="qr-instructions">
+          Present this QR code at the event entrance for check-in.
+        </p>
       </div>
     </div>
   );
