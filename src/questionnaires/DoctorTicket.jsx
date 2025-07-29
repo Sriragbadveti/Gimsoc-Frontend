@@ -693,12 +693,9 @@ export default function DoctorTicket() {
                   <div className="text-center">
                     <Star className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">Workshop Selection Coming Soon!</h3>
-                    <p className="text-gray-300 mb-4">Workshop selection will be available soon.</p>
-                    <div className="bg-yellow-100/20 rounded-lg p-4">
-                      <p className="text-sm text-yellow-300">
-                        <strong>Note:</strong> Workshop spots are limited and will be confirmed based on availability.
-                      </p>
-                    </div>
+                    <p className="text-gray-300 mb-4">
+                      Workshop selection will begin in September: Stay tuned for announcements on your email and our socials
+                    </p>
                   </div>
                 </div>
               </section>
@@ -956,7 +953,7 @@ export default function DoctorTicket() {
                           <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
                           <span className="text-gray-300"> or drag and drop</span>
                         </label>
-                        <p className="text-xs text-gray-300 mt-1">PDF only</p>
+                        <p className="text-xs text-gray-300 mt-1">Upload the exact payment receipt as a JPEG or PNG, not a PDF. Screenshots must clearly show full transaction details as shown in the examples</p>
                         {formData.paymentProof && (
                           <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
                         )}
