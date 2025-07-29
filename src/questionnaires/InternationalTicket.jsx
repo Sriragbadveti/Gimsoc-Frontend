@@ -136,9 +136,9 @@ export default function InternationalTicket() {
   // Calculate pricing based on package type
   const calculatePrice = () => {
     switch (packageType) {
-      case "3-Day":
+      case "3Days":
         return 100 // 3-Day Package - 100 USD
-      case "7-Day":
+      case "7Days":
         return 325 // 7-Day Package - 325 USD
       default:
         return 0
@@ -499,7 +499,7 @@ export default function InternationalTicket() {
                     <span className="text-3xl font-bold text-yellow-400">${calculatePrice()} USD</span>
                   </div>
                   <p className="text-blue-100 text-sm mt-1">
-                    {packageType === "3-Day" ? "3-Day conference access with gala night" : "7-Day all-inclusive with accommodation and tours"}
+                    {packageType === "3Days" ? "3-Day conference access with gala night" : "7-Day all-inclusive with accommodation and tours"}
                   </p>
                 </div>
               )}
