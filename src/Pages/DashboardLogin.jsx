@@ -195,7 +195,7 @@ export default function DashboardLogin() {
             </p>
             <p className="text-xs text-gray-400 mt-2">
               Don't have a ticket?{" "}
-              <a href="/tickets" className="text-blue-400 hover:text-blue-300">
+              <a href="/comingsoon" className="text-blue-400 hover:text-blue-300">
                 Book your ticket here
               </a>
             </p>

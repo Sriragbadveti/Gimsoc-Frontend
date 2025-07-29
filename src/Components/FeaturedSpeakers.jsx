@@ -92,7 +92,7 @@ export default function FeaturedSpeakers() {
       name: "Dr. Ketevan Papaliashvili MD, MSc",
       title: "MD Program Head Assistant, Lecturer",
       institution: "Georgian-American University",
-      image: "/Ketevan.png",
+      image: "/Ketevan.jpg",
     },
     {
       name: "Dr. Nana Chkhikvadze MD",

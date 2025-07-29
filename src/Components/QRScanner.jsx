@@ -225,6 +225,12 @@ const QRScanner = () => {
       )}
 
       {ticketDetails && (
+        <div className="name-display">
+          <h2>👤 {ticketDetails.fullName}</h2>
+        </div>
+      )}
+
+      {ticketDetails && (
         <div className="ticket-details">
           <h3>🎫 Ticket Details</h3>
           <div className="ticket-card">
