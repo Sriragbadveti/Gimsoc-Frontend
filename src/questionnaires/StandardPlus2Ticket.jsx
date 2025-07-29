@@ -482,7 +482,12 @@ export default function StandardPlus2Ticket() {
         // Server responded with error
         const errorMsg = err.response.data?.message || err.message
         
-        if (err.response?.status === 409) {
+        if (err.response?.status === 429) {
+          // Rate limit error
+          setErrorBooking(true)
+          setErrorMessage("You've made too many requests. Please wait a few minutes before trying again.")
+          setErrorType("rate_limit")
+        } else if (err.response?.status === 409) {
           if (errorMsg.includes("already been used") || errorMsg.includes("email has already been used")) {
             setEmailUsed(true)
             setErrorMessage("This email has already been used to book a ticket. Please use a different email address.")

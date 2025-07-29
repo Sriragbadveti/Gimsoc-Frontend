@@ -466,7 +466,10 @@ export default function StandardPlus3Ticket() {
       } else if (err.response) {
         // Server responded with error
         alert(`Form submission failed: ${err.response.data?.message || err.message}`)
-        if (err.response?.status === 409 && (
+        if (err.response?.status === 429) {
+          // Rate limit error
+          alert("You've made too many requests. Please wait a few minutes before trying again.")
+        } else if (err.response?.status === 409 && (
           err.response?.data?.message?.includes("sold out") ||
           err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
           err.response?.data?.message?.includes("TSU student tickets are sold out") ||

@@ -148,6 +148,12 @@ export default function InternationalTicket() {
       console.log("⚠️ Submission already in progress, ignoring duplicate click")
       return
     }
+
+    // Check if PayPal payment is required but not completed
+    if (formData.paymentMethod === "Credit/Debit Card" && !paypalPaid) {
+      alert("Please complete the PayPal payment before submitting your registration.")
+      return
+    }
     
     setIsSubmitting(true)
     setShowLoading(true)
@@ -256,11 +262,21 @@ export default function InternationalTicket() {
         }
         else {
           form.append(key, value)
+          console.log(`📝 Form field ${key}: ${value}`)
         }
       }
     })
 
     try {
+      console.log("🚀 Submitting international ticket form...")
+      console.log("📋 Form data being sent:", {
+        ticketCategory: "International",
+        ticketType: `International-${packageType}`,
+        email: formData.email,
+        fullName: formData.fullName,
+        paymentMethod: formData.paymentMethod
+      })
+      
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -292,10 +308,18 @@ export default function InternationalTicket() {
       setShowLoading(false)
       setErrorBooking(true)
       console.error("❌ Submission failed:", err)
+      console.error("❌ Error details:", {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        statusText: err.response?.statusText
+      })
+      
       if (err.code === "ECONNABORTED") {
         alert("Request timed out. Please try again later.")
       } else if (err.response) {
-        alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+        const errorMessage = err.response.data?.message || err.message
+        alert(`Form submission failed: ${errorMessage}`)
       } else if (err.request) {
         alert("Network error: Unable to reach the server.")
       } else {
@@ -1051,11 +1075,20 @@ export default function InternationalTicket() {
                       <PaypalButton
                         key={`paypal-${packageType}-${formData.paymentMethod}`}
                         amount={packageType === "7Days" ? "325.00" : "100.00"}
-                        onSuccess={() => setPaypalPaid(true)}
-                        onError={() => alert("PayPal payment failed. Please try again.")}
+                        onSuccess={(data) => {
+                          console.log("✅ PayPal payment successful:", data)
+                          setPaypalPaid(true)
+                          alert("Payment successful! You can now complete your registration.")
+                        }}
+                        onError={(error) => {
+                          console.error("❌ PayPal payment failed:", error)
+                          alert("PayPal payment failed. Please try again.")
+                        }}
                       />
                     ) : (
-                      <div className="text-green-500 font-semibold text-center">Payment successful! You can now complete registration.</div>
+                      <div className="text-green-500 font-semibold text-center p-4 bg-green-100 rounded-lg">
+                        ✅ Payment successful! You can now complete registration.
+                      </div>
                     )}
                   </div>
                 )}
