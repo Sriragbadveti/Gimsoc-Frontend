@@ -45,7 +45,7 @@ export default function Hero() {
       <div className="absolute inset-0 w-full h-full z-0">
         <video className="absolute top-0 left-0 w-full h-full object-cover" autoPlay loop muted playsInline>
           <source
-            src="https://res.cloudinary.com/dllp1nsmt/video/upload/q_auto,f_auto/v1749914669/pao7gduan5aambzppvgp.mov"
+            src={`https://res.cloudinary.com/dllp1nsmt/video/upload/q_auto,f_auto/v1749914669/pao7gduan5aambzppvgp.mov?t=${Date.now()}`}
             type="video/mp4"
           />
           Your browser does not support the video tag.

@@ -208,17 +208,12 @@ const Navbar = () => {
             ) : (
               <>
                 <button
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate("/dashboard-login")}
                   className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
                 >
                   Login
                 </button>
-                <button
-                  onClick={() => navigate("/signup")}
-                  className="group relative text-sm font-semibold text-white px-3 py-2 transition bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 rounded-md"
-                >
-                  Signup
-                </button>
+                
               </>
             )}
           </div>
@@ -335,21 +330,13 @@ const Navbar = () => {
                       <button
                         onClick={() => {
                           setMobileMenuOpen(false)
-                          navigate("/login")
+                          navigate("/dashboard-login")
                         }}
                         className="w-full text-center rounded-lg px-3 py-2.5 text-base font-semibold text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 transition-opacity"
                       >
                         Login
                       </button>
-                      <button
-                        onClick={() => {
-                          setMobileMenuOpen(false)
-                          navigate("/signup")
-                        }}
-                        className="w-full text-center rounded-lg px-3 py-2.5 text-base font-semibold text-white bg-gradient-to-br from-[#4aa053] to-[#1e4923] hover:opacity-90 transition-opacity"
-                      >
-                        Signup
-                      </button>
+                      
                     </div>
                   )}
                 </div>
