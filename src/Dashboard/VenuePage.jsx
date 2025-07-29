@@ -57,7 +57,7 @@ const VenuePage = () => {
                 <div className="space-y-2 text-sm text-blue-800">
                   <p><strong>Address:</strong> Tbilisi, Georgia</p>
                   <p><strong>Conference Center:</strong> Main Conference Hall</p>
-                  <p><strong>Capacity:</strong> 500+ attendees</p>
+                  <p><strong>Capacity:</strong> 650+ attendees</p>
                   
                 </div>
               </div>
@@ -75,25 +75,9 @@ const VenuePage = () => {
 
             {/* Quick Actions */}
             <div className="flex flex-wrap gap-3 mt-6">
-              <button
-                onClick={handleNavigate}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors font-medium"
-              >
-                <Navigation className="w-4 h-4" />
-                Get Directions
-              </button>
-              <button
-                onClick={() => window.open("tel:+995123456789", "_blank")}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors font-medium"
-              >
-                📞 Call Venue
-              </button>
-              <button
-                onClick={() => window.open("mailto:venue@medcon25.com", "_blank")}
-                className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors font-medium"
-              >
-                📧 Contact Venue
-              </button>
+             
+              
+              
             </div>
           </div>
         </div>

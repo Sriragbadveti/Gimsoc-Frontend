@@ -222,33 +222,7 @@ const ProfilePage = ({ userData }) => {
         </Card>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <div className="p-6 text-center">
-            <div className="text-2xl font-bold text-blue-600 mb-1">12</div>
-            <div className="text-sm text-gray-600">Sessions Registered</div>
-          </div>
-        </Card>
-        <Card>
-          <div className="p-6 text-center">
-            <div className="text-2xl font-bold text-green-600 mb-1">3</div>
-            <div className="text-sm text-gray-600">Workshop Tracks</div>
-          </div>
-        </Card>
-        <Card>
-          <div className="p-6 text-center">
-            <div className="text-2xl font-bold text-purple-600 mb-1">8</div>
-            <div className="text-sm text-gray-600">Networking Events</div>
-          </div>
-        </Card>
-        <Card>
-          <div className="p-6 text-center">
-            <div className="text-2xl font-bold text-orange-600 mb-1">25</div>
-            <div className="text-sm text-gray-600">Resources Available</div>
-          </div>
-        </Card>
-      </div>
+      
     </div>
   )
 }

@@ -360,7 +360,7 @@ const SchedulePage = () => {
             <div className="text-6xl mb-6">📅</div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Schedule Coming Soon</h2>
             <p className="text-lg text-gray-600 mb-6">
-              The complete conference schedule will be available in September 2024.
+              The complete conference schedule will be available in September 2025.
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-800">

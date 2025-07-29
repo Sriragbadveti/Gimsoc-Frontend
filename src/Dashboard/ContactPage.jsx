@@ -32,7 +32,7 @@ const ContactPage = () => {
     {
       title: "Registration & Billing",
       email: "nupuraajesh@gmail.com",
-      phone: "+995 123 456 791",
+      
       icon: CheckCircle,
       color: "bg-green-500",
       borderColor: "border-green-200",
@@ -41,18 +41,7 @@ const ContactPage = () => {
       responseTime: "12 hours",
       features: ["Ticket Registration", "Payment Issues", "Billing Support"]
     },
-    {
-      title: "Finance",
-      email: "mandrika311@gmail.com",
-      phone: "+995 123 456 792",
-      icon: Users,
-      color: "bg-purple-500",
-      borderColor: "border-purple-200",
-      textColor: "text-purple-800",
-      description: "Media inquiries, partnership opportunities, and sponsorship information.",
-      responseTime: "48 hours",
-      features: ["Media Inquiries", "Partnerships", "Sponsorship"]
-    }
+    
   ]
 
   return (
@@ -171,28 +160,7 @@ const ContactPage = () => {
       </Card>
 
       {/* Office Hours */}
-      <Card>
-        <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Support Hours</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-              <h3 className="font-medium text-blue-900 mb-2">Weekdays</h3>
-              <p className="text-sm text-blue-800">Monday - Friday</p>
-              <p className="text-sm text-blue-800 font-medium">9:00 AM - 6:00 PM (GMT+4)</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-              <h3 className="font-medium text-green-900 mb-2">Weekends</h3>
-              <p className="text-sm text-green-800">Saturday - Sunday</p>
-              <p className="text-sm text-green-800 font-medium">10:00 AM - 4:00 PM (GMT+4)</p>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-              <h3 className="font-medium text-purple-900 mb-2">Emergency</h3>
-              <p className="text-sm text-purple-800">24/7 Support</p>
-              <p className="text-sm text-purple-800 font-medium">During Conference Days</p>
-            </div>
-          </div>
-        </div>
-      </Card>
+     
     </div>
   )
 }

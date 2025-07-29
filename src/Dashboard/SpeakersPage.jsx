@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MapPin, Calendar, Users, ExternalLink, Star, Award } from "lucide-react"
+import { ExternalLink, Star, Award } from "lucide-react"
 import Card from "./Card"
 
 const SpeakersPage = () => {
@@ -16,10 +16,7 @@ const SpeakersPage = () => {
       affiliation: "UK",
       category: "keynote",
       bio: "Dr. Abhishek Ray is a distinguished gastroenterologist based in the UK with extensive experience in digestive health and gastrointestinal disorders. His expertise spans from diagnostic procedures to advanced therapeutic interventions in gastroenterology.",
-      sessions: [
-        { title: "Advances in Gastroenterology", time: "Day 1, 10:00", location: "Main Auditorium" },
-        { title: "Gastrointestinal Case Studies", time: "Day 2, 14:00", location: "Conference Room A" },
-      ],
+      sessions: [],
       image: "/Abhishek.jpeg",
       expertise: ["Gastroenterology", "Endoscopy", "Digestive Health", "Gastrointestinal Disorders"],
       achievements: ["Fellowship in Gastroenterology", "UK Medical Council Certified", "Published Research in Digestive Health"],
@@ -36,10 +33,7 @@ const SpeakersPage = () => {
       affiliation: "Malawi Liverpool Wellcome Research Programme",
       category: "research",
       bio: "Chisomo Kanthanga is a dedicated microbiologist working with the Malawi Liverpool Wellcome Research Programme. His research focuses on infectious diseases and public health, contributing significantly to understanding disease transmission and prevention strategies.",
-      sessions: [
-        { title: "Microbiology Research Insights", time: "Day 1, 11:30", location: "Research Hall" },
-        { title: "Public Health Microbiology", time: "Day 2, 09:00", location: "Conference Room B" },
-      ],
+      sessions: [],
       image: "/Chisomo.jpeg",
       expertise: ["Microbiology", "Infectious Diseases", "Public Health", "Research Methodology"],
       achievements: ["Wellcome Trust Research Fellow", "Published in International Journals", "Public Health Excellence Award"],
@@ -56,10 +50,7 @@ const SpeakersPage = () => {
       affiliation: "University of Georgia",
       category: "academic",
       bio: "Annam Jan specializes in histology and cellular biology at the University of Georgia. Her work involves studying tissue structures and cellular organization, providing crucial insights into disease pathology and tissue engineering.",
-      sessions: [
-        { title: "Histological Analysis Techniques", time: "Day 1, 15:00", location: "Laboratory Hall" },
-        { title: "Cellular Biology Workshop", time: "Day 3, 10:00", location: "Workshop Room" },
-      ],
+      sessions: [],
       image: "/Anaam.jpg",
       expertise: ["Histology", "Cellular Biology", "Tissue Analysis", "Pathology"],
       achievements: ["University of Georgia Faculty", "Histology Research Grant", "Teaching Excellence Award"],
@@ -76,10 +67,7 @@ const SpeakersPage = () => {
       affiliation: "University of Georgia",
       category: "leadership",
       bio: "Salome Tasaria serves as both an epidemiologist and Dean at the University of Georgia. Her leadership combines academic excellence with epidemiological research, focusing on disease patterns and public health interventions.",
-      sessions: [
-        { title: "Epidemiology Keynote", time: "Day 1, 09:00", location: "Main Auditorium" },
-        { title: "Academic Leadership Panel", time: "Day 2, 16:00", location: "Leadership Forum" },
-      ],
+      sessions: [],
       image: "/flat.webp",
       expertise: ["Epidemiology", "Public Health", "Academic Leadership", "Disease Prevention"],
       achievements: ["Dean of University of Georgia", "Epidemiology Research Award", "Leadership Excellence Recognition"],
@@ -96,10 +84,7 @@ const SpeakersPage = () => {
       affiliation: "IMG Unity",
       category: "clinical",
       bio: "Dr. Tahseen Siddiqui is board certified in both Internal Medicine and Infectious Diseases. His clinical expertise spans from general internal medicine to specialized infectious disease treatment, with a focus on evidence-based patient care.",
-      sessions: [
-        { title: "Infectious Diseases Update", time: "Day 2, 11:00", location: "Clinical Hall" },
-        { title: "Internal Medicine Cases", time: "Day 3, 14:00", location: "Case Study Room" },
-      ],
+      sessions: [],
       image: "/Tahseen.png",
       expertise: ["Internal Medicine", "Infectious Diseases", "Clinical Practice", "Patient Care"],
       achievements: ["Board Certified Internal Medicine", "Board Certified Infectious Diseases", "IMG Unity Recognition"],
@@ -116,10 +101,7 @@ const SpeakersPage = () => {
       affiliation: "-",
       category: "fellowship",
       bio: "Dr. Giorgi Derevenskikh specializes in pulmonology and internal medicine, with extensive fellowship training in the USA. His expertise includes respiratory disorders, pulmonary function testing, and advanced respiratory care.",
-      sessions: [
-        { title: "Pulmonology Advances", time: "Day 2, 13:00", location: "Pulmonary Hall" },
-        { title: "Respiratory Care Workshop", time: "Day 3, 11:00", location: "Workshop Room" },
-      ],
+      sessions: [],
       image: "/Giorgi.png",
       expertise: ["Pulmonology", "Internal Medicine", "Respiratory Care", "Pulmonary Function"],
       achievements: ["USA Fellowship Trained", "Pulmonology Certification", "Clinical Excellence Award"],
@@ -136,10 +118,7 @@ const SpeakersPage = () => {
       affiliation: "Geomedi",
       category: "institutional",
       bio: "Dr. Otar Chokoshvili represents Geomedi University, contributing to medical education and research. His work focuses on advancing medical knowledge and training the next generation of healthcare professionals.",
-      sessions: [
-        { title: "Medical Education Innovation", time: "Day 1, 16:00", location: "Education Hall" },
-        { title: "Geomedi University Presentation", time: "Day 2, 15:00", location: "Institutional Forum" },
-      ],
+      sessions: [],
       image: "/flat.webp",
       expertise: ["Medical Education", "Institutional Development", "Academic Research", "Healthcare Training"],
       achievements: ["Geomedi University Faculty", "Medical Education Excellence", "Institutional Leadership"],
@@ -156,10 +135,7 @@ const SpeakersPage = () => {
       affiliation: "Georgian-American University",
       category: "academic",
       bio: "Dr. Ketevan Papaliashvili serves as MD Program Head Assistant and Lecturer at Georgian-American University. Her academic focus includes medical education, curriculum development, and mentoring future physicians.",
-      sessions: [
-        { title: "Medical Education Trends", time: "Day 2, 10:00", location: "Education Hall" },
-        { title: "Curriculum Development Workshop", time: "Day 3, 13:00", location: "Workshop Room" },
-      ],
+      sessions: [],
       image: "/Ketevan.png",
       expertise: ["Medical Education", "Curriculum Development", "Academic Leadership", "Student Mentoring"],
       achievements: ["MD Program Head Assistant", "MSc in Medical Education", "Teaching Excellence Award"],
@@ -176,10 +152,7 @@ const SpeakersPage = () => {
       affiliation: "Center of Allergy and Immunology, Tbilisi",
       category: "specialist",
       bio: "Dr. Nana Chkhikvadze is a specialized allergiologist and immunologist at the Center of Allergy and Immunology in Tbilisi. Her expertise includes allergy diagnosis, immunotherapy, and immunological disorders.",
-      sessions: [
-        { title: "Allergy and Immunology Update", time: "Day 1, 14:00", location: "Specialist Hall" },
-        { title: "Immunotherapy Advances", time: "Day 3, 09:00", location: "Clinical Workshop" },
-      ],
+      sessions: [],
       image: "/Nana.jpg",
       expertise: ["Allergiology", "Immunology", "Allergy Diagnosis", "Immunotherapy"],
       achievements: ["Specialist in Allergiology", "Immunology Certification", "Clinical Excellence Award"],
@@ -196,10 +169,7 @@ const SpeakersPage = () => {
       affiliation: "Mohammed Bin Rashid University of Medicine and Health Sciences (MBRU) and Dubai Health",
       category: "residency",
       bio: "Dr. Nayab Mustafa is a Family Medicine Resident at MBRU and Dubai Health. Her training focuses on comprehensive family care, preventive medicine, and community health promotion.",
-      sessions: [
-        { title: "Family Medicine Perspectives", time: "Day 2, 12:00", location: "Family Medicine Hall" },
-        { title: "Preventive Care Workshop", time: "Day 3, 15:00", location: "Community Health Room" },
-      ],
+      sessions: [],
       image: "/unnamed.png",
       expertise: ["Family Medicine", "Preventive Care", "Community Health", "Primary Care"],
       achievements: ["MBRU Residency Program", "Dubai Health Recognition", "Family Medicine Excellence"],
@@ -216,10 +186,7 @@ const SpeakersPage = () => {
       affiliation: "",
       category: "forensic",
       bio: "Dr. Aby Joseph is a multi-faceted forensic science expert with expertise in CSI, forensic facility design, and molecular biology. As a PhD candidate in Forensic QMS, she combines academic rigor with practical forensic applications.",
-      sessions: [
-        { title: "Forensic Science Innovation", time: "Day 1, 13:00", location: "Forensic Hall" },
-        { title: "DNA Analysis Workshop", time: "Day 2, 16:00", location: "Laboratory Workshop" },
-      ],
+      sessions: [],
       image: "/Aby.png",
       expertise: ["Forensic Science", "CSI", "Molecular Biology", "Forensic DNA", "Quality Management"],
       achievements: ["Forensic Science Consultant", "CSI Facility Designer", "PhD Candidate", "Technical Assessor"],
@@ -372,30 +339,7 @@ const SpeakersPage = () => {
                     </div>
                   </div>
 
-                  {/* Sessions */}
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Conference Sessions</h3>
-                    <div className="space-y-4">
-                      {selectedSpeaker.sessions.map((session, index) => (
-                        <div
-                          key={index}
-                          className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-100"
-                        >
-                          <h4 className="font-semibold text-blue-900 mb-2">{session.title}</h4>
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                            <div className="flex items-center">
-                              <Calendar className="w-4 h-4 mr-1" />
-                              {session.time}
-                            </div>
-                            <div className="flex items-center">
-                              <MapPin className="w-4 h-4 mr-1" />
-                              {session.location}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -427,11 +371,7 @@ const SpeakersPage = () => {
                   <p className="text-gray-700 text-sm line-clamp-3">{speaker.bio}</p>
                 </div>
 
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center text-gray-500">
-                    <Users className="w-4 h-4 mr-1" />
-                    {speaker.sessions.length} session{speaker.sessions.length > 1 ? "s" : ""}
-                  </div>
+                <div className="flex items-center justify-end text-sm">
                   <span className="text-blue-600 font-medium hover:text-blue-800">View Details →</span>
                 </div>
               </div>

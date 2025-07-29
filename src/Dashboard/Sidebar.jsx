@@ -100,7 +100,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
             <div className="space-y-3">
               {/* Conference Info */}
               <div className="text-center">
-                <p className="text-xs text-gray-500">October 24th, 2025</p>
+                <p className="text-xs text-gray-500">October 24th / 26th, 2025</p>
                 <p className="text-xs text-gray-500">Ivane Javakhishvili Tbilisi State University</p>
               </div>
 
