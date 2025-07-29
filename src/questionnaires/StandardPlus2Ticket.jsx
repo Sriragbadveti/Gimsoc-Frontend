@@ -634,14 +634,14 @@ export default function StandardPlus2Ticket() {
                   className="group cursor-pointer card-hover animate-fade-in"
                   style={{ animationDelay: "0.1s" }}
                 >
-                  <div className="bg-gradient-to-br from-gray-600/20 to-slate-600/20 border-2 border-gray-300/50 rounded-2xl p-6 hover:border-gray-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
-                    <div className="flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4 group-hover:bg-gray-200 transition-colors">
-                      <User className="w-8 h-8 text-gray-600" />
+                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-2 border-blue-300/50 rounded-2xl p-6 hover:border-blue-400 hover:shadow-xl transition-all duration-300 animate-shimmer backdrop-blur-sm">
+                    <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4 group-hover:bg-blue-200 transition-colors">
+                      <User className="w-8 h-8 text-blue-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-gray-400">60 GEL</span>
+                      <span className="text-2xl font-bold text-blue-400">60 GEL</span>
                       <div className="text-sm text-gray-400">Regular price</div>
                     </div>
                   </div>
