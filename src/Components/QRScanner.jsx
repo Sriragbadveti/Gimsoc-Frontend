@@ -66,46 +66,28 @@ const QRScanner = () => {
   const handleQRScan = (qrData) => {
     try {
       console.log('📱 QR Code scanned:', qrData);
-      setScannedData(qrData);
       
       // Extract ticket ID from QR data - handle both string and object formats
       let ticketId = null;
-      let userData = null;
       
       if (typeof qrData === 'string') {
         // Try to parse as JSON if it's a string
         try {
           const parsedData = JSON.parse(qrData);
           ticketId = parsedData.ticketId;
-          userData = parsedData;
         } catch (e) {
           // If it's not JSON, treat as direct ticket ID
           ticketId = qrData;
         }
       } else if (typeof qrData === 'object') {
         ticketId = qrData.ticketId;
-        userData = qrData;
       }
       
       if (ticketId) {
         console.log('🎫 Ticket ID extracted:', ticketId);
         
-        // If QR data contains user information, use it directly
-        if (userData && userData.fullName) {
-          console.log('✅ User data found in QR code:', userData);
-          setTicketDetails({
-            ticketId: userData.ticketId,
-            fullName: userData.fullName,
-            email: userData.email,
-            ticketType: userData.ticketType,
-            ticketCategory: userData.ticketCategory,
-            createdAt: new Date(userData.timestamp)
-          });
-        } else {
-          // Fall back to fetching from database
-          console.log('🔍 No user data in QR, fetching from database');
-          fetchTicketDetails(ticketId);
-        }
+        // Don't show scanned data, just fetch ticket details
+        fetchTicketDetails(ticketId);
       } else {
         console.error('❌ No ticket ID found in QR data:', qrData);
         setError('Invalid QR code format - no ticket ID found');
@@ -149,7 +131,7 @@ const QRScanner = () => {
         <p>Scan QR codes to validate tickets and view details</p>
       </div>
 
-      {!isScanning && !scannedData && (
+      {!isScanning && !ticketDetails && (
         <div className="scanner-controls">
           <button onClick={startScanning} className="scan-button">
             📱 Start Camera Scan
@@ -174,7 +156,7 @@ const QRScanner = () => {
         </div>
       )}
 
-      {!isScanning && (
+      {!isScanning && !ticketDetails && (
         <div className="manual-input">
           <h3>📝 Manual QR Data Input</h3>
           <form onSubmit={handleManualInput}>
@@ -207,43 +189,9 @@ const QRScanner = () => {
         </div>
       )}
 
-      {scannedData && (
-        <div className="scanned-data">
-          <h3>📱 QR Code Scanned Successfully</h3>
-          <div className="data-card">
-            {scannedData.fullName && (
-              <div className="data-item">
-                <span className="label">Name:</span>
-                <span className="value">{scannedData.fullName}</span>
-              </div>
-            )}
-            {scannedData.ticketType && (
-              <div className="data-item">
-                <span className="label">Ticket Type:</span>
-                <span className="value">{scannedData.ticketType}</span>
-              </div>
-            )}
-            {scannedData.expiry && (
-              <div className="data-item">
-                <span className="label">Status:</span>
-                <span className="value">
-                  {Date.now() < scannedData.expiry ? '✅ Valid' : '❌ Expired'}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {ticketDetails && (
-        <div className="name-display">
-          <h2>👤 {ticketDetails.fullName}</h2>
-        </div>
-      )}
-
       {ticketDetails && (
         <div className="ticket-details">
-          <h3>🎫 Ticket Details</h3>
+          <h3>🎫 Ticket Validated Successfully</h3>
           <div className="ticket-card">
             <div className="ticket-item">
               <span className="label">Name:</span>
@@ -261,7 +209,7 @@ const QRScanner = () => {
         </div>
       )}
 
-      {(scannedData || ticketDetails) && (
+      {ticketDetails && (
         <div className="scanner-actions">
           <button onClick={resetScan} className="reset-button">
             🔄 Scan Another QR Code

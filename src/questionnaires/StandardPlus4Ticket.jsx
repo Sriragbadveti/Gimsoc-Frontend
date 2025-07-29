@@ -816,7 +816,7 @@ export default function StandardPlus4Ticket() {
             </section>
 
             {/* Member-Specific Sections */}
-            {memberType === "gimsoc" && (
+            {memberType === "GIMSOC" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-purple-100 rounded-xl">
@@ -840,7 +840,7 @@ export default function StandardPlus4Ticket() {
               </section>
             )}
 
-            {memberType === "tsu" && (
+            {memberType === "TSU" && (
               <section className="space-y-6 animate-fade-in-delay">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-green-100 rounded-xl">

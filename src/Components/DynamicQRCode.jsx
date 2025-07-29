@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import QRCode from 'qrcode';
+import React, { useState, useEffect, useRef } from 'react';
 import './DynamicQRCode.css';
 
 const DynamicQRCode = ({ ticketId, userData }) => {
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const wsRef = useRef(null);
 
   useEffect(() => {
     const generateQRCode = async () => {
@@ -30,21 +31,15 @@ const DynamicQRCode = ({ ticketId, userData }) => {
           qrData.ticketCategory = userData.ticketCategory;
         }
 
-        // Generate QR code locally
+        // Generate QR code using hosted service
         const qrDataString = JSON.stringify(qrData);
-        const dataUrl = await QRCode.toDataURL(qrDataString, {
-          errorCorrectionLevel: 'H',
-          type: 'image/png',
-          quality: 0.92,
-          margin: 1,
-          color: {
-            dark: '#000000',
-            light: '#FFFFFF'
-          }
-        });
+        const hostedUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrDataString)}`;
 
-        setQrCodeDataUrl(dataUrl);
+        setQrCodeUrl(hostedUrl);
         console.log('✅ QR Code generated with user data:', userData ? 'Yes' : 'No');
+        
+        // Start scanning animation
+        setIsScanning(true);
       } catch (error) {
         console.error('❌ Error generating QR code:', error);
         setError('Failed to generate QR code');
@@ -57,6 +52,54 @@ const DynamicQRCode = ({ ticketId, userData }) => {
       generateQRCode();
     }
   }, [ticketId, userData]);
+
+  // WebSocket connection for real-time updates
+  useEffect(() => {
+    if (ticketId) {
+      const connectWebSocket = () => {
+        const ws = new WebSocket('wss://gimsoc-backend.onrender.com');
+        
+        ws.onopen = () => {
+          console.log('🔗 WebSocket connected');
+          ws.send(JSON.stringify({
+            type: 'subscribe',
+            ticketId: ticketId
+          }));
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'qr_update' && data.ticketId === ticketId) {
+              console.log('🔄 QR code updated via WebSocket');
+              setQrCodeUrl(data.qrCode);
+            }
+          } catch (error) {
+            console.error('❌ Error parsing WebSocket message:', error);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('❌ WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+          console.log('🔌 WebSocket disconnected, attempting to reconnect...');
+          setTimeout(connectWebSocket, 5000);
+        };
+
+        wsRef.current = ws;
+      };
+
+      connectWebSocket();
+
+      return () => {
+        if (wsRef.current) {
+          wsRef.current.close();
+        }
+      };
+    }
+  }, [ticketId]);
 
   if (loading) {
     return (
@@ -82,17 +125,27 @@ const DynamicQRCode = ({ ticketId, userData }) => {
   return (
     <div className="qr-container">
       <div className="qr-header">
-        <h3>🎫 Your MEDCON Ticket QR Code</h3>
-        <p>Scan this QR code for entry</p>
+        <h3>🎫 Your Dynamic MEDCON Ticket QR Code</h3>
+        <div className="connection-status">
+          <span className="status-indicator connected">
+            🟢 Dynamic QR Code
+          </span>
+        </div>
       </div>
       
-      <div className="qr-code-section">
-        <div className="qr-code-wrapper">
+      <div className="qr-display">
+        <div className={`qr-code-container ${isScanning ? 'scanning' : ''}`}>
           <img 
-            src={qrCodeDataUrl} 
+            src={qrCodeUrl} 
             alt="MEDCON Ticket QR Code" 
             className="qr-code-image"
           />
+          
+          {/* Scanning line animation */}
+          <div className={`scan-line ${isScanning ? 'active' : ''}`}></div>
+          
+          {/* Pulse effect */}
+          <div className={`pulse-ring ${isScanning ? 'active' : ''}`}></div>
         </div>
         
         {userData && (
@@ -111,15 +164,18 @@ const DynamicQRCode = ({ ticketId, userData }) => {
             </div>
           </div>
         )}
-      </div>
-      
-      <div className="qr-footer">
-        <p className="qr-note">
-          <strong>Note:</strong> This QR code updates every 5 minutes for security.
-        </p>
-        <p className="qr-instructions">
-          Present this QR code at the event entrance for check-in.
-        </p>
+
+        <div className="qr-info">
+          <p className="qr-description">
+            This QR code updates automatically every 5 minutes for enhanced security.
+            Scan it at the conference for quick check-in.
+          </p>
+          <div className="qr-features">
+            <span className="feature">🔒 Time-based security</span>
+            <span className="feature">🔄 Auto-updates</span>
+            <span className="feature">📱 Mobile-friendly</span>
+          </div>
+        </div>
       </div>
     </div>
   );
