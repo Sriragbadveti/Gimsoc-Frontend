@@ -286,7 +286,16 @@ export default function DoctorTicket() {
       if (err.code === "ECONNABORTED") {
         alert("Request timed out. Please try again later.")
       } else if (err.response) {
-        alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+        const errorMessage = err.response.data?.message || err.message;
+        const errorDetails = err.response.data?.details || [];
+        
+        if (err.response?.status === 400 && errorDetails.length > 0) {
+          // Show detailed validation errors
+          const errorMessages = errorDetails.map(detail => `${detail.field}: ${detail.message}`).join('\n');
+          alert(`Validation errors:\n${errorMessages}`);
+        } else {
+          alert(`Form submission failed: ${errorMessage}`)
+        }
       } else if (err.request) {
         alert("Network error: Unable to reach the server.")
       } else {

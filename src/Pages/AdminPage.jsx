@@ -20,7 +20,20 @@ import {
   LogOut,
 } from "lucide-react"
 
-const TICKET_TYPES = ["All", "Individual", "Group", "International", "Doctor", "TSU", "TSU All Inclusive"]
+const TICKET_TYPES = [
+  "All", 
+  "Standard+2", 
+  "Standard+3", 
+  "Standard+4", 
+  "Individual", 
+  "Group", 
+  "International", 
+  "Doctor", 
+  "Executive", 
+  "All-Inclusive",
+  "TSU", 
+  "TSU All Inclusive"
+]
 const PAYMENT_STATUSES = ["All", "pending", "completed"]
 const ABSTRACT_CATEGORIES = [
   "All",
@@ -57,6 +70,7 @@ export default function AdminDashboard() {
   // Filter states for tickets
   const [ticketTypeFilter, setTicketTypeFilter] = useState("All")
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("All")
+  const [galaDinnerFilter, setGalaDinnerFilter] = useState("All")
   const [ticketSearchQuery, setTicketSearchQuery] = useState("")
 
   // Filter states for abstracts
@@ -164,12 +178,57 @@ export default function AdminDashboard() {
   // Filtered tickets
   const filteredTickets = useMemo(() => {
     return tickets.filter((ticket) => {
-      if (ticketTypeFilter !== "All" && ticket.ticketType !== ticketTypeFilter) {
-        return false
+      // Ticket type filtering with partial matching
+      if (ticketTypeFilter !== "All") {
+        const ticketType = ticket.ticketType || "";
+        const filterType = ticketTypeFilter;
+        
+        // Handle special cases for partial matching
+        let matches = false;
+        
+        if (filterType === "International" && ticketType.includes("International")) {
+          matches = true;
+        } else if (filterType === "Doctor" && ticketType.includes("Doctor")) {
+          matches = true;
+        } else if (filterType === "Executive" && ticketType.includes("Executive")) {
+          matches = true;
+        } else if (filterType === "All-Inclusive" && ticketType.includes("All-Inclusive")) {
+          matches = true;
+        } else if (filterType === "TSU" && (ticketType.includes("TSU") || ticket.subType === "TSU")) {
+          matches = true;
+        } else if (filterType === "TSU All Inclusive" && ticketType.includes("TSU") && ticketType.includes("All-Inclusive")) {
+          matches = true;
+        } else if (filterType === "Standard+2" && ticketType.includes("Standard+2")) {
+          matches = true;
+        } else if (filterType === "Standard+3" && ticketType.includes("Standard+3")) {
+          matches = true;
+        } else if (filterType === "Standard+4" && ticketType.includes("Standard+4")) {
+          matches = true;
+        } else if (filterType === "Individual" && ticketType.includes("Individual")) {
+          matches = true;
+        } else if (filterType === "Group" && ticketType.includes("Group")) {
+          matches = true;
+        }
+        
+        if (!matches) {
+          return false;
+        }
       }
+      
       if (paymentStatusFilter !== "All" && ticket.paymentStatus !== paymentStatusFilter) {
         return false
       }
+      
+      // Gala dinner filtering
+      if (galaDinnerFilter !== "All") {
+        const galaDinner = ticket.galaDinner || "";
+        if (galaDinnerFilter === "Yes" && !galaDinner.includes("Yes")) {
+          return false;
+        } else if (galaDinnerFilter === "No" && galaDinner.includes("Yes")) {
+          return false;
+        }
+      }
+      
       if (ticketSearchQuery.trim()) {
         const query = ticketSearchQuery.toLowerCase()
         const matchesName = ticket.fullName?.toLowerCase().includes(query)
@@ -180,7 +239,7 @@ export default function AdminDashboard() {
       }
       return true
     })
-  }, [tickets, ticketTypeFilter, paymentStatusFilter, ticketSearchQuery])
+  }, [tickets, ticketTypeFilter, paymentStatusFilter, galaDinnerFilter, ticketSearchQuery])
 
   // Filtered abstracts
   const filteredAbstracts = useMemo(() => {
@@ -511,6 +570,7 @@ export default function AdminDashboard() {
   const clearTicketFilters = () => {
     setTicketTypeFilter("All")
     setPaymentStatusFilter("All")
+    setGalaDinnerFilter("All")
     setTicketSearchQuery("")
   }
 
@@ -703,6 +763,21 @@ export default function AdminDashboard() {
             </div>
 
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Gala Dinner</label>
+              <select
+                value={galaDinnerFilter}
+                onChange={(e) => setGalaDinnerFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
+              >
+                <option value="All">All</option>
+                <option value="Yes">With Gala Dinner</option>
+                <option value="No">Without Gala Dinner</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -717,7 +792,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {(ticketTypeFilter !== "All" || paymentStatusFilter !== "All" || ticketSearchQuery.trim()) && (
+          {(ticketTypeFilter !== "All" || paymentStatusFilter !== "All" || galaDinnerFilter !== "All" || ticketSearchQuery.trim()) && (
             <div className="mt-4 pt-4 border-t border-gray-200">
               <button onClick={clearTicketFilters} className="text-sm text-gray-600 hover:text-gray-900 underline">
                 Clear all filters
@@ -1247,6 +1322,7 @@ export default function AdminDashboard() {
                                   {ticket.dietaryRestrictions && <div><span className="font-medium">Dietary Restrictions:</span> {ticket.dietaryRestrictions}</div>}
                                   {ticket.accessibilityNeeds && <div><span className="font-medium">Accessibility Needs:</span> {ticket.accessibilityNeeds}</div>}
                                   {ticket.paymentMethod && <div><span className="font-medium">Payment Method:</span> {ticket.paymentMethod}</div>}
+                                  {ticket.paypalOrderId && <div><span className="font-medium">PayPal Order ID:</span> {ticket.paypalOrderId}</div>}
                                   {ticket.galaDinner && <div><span className="font-medium">Gala Dinner:</span> {ticket.galaDinner}</div>}
                                 </div>
                               </div>
@@ -1357,6 +1433,18 @@ export default function AdminDashboard() {
                   <div className="col-span-2">
                     <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Gala Dinner</p>
                     <p className="text-sm text-gray-900 mt-1">{ticket.galaDinner}</p>
+                  </div>
+                )}
+                {ticket.paymentMethod && (
+                  <div className="col-span-2">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</p>
+                    <p className="text-sm text-gray-900 mt-1">{ticket.paymentMethod}</p>
+                  </div>
+                )}
+                {ticket.paypalOrderId && (
+                  <div className="col-span-2">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">PayPal Order ID</p>
+                    <p className="text-sm text-gray-900 mt-1">{ticket.paypalOrderId}</p>
                   </div>
                 )}
               </div>

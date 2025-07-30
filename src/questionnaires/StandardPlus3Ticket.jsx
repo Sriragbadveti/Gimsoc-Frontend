@@ -393,10 +393,6 @@ export default function StandardPlus3Ticket() {
       }
     })
 
-    // Always append gala dinner field (even if empty)
-    form.append("galaDinner", formData.galaDinner || "")
-    console.log(`🎭 Gala dinner field: ${formData.galaDinner || ""}`)
-
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
 
@@ -465,7 +461,9 @@ export default function StandardPlus3Ticket() {
         alert("Request timed out. The server is not responding. Please try again later.")
       } else if (err.response) {
         // Server responded with error
-        alert(`Form submission failed: ${err.response.data?.message || err.message}`)
+        const errorMessage = err.response.data?.message || err.message;
+        const errorDetails = err.response.data?.details || [];
+        
         if (err.response?.status === 429) {
           // Rate limit error
           alert("You've made too many requests. Please wait a few minutes before trying again.")
@@ -478,6 +476,12 @@ export default function StandardPlus3Ticket() {
           setSoldOut(true)
         } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
           setEmailUsed(true)
+        } else if (err.response?.status === 400 && errorDetails.length > 0) {
+          // Show detailed validation errors
+          const errorMessages = errorDetails.map(detail => `${detail.field}: ${detail.message}`).join('\n');
+          alert(`Validation errors:\n${errorMessages}`);
+        } else {
+          alert(`Form submission failed: ${errorMessage}`)
         }
       } else if (err.request) {
         // Network error

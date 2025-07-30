@@ -94,13 +94,13 @@ export default function PayPalButton({ amount, onSuccess, onError }) {
                 `https://gimsoc-backend.onrender.com/api/paypal/capture-order/${data.orderID}`
               );
               console.log("✅ PayPal payment captured:", response.data);
-              onSuccess && onSuccess(response.data);
+              // Pass the order ID along with the response data
+              onSuccess && onSuccess({ ...response.data, orderID: data.orderID });
             } catch (error) {
               console.error("❌ Error capturing PayPal order:", error);
               onError && onError(error);
-              throw error;
-            } finally {
               setLoading(false);
+              setDebugInfo(`Capture error: ${error.message}`);
             }
           },
           onError: (err) => {

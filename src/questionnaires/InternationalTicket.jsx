@@ -88,6 +88,7 @@ export default function InternationalTicket() {
   const [showLoading, setShowLoading] = useState(false)
   const navigate = useNavigate()
   const [paypalPaid, setPaypalPaid] = useState(false);
+  const [paypalOrderId, setPaypalOrderId] = useState(null);
 
 
   useEffect(() => {
@@ -239,6 +240,12 @@ export default function InternationalTicket() {
     form.append("ticketCategory", "International")
     form.append("ticketType", `International-${packageType}`)
 
+    // Add PayPal order ID if available
+    if (paypalOrderId) {
+      form.append("paypalOrderId", paypalOrderId)
+      console.log("💳 Adding PayPal order ID to form:", paypalOrderId)
+    }
+
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
@@ -318,8 +325,16 @@ export default function InternationalTicket() {
       if (err.code === "ECONNABORTED") {
         alert("Request timed out. Please try again later.")
       } else if (err.response) {
-        const errorMessage = err.response.data?.message || err.message
-        alert(`Form submission failed: ${errorMessage}`)
+        const errorMessage = err.response.data?.message || err.message;
+        const errorDetails = err.response.data?.details || [];
+        
+        if (err.response?.status === 400 && errorDetails.length > 0) {
+          // Show detailed validation errors
+          const errorMessages = errorDetails.map(detail => `${detail.field}: ${detail.message}`).join('\n');
+          alert(`Validation errors:\n${errorMessages}`);
+        } else {
+          alert(`Form submission failed: ${errorMessage}`)
+        }
       } else if (err.request) {
         alert("Network error: Unable to reach the server.")
       } else {
@@ -1078,6 +1093,7 @@ export default function InternationalTicket() {
                         onSuccess={(data) => {
                           console.log("✅ PayPal payment successful:", data)
                           setPaypalPaid(true)
+                          setPaypalOrderId(data.orderID)
                           alert("Payment successful! You can now complete your registration.")
                         }}
                         onError={(error) => {

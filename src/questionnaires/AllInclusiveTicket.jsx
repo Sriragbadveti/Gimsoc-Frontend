@@ -446,10 +446,6 @@ export default function AllInclusiveTicket() {
       }
     })
 
-    // Always append gala dinner field (even if empty)
-    form.append("galaDinner", formData.galaDinner || "")
-    console.log(`🎭 Gala dinner field: ${formData.galaDinner || ""}`)
-
     // Add required fields that might be empty but are expected by backend
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
 
@@ -519,41 +515,27 @@ export default function AllInclusiveTicket() {
         setErrorType("general")
       } else if (err.response) {
         // Server responded with error
-        const errorMsg = err.response.data?.message || err.message
+        const errorMessage = err.response.data?.message || err.message;
+        const errorDetails = err.response.data?.details || [];
         
         if (err.response?.status === 429) {
           // Rate limit error
-          setErrorBooking(true)
-          setErrorMessage("You've made too many requests. Please wait a few minutes before trying again.")
-          setErrorType("rate_limit")
-        } else if (err.response?.status === 409) {
-          if (errorMsg.includes("already been used") || errorMsg.includes("email has already been used")) {
-            setEmailUsed(true)
-            setErrorMessage("This email has already been used to book a ticket. Please use a different email address.")
-            setErrorType("email_used")
-          } else if (
-            errorMsg.includes("sold out") ||
-            errorMsg.includes("Executive & Subcommittee tickets are sold out") ||
-            errorMsg.includes("TSU student tickets are sold out") ||
-            errorMsg.includes("GEOMEDI student tickets for Standard+2 are sold out") ||
-            errorMsg.includes("Tickets for this category are sold out")
-          ) {
-            setSoldOut(true)
-            setErrorMessage("Tickets for this category are sold out. Please try a different ticket type.")
-            setErrorType("sold_out")
-          } else if (errorMsg.includes("Gala dinner tickets are sold out")) {
-            setGalaSoldOut(true)
-            setErrorMessage("Gala dinner tickets are sold out. Please remove gala dinner from your selection.")
-            setErrorType("gala_sold_out")
-          } else {
-            setErrorBooking(true)
-            setErrorMessage(errorMsg)
-            setErrorType("general")
-          }
+          alert("You've made too many requests. Please wait a few minutes before trying again.")
+        } else if (err.response?.status === 409 && (
+          err.response?.data?.message?.includes("sold out") ||
+          err.response?.data?.message?.includes("Executive & Subcommittee tickets are sold out") ||
+          err.response?.data?.message?.includes("TSU student tickets are sold out") ||
+          err.response?.data?.message?.includes("GEOMEDI student tickets for Standard+2 are sold out")
+        )) {
+          setSoldOut(true)
+        } else if (err.response?.status === 409 && err.response?.data?.message?.includes("already been used")) {
+          setEmailUsed(true)
+        } else if (err.response?.status === 400 && errorDetails.length > 0) {
+          // Show detailed validation errors
+          const errorMessages = errorDetails.map(detail => `${detail.field}: ${detail.message}`).join('\n');
+          alert(`Validation errors:\n${errorMessages}`);
         } else {
-          setErrorBooking(true)
-          setErrorMessage(errorMsg)
-          setErrorType("general")
+          alert(`Form submission failed: ${errorMessage}`)
         }
       } else if (err.request) {
         // Network error
