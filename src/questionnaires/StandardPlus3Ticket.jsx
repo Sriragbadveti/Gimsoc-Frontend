@@ -152,22 +152,39 @@ export default function StandardPlus3Ticket() {
     }
   }
 
-  const handleFileChange = async (e) => {
-    const { name, files } = e.target;
-    const file = files[0];
-    if (!file) return;
-    setUploading((prev) => ({ ...prev, [name]: 0 }));
-    setUploadError((prev) => ({ ...prev, [name]: null }));
-    try {
-      const url = await uploadToCloudinary(file, (progress) => {
-        setUploading((prev) => ({ ...prev, [name]: progress }));
-      });
-      setFormData((prev) => ({ ...prev, [name]: url }));
-    } catch (err) {
-      setUploadError((prev) => ({ ...prev, [name]: "Upload failed. Please try again." }));
-    } finally {
-      setUploading((prev) => ({ ...prev, [name]: undefined }));
+  const handleFileChange = (e) => {
+    const { name, files } = e.target
+    const file = files[0]
+    
+    if (!file) return
+    
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      alert(`File ${file.name} is too large. Maximum size is 5MB.`)
+      e.target.value = '' // Clear the input
+      return
     }
+    
+    // Validate file type
+    const allowedTypes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/webp',
+      'application/pdf', 'application/msword', 
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ]
+    
+    if (!allowedTypes.includes(file.type)) {
+      alert(`File ${file.name} has invalid type. Allowed types: JPEG, PNG, WebP, PDF, DOC, DOCX`)
+      e.target.value = '' // Clear the input
+      return
+    }
+    
+    console.log(`📁 File selected: ${file.name} (${file.size} bytes, ${file.type})`)
+    
+    setFormData((prev) => ({
+      ...prev,
+      [name]: file,
+    }))
   }
 
   const handleMemberTypeSelect = (type) => {
@@ -242,6 +259,13 @@ export default function StandardPlus3Ticket() {
     setShowLoading(true)
     setSoldOut(false)
     setEmailUsed(false)
+
+    // Show upload progress message
+    console.log("🚀 Starting ticket submission process...")
+    console.log("📁 Files to upload:", {
+      headshot: formData.headshot ? `${formData.headshot.name} (${formData.headshot.size} bytes)` : 'None',
+      paymentProof: formData.paymentProof ? `${formData.paymentProof.name} (${formData.paymentProof.size} bytes)` : 'None'
+    })
 
     // Comprehensive validation for all required fields
     const requiredFields = {
@@ -425,7 +449,7 @@ export default function StandardPlus3Ticket() {
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
-        timeout: 30000, // 30 second timeout
+        timeout: 60000, // 60 second timeout for file uploads
       })
 
       console.log("✅ Submitted successfully:", response.data)
