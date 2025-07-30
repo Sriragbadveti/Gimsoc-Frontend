@@ -558,6 +558,7 @@ export default function AllInclusiveTicket() {
     "David Tvildiani Medical University (DTMU)",
     "University of Georgia (UG)",
     "Caucasus International University (CIU)",
+    "Caucasus University (CU)",
     "Georgian American University (GAU)",
     "East European University (EEU)",
     "New Vision University (NVU)",
