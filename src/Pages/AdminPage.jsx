@@ -18,6 +18,10 @@ import {
   RefreshCw,
   Upload,
   LogOut,
+  Mail,
+  UserSearch,
+  XCircle,
+  Clock,
 } from "lucide-react"
 
 const TICKET_TYPES = [
@@ -52,6 +56,15 @@ export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [adminData, setAdminData] = useState(null)
+
+  // Audit states
+  const [emailAuditData, setEmailAuditData] = useState([])
+  const [emailAuditLoading, setEmailAuditLoading] = useState(false)
+  const [userSearchQuery, setUserSearchQuery] = useState("")
+  const [userSearchResults, setUserSearchResults] = useState([])
+  const [userSearchLoading, setUserSearchLoading] = useState(false)
+  const [failedRegistrations, setFailedRegistrations] = useState([])
+  const [failedRegistrationsLoading, setFailedRegistrationsLoading] = useState(false)
 
   // Tickets state
   const [tickets, setTickets] = useState([])
@@ -584,6 +597,78 @@ export default function AdminDashboard() {
     console.log("Force refreshing tickets data...")
     fetchTickets()
     fetchTicketCounts()
+  }
+
+  // Audit API functions
+  const fetchEmailAudit = async () => {
+    try {
+      setEmailAuditLoading(true)
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/email-audit", {
+        headers: getAuthHeaders()
+      })
+      setEmailAuditData(response.data)
+    } catch (err) {
+      console.error("Error fetching email audit:", err)
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert("Failed to fetch email audit data.")
+    } finally {
+      setEmailAuditLoading(false)
+    }
+  }
+
+  const searchUserInLogs = async (searchQuery) => {
+    if (!searchQuery.trim()) {
+      alert("Please enter a search query")
+      return
+    }
+    
+    try {
+      setUserSearchLoading(true)
+      const response = await axios.get(`https://gimsoc-backend.onrender.com/api/admin/search-user-in-logs?query=${encodeURIComponent(searchQuery)}`, {
+        headers: getAuthHeaders()
+      })
+      setUserSearchResults(response.data)
+    } catch (err) {
+      console.error("Error searching user in logs:", err)
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert("Failed to search user in logs.")
+    } finally {
+      setUserSearchLoading(false)
+    }
+  }
+
+  const fetchFailedRegistrations = async () => {
+    try {
+      setFailedRegistrationsLoading(true)
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/find-failed-registrations", {
+        headers: getAuthHeaders()
+      })
+      setFailedRegistrations(response.data)
+    } catch (err) {
+      console.error("Error fetching failed registrations:", err)
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert("Failed to fetch failed registrations.")
+    } finally {
+      setFailedRegistrationsLoading(false)
+    }
   }
 
   const exportToGoogleSheets = async () => {
@@ -1917,7 +2002,269 @@ export default function AdminDashboard() {
     )
   }
 
+  // Render Email Audit Tab
+  const renderEmailAuditTab = () => {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <Mail className="h-5 w-5 text-gray-500" />
+              <h3 className="text-lg font-medium text-gray-900">Email Audit</h3>
+            </div>
+            <button
+              onClick={fetchEmailAudit}
+              disabled={emailAuditLoading}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {emailAuditLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              {emailAuditLoading ? "Loading..." : "Fetch Email Audit"}
+            </button>
+          </div>
 
+          {emailAuditLoading && (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
+                <p className="text-gray-600">Loading email audit data...</p>
+              </div>
+            </div>
+          )}
+
+          {!emailAuditLoading && emailAuditData.length === 0 && (
+            <div className="text-center py-8">
+              <Mail className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+              <p className="text-gray-500">No email audit data available. Click "Fetch Email Audit" to load data.</p>
+            </div>
+          )}
+
+          {!emailAuditLoading && emailAuditData.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recipient</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {emailAuditData.map((email, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {formatDate(email.timestamp)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {email.recipient}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {email.subject}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          email.status === 'sent' ? 'bg-green-100 text-green-800' : 
+                          email.status === 'failed' ? 'bg-red-100 text-red-800' : 
+                          'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {email.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {email.type}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Render User Search Tab
+  const renderUserSearchTab = () => {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <UserSearch className="h-5 w-5 text-gray-500" />
+            <h3 className="text-lg font-medium text-gray-900">User Search in Logs</h3>
+          </div>
+
+          <div className="flex gap-4 mb-6">
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Search by email, name, phone, or ticket ID..."
+                value={userSearchQuery}
+                onChange={(e) => setUserSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onKeyPress={(e) => e.key === 'Enter' && searchUserInLogs(userSearchQuery)}
+              />
+            </div>
+            <button
+              onClick={() => searchUserInLogs(userSearchQuery)}
+              disabled={userSearchLoading || !userSearchQuery.trim()}
+              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {userSearchLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Search className="h-4 w-4" />
+              )}
+              {userSearchLoading ? "Searching..." : "Search"}
+            </button>
+          </div>
+
+          {userSearchLoading && (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
+                <p className="text-gray-600">Searching user logs...</p>
+              </div>
+            </div>
+          )}
+
+          {!userSearchLoading && userSearchResults.length === 0 && userSearchQuery && (
+            <div className="text-center py-8">
+              <UserSearch className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+              <p className="text-gray-500">No results found for "{userSearchQuery}"</p>
+            </div>
+          )}
+
+          {!userSearchLoading && userSearchResults.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Info</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {userSearchResults.map((log, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {formatDate(log.timestamp)}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        <div>
+                          <div className="font-medium">{log.email}</div>
+                          {log.name && <div className="text-gray-500">{log.name}</div>}
+                          {log.phone && <div className="text-gray-500">{log.phone}</div>}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {log.action}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {log.details}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Render Failed Registrations Tab
+  const renderFailedRegistrationsTab = () => {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <XCircle className="h-5 w-5 text-red-500" />
+              <h3 className="text-lg font-medium text-gray-900">Failed Registrations</h3>
+            </div>
+            <button
+              onClick={fetchFailedRegistrations}
+              disabled={failedRegistrationsLoading}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {failedRegistrationsLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              {failedRegistrationsLoading ? "Loading..." : "Fetch Failed Registrations"}
+            </button>
+          </div>
+
+          {failedRegistrationsLoading && (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
+                <p className="text-gray-600">Loading failed registrations...</p>
+              </div>
+            </div>
+          )}
+
+          {!failedRegistrationsLoading && failedRegistrations.length === 0 && (
+            <div className="text-center py-8">
+              <XCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+              <p className="text-gray-500">No failed registrations found. Click "Fetch Failed Registrations" to load data.</p>
+            </div>
+          )}
+
+          {!failedRegistrationsLoading && failedRegistrations.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Info</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Error</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Retry Count</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {failedRegistrations.map((registration, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {formatDate(registration.timestamp)}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        <div>
+                          <div className="font-medium">{registration.email}</div>
+                          {registration.fullName && <div className="text-gray-500">{registration.fullName}</div>}
+                          {registration.phoneNumber && <div className="text-gray-500">{registration.phoneNumber}</div>}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {registration.ticketType}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-red-600">
+                        {registration.error}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {registration.retryCount || 0}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -2008,6 +2355,60 @@ export default function AdminDashboard() {
                   )}
                 </div>
               </button>
+              <button
+                onClick={() => setActiveTab("email-audit")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === "email-audit"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Email Audit
+                  {emailAuditData.length > 0 && (
+                    <span className="bg-gray-100 text-gray-900 py-0.5 px-2 rounded-full text-xs font-medium">
+                      {emailAuditData.length}
+                    </span>
+                  )}
+                </div>
+              </button>
+              <button
+                onClick={() => setActiveTab("user-search")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === "user-search"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <UserSearch className="h-4 w-4" />
+                  User Search
+                  {userSearchResults.length > 0 && (
+                    <span className="bg-gray-100 text-gray-900 py-0.5 px-2 rounded-full text-xs font-medium">
+                      {userSearchResults.length}
+                    </span>
+                  )}
+                </div>
+              </button>
+              <button
+                onClick={() => setActiveTab("failed-registrations")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === "failed-registrations"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <XCircle className="h-4 w-4" />
+                  Failed Registrations
+                  {failedRegistrations.length > 0 && (
+                    <span className="bg-gray-100 text-gray-900 py-0.5 px-2 rounded-full text-xs font-medium">
+                      {failedRegistrations.length}
+                    </span>
+                  )}
+                </div>
+              </button>
             </nav>
           </div>
         </div>
@@ -2015,6 +2416,9 @@ export default function AdminDashboard() {
         {/* Tab Content */}
         {activeTab === "tickets" && renderTicketsTab()}
         {activeTab === "abstracts" && renderAbstractsTab()}
+        {activeTab === "email-audit" && renderEmailAuditTab()}
+        {activeTab === "user-search" && renderUserSearchTab()}
+        {activeTab === "failed-registrations" && renderFailedRegistrationsTab()}
       </div>
     </div>
   )
