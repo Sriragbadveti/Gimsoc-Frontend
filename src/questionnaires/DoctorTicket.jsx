@@ -802,8 +802,9 @@ export default function DoctorTicket() {
                     <span className="text-blue-400 hover:text-blue-300 font-medium text-lg">Click to upload</span>
                     <span className="text-gray-300"> or drag and drop</span>
                   </label>
-                  <p className="text-xs text-gray-300 mt-2">Image formats only</p>
+                  <p className="text-xs text-gray-300 mt-2">Clear, front-facing photo with plain background</p>
                   <p className="text-xs text-yellow-300 mt-1">📁 Only JPEG and PNG files are allowed</p>
+                  <p className="text-xs text-red-300 mt-1">⚠️ Maximum file size: 5MB</p>
                   {formData.headshot && (
                     <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.headshot.name}</p>
                   )}
@@ -996,7 +997,10 @@ export default function DoctorTicket() {
                           <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
                           <span className="text-gray-300"> or drag and drop</span>
                         </label>
-                        <p className="text-xs text-gray-300 mt-1">Upload the exact payment receipt as a JPEG or PNG, not a PDF. Screenshots must clearly show full transaction details as shown in the examples</p>
+                        <p className="text-xs text-gray-300 mt-1">
+                          Upload the exact payment receipt as a JPEG or PNG, not a PDF. Screenshots must clearly show full transaction details as shown in the examples
+                        </p>
+                        <p className="text-xs text-red-300 mt-1">⚠️ Maximum file size: 5MB</p>
                         {formData.paymentProof && (
                           <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
                         )}
