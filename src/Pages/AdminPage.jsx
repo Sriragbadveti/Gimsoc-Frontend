@@ -175,14 +175,14 @@ export default function AdminDashboard() {
     }
   }, [activeTab, isAuthenticated])
 
-  // Auto-refresh tickets every 30 seconds when on tickets tab
+  // Auto-refresh tickets every 2 minutes when on tickets tab
   useEffect(() => {
     if (isAuthenticated && activeTab === "tickets") {
       const interval = setInterval(() => {
         console.log("🔄 Auto-refreshing tickets...")
         fetchTickets()
         fetchTicketCounts()
-      }, 30000) // Refresh every 30 seconds
+      }, 120000) // Refresh every 2 minutes
 
       return () => clearInterval(interval)
     }
