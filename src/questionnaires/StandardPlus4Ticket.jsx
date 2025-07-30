@@ -472,6 +472,7 @@ export default function StandardPlus4Ticket() {
     "East European University (EEU)",
     "New Vision University (NVU)",
     "Petre Shotadze Tbilisi Medical Academy (TMA)",
+    "SEU",
     "European University (EU)",
     "Alte University",
     "Ivane Javakhishvili Tbilisi State University (TSU – Faculty of Medicine)",
