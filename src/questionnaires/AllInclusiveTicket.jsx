@@ -23,6 +23,7 @@ import { StatefulButton } from "../Components/StatefulButton"
 import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
 import ErrorAnimation from "../Components/ErrorAnimation"
 import LoadingAnimation from "../Components/LoadingAnimation"
+import LoadingBar from "../Components/LoadingBar"
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -624,24 +625,7 @@ export default function AllInclusiveTicket() {
       >
         {showBalloons && <BalloonAnimation />}
         {showLoading && <LoadingAnimation isVisible={showLoading} onComplete={() => setShowLoading(false)} />}
-        {isSubmitting && (
-          <div className="fixed top-0 left-0 w-full z-50">
-            <div className="h-2 w-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 animate-loading-bar"></div>
-            <div className="w-full text-center py-2 bg-black/80 text-white font-bold text-lg shadow-lg">
-              Booking your ticket
-            </div>
-            <style>{`
-              @keyframes loading-bar {
-                0% { background-position: 0% 50%; }
-                100% { background-position: 100% 50%; }
-              }
-              .animate-loading-bar {
-                background-size: 200% 100%;
-                animation: loading-bar 1.5s linear infinite;
-              }
-            `}</style>
-          </div>
-        )}
+        <LoadingBar isVisible={isSubmitting} message="Booking your ticket..." />
 
         {/* Floating particles background - reduced for performance */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
