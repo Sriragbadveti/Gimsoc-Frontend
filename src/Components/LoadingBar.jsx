@@ -8,6 +8,11 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
   const [dots, setDots] = useState("")
   const [isMobile, setIsMobile] = useState(false)
 
+  // Debug logging
+  useEffect(() => {
+    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress)
+  }, [isVisible, progress])
+
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
@@ -26,6 +31,8 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
       setDots("")
       return
     }
+
+    console.log("🚀 Starting LoadingBar animation")
 
     // Animate progress bar with different speeds for mobile/desktop
     const progressInterval = setInterval(() => {
@@ -64,48 +71,73 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
   if (!isVisible) return null
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50">
-      {/* Animated gradient progress bar */}
-      <div className="relative h-2 sm:h-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 overflow-hidden">
-        <div 
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-white/30 to-white/50 transition-all duration-300 ease-out"
-          style={{ width: `${progress}%` }}
-        />
-        {/* Animated shimmer effect */}
-        <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
-        {/* Glow effect */}
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse" />
-      </div>
-
-      {/* Message bar - responsive design */}
-      <div className="bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-pink-900/95 backdrop-blur-sm border-b border-white/20">
-        <div className="flex items-center justify-center py-2 sm:py-3 px-3 sm:px-4">
-          <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-spin mr-2 sm:mr-3 flex-shrink-0" />
-          <span className="text-white font-semibold text-sm sm:text-lg text-center">
-            {message}{dots}
-          </span>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center">
+      <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 max-w-md w-full mx-4 border border-white/20 shadow-2xl">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <Loader2 className="w-8 h-8 text-white animate-spin" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">Booking Your Ticket</h2>
+          <p className="text-gray-300">Please wait while we process your registration...</p>
         </div>
+
+        {/* Progress Bar */}
+        <div className="mb-8">
+          <div className="flex justify-between text-sm text-gray-400 mb-2">
+            <span>Progress</span>
+            <span>{Math.round(progress)}%</span>
+          </div>
+          <div className="w-full bg-gray-700 rounded-full h-3">
+            <div 
+              className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-300 ease-out relative overflow-hidden"
+              style={{ width: `${progress}%` }}
+            >
+              {/* Shimmer effect on progress bar */}
+              <div 
+                className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                style={{
+                  animation: 'shimmer 2s infinite'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Message */}
+        <div className="text-center">
+          <div className="flex items-center justify-center space-x-2">
+            <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
+            <span className="text-white font-semibold text-lg">
+              {message}{dots}
+            </span>
+          </div>
+        </div>
+
+        {/* Animated dots at bottom */}
+        <div className="flex justify-center space-x-1 mt-6">
+          {[0, 1, 2].map((dot) => (
+            <div
+              key={dot}
+              className={`w-2 h-2 rounded-full animate-pulse ${
+                dot === (Math.floor(progress / 30) % 3) ? 'bg-blue-400' : 'bg-gray-600'
+              }`}
+              style={{
+                animationDelay: `${dot * 0.2}s`
+              }}
+            ></div>
+          ))}
+        </div>
+
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes shimmer {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(100%); }
+            }
+          `
+        }} />
       </div>
-
-      {/* Additional glow effect for better visibility */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-pulse opacity-50" />
-
-      <style jsx>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        .animate-shimmer {
-          animation: shimmer 2s infinite;
-        }
-        
-        /* Mobile-specific optimizations */
-        @media (max-width: 768px) {
-          .animate-shimmer {
-            animation: shimmer 1.5s infinite;
-          }
-        }
-      `}</style>
     </div>
   )
 }

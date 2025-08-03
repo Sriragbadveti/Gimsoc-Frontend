@@ -320,6 +320,7 @@ export default function AllInclusiveTicket() {
       return
     }
     
+    console.log("🎯 Setting isSubmitting to true")
     setIsSubmitting(true)
     setShowLoading(true)
     setSoldOut(false)
