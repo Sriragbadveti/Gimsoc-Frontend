@@ -179,7 +179,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (isAuthenticated && activeTab === "tickets") {
       const interval = setInterval(() => {
-        console.log("🔄 Auto-refreshing tickets...")
+        // Silent refresh - no console log
         fetchTickets()
         fetchTicketCounts()
       }, 120000) // Refresh every 2 minutes
@@ -281,7 +281,7 @@ export default function AdminDashboard() {
       const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getalltickets", { 
         headers: getAuthHeaders()
       })
-      console.log("Fetched tickets:", response.data)
+      // Silent fetch - only log on errors
       setTickets(response.data)
       setLastUpdated(new Date())
     } catch (err) {
