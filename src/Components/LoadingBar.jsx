@@ -1,17 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2, CheckCircle, Upload, User, CreditCard, Mail, FileText } from "lucide-react"
 
-const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
+const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep = 0, totalSteps = 5, fileUploadProgress = 0 }) => {
   const [progress, setProgress] = useState(0)
   const [dots, setDots] = useState("")
   const [isMobile, setIsMobile] = useState(false)
 
   // Debug logging
   useEffect(() => {
-    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress)
-  }, [isVisible, progress])
+    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress, "Step:", currentStep)
+  }, [isVisible, progress, currentStep])
 
   // Check if device is mobile
   useEffect(() => {
@@ -34,18 +34,12 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
 
     console.log("🚀 Starting LoadingBar animation")
 
-    // Animate progress bar with different speeds for mobile/desktop
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 95) {
-          clearInterval(progressInterval)
-          return 95 // Don't go to 100% until submission is complete
-        }
-        // Faster progress on mobile for better UX
-        const increment = isMobile ? Math.random() * 4 + 2 : Math.random() * 3 + 1
-        return prev + increment
-      })
-    }, isMobile ? 150 : 200) // Faster updates on mobile
+    // Calculate progress based on current step and file upload progress
+    const stepProgress = (currentStep / totalSteps) * 100
+    const fileProgress = fileUploadProgress > 0 ? (fileUploadProgress / totalSteps) : 0
+    const totalProgress = Math.min(stepProgress + fileProgress, 95) // Don't go to 100% until complete
+
+    setProgress(totalProgress)
 
     // Animate dots
     const dotsInterval = setInterval(() => {
@@ -56,10 +50,9 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
     }, 500)
 
     return () => {
-      clearInterval(progressInterval)
       clearInterval(dotsInterval)
     }
-  }, [isVisible, isMobile])
+  }, [isVisible, currentStep, totalSteps, fileUploadProgress])
 
   // Complete the progress when submission is done
   useEffect(() => {
@@ -69,6 +62,16 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
   }, [isVisible, progress])
 
   if (!isVisible) return null
+
+  // Define steps with icons and descriptions
+  const steps = [
+    { icon: User, text: "Validating information...", color: "text-blue-500" },
+    { icon: Upload, text: "Uploading files...", color: "text-green-500" },
+    { icon: CreditCard, text: "Processing payment...", color: "text-purple-500" },
+    { icon: FileText, text: "Saving ticket...", color: "text-yellow-500" },
+    { icon: Mail, text: "Sending confirmation...", color: "text-pink-500" },
+    { icon: CheckCircle, text: "Ticket booked successfully!", color: "text-green-500" }
+  ]
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center">
@@ -104,6 +107,67 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
           </div>
         </div>
 
+        {/* Current Step */}
+        <div className="space-y-4 mb-6">
+          {steps.map((step, index) => {
+            const Icon = step.icon
+            const isActive = index === currentStep
+            const isCompleted = index < currentStep
+            
+            return (
+              <div 
+                key={index}
+                className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-white/20 border border-white/30' 
+                    : isCompleted 
+                    ? 'bg-green-500/20 border border-green-500/30' 
+                    : 'bg-gray-700/50 border border-gray-600/30'
+                }`}
+              >
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                  isActive 
+                    ? 'bg-blue-500 animate-pulse' 
+                    : isCompleted 
+                    ? 'bg-green-500' 
+                    : 'bg-gray-600'
+                }`}>
+                  {isActive ? (
+                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                  ) : (
+                    <Icon className={`w-4 h-4 text-white ${step.color}`} />
+                  )}
+                </div>
+                <span className={`text-sm font-medium ${
+                  isActive 
+                    ? 'text-white' 
+                    : isCompleted 
+                    ? 'text-green-300' 
+                    : 'text-gray-400'
+                }`}>
+                  {step.text}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* File Upload Progress (if applicable) */}
+        {fileUploadProgress > 0 && currentStep === 1 && (
+          <div className="mb-6">
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>File Upload</span>
+              <span>{Math.round(fileUploadProgress)}%</span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div 
+                className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${fileUploadProgress}%` }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Message */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2">
@@ -120,7 +184,7 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket..." }) => {
             <div
               key={dot}
               className={`w-2 h-2 rounded-full animate-pulse ${
-                dot === (Math.floor(progress / 30) % 3) ? 'bg-blue-400' : 'bg-gray-600'
+                dot === (currentStep % 3) ? 'bg-blue-400' : 'bg-gray-600'
               }`}
               style={{
                 animationDelay: `${dot * 0.2}s`

@@ -101,6 +101,8 @@ export default function StandardPlus4Ticket() {
   const [emailUsed, setEmailUsed] = useState(false)
   const [bankTransferKey, setBankTransferKey] = useState(0)
   const navigate = useNavigate()
+  const [loadingStep, setLoadingStep] = useState(0)
+  const [fileUploadProgress, setFileUploadProgress] = useState(0)
 
   useEffect(() => {
     setFadeIn(true)
@@ -237,6 +239,8 @@ export default function StandardPlus4Ticket() {
     setShowLoading(true)
     setSoldOut(false)
     setEmailUsed(false)
+    setLoadingStep(0) // Start at step 0
+    setFileUploadProgress(0)
 
     // Show upload progress message
     console.log("🚀 Starting ticket submission process...")
@@ -420,8 +424,14 @@ export default function StandardPlus4Ticket() {
         console.log(`${key}: ${value}`)
       }
       
+      // Step 1: Validation complete
+      setLoadingStep(1)
+      
       // Test backend connectivity
       console.log("🔍 Testing backend connectivity...")
+      
+      // Step 2: File upload in progress
+      setLoadingStep(2)
       
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
         headers: {
@@ -429,13 +439,28 @@ export default function StandardPlus4Ticket() {
         },
         withCredentials: true,
         timeout: 60000, // 60 second timeout for file uploads
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            setFileUploadProgress(progress)
+          }
+        }
       })
 
+      // Step 3: Processing payment
+      setLoadingStep(3)
+      
+      // Step 4: Saving ticket
+      setLoadingStep(4)
+      
       console.log("✅ Submitted successfully:", response.data)
       
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
       if (response.data.message === "Ticket submitted successfully") {
+        // Step 5: Sending confirmation
+        setLoadingStep(5)
+        
         // Let the loading animation complete naturally, then show success
         setTimeout(() => {
           setShowLoading(false)
@@ -652,14 +677,20 @@ export default function StandardPlus4Ticket() {
           </div>
         </div>
       </div>
-    )
+     )
   }
 
   // Form Step
   return (
     <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       {showSuccessAnimation && <SuccessAnimation />}
-      <LoadingBar isVisible={isSubmitting} message="Booking your ticket..." />
+              <LoadingBar 
+          isVisible={isSubmitting} 
+          message="Booking your ticket..." 
+          currentStep={loadingStep}
+          totalSteps={5}
+          fileUploadProgress={fileUploadProgress}
+        />
       {errorBooking && (
         <div className="fixed top-0 left-0 w-full z-50">
           <div className="w-full text-center py-2 bg-red-600 text-white font-bold text-lg shadow-lg animate-fade-in">

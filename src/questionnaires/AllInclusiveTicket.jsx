@@ -179,6 +179,8 @@ export default function AllInclusiveTicket() {
   const [errorMessage, setErrorMessage] = useState("")
   const [errorType, setErrorType] = useState("general")
   const [bankTransferKey, setBankTransferKey] = useState(0)
+  const [loadingStep, setLoadingStep] = useState(0)
+  const [fileUploadProgress, setFileUploadProgress] = useState(0)
   
   // Gala availability hook
   const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
@@ -325,6 +327,8 @@ export default function AllInclusiveTicket() {
     setShowLoading(true)
     setSoldOut(false)
     setEmailUsed(false)
+    setLoadingStep(0) // Start at step 0
+    setFileUploadProgress(0)
 
     // Show upload progress message
     console.log("🚀 Starting ticket submission process...")
@@ -491,6 +495,9 @@ export default function AllInclusiveTicket() {
     }
 
     try {
+      // Step 1: Validation complete
+      setLoadingStep(1)
+      
       console.log("📤 Submitting form with data:", {
         ticketCategory: "Standard",
         subType: memberType,
@@ -507,6 +514,9 @@ export default function AllInclusiveTicket() {
         console.log(`${key}: ${value}`)
       }
 
+      // Step 2: File upload in progress
+      setLoadingStep(2)
+      
       // Test backend connectivity
       console.log("🔍 Testing backend connectivity...")
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
@@ -515,13 +525,28 @@ export default function AllInclusiveTicket() {
         },
         withCredentials: true,
         timeout: 60000, // 60 second timeout for file uploads
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            setFileUploadProgress(progress)
+          }
+        }
       })
 
+      // Step 3: Processing payment
+      setLoadingStep(3)
+      
+      // Step 4: Saving ticket
+      setLoadingStep(4)
+      
       console.log("✅ Submitted successfully:", response.data)
       
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
       if (response.data.message === "Ticket submitted successfully") {
+        // Step 5: Sending confirmation
+        setLoadingStep(5)
+        
         // Let the loading animation complete naturally, then show balloons
         setTimeout(() => {
           setShowLoading(false)
@@ -626,7 +651,13 @@ export default function AllInclusiveTicket() {
       >
         {showBalloons && <BalloonAnimation />}
         {showLoading && <LoadingAnimation isVisible={showLoading} onComplete={() => setShowLoading(false)} />}
-        <LoadingBar isVisible={isSubmitting} message="Booking your ticket..." />
+        <LoadingBar 
+          isVisible={isSubmitting} 
+          message="Booking your ticket..." 
+          currentStep={loadingStep}
+          totalSteps={5}
+          fileUploadProgress={fileUploadProgress}
+        />
 
         {/* Floating particles background - reduced for performance */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
