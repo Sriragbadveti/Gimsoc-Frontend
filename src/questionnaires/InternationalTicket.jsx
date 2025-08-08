@@ -147,7 +147,7 @@ export default function InternationalTicket() {
       return
     }
     
-    console.log(`📁 File selected: ${file.name} (${file.size} bytes, ${file.type})`)
+
     
     setFormData((prev) => ({
       ...prev,
@@ -193,7 +193,6 @@ export default function InternationalTicket() {
     
     // Prevent double submission
     if (isSubmitting) {
-      console.log("⚠️ Submission already in progress, ignoring duplicate click")
       return
     }
 
@@ -208,12 +207,7 @@ export default function InternationalTicket() {
     setLoadingStep(0) // Start at step 0
     setFileUploadProgress(0)
 
-    // Show upload progress message
-    console.log("🚀 Starting ticket submission process...")
-    console.log("📁 Files to upload:", {
-      headshot: formData.headshot ? `${formData.headshot.name} (${formData.headshot.size} bytes)` : 'None',
-      paymentProof: formData.paymentProof ? `${formData.paymentProof.name} (${formData.paymentProof.size} bytes)` : 'None'
-    })
+
 
     // Comprehensive validation for all required fields
     const requiredFields = {
@@ -309,11 +303,9 @@ export default function InternationalTicket() {
     // Add PayPal order ID if available
     if (paypalOrderId) {
       form.append("paypalOrderId", paypalOrderId)
-      console.log("💳 Adding PayPal order ID to form:", paypalOrderId)
     }
 
     // Convert form data according to schema
-    console.log("🔍 Form data being processed:", formData)
 
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
@@ -329,36 +321,18 @@ export default function InternationalTicket() {
           if (typeof value === "string" && value.startsWith("http")) {
             // Direct Cloudinary URL
             form.append(key + "Url", value)
-            console.log(`🌐 Cloudinary URL field ${key + "Url"}: ${value}`)
           } else if (value instanceof File) {
             // Legacy/manual file upload
           form.append(key, value)
-            console.log(`📁 File field ${key}: ${value.name}`)
           }
         }
         else {
           form.append(key, value)
-          console.log(`📝 Form field ${key}: ${value}`)
         }
       }
     })
 
     try {
-      console.log("🚀 Submitting international ticket form...")
-      
-      // Debug: Log all form entries
-      console.log("📋 All form entries:");
-      for (const [key, value] of form.entries()) {
-        console.log(`  ${key}: ${value}`);
-      }
-      
-      console.log("📋 Form data being sent:", {
-        ticketCategory: "International",
-        ticketType: `International-${packageType}`,
-        email: formData.email,
-        fullName: formData.fullName,
-        paymentMethod: formData.paymentMethod
-      })
       
       // Step 1: Validation complete
       setLoadingStep(1)
@@ -386,7 +360,7 @@ export default function InternationalTicket() {
       // Step 4: Saving ticket
       setLoadingStep(4)
       
-      console.log("✅ Submitted successfully:", response.data)
+
       
       // Only show success animations and navigate on successful submission
       // Check if the response indicates a successful submission
@@ -1176,7 +1150,7 @@ export default function InternationalTicket() {
                         key={`paypal-${packageType}-${formData.paymentMethod}`}
                         amount={packageType === "7Days" ? "325.00" : "100.00"}
                         onSuccess={(data) => {
-                          console.log("✅ PayPal payment successful:", data)
+                  
                           setPaypalPaid(true)
                           setPaypalOrderId(data.orderID)
                           alert("Payment successful! You can now complete your registration.")
