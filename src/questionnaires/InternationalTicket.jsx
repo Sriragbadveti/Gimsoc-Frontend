@@ -92,6 +92,7 @@ export default function InternationalTicket() {
   const [paypalOrderId, setPaypalOrderId] = useState(null);
   const [loadingStep, setLoadingStep] = useState(0)
   const [fileUploadProgress, setFileUploadProgress] = useState(0)
+  const [bankTransferKey, setBankTransferKey] = useState(0)
 
 
   useEffect(() => {
@@ -160,6 +161,17 @@ export default function InternationalTicket() {
   }
 
   // Calculate pricing based on package type
+  const getINRPrice = () => {
+    switch (packageType) {
+      case "3Days":
+        return 8800 // 3-Day Package - 8800 INR
+      case "7Days":
+        return 26800 // 7-Day Package - 26800 INR
+      default:
+        return 0
+    }
+  }
+
   const calculatePrice = () => {
     switch (packageType) {
       case "3Days":

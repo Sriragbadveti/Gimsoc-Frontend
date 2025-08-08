@@ -10,8 +10,8 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
 
   // Debug logging
   useEffect(() => {
-    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress, "Step:", currentStep)
-  }, [isVisible, progress, currentStep])
+    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress, "Step:", currentStep, "FileUploadProgress:", fileUploadProgress)
+  }, [isVisible, progress, currentStep, fileUploadProgress])
 
   // Check if device is mobile
   useEffect(() => {
@@ -153,7 +153,7 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
         </div>
 
         {/* File Upload Progress (if applicable) */}
-        {fileUploadProgress > 0 && currentStep === 1 && (
+        {fileUploadProgress > 0 && currentStep === 2 && (
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-400 mb-2">
               <span>File Upload</span>

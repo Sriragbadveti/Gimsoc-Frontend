@@ -210,6 +210,30 @@ export default function StandardPlus3Ticket() {
   }
 
   // Calculate pricing based on member type
+  const getINRPrice = () => {
+    let baseINR = 0
+
+    switch (memberType) {
+      case "GIMSOC":
+        baseINR = 1960 // GIMSOC Members - 1960 INR
+        break
+      case "TSU":
+        baseINR = 1960 // TSU Students - 1960 INR
+        break
+      case "Executive":
+        baseINR = 1800 // Executive & Subcommittee - 1800 INR
+        break
+      case "Non-GIMSOC":
+        baseINR = 2120 // Non-GIMSOC Members - 2120 INR
+        break
+      default:
+        baseINR = 2120 // Default to Non-GIMSOC price
+    }
+
+    const galaINR = formData.galaDinner && formData.galaDinner.includes("Yes") ? 1320 : 0
+    return baseINR + galaINR
+  }
+
   const calculatePrice = () => {
     let basePrice = 0
 
@@ -641,7 +665,7 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">GIMSOC Member</h3>
                     <p className="text-white mb-4">Active GIMSOC membership required</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-400">60 GEL</span>
+                      <span className="text-2xl font-bold text-green-400">60 GEL / 1960 INR</span>
                       <div className="text-sm text-gray-400">5 GEL discount</div>
                     </div>
                   </div>
@@ -660,7 +684,7 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-blue-600">65 GEL</span>
+                      <span className="text-2xl font-bold text-blue-600">65 GEL / 2120 INR</span>
                       <div className="text-sm text-gray-400">Regular price</div>
                     </div>
                   </div>
@@ -679,7 +703,7 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">TSU Student</h3>
                     <p className="text-white mb-4">TSU Faculty of Medicine</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-400">60 GEL</span>
+                      <span className="text-2xl font-bold text-green-400">60 GEL / 1960 INR</span>
                       <div className="text-sm text-gray-400">5 GEL discount</div>
                     </div>
                   </div>
@@ -698,7 +722,7 @@ export default function StandardPlus3Ticket() {
                     <h3 className="text-xl font-bold text-white mb-2">Executive & Subcommittee</h3>
                     <p className="text-white mb-4">GIMSOC leadership team</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-purple-400">55 GEL</span>
+                      <span className="text-2xl font-bold text-purple-400">55 GEL / 1800 INR</span>
                       <div className="text-sm text-gray-400">10 GEL discount</div>
                     </div>
                   </div>
@@ -757,9 +781,9 @@ export default function StandardPlus3Ticket() {
               {/* Dynamic Price Display */}
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
                 <span className="text-white text-lg font-medium">Total Price: </span>
-                <span className="text-white text-3xl font-bold">{calculatePrice()} GEL</span>
+                <span className="text-white text-3xl font-bold">{calculatePrice()} GEL / {getINRPrice()} INR</span>
                 {formData.galaDinner === "Yes, I would like to attend the Gala Dinner (+40 GEL)" && (
-                  <div className="text-yellow-300 text-sm mt-1">✓ Gala Dinner Included (+40 GEL)</div>
+                  <div className="text-yellow-300 text-sm mt-1">✓ Gala Dinner Included (+40 GEL / +1320 INR)</div>
                 )}
               </div>
             </div>
@@ -1228,14 +1252,14 @@ export default function StandardPlus3Ticket() {
                   </p>
                   <div className="bg-purple-100/20 rounded-lg p-4 mb-6">
                     <p className="text-sm text-purple-300">
-                      <strong>Note:</strong> Gala access is optional and costs an additional 40 GEL.
+                      <strong>Note:</strong> Gala access is optional and costs an additional 40 GEL / 1320 INR.
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   {[
-                    "Yes, I would like to attend the Gala Dinner (+40 GEL)",
+                    "Yes, I would like to attend the Gala Dinner (+40 GEL / +1320 INR)",
                     "No, I will not attend the Gala Dinner",
                   ].map((option) => (
                     <label
@@ -1416,7 +1440,7 @@ export default function StandardPlus3Ticket() {
                       </div>
 
                       {/* Bank of Georgia Details */}
-                      <div>
+                      <div className="mb-6">
                         <h4 className="text-md font-semibold text-green-300 mb-3">
                           BANK DETAILS FOR TRANSFERS IN GEORGIAN LARI (GEL)
                         </h4>
@@ -1435,6 +1459,36 @@ export default function StandardPlus3Ticket() {
                           </p>
                           
                         </div>
+                      </div>
+
+                      {/* INR Transfer Details */}
+                      <div>
+                        <h4 className="text-md font-semibold text-green-300 mb-3">
+                          FOR INR TRANSFER (INDIAN RUPEES)
+                        </h4>
+                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
+                          <p className="text-sm text-gray-300">
+                            <strong>UPI ID:</strong> divyeshkadiyala@ybl
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Phone Number:</strong> +91 8971224430
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PhonePe Image Section */}
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white mb-4 text-center">
+                        💳 PhonePe Payment Option
+                      </h3>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <img 
+                          src="/phonepe.jpg" 
+                          alt="PhonePe Payment" 
+                          className="w-full h-auto rounded-lg shadow-lg"
+                        />
+                        <p className="text-sm text-gray-300 mt-2 text-center">Scan QR code or use UPI ID for payment</p>
                       </div>
                     </div>
 
