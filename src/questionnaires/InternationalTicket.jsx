@@ -172,7 +172,7 @@ export default function InternationalTicket() {
       case "3Days":
         return 8800 // 3-Day Package - 8800 INR
       case "7Days":
-        return 26800 // 7-Day Package - 26800 INR
+        return 28600 // 7-Day Package - 26800 INR
       default:
         return 0
     }
