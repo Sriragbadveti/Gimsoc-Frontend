@@ -108,6 +108,12 @@ export default function InternationalTicket() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
+    
+    // Force re-render when switching TO Bank Transfer to fix white screen issue
+    if (name === "paymentMethod" && value === "Bank Transfer") {
+      setBankTransferKey(prev => prev + 1)
+    }
+    
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -574,7 +580,7 @@ export default function InternationalTicket() {
                 <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4 mb-4 border border-white/30">
                   <div className="flex items-center justify-center gap-3">
                     <span className="text-white text-lg font-semibold">Package Price:</span>
-                    <span className="text-3xl font-bold text-yellow-400">${calculatePrice()} USD</span>
+                    <span className="text-3xl font-bold text-yellow-400">${calculatePrice()} USD / {getINRPrice()} INR</span>
                   </div>
                   <p className="text-blue-100 text-sm mt-1">
                     {packageType === "3Days" ? "3-Day conference access with gala night" : "7-Day all-inclusive with accommodation and tours"}
@@ -1123,7 +1129,18 @@ export default function InternationalTicket() {
                       <span className="text-white font-medium">Credit/Debit Card</span>
                     </label>
 
-
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-white/50 cursor-pointer transition-all bg-white/20 backdrop-blur-sm">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Bank Transfer"
+                        checked={formData.paymentMethod === "Bank Transfer"}
+                        onChange={handleInputChange}
+                        className="text-green-600 focus:ring-green-500"
+                        required
+                      />
+                      <span className="text-white font-medium">Bank Transfer</span>
+                    </label>
                   </div>
                 </div>
 
@@ -1152,7 +1169,74 @@ export default function InternationalTicket() {
                   </div>
                 )}
 
-                
+                {formData.paymentMethod === "Bank Transfer" && (
+                  <div key={`bank-transfer-${bankTransferKey}`} className="space-y-6">
+                    {/* Bank Details */}
+                    <div className="bg-gradient-to-r from-green-50/10 to-emerald-50/10 border-2 border-green-200/30 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold text-green-400 mb-4">Bank Transfer Details</h3>
+
+                      {/* INR Transfer Details */}
+                      <div>
+                        <h4 className="text-md font-semibold text-green-300 mb-3">
+                          FOR INR TRANSFER (INDIAN RUPEES)
+                        </h4>
+                        <div className="bg-white/10 rounded-lg p-4 space-y-2">
+                          <p className="text-sm text-gray-300">
+                            <strong>UPI ID:</strong> divyeshkadiyala@ybl
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Phone Number:</strong> +91 8971224430
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            <strong>Amount:</strong> {packageType === "7Days" ? "26800 INR" : "8800 INR"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PhonePe Image Section */}
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-white mb-4 text-center">
+                        💳 PhonePe Payment Option
+                      </h3>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <img 
+                          src="/phonepe.jpg" 
+                          alt="PhonePe Payment" 
+                          className="w-full h-auto rounded-lg shadow-lg"
+                        />
+                        <p className="text-sm text-gray-300 mt-2 text-center">Scan QR code or use UPI ID for payment</p>
+                      </div>
+                    </div>
+
+                    {/* Upload Section */}
+                    <div className="transform hover:scale-105 transition-transform duration-300">
+                      <label className="block text-sm font-medium text-white mb-2">Upload Proof of Payment *</label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors bg-white/20 backdrop-blur-sm">
+                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <input
+                          type="file"
+                          onChange={handleFileChange}
+                          name="paymentProof"
+                          accept=".jpg,.jpeg,.png"
+                          className="hidden"
+                          id="payment-upload"
+                        />
+                        <label htmlFor="payment-upload" className="cursor-pointer">
+                          <span className="text-green-400 hover:text-green-300 font-medium">Click to upload</span>
+                          <span className="text-gray-300"> or drag and drop</span>
+                        </label>
+                        <p className="text-xs text-gray-300 mt-1">
+                          Upload the exact payment receipt as a JPEG or PNG, not a PDF. Screenshots must clearly show full transaction details.
+                        </p>
+                        <p className="text-xs text-red-300 mt-1">⚠️ Maximum file size: 5MB</p>
+                        {formData.paymentProof && (
+                          <p className="text-sm text-green-400 mt-2">✓ File selected: {formData.paymentProof.name}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
 
