@@ -256,6 +256,14 @@ export default function InternationalTicket() {
     // Special validation for 7-day package friends (optional)
     // Removed mandatory validation for friend names
 
+    // Validate payment method for international tickets
+    const validPaymentMethods = ["Credit/Debit Card", "Bank Transfer"];
+    if (!validPaymentMethods.includes(formData.paymentMethod)) {
+      alert("Please select a valid payment method: Credit/Debit Card or Bank Transfer");
+      setIsSubmitting(false);
+      return;
+    }
+
     if (missingFields.length > 0) {
       const fieldNames = missingFields.map(field => {
         const fieldMap = {
