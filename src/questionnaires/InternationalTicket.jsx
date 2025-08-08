@@ -312,6 +312,11 @@ export default function InternationalTicket() {
     }
 
     Object.entries(formData).forEach(([key, value]) => {
+      // Skip ticketType as it's already handled above
+      if (key === "ticketType") {
+        return;
+      }
+      
       if (value !== null && value !== undefined && value !== "") {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
           const boolValue = value === true || value === "true" || value === "Yes"
