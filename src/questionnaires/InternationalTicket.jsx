@@ -311,12 +311,11 @@ export default function InternationalTicket() {
       console.log("💳 Adding PayPal order ID to form:", paypalOrderId)
     }
 
-    Object.entries(formData).forEach(([key, value]) => {
-      // Skip ticketType as it's already handled above
-      if (key === "ticketType") {
-        return;
-      }
-      
+    // Create a copy of formData without ticketType to avoid duplication
+    const { ticketType, ...formDataWithoutTicketType } = formData;
+    console.log("🔍 FormData without ticketType:", Object.keys(formDataWithoutTicketType));
+    
+    Object.entries(formDataWithoutTicketType).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
           const boolValue = value === true || value === "true" || value === "Yes"
@@ -346,6 +345,13 @@ export default function InternationalTicket() {
 
     try {
       console.log("🚀 Submitting international ticket form...")
+      
+      // Debug: Log all form entries
+      console.log("📋 All form entries:");
+      for (const [key, value] of form.entries()) {
+        console.log(`  ${key}: ${value}`);
+      }
+      
       console.log("📋 Form data being sent:", {
         ticketCategory: "International",
         ticketType: `International-${packageType}`,
@@ -567,7 +573,13 @@ export default function InternationalTicket() {
       }`}
     >
       {showSuccessAnimation && <SuccessAnimation />}
-
+      <LoadingBar 
+        isVisible={isSubmitting} 
+        message="Booking your ticket..." 
+        currentStep={loadingStep}
+        totalSteps={5}
+        fileUploadProgress={fileUploadProgress}
+      />
 
       {errorBooking && (
         <div className="fixed top-0 left-0 w-full z-50">
@@ -1201,7 +1213,7 @@ export default function InternationalTicket() {
                             <strong>Phone Number:</strong> +91 8971224430
                           </p>
                           <p className="text-sm text-gray-300">
-                            <strong>Amount:</strong> {packageType === "7Days" ? "26800 INR" : "8800 INR"}
+                            <strong>Amount:</strong> {packageType === "7Days" ? "28600 INR" : "8800 INR"}
                           </p>
                         </div>
                       </div>
