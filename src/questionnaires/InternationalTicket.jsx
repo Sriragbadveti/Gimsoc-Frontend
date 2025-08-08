@@ -160,7 +160,6 @@ export default function InternationalTicket() {
     setFormData((prev) => ({
       ...prev,
       packageType: type,
-      ticketType: `International-${type}`,
       workshopPackage: `International-${type}`,
     }))
     setCurrentStep(2)
@@ -302,6 +301,8 @@ export default function InternationalTicket() {
     }
 
     const form = new FormData()
+
+    // Set ticket classification - map to backend schema
     form.append("ticketCategory", "International")
     form.append("ticketType", `International-${packageType}`)
 
@@ -311,11 +312,10 @@ export default function InternationalTicket() {
       console.log("💳 Adding PayPal order ID to form:", paypalOrderId)
     }
 
-    // Create a copy of formData without ticketType to avoid duplication
-    const { ticketType, ...formDataWithoutTicketType } = formData;
-    console.log("🔍 FormData without ticketType:", Object.keys(formDataWithoutTicketType));
-    
-    Object.entries(formDataWithoutTicketType).forEach(([key, value]) => {
+    // Convert form data according to schema
+    console.log("🔍 Form data being processed:", formData)
+
+    Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
           const boolValue = value === true || value === "true" || value === "Yes"
