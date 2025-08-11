@@ -977,8 +977,7 @@ const VolunteerApplication = () => {
           <div className="bg-gray-800 rounded-lg p-6 mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-blue-400">What happens next?</h2>
             <ul className="text-left text-gray-300 space-y-2">
-              <li>• Our team will review your application within 48 hours</li>
-              <li>• You'll receive an email confirmation with your application details</li>
+              <li>• Our team will review your application after the deadline</li>
               <li>• If selected, you'll be contacted for further coordination</li>
               <li>• Training sessions will be scheduled for approved volunteers</li>
             </ul>
