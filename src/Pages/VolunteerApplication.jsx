@@ -34,6 +34,116 @@ const VolunteerApplication = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  // Validation functions
+  const validateStep1 = () => {
+    if (!formData.email || !formData.fullName || !formData.whatsappNumber || !formData.university) {
+      return false;
+    }
+    if (formData.isGimsocMember && !formData.gimsocMembershipId) {
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep2 = () => {
+    if (!formData.whatMakesYouUnique || !formData.handleConstructiveCriticism || 
+        !formData.dateOfArrival || !formData.dateOfDeparture || !formData.firstChoice) {
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep3 = () => {
+    if (!formData.firstChoice) return false;
+    
+    // Check if required responses exist for the selected team
+    const team = formData.firstChoice;
+    if (team === "LOGISTICS TEAM - Volunteer") {
+      const required = ['comfortablePhysicalTasks', 'sessionBehindSchedule', 'problemSolving', 
+                       'handleStress', 'teamDisagreement', 'pastExperience', 'technicalSetup', 'smoothGuestExperience'];
+      return required.every(field => formData.logisticsResponses?.[field]);
+    }
+    if (team === "PR and MARKETING TEAM - Volunteer") {
+      const required = ['cameraType', 'visualConsistency', 'capturePlan', 'engagementStrategy', 'hasExperience'];
+      return required.every(field => formData.prMarketingResponses?.[field]);
+    }
+    if (team === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+      const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
+                       'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
+      return required.every(field => formData.organizationResponses?.[field]);
+    }
+    if (team === "WORKSHOP TEAM - Volunteer") {
+      const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
+                       'flexibleRoles', 'equipmentFailure', 'underPressure', 'basicSetup'];
+      return required.every(field => formData.workshopResponses?.[field]);
+    }
+    if (team === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+      const required = ['universityCommitment', 'physicalTasks', 'handleFrustration', 'canva', 
+                       'googleSkills', 'mixup', 'confident', 'prioritize'];
+      return required.every(field => formData.registrationResponses?.[field]);
+    }
+    if (team === "IT and TECH SUPPORT TEAM - Volunteer" || team === "IT and TECH SUPPORT TEAM -  Volunteer") {
+      const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
+                       'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
+      return required.every(field => formData.itTechResponses?.[field]);
+    }
+    return true;
+  };
+
+  const canProceedToNext = () => {
+    switch (currentStep) {
+      case 1: return validateStep1();
+      case 2: return validateStep2();
+      case 3: return validateStep3();
+      default: return true;
+    }
+  };
+
+  const getStepValidationMessage = () => {
+    switch (currentStep) {
+      case 1:
+        if (!formData.email) return "Please enter your email address";
+        if (!formData.fullName) return "Please enter your full name";
+        if (!formData.whatsappNumber) return "Please enter your WhatsApp number";
+        if (!formData.university) return "Please select your university";
+        if (formData.isGimsocMember && !formData.gimsocMembershipId) return "Please enter your GIMSOC membership ID";
+        return "";
+      case 2:
+        if (!formData.whatMakesYouUnique) return "Please describe what makes you unique";
+        if (!formData.handleConstructiveCriticism) return "Please describe how you handle criticism";
+        if (!formData.dateOfArrival) return "Please select your arrival date";
+        if (!formData.dateOfDeparture) return "Please select your departure date";
+        if (!formData.firstChoice) return "Please select your first team choice";
+        return "";
+      case 3:
+        return "Please complete all role-specific questions for your selected team";
+      default:
+        return "";
+    }
+  };
+
+  // Helper function to check if a specific field is valid
+  const isFieldValid = (fieldName) => {
+    switch (currentStep) {
+      case 1:
+        if (fieldName === 'email') return !!formData.email;
+        if (fieldName === 'fullName') return !!formData.fullName;
+        if (fieldName === 'whatsappNumber') return !!formData.whatsappNumber;
+        if (fieldName === 'university') return !!formData.university;
+        if (fieldName === 'gimsocMembershipId') return !formData.isGimsocMember || !!formData.gimsocMembershipId;
+        return true;
+      case 2:
+        if (fieldName === 'whatMakesYouUnique') return !!formData.whatMakesYouUnique;
+        if (fieldName === 'handleConstructiveCriticism') return !!formData.handleConstructiveCriticism;
+        if (fieldName === 'dateOfArrival') return !!formData.dateOfArrival;
+        if (fieldName === 'dateOfDeparture') return !!formData.dateOfDeparture;
+        if (fieldName === 'firstChoice') return !!formData.firstChoice;
+        return true;
+      default:
+        return true;
+    }
+  };
+
   const universities = [
     "Geomedi University",
     "Ivane Javakhishvili Tbilisi State University (TSU)",
@@ -85,13 +195,19 @@ const VolunteerApplication = () => {
 
   const nextStep = () => {
     if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
+      if (canProceedToNext()) {
+        setCurrentStep(currentStep + 1);
+        setError(""); // Clear any previous errors
+      } else {
+        setError(getStepValidationMessage());
+      }
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      setError(""); // Clear errors when going back
     }
   };
 
@@ -254,6 +370,19 @@ const VolunteerApplication = () => {
             {currentStep === 3 && "Role-Specific Questions"}
             {currentStep === 4 && "Review & Submit"}
           </div>
+
+          {/* Validation Error Display */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-4 p-4 bg-red-500/20 border border-red-500/30 rounded-lg"
+            >
+              <p className="text-red-200 text-center">
+                <span className="font-semibold">⚠️ Please complete all required fields:</span> {error}
+              </p>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Form */}
@@ -278,64 +407,121 @@ const VolunteerApplication = () => {
                   Basic Information
                 </h2>
                 
+                {/* Step 1 Progress Indicator */}
+                <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-blue-200">Step 1 Progress</span>
+                    <span className="text-sm text-blue-300">
+                      {[
+                        !!formData.email,
+                        !!formData.fullName,
+                        !!formData.whatsappNumber,
+                        !!formData.university,
+                        !formData.isGimsocMember || !!formData.gimsocMembershipId
+                      ].filter(Boolean).length}/5 fields completed
+                    </span>
+                  </div>
+                  <div className="w-full bg-blue-500/20 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${([
+                          !!formData.email,
+                          !!formData.fullName,
+                          !!formData.whatsappNumber,
+                          !!formData.university,
+                          !formData.isGimsocMember || !!formData.gimsocMembershipId
+                        ].filter(Boolean).length / 5) * 100}%`
+                      }}
+                    />
+                  </div>
+                </div>
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      Email Address *
+                      Email Address <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Enter your email address"
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all placeholder-gray-500 ${
+                        formData.email 
+                          ? isFieldValid('email') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
+                      placeholder="Enter your professional email address"
                       required
                     />
+                    {formData.email && !isFieldValid('email') && (
+                      <p className="text-red-400 text-xs mt-1">Please enter a valid email address</p>
+                    )}
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      Full Name *
+                      Full Name <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Enter your full name"
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all placeholder-gray-500 ${
+                        formData.fullName 
+                          ? isFieldValid('fullName') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
+                      placeholder="Enter your full name as it appears on official documents"
                       required
                     />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      WhatsApp Number with Country Code *
+                      WhatsApp Number with Country Code <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="tel"
                       name="whatsappNumber"
                       value={formData.whatsappNumber}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="+1 234 567 8900"
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all placeholder-gray-500 ${
+                        formData.whatsappNumber 
+                          ? isFieldValid('whatsappNumber') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
+                      placeholder="+995 123 456 789 (Include country code)"
                       required
                     />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      University *
+                      University <span className="text-red-400">*</span>
                     </label>
                     <select
                       name="university"
                       value={formData.university}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all ${
+                        formData.university 
+                          ? isFieldValid('university') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
                       required
                     >
-                      <option value="">Select your university</option>
+                      <option value="">Select your university from the list</option>
                       {universities.map((uni) => (
                         <option key={uni} value={uni}>{uni}</option>
                       ))}
@@ -343,33 +529,44 @@ const VolunteerApplication = () => {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <div className="flex items-center mb-4">
+                    <div className="flex items-center mb-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                       <input
                         type="checkbox"
                         name="isGimsocMember"
                         checked={formData.isGimsocMember}
                         onChange={handleInputChange}
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                        className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                       />
-                      <label className="ml-2 text-sm font-medium text-white">
-                        Are you a GIMSOC member?
+                      <label className="ml-3 text-sm font-medium text-white">
+                        Are you a GIMSOC member? <span className="text-blue-300">(Optional)</span>
                       </label>
                     </div>
                     
                     {formData.isGimsocMember && (
-                      <div>
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
                         <label className="block text-sm font-medium text-white mb-2">
-                          GIMSOC Membership ID
+                          GIMSOC Membership ID <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="text"
                           name="gimsocMembershipId"
                           value={formData.gimsocMembershipId}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                          placeholder="Enter your GIMSOC membership ID"
+                          className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all placeholder-gray-500 ${
+                            formData.gimsocMembershipId 
+                              ? isFieldValid('gimsocMembershipId') 
+                                ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                                : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                              : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                          }`}
+                          placeholder="Enter your GIMSOC membership ID (e.g., GIMSOC2024-001)"
                         />
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                 </div>
@@ -378,11 +575,16 @@ const VolunteerApplication = () => {
                   <motion.button
                     type="button"
                     onClick={nextStep}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                    disabled={!canProceedToNext()}
+                    whileHover={canProceedToNext() ? { scale: 1.05 } : {}}
+                    whileTap={canProceedToNext() ? { scale: 0.95 } : {}}
+                    className={`font-semibold py-3 px-8 rounded-lg transition-all ${
+                      canProceedToNext()
+                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                        : "bg-gray-500 text-gray-300 cursor-not-allowed"
+                    }`}
                   >
-                    Next Step
+                    {canProceedToNext() ? "Next Step" : "Complete Required Fields"}
                   </motion.button>
                 </div>
               </motion.div>
@@ -400,33 +602,75 @@ const VolunteerApplication = () => {
                   Team Selection
                 </h2>
                 
+                {/* Step 2 Progress Indicator */}
+                <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-blue-200">Step 2 Progress</span>
+                    <span className="text-sm text-blue-300">
+                      {[
+                        !!formData.whatMakesYouUnique,
+                        !!formData.handleConstructiveCriticism,
+                        !!formData.dateOfArrival,
+                        !!formData.dateOfDeparture,
+                        !!formData.firstChoice
+                      ].filter(Boolean).length}/5 fields completed
+                    </span>
+                  </div>
+                  <div className="w-full bg-blue-500/20 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${([
+                          !!formData.whatMakesYouUnique,
+                          !!formData.handleConstructiveCriticism,
+                          !!formData.dateOfArrival,
+                          !!formData.dateOfDeparture,
+                          !!formData.firstChoice
+                        ].filter(Boolean).length / 5) * 100}%`
+                      }}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      What makes you unique, and why should you be selected for this role? *
+                      What makes you unique, and why should you be selected for this role? <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       name="whatMakesYouUnique"
                       value={formData.whatMakesYouUnique}
                       onChange={handleInputChange}
                       rows={4}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Tell us what makes you stand out..."
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all placeholder-gray-500 ${
+                        formData.whatMakesYouUnique 
+                          ? isFieldValid('whatMakesYouUnique') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
+                      placeholder="Share your unique skills, experiences, or qualities that make you stand out. What drives your passion for volunteering?"
                       required
                     />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      How do you handle constructive criticism in a collaborative environment? *
+                      How do you handle constructive criticism in a collaborative environment? <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       name="handleConstructiveCriticism"
                       value={formData.handleConstructiveCriticism}
                       onChange={handleInputChange}
                       rows={4}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Describe your approach to feedback..."
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all placeholder-gray-500 ${
+                        formData.handleConstructiveCriticism 
+                          ? isFieldValid('handleConstructiveCriticism') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
+                      placeholder="Describe a specific situation where you received feedback and how you responded. What did you learn from it?"
                       required
                     />
                   </div>
@@ -434,49 +678,72 @@ const VolunteerApplication = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-white mb-2">
-                        Date of Arrival (Coming to Tbilisi) *
+                        Date of Arrival (Coming to Tbilisi) <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="date"
                         name="dateOfArrival"
                         value={formData.dateOfArrival}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all ${
+                          formData.dateOfArrival 
+                            ? isFieldValid('dateOfArrival') 
+                              ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                              : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                            : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                        }`}
+                        placeholder="Select your arrival date"
                         required
                       />
+                      <p className="text-xs text-gray-400 mt-1">When will you arrive in Tbilisi?</p>
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-white mb-2">
-                        Date of Departure (Leaving from Tbilisi) *
+                        Date of Departure (Leaving from Tbilisi) <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="date"
                         name="dateOfDeparture"
                         value={formData.dateOfDeparture}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all ${
+                          formData.dateOfDeparture 
+                            ? isFieldValid('dateOfDeparture') 
+                              ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                              : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                            : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                        }`}
+                        placeholder="Select your departure date"
                         required
                       />
+                      <p className="text-xs text-gray-400 mt-1">When will you leave Tbilisi?</p>
                     </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      What is your 1st choice for Volunteer Spot? *
+                      What is your 1st choice for Volunteer Spot? <span className="text-red-400">*</span>
                     </label>
                     <select
                       name="firstChoice"
                       value={formData.firstChoice}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className={`w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border transition-all ${
+                        formData.firstChoice 
+                          ? isFieldValid('firstChoice') 
+                            ? 'border-green-500 focus:ring-2 focus:ring-green-500 focus:border-transparent' 
+                            : 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                          : 'border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      }`}
                       required
                     >
-                      <option value="">Select your first choice</option>
+                      <option value="">Choose your primary team preference</option>
                       {teamChoices.map((choice) => (
                         <option key={choice} value={choice}>{choice}</option>
                       ))}
                     </select>
+                    <p className="text-xs text-gray-400 mt-1">This will determine the role-specific questions you'll answer next</p>
                   </div>
                   
                   <div>
@@ -495,6 +762,7 @@ const VolunteerApplication = () => {
                         <option key={choice} value={choice}>{choice}</option>
                       ))}
                     </select>
+                    <p className="text-xs text-gray-400 mt-1">Optional: Choose a backup team if your first choice is full</p>
                   </div>
                   
                   <div>
@@ -513,6 +781,7 @@ const VolunteerApplication = () => {
                         <option key={choice} value={choice}>{choice}</option>
                       ))}
                     </select>
+                    <p className="text-xs text-gray-400 mt-1">Optional: Choose a third backup team</p>
                   </div>
                 </div>
                 
@@ -530,11 +799,16 @@ const VolunteerApplication = () => {
                   <motion.button
                     type="button"
                     onClick={nextStep}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                    disabled={!canProceedToNext()}
+                    whileHover={canProceedToNext() ? { scale: 1.05 } : {}}
+                    whileTap={canProceedToNext() ? { scale: 0.95 } : {}}
+                    className={`font-semibold py-3 px-8 rounded-lg transition-all ${
+                      canProceedToNext()
+                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                        : "bg-gray-500 text-gray-300 cursor-not-allowed"
+                    }`}
                   >
-                    Next Step
+                    {canProceedToNext() ? "Next Step" : "Complete Required Fields"}
                   </motion.button>
                 </div>
               </motion.div>
@@ -552,6 +826,78 @@ const VolunteerApplication = () => {
                   Role-Specific Questions
                 </h2>
                 
+                {/* Step 3 Progress Indicator */}
+                <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-blue-200">Step 3 Progress</span>
+                    <span className="text-sm text-blue-300">
+                      {(() => {
+                        if (!formData.firstChoice) return "0/0 questions";
+                        const team = formData.firstChoice;
+                        let totalQuestions = 0;
+                        let completedQuestions = 0;
+                        
+                        if (team === "LOGISTICS TEAM - Volunteer") {
+                          totalQuestions = 8;
+                          completedQuestions = Object.keys(formData.logisticsResponses || {}).length;
+                        } else if (team === "PR and MARKETING TEAM - Volunteer") {
+                          totalQuestions = 5;
+                          completedQuestions = Object.keys(formData.prMarketingResponses || {}).length;
+                        } else if (team === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                          totalQuestions = 10;
+                          completedQuestions = Object.keys(formData.organizationResponses || {}).length;
+                        } else if (team === "WORKSHOP TEAM - Volunteer") {
+                          totalQuestions = 8;
+                          completedQuestions = Object.keys(formData.workshopResponses || {}).length;
+                        } else if (team === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                          totalQuestions = 8;
+                          completedQuestions = Object.keys(formData.registrationResponses || {}).length;
+                        } else if (team === "IT and TECH SUPPORT TEAM - Volunteer" || team === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                          totalQuestions = 7;
+                          completedQuestions = Object.keys(formData.itTechResponses || {}).length;
+                        }
+                        
+                        return `${completedQuestions}/${totalQuestions} questions completed`;
+                      })()}
+                    </span>
+                  </div>
+                  <div className="w-full bg-blue-500/20 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${(() => {
+                          if (!formData.firstChoice) return "0%";
+                          const team = formData.firstChoice;
+                          let totalQuestions = 0;
+                          let completedQuestions = 0;
+                          
+                          if (team === "LOGISTICS TEAM - Volunteer") {
+                            totalQuestions = 8;
+                            completedQuestions = Object.keys(formData.logisticsResponses || {}).length;
+                          } else if (team === "PR and MARKETING TEAM - Volunteer") {
+                            totalQuestions = 5;
+                            completedQuestions = Object.keys(formData.prMarketingResponses || {}).length;
+                          } else if (team === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                            totalQuestions = 10;
+                            completedQuestions = Object.keys(formData.organizationResponses || {}).length;
+                          } else if (team === "WORKSHOP TEAM - Volunteer") {
+                            totalQuestions = 8;
+                            completedQuestions = Object.keys(formData.workshopResponses || {}).length;
+                          } else if (team === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                            totalQuestions = 8;
+                            completedQuestions = Object.keys(formData.registrationResponses || {}).length;
+                          } else if (team === "IT and TECH SUPPORT TEAM - Volunteer" || team === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                            totalQuestions = 7;
+                            completedQuestions = Object.keys(formData.itTechResponses || {}).length;
+                          }
+                          
+                          return totalQuestions > 0 ? `${(completedQuestions / totalQuestions) * 100}%` : "0%";
+                        })()}`
+                      }}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-8">
                   {/* Logistics Team Questions */}
                   {formData.firstChoice === "LOGISTICS TEAM - Volunteer" && (
@@ -997,11 +1343,16 @@ const VolunteerApplication = () => {
                   <motion.button
                     type="button"
                     onClick={nextStep}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                    disabled={!canProceedToNext()}
+                    whileHover={canProceedToNext() ? { scale: 1.05 } : {}}
+                    whileTap={canProceedToNext() ? { scale: 0.95 } : {}}
+                    className={`font-semibold py-3 px-8 rounded-lg transition-all ${
+                      canProceedToNext()
+                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                        : "bg-gray-500 text-gray-300 cursor-not-allowed"
+                    }`}
                   >
-                    Next Step
+                    {canProceedToNext() ? "Next Step" : "Complete Required Fields"}
                   </motion.button>
                 </div>
               </motion.div>
