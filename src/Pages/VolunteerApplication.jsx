@@ -293,6 +293,20 @@ const VolunteerApplication = () => {
       case "LOGISTICS TEAM - Volunteer":
         return (
           <>
+            <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+              <h4 className="text-lg font-semibold text-blue-300 mb-3">LOGISTICS TEAM - Volunteer</h4>
+              <p className="text-blue-200 text-sm mb-3">As a volunteer of the Logistics Team, your role:</p>
+              <div className="text-blue-200 text-sm space-y-2">
+                <p><strong>[ROLE]</strong></p>
+                <p>• Coordination of Event Logistics: Ensure seamless coordination of all logistical aspects of the event</p>
+                <p>• Venue Setup: Manage the setup, arrangement and tear down of the venue to meet event requirements</p>
+                <p>• Equipment Management: Oversee the setup and maintenance of equipment needed for all the conference as well as pre-conference workshops</p>
+                <p>• Information Booth: Manage the information booth on the conference day by assisting and directing attendees</p>
+                <p>• Crowd Control: Offer directional assistance and answer attendees questions</p>
+                <p>• Audience Communicator: Ensure the Smooth communication between attendees and organization</p>
+              </div>
+            </div>
+            
             <div>
               <label className="block text-sm font-medium text-white mb-2">
                 The logistics roles often involve physical tasks. Are you comfortable in performing such tasks? *
@@ -419,69 +433,196 @@ const VolunteerApplication = () => {
       case "PR and MARKETING TEAM - Volunteer":
         return (
           <>
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">Editing Tools (optional)</label>
-              <select name={`prMarketingResponses.editingTool`} value={formData.prMarketingResponses?.editingTool || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-                <option value="">Select one</option>
-                <option value="CapCut">CapCut</option>
-                <option value="Canva">Canva</option>
-                <option value="Adobe Premiere Pro">Adobe Premiere Pro</option>
-              </select>
+            <div className="mb-6 p-4 bg-pink-500/10 border border-pink-500/20 rounded-lg">
+              <h4 className="text-lg font-semibold text-pink-300 mb-3">PR and MARKETING TEAM - Volunteer (1st Choice)</h4>
+              <p className="text-pink-200 text-sm mb-3">As a Volunteer of the PR and Marketing Team, your role on the days of the event:</p>
+              <div className="text-pink-200 text-sm space-y-2">
+                <p><strong>On-Site Media Coverage:</strong></p>
+                <p><strong>[Role]</strong></p>
+                <p>• Assist on the ground with photography and videography to capture key moments from the event, including sessions, speaker highlights, and participant interactions.</p>
+                <p>This includes –</p>
+                <p>• Capturing high-quality photos and videos of the event in action.</p>
+                <p>• Supporting the documentation of behind-the-scenes moments and dynamic content for social media.</p>
+                <p>• Coordinating with team members to ensure key moments are covered.</p>
+                <p><em>Note: Editing is not a required task unless a skilled volunteer is available</em></p>
+              </div>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Camera Availability</label>
-              <select name={`prMarketingResponses.cameraType`} value={formData.prMarketingResponses?.cameraType || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+              <label className="block text-sm font-medium text-white mb-2">
+                Which video editing tools are you familiar with and comfortable using? (Check all that apply) *
+              </label>
+              <div className="space-y-2">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name={`prMarketingResponses.capcut`}
+                    checked={formData.prMarketingResponses?.capcut || false}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  <span className="text-white text-sm">CapCut</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name={`prMarketingResponses.canva`}
+                    checked={formData.prMarketingResponses?.canva || false}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  <span className="text-white text-sm">Canva</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name={`prMarketingResponses.adobePremiere`}
+                    checked={formData.prMarketingResponses?.adobePremiere || false}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  <span className="text-white text-sm">Adobe Premiere Pro</span>
+                </label>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Share a relevant link/portfolio of any relevant content you've created (Videos, reels, designs, social media campaigns, etc.) *
+              </label>
+              <textarea
+                name={`prMarketingResponses.portfolio`}
+                value={formData.prMarketingResponses?.portfolio || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="If unavailable, describe something you've worked on"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Do you have a good-quality phone camera or a Professional Camera? *
+              </label>
+              <select
+                name={`prMarketingResponses.cameraType`}
+                value={formData.prMarketingResponses?.cameraType || ""}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                required
+              >
                 <option value="">Select one</option>
                 <option value="Phone Camera">Phone Camera</option>
                 <option value="Professional Camera">Professional Camera</option>
               </select>
             </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Portfolio link or description</label>
-                <textarea name={`prMarketingResponses.portfolio`} value={formData.prMarketingResponses?.portfolio || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Ensure visual consistency with the event theme</label>
-                <textarea name={`prMarketingResponses.visualConsistency`} value={formData.prMarketingResponses?.visualConsistency || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Plan content capture without disrupting sessions</label>
-                <textarea name={`prMarketingResponses.capturePlan`} value={formData.prMarketingResponses?.capturePlan || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Increase attendee engagement (one creative strategy)</label>
-                <textarea name={`prMarketingResponses.engagementStrategy`} value={formData.prMarketingResponses?.engagementStrategy || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Prior experience in Advertising/Marketing?</label>
-                <select name={`prMarketingResponses.hasExperience`} value={formData.prMarketingResponses?.hasExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                  <option value="">Select one</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
-              </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                How would you ensure that all social media and video content remains visually consistent with the event's theme? *
+              </label>
+              <textarea
+                name={`prMarketingResponses.visualConsistency`}
+                value={formData.prMarketingResponses?.visualConsistency || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Describe your approach..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                During the event, how would you plan and execute content capture (Photos/videos/Live updates) without disrupting sessions or attendees? *
+              </label>
+              <textarea
+                name={`prMarketingResponses.capturePlan`}
+                value={formData.prMarketingResponses?.capturePlan || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Describe your plan..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                How would you increase attendee engagement on social media during the conference days? Mention one Creative strategy you'd use *
+              </label>
+              <textarea
+                name={`prMarketingResponses.engagementStrategy`}
+                value={formData.prMarketingResponses?.engagementStrategy || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Describe your creative strategy..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Do you have prior experience in Advertising and Marketing? *
+              </label>
+              <select
+                name={`prMarketingResponses.hasExperience`}
+                value={formData.prMarketingResponses?.hasExperience || ""}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                required
+              >
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
             </div>
           </>
         );
       case "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer":
         return (
           <>
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">Past experience in organizing/planning events</label>
-              <textarea name={`organizationResponses.pastExperience`} value={formData.organizationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <h4 className="text-lg font-semibold text-green-300 mb-3">ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer</h4>
+              <div className="text-green-200 text-sm space-y-2">
+                <p><strong>[ROLE];</strong></p>
+                <p>As a Volunteer of the Organization and Planning Team, your role:</p>
+                <p>• Crowd Control and Coordination: Help in coordinating and controlling the crowd to ensure a smooth experience for all attendees.</p>
+                <p>• Timeline Adherence: Ensure that all activities and sessions adhere to the planned schedule.</p>
+                <p>• Catering Services: Assist in organizing and managing catering services for the event.</p>
+                <p>• Speaker and Participant Support: Provide support to speakers and participants, addressing their needs and ensuring their comfort.</p>
+                <p className="text-yellow-300 font-semibold">Please fill in descriptive answers to the questions below. Single sentence answers will be immediately disqualified</p>
+              </div>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Handle hallway crowd block during transitions</label>
-              <textarea name={`organizationResponses.hallwayBlock`} value={formData.organizationResponses?.hallwayBlock || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Have you worked in organizing and planning in previous event. If Yes, please state the event and what role you had *
+              </label>
+              <textarea name={`organizationResponses.pastExperience`} value={formData.organizationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your experience..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Handle conflict with a team member during event</label>
-              <textarea name={`organizationResponses.conflict`} value={formData.organizationResponses?.conflict || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                A large group of attendees is blocking a hallway during a transition between sessions. How would you handle the situation to ensure smooth flow without causing disruption? *
+              </label>
+              <textarea name={`organizationResponses.hallwayBlock`} value={formData.organizationResponses?.hallwayBlock || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                How would you deal with a difference of opinion or a conflict with another with another team member during the event? *
+              </label>
+              <textarea name={`organizationResponses.conflict`} value={formData.organizationResponses?.conflict || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your conflict resolution approach..." required />
+            </div>
+            
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-white mb-2">Available full duration (9AM-6PM)?</label>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Are you available for the FULL duration of the event (including early setup and post-event teardown) | 9AM-6PM? *
+                </label>
                 <select name={`organizationResponses.fullEvent`} value={formData.organizationResponses?.fullEvent || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                   <option value="">Select one</option>
                   <option value="Yes">Yes</option>
@@ -489,7 +630,9 @@ const VolunteerApplication = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-white mb-2">Available for pre-conference events?</label>
+                <label className="block text-sm font-medium text-white mb-2">
+                  Are you available for the full duration of the pre-conference event (including early setup and post-event teardown)? | Date & time will be provided 1 week prior to each event *
+                </label>
                 <select name={`organizationResponses.preConference`} value={formData.organizationResponses?.preConference || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                   <option value="">Select one</option>
                   <option value="Yes">Yes</option>
@@ -497,28 +640,50 @@ const VolunteerApplication = () => {
                 </select>
               </div>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Comfortable assisting speakers and guests?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable assisting speaker and guests- such as helping them navigate the venue or resolving minor issues? *
+              </label>
               <select name={`organizationResponses.assistSpeakers`} value={formData.organizationResponses?.assistSpeakers || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">First-time attendee asks for help mid-task</label>
-              <textarea name={`organizationResponses.helpAttendee`} value={formData.organizationResponses?.helpAttendee || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable taking and following instructions from a team lead and coordinating with other subcommittees? *
+              </label>
+              <textarea name={`organizationResponses.teamCoordination`} value={formData.organizationResponses?.teamCoordination || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Doctor is lost and team busy</label>
-              <textarea name={`organizationResponses.helpDoctor`} value={formData.organizationResponses?.helpDoctor || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                A first-time attendee looks confused about where to go and asks for help while you're in the middle of another task. What would you do? *
+              </label>
+              <textarea name={`organizationResponses.helpAttendee`} value={formData.organizationResponses?.helpAttendee || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Session moved rooms suddenly</label>
-              <textarea name={`organizationResponses.roomChange`} value={formData.organizationResponses?.roomChange || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                If a doctor arrives at the venue and seems lost, yet all team members are pre-occupied to attend to him. How would you tackle this situation? *
+              </label>
+              <textarea name={`organizationResponses.helpDoctor`} value={formData.organizationResponses?.helpDoctor || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Willing to follow protocols and adapt to changes?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                If a session is suddenly moved to a different room, how would you help ensure that both attendees and speakers are informed quickly and accurately? *
+              </label>
+              <textarea name={`organizationResponses.roomChange`} value={formData.organizationResponses?.roomChange || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you willing to follow predefined event protocols and adapt quickly to last-minute changes or updates? *
+              </label>
               <select name={`organizationResponses.adaptability`} value={formData.organizationResponses?.adaptability || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
@@ -530,48 +695,84 @@ const VolunteerApplication = () => {
       case "WORKSHOP TEAM - Volunteer":
         return (
           <>
+            <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+              <h4 className="text-lg font-semibold text-yellow-300 mb-3">WORKSHOP TEAM - Volunteer</h4>
+              <div className="text-yellow-200 text-sm space-y-2">
+                <p><strong>[ROLE]</strong></p>
+                <p>As a Volunteer of the Workshop Team, your role:</p>
+                <p>• Workshop Organization: Facilitate the organization of workshops, ensuring all logistical aspects are covered.</p>
+                <p>• Trainer Coordination: Coordinate and assist workshop trainers in delivering engaging and effective sessions.</p>
+                <p>• Training Opportunity: Get the chance to train in one of the conference workshops, enhancing personal skills and knowledge.</p>
+                <p className="text-orange-300 font-semibold">NOTE: Workshop Volunteers are subject to attending mandatory pre-conference training sessions and be a part of various online as well as offline discussion sessions as well as workshop planning.</p>
+                <p className="text-orange-300 font-semibold">You should be in Tbilisi 3 week before the conference date</p>
+              </div>
+            </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Available for mandatory pre-conference training and planning?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you available and willing to attend all mandatory pre-conference training sessions and participate in online/offline planning meetings? *
+              </label>
               <select name={`workshopResponses.trainingAvailability`} value={formData.workshopResponses?.trainingAvailability || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Describe a structured activity you organized/supported</label>
-              <textarea name={`workshopResponses.orgSupport`} value={formData.workshopResponses?.orgSupport || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Describe a time when you were responsible for organizing or supporting a structured activity (e.g., a class, study group, training session). What did you do, and what did you learn? *
+              </label>
+              <textarea name={`workshopResponses.orgSupport`} value={formData.workshopResponses?.orgSupport || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your experience..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Assist trainers with setup/time/engagement</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable assisting and coordinating with trainers or facilitators, including tasks like setup, time management, and participant interaction? *
+              </label>
               <select name={`workshopResponses.assistTrainers`} value={formData.workshopResponses?.assistTrainers || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Track and communicate responsibilities within a team</label>
-              <textarea name={`workshopResponses.teamCoordination`} value={formData.workshopResponses?.teamCoordination || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Workshops often involve coordination between multiple people. How do you typically keep track of and communicate responsibilities within a team? *
+              </label>
+              <textarea name={`workshopResponses.teamCoordination`} value={formData.workshopResponses?.teamCoordination || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Open to behind-the-scenes and participant-facing tasks?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you open to handling both behind-the-scenes tasks and interacting directly with participants, depending on what's needed? *
+              </label>
               <select name={`workshopResponses.flexibleRoles`} value={formData.workshopResponses?.flexibleRoles || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Trainer's equipment fails mid-session</label>
-              <textarea name={`workshopResponses.equipmentFailure`} value={formData.workshopResponses?.equipmentFailure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                A trainer's equipment fails mid-session, and participants are beginning to get restless. How would you help manage the situation? *
+              </label>
+              <textarea name={`workshopResponses.equipmentFailure`} value={formData.workshopResponses?.equipmentFailure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Perform under pressure with multiple tasks</label>
-              <textarea name={`workshopResponses.underPressure`} value={formData.workshopResponses?.underPressure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Workshops run on tight schedules. How do you typically perform under pressure, especially when multiple tasks demand your attention? *
+              </label>
+              <textarea name={`workshopResponses.underPressure`} value={formData.workshopResponses?.underPressure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Comfortable setting up basic workshop equipment?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable setting up basic workshop equipment (e.g., projector, whiteboard, mic, handouts etc.)? *
+              </label>
               <select name={`workshopResponses.basicSetup`} value={formData.workshopResponses?.basicSetup || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
@@ -583,106 +784,181 @@ const VolunteerApplication = () => {
       case "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer":
         return (
           <>
+            <div className="mb-6 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+              <h4 className="text-lg font-semibold text-indigo-300 mb-3">REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer</h4>
+              <div className="text-indigo-200 text-sm space-y-2">
+                <p><strong>[description]:</strong></p>
+                <p>As a Volunteer of the Registration and Attendees Services Team, your role:</p>
+                <p>• Registration Process: Assist in managing the registration process, ensuring a smooth experience for attendees on both days of the conference.</p>
+                <p>• Attendee Support: Provide support to attendees, addressing their questions and concerns.</p>
+                <p>• Distribution of Goodie bags: Distribute goodie bags to attendees as advised by the Registration Sub-committee. Also includes assembling items of Goodie bags for ~650 attendees before the conference.</p>
+                <p>• Inquiry Management: Direct inquiries to the appropriate head for resolution.</p>
+                <p>Additionally might be assigned with work online based on Google Docs, Excel and Canva</p>
+                <p>First and Second days will require volunteers to go to their assigned university for registration of workshops.</p>
+                <p className="text-yellow-300 font-semibold">COORDINATION with WORKSHOPS is required</p>
+              </div>
+            </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Available to go to assigned universities for workshop registration?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                The event is for 2 days and require volunteers to go to assigned universities for workshop registration. Are you available and committed to fulfill this requirement? *
+              </label>
               <select name={`registrationResponses.universityCommitment`} value={formData.registrationResponses?.universityCommitment || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Willing to assist in physical tasks before the conference?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you willing and able to assist in physical tasks before the conference? *
+              </label>
               <select name={`registrationResponses.physicalTasks`} value={formData.registrationResponses?.physicalTasks || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Assist a frustrated/ confused attendee about registration/location</label>
-              <textarea name={`registrationResponses.handleFrustration`} value={formData.registrationResponses?.handleFrustration || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                If an attendee is frustrated or confused about their registration or workshop location, how would you calm the situation and assist them? *
+              </label>
+              <textarea name={`registrationResponses.handleFrustration`} value={formData.registrationResponses?.handleFrustration || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Comfortable with Canva or similar platforms?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable using Canva or similar platforms for basic online design or informational tasks, if needed? *
+              </label>
               <select name={`registrationResponses.canva`} value={formData.registrationResponses?.canva || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Google Sheets & Forms Proficiency (1-5)</label>
-              <input type="number" min={1} max={5} name={`registrationResponses.googleSkills`} value={formData.registrationResponses?.googleSkills || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                How well do you know Google Sheets and Forms? (1 to 5) *
+              </label>
+              <input type="number" min={1} max={5} name={`registrationResponses.googleSkills`} value={formData.registrationResponses?.googleSkills || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Rate from 1-5" required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Resolve a registration mix-up with Workshop Team</label>
-              <textarea name={`registrationResponses.mixup`} value={formData.registrationResponses?.mixup || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                You are asked to coordinate with the Workshop Team to solve a registration mix-up. How would you ensure the issue is addressed efficiently? *
+              </label>
+              <textarea name={`registrationResponses.mixup`} value={formData.registrationResponses?.mixup || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Confident answering attendee questions and directing them?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Do you feel confident answering attendee questions and directing them to the appropriate committee or location? *
+              </label>
               <select name={`registrationResponses.confident`} value={formData.registrationResponses?.confident || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Prioritize tasks when working on multiple items</label>
-              <textarea name={`registrationResponses.prioritize`} value={formData.registrationResponses?.prioritize || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                You would be working on multiple tasks simultaneously. How would you prioritize your tasks? *
+              </label>
+              <textarea name={`registrationResponses.prioritize`} value={formData.registrationResponses?.prioritize || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Prior experience in registration/welcome/logistics</label>
-              <textarea name={`registrationResponses.pastExperience`} value={formData.registrationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+              <label className="block text-sm font-medium text-white mb-2">
+                Have you ever helped with registration, welcome desks, or logistical tasks at an event before? If yes, briefly describe your experience.
+              </label>
+              <textarea name={`registrationResponses.pastExperience`} value={formData.registrationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your experience..." />
             </div>
           </>
         );
       case "IT and TECH SUPPORT TEAM -  Volunteer" || "IT and TECH SUPPORT TEAM - Volunteer":
         return (
           <>
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <h4 className="text-lg font-semibold text-red-300 mb-3">IT and TECH SUPPORT TEAM - Volunteer</h4>
+              <div className="text-red-200 text-sm space-y-2">
+                <p><strong>[description]:</strong></p>
+                <p>As a Volunteer of the IT and Tech Support Team, your role:</p>
+                <p>• Technical Assistance: Offer technical support to ensure all technological aspects of the event run smoothly.</p>
+                <p>• Issue Troubleshooting: Troubleshoot any technical issues that arise during the event.</p>
+                <p>• Operation of AV Equipment: Ensure the smooth operation of audiovisual equipment and virtual platforms, if applicable.</p>
+              </div>
+            </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Experience with AV equipment (mics, projectors, speakers, laptops)?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable and have experience handling AV equipment such as microphones, projectors, speakers, and laptops? *
+              </label>
               <select name={`itTechResponses.avExperience`} value={formData.itTechResponses?.avExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Mic stops working mid-session — your response?</label>
-              <textarea name={`itTechResponses.micIssue`} value={formData.itTechResponses?.micIssue || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                A microphone stops working mid-session. Describe how you would respond to fix the issue while minimizing disruption. *
+              </label>
+              <textarea name={`itTechResponses.micIssue`} value={formData.itTechResponses?.micIssue || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Experience with Zoom/Meet live setup?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Experience with Zoom/Meet live setup? *
+              </label>
               <select name={`itTechResponses.virtualPlatform`} value={formData.itTechResponses?.virtualPlatform || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Staying calm and efficient during sudden failures</label>
-              <textarea name={`itTechResponses.stayCalm`} value={formData.itTechResponses?.stayCalm || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Staying calm and efficient during sudden failures *
+              </label>
+              <textarea name={`itTechResponses.stayCalm`} value={formData.itTechResponses?.stayCalm || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Troubleshoot screen freezing/audio/connectivity?</label>
+              <label className="block text-sm font-medium text-white mb-2">
+                Troubleshoot screen freezing/audio/connectivity? *
+              </label>
               <select name={`itTechResponses.troubleshootCommon`} value={formData.itTechResponses?.troubleshootCommon || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Presenter needs laptop help while teammate handles sound elsewhere</label>
-              <textarea name={`itTechResponses.prioritization`} value={formData.itTechResponses?.prioritization || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Presenter needs laptop help while teammate handles sound elsewhere *
+              </label>
+              <textarea name={`itTechResponses.prioritization`} value={formData.itTechResponses?.prioritization || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Previous event tech/AV experience (describe)</label>
-              <textarea name={`itTechResponses.pastExperience`} value={formData.itTechResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+              <label className="block text-sm font-medium text-white mb-2">
+                Previous event tech/AV experience (describe)
+              </label>
+              <textarea name={`itTechResponses.pastExperience`} value={formData.itTechResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:border-transparent transition-all" placeholder="Describe your experience..." />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Manage live presentation and simultaneous virtual broadcast</label>
-              <textarea name={`itTechResponses.liveAndVirtual`} value={formData.itTechResponses?.liveAndVirtual || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              <label className="block text-sm font-medium text-white mb-2">
+                Manage live presentation and simultaneous virtual broadcast *
+              </label>
+              <textarea name={`itTechResponses.liveAndVirtual`} value={formData.itTechResponses?.liveAndVirtual || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
           </>
         );
