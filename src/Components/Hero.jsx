@@ -120,6 +120,23 @@ export default function Hero() {
                 Learn more <span aria-hidden="true">→</span>
               </motion.button>
             </div>
+            
+            {/* Volunteer Button - Mobile Only */}
+            <motion.div
+              className="mt-4 sm:hidden flex justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.2, duration: 0.5 }}
+            >
+              <motion.button
+                onClick={() => navigate("/volunteer")}
+                className="w-full max-w-xs rounded-md bg-gradient-to-br from-[#6366f1] to-[#3730a3] px-6 py-3 text-sm font-semibold text-white shadow-xs hover:opacity-90 hover:scale-105 transition-transform duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                🎯 Join as Volunteer
+              </motion.button>
+            </motion.div>
           </div>
         </div>
       </div>

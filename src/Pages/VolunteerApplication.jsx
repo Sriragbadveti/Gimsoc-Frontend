@@ -864,6 +864,85 @@ const VolunteerApplication = () => {
                   Basic Information
                 </h2>
                 
+                {/* Volunteer Information Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-8 p-6 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-xl border border-blue-500/40"
+                >
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-bold text-blue-300 mb-2">
+                      🎯 Join the MEDCON'25 Volunteers Team!
+                    </h3>
+                    <p className="text-blue-200 text-lg">
+                      Be part of something extraordinary
+                    </p>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-6 mb-6">
+                    <div className="space-y-4">
+                      <div className="bg-white/10 rounded-lg p-4 border border-white/20">
+                        <h4 className="text-lg font-semibold text-white mb-3">
+                          🌟 About the Opportunity
+                        </h4>
+                        <p className="text-gray-200 text-sm leading-relaxed">
+                          We are thrilled to open applications for volunteers to be part of the Volunteers Team for MEDCON'25, the 3rd Annual International Medical Conference hosted by GIMSOC. This flagship event unites Medical Students, Healthcare Professionals, and Global Leaders dedicated to advancing clinical knowledge, innovation, and collaboration.
+                        </p>
+                        <p className="text-gray-200 text-sm leading-relaxed mt-3">
+                          As a Volunteer, you will play a key role in ensuring the smooth operation of this prestigious event. With a variety of departments to be part of, you'll gain hands-on experience, develop professional skills and contribute to the success of one of the largest student-led medical conference in Tbilisi, Georgia.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white/10 rounded-lg p-4 border border-white/20">
+                        <h4 className="text-lg font-semibold text-white mb-3">
+                          🎓 Why Join?
+                        </h4>
+                        <ul className="text-gray-200 text-sm space-y-2">
+                          <li>• Gain hands-on experience at a leading international medical conference</li>
+                          <li>• Collaborate with an international team of students and professionals</li>
+                          <li>• Enhance skills in public speaking, event planning, and networking</li>
+                          <li>• Earn official recognition and certification for your contribution</li>
+                          <li>• Be part of one of the largest student-led conferences in the region</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-lg p-4 border border-yellow-500/30">
+                        <h4 className="text-lg font-semibold text-yellow-300 mb-3">
+                          🎁 Volunteer Perks
+                        </h4>
+                        <ul className="text-yellow-200 text-sm space-y-2">
+                          <li>• Volunteer Certificate</li>
+                          <li>• CPD Points</li>
+                          <li>• Headshot taken by Trident</li>
+                          <li>• Feature on MEDCON Instagram</li>
+                          <li>• MEDCON Website Mention</li>
+                          <li>• Exclusive Digital Sticker Pack</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg p-4 border border-green-500/30">
+                        <h4 className="text-lg font-semibold text-green-300 mb-3">
+                          🚀 Ready to Get Started?
+                        </h4>
+                        <p className="text-green-200 text-sm leading-relaxed">
+                          Complete the form below to begin your volunteer application journey. We're excited to have you join our team and make MEDCON'25 an unforgettable experience!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="inline-flex items-center px-4 py-2 bg-blue-600/20 border border-blue-500/40 rounded-full">
+                      <span className="text-blue-300 text-sm font-medium">
+                        📝 Application Steps: Basic Info → Team Selection → Role Questions → Review & Submit
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+                
                 {/* Step 1 Progress Indicator */}
                 <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
@@ -1058,6 +1137,154 @@ const VolunteerApplication = () => {
                 <h2 className="text-3xl font-bold text-white mb-6 text-center">
                   Team Selection
                 </h2>
+                
+                {/* Available Departments Information */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-8 p-6 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl border border-purple-500/40"
+                >
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-bold text-purple-300 mb-2">
+                      📌 Available Departments
+                    </h3>
+                    <p className="text-purple-200 text-lg">
+                      Choose the team that best matches your skills and interests
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    {/* Logistics Team */}
+                    <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg p-5 border border-blue-500/30">
+                      <h4 className="text-xl font-bold text-blue-300 mb-3">
+                        🚚 Logistics Volunteer
+                      </h4>
+                      <p className="text-gray-200 text-sm mb-3">
+                        Ensuring smooth operations during the whole event. Your responsibilities will include:
+                      </p>
+                      <ul className="text-gray-200 text-sm space-y-2 mb-3">
+                        <li>• Coordinating transportation, accommodations, and venue setup</li>
+                        <li>• Getting quotes from shops and vendors for conference logistics</li>
+                        <li>• Ensuring proper signage and room arrangements</li>
+                        <li>• Managing schedules and assisting with the flow of delegates, speakers, and guests</li>
+                      </ul>
+                      <div className="bg-blue-600/20 rounded-lg p-3 border border-blue-500/30">
+                        <p className="text-blue-200 text-sm font-semibold">
+                          🎯 Skills Needed: Strong organizational skills, groundwork, ability to multitask, and attention to detail.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* PR and Marketing Team */}
+                    <div className="bg-gradient-to-r from-pink-500/20 to-rose-500/20 rounded-lg p-5 border border-pink-500/30">
+                      <h4 className="text-xl font-bold text-pink-300 mb-3">
+                        📸 PR and Marketing Volunteer
+                      </h4>
+                      <p className="text-gray-200 text-sm mb-3">
+                        Help capture the event and showcase it to a global audience. Your tasks will involve:
+                      </p>
+                      <ul className="text-gray-200 text-sm space-y-2 mb-3">
+                        <li>• Assisting on the ground with photography and videography</li>
+                        <li>• Capturing dynamic moments of participants, speakers, and the event atmosphere</li>
+                        <li>• (Optional) If skilled in editing, contributing to post-event content creation</li>
+                      </ul>
+                      <div className="bg-pink-600/20 rounded-lg p-3 border border-pink-500/30">
+                        <p className="text-pink-200 text-sm font-semibold">
+                          🎯 Skills Needed: Good eye for visual storytelling, familiarity with cameras or smartphones for photo/video, and reliability in fast-paced environments. Editing skills are a plus but not required.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Organization Team */}
+                    <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg p-5 border border-green-500/30">
+                      <h4 className="text-xl font-bold text-green-300 mb-3">
+                        📋 Organization and Programme Planning Volunteer
+                      </h4>
+                      <p className="text-gray-200 text-sm mb-3">
+                        Support the coordination of all event-related activities, including program schedules, logistics, and guest services. You will be involved in:
+                      </p>
+                      <ul className="text-gray-200 text-sm space-y-2 mb-3">
+                        <li>• Scheduling and ensuring timely execution of conference sessions and breaks</li>
+                        <li>• Managing event timelines and helping coordinate volunteers</li>
+                        <li>• Assisting in ensuring the overall conference runs smoothly</li>
+                      </ul>
+                      <div className="bg-green-600/20 rounded-lg p-3 border border-green-500/30">
+                        <p className="text-green-200 text-sm font-semibold">
+                          🎯 Skills Needed: Strong organizational and problem-solving skills, multitasking ability, and team spirit.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Workshops Team */}
+                    <div className="bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-lg p-5 border border-yellow-500/30">
+                      <h4 className="text-xl font-bold text-yellow-300 mb-3">
+                        🔧 Workshops Volunteer
+                      </h4>
+                      <p className="text-gray-200 text-sm mb-3">
+                        Contribute to the planning and execution of hands-on workshops during the conference. Your responsibilities will include:
+                      </p>
+                      <ul className="text-gray-200 text-sm space-y-2 mb-3">
+                        <li>• Assisting with the setup and execution of workshops</li>
+                        <li>• Coordinating materials and tools for interactive sessions</li>
+                        <li>• Supporting workshop leaders and helping manage participant engagement</li>
+                      </ul>
+                      <div className="bg-yellow-600/20 rounded-lg p-3 border border-yellow-500/30">
+                        <p className="text-yellow-200 text-sm font-semibold">
+                          🎯 Skills Needed: Good communication, a keen eye for detail, and a proactive attitude.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Registration Team */}
+                    <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-lg p-5 border border-indigo-500/30">
+                      <h4 className="text-xl font-bold text-indigo-300 mb-3">
+                        📝 Registration and Attendees Services Volunteer
+                      </h4>
+                      <p className="text-gray-200 text-sm mb-3">
+                        Ensure that all participants and guests have a seamless experience from check-in to the end of the event. Responsibilities will include:
+                      </p>
+                      <ul className="text-gray-200 text-sm space-y-2 mb-3">
+                        <li>• Registering attendees and distributing conference materials</li>
+                        <li>• Assisting with any inquiries from delegates, speakers, or guests</li>
+                        <li>• Providing on-the-ground support during the event to ensure everything runs smoothly</li>
+                      </ul>
+                      <div className="bg-indigo-600/20 rounded-lg p-3 border border-indigo-500/30">
+                        <p className="text-indigo-200 text-sm font-semibold">
+                          🎯 Skills Needed: Friendly and approachable demeanor, strong organizational skills, and customer service experience.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* IT and Tech Team */}
+                    <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-lg p-5 border border-red-500/30">
+                      <h4 className="text-xl font-bold text-red-300 mb-3">
+                        💻 IT and Tech Volunteer
+                      </h4>
+                      <p className="text-gray-200 text-sm mb-3">
+                        Be the technical backbone of the conference. Your role will involve:
+                      </p>
+                      <ul className="text-gray-200 text-sm space-y-2 mb-3">
+                        <li>• Setting up and managing audiovisual equipment for sessions and presentations</li>
+                        <li>• Troubleshooting tech issues during the event</li>
+                        <li>• Supporting speakers and participants with tech-related needs</li>
+                      </ul>
+                      <div className="bg-red-600/20 rounded-lg p-3 border border-red-500/30">
+                        <p className="text-red-200 text-sm font-semibold">
+                          🎯 Skills Needed: Experience with AV equipment, problem-solving skills, and attention to detail.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center mt-6">
+                    <div className="inline-flex items-center px-4 py-2 bg-purple-600/20 border border-purple-500/40 rounded-full">
+                      <span className="text-purple-300 text-sm font-medium">
+                        💡 Choose your teams carefully - you'll answer specific questions for each selected team in the next step
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
                 
                 {/* Step 2 Progress Indicator */}
                 <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
