@@ -2319,250 +2319,376 @@ export default function AdminDashboard() {
   const renderVolunteersTab = () => {
     if (volunteersLoading) {
       return (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
-            <p className="text-gray-600">Loading volunteers...</p>
-          </div>
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
-      )
+      );
     }
+
     if (volunteersError) {
       return (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-200">
-            <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-500" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Volunteers</h2>
-            <p className="text-red-600 mb-6 text-sm">{volunteersError}</p>
-            <button onClick={fetchVolunteers} className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">Try Again</button>
-          </div>
+        <div className="text-center py-8">
+          <p className="text-red-500 mb-4">{volunteersError}</p>
+          <button
+            onClick={fetchVolunteers}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Retry
+          </button>
         </div>
-      )
+      );
     }
+
+    if (filteredVolunteers.length === 0) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-gray-500 text-lg">No volunteer applications found.</p>
+        </div>
+      );
+    }
+
     return (
-      <>
-        {/* Modal */}
-        {isVolunteerModalOpen && selectedVolunteer && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-4 border-b">
-                <h3 className="text-lg font-semibold">Volunteer Details - {selectedVolunteer.fullName}</h3>
-                <button onClick={() => setIsVolunteerModalOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
-              </div>
-              <div className="p-4 space-y-4 text-sm">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-gray-500">Email</div>
-                    <div className="font-medium">{selectedVolunteer.email}</div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500">WhatsApp</div>
-                    <div className="font-medium">{selectedVolunteer.whatsappNumber}</div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500">University</div>
-                    <div className="font-medium">{selectedVolunteer.university}</div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500">GIMSOC Member</div>
-                    <div className="font-medium">{selectedVolunteer.isGimsocMember ? 'Yes' : 'No'}</div>
-                  </div>
-                  {selectedVolunteer.gimsocMembershipId && (
-                    <div>
-                      <div className="text-gray-500">Membership ID</div>
-                      <div className="font-medium">{selectedVolunteer.gimsocMembershipId}</div>
-                    </div>
-                  )}
-                  <div>
-                    <div className="text-gray-500">Arrival</div>
-                    <div className="font-medium">{formatDate(selectedVolunteer.dateOfArrival)}</div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500">Departure</div>
-                    <div className="font-medium">{formatDate(selectedVolunteer.dateOfDeparture)}</div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <div className="text-gray-500">1st Choice</div>
-                    <div className="font-medium">{selectedVolunteer.firstChoice}</div>
-                  </div>
-                  {selectedVolunteer.secondChoice && (
-                    <div>
-                      <div className="text-gray-500">2nd Choice</div>
-                      <div className="font-medium">{selectedVolunteer.secondChoice}</div>
-                    </div>
-                  )}
-                  {selectedVolunteer.thirdChoice && (
-                    <div>
-                      <div className="text-gray-500">3rd Choice</div>
-                      <div className="font-medium">{selectedVolunteer.thirdChoice}</div>
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <div className="text-gray-500 mb-1">What makes you unique?</div>
-                  <div className="font-medium whitespace-pre-wrap">{selectedVolunteer.whatMakesYouUnique}</div>
-                </div>
-                <div>
-                  <div className="text-gray-500 mb-1">Handling constructive criticism</div>
-                  <div className="font-medium whitespace-pre-wrap">{selectedVolunteer.handleConstructiveCriticism}</div>
-                </div>
-
-                {/* Role-specific blocks */}
-                {selectedVolunteer.logisticsResponses && (
-                  <div>
-                    <div className="text-gray-500 mb-2">Logistics Responses</div>
-                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.logisticsResponses, null, 2)}</pre>
-                  </div>
-                )}
-                {selectedVolunteer.prMarketingResponses && (
-                  <div>
-                    <div className="text-gray-500 mb-2">PR & Marketing Responses</div>
-                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.prMarketingResponses, null, 2)}</pre>
-                  </div>
-                )}
-                {selectedVolunteer.organizationResponses && (
-                  <div>
-                    <div className="text-gray-500 mb-2">Organization & Programme Responses</div>
-                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.organizationResponses, null, 2)}</pre>
-                  </div>
-                )}
-                {selectedVolunteer.workshopResponses && (
-                  <div>
-                    <div className="text-gray-500 mb-2">Workshops Responses</div>
-                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.workshopResponses, null, 2)}</pre>
-                  </div>
-                )}
-                {selectedVolunteer.registrationResponses && (
-                  <div>
-                    <div className="text-gray-500 mb-2">Registration Responses</div>
-                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.registrationResponses, null, 2)}</pre>
-                  </div>
-                )}
-                {selectedVolunteer.itTechResponses && (
-                  <div>
-                    <div className="text-gray-500 mb-2">IT & Tech Responses</div>
-                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.itTechResponses, null, 2)}</pre>
-                  </div>
-                )}
-
-                <div className="flex justify-end pt-2 border-t">
-                  <button onClick={() => setIsVolunteerModalOpen(false)} className="px-4 py-2 text-sm bg-gray-800 text-white rounded hover:bg-gray-700">Close</button>
-                </div>
-              </div>
-            </div>
+      <div className="space-y-6">
+        {/* Search and Refresh */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+          <div className="relative flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="Search volunteers..."
+              value={volunteerSearchQuery}
+              onChange={(e) => setVolunteerSearchQuery(e.target.value)}
+              className="w-full px-4 py-2 pl-10 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <svg className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
           </div>
-        )}
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Filter className="h-5 w-5 text-gray-500" />
-              <h3 className="text-lg font-medium text-gray-900">Volunteers</h3>
-            </div>
-            <button onClick={fetchVolunteers} disabled={volunteersLoading} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-              {volunteersLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-              {volunteersLoading ? "Refreshing..." : "Refresh"}
-            </button>
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by name, email, university or first choice..."
-                value={volunteerSearchQuery}
-                onChange={(e) => setVolunteerSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-              />
-            </div>
-          </div>
+          <button
+            onClick={fetchVolunteers}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Refresh
+          </button>
         </div>
 
-        {/* Desktop Table */}
-        <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applicant</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Choices</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredVolunteers.map((v) => (
-                  <tr key={v._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{v.fullName}</div>
-                        <div className="text-sm text-gray-500">{v.email}</div>
-                        <div className="text-xs text-gray-400">{v.whatsappNumber}</div>
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
+          <table className="w-full bg-white/10 backdrop-blur-xl rounded-lg overflow-hidden">
+            <thead className="bg-blue-500/20">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Applicant</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Team Choices</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Availability</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Submitted</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-700/50">
+              {filteredVolunteers.map((volunteer) => (
+                <tr key={volunteer._id} className="hover:bg-white/5 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm font-medium text-white">{volunteer.fullName}</div>
+                      <div className="text-sm text-gray-300">{volunteer.university}</div>
+                      {volunteer.isGimsocMember && (
+                        <div className="text-xs text-blue-300">GIMSOC: {volunteer.gimsocMembershipId}</div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-300">
+                      <div>{volunteer.email}</div>
+                      <div>{volunteer.whatsappNumber}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          1st: {volunteer.firstChoice}
+                        </span>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{v.university}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">1st: {v.firstChoice}</div>
-                      {v.secondChoice && <div className="text-xs text-gray-500">2nd: {v.secondChoice}</div>}
-                      {v.thirdChoice && <div className="text-xs text-gray-500">3rd: {v.thirdChoice}</div>}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(v.createdAt)}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800" onClick={() => { setSelectedVolunteer(v); setIsVolunteerModalOpen(true); }}>
-                        <Eye className="h-4 w-4" />
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      {volunteer.secondChoice && volunteer.secondChoice !== "I don't want to choose any more teams" && (
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            2nd: {volunteer.secondChoice}
+                          </span>
+                        </div>
+                      )}
+                      {volunteer.thirdChoice && volunteer.thirdChoice !== "I don't want to choose any more teams" && (
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            3rd: {volunteer.thirdChoice}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-300">
+                      <div>Arrival: {new Date(volunteer.dateOfArrival).toLocaleDateString()}</div>
+                      <div>Departure: {new Date(volunteer.dateOfDeparture).toLocaleDateString()}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    {new Date(volunteer.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => openVolunteerDetails(volunteer)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                    >
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* Mobile Cards */}
+        {/* Mobile Card View */}
         <div className="lg:hidden space-y-4">
-          {filteredVolunteers.map((v) => (
-            <div key={v._id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h3 className="font-medium text-gray-900">{v.fullName}</h3>
-                  <p className="text-sm text-gray-500">{v.email}</p>
-                  <p className="text-xs text-gray-400">{v.whatsappNumber}</p>
+          {filteredVolunteers.map((volunteer) => (
+            <div key={volunteer._id} className="bg-white/10 backdrop-blur-xl rounded-lg p-4 border border-white/20">
+              <div className="space-y-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">{volunteer.fullName}</h3>
+                    <p className="text-gray-300">{volunteer.university}</p>
+                    {volunteer.isGimsocMember && (
+                      <p className="text-sm text-blue-300">GIMSOC: {volunteer.gimsocMembershipId}</p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => openVolunteerDetails(volunteer)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                  >
+                    Details
+                  </button>
                 </div>
-                <span className="text-xs text-gray-500">{formatDate(v.createdAt)}</span>
-              </div>
-              <div className="text-sm text-gray-700">{v.university}</div>
-              <div className="mt-2 text-sm">
-                <div>1st: {v.firstChoice}</div>
-                {v.secondChoice && <div className="text-gray-600">2nd: {v.secondChoice}</div>}
-                {v.thirdChoice && <div className="text-gray-600">3rd: {v.thirdChoice}</div>}
-              </div>
-              <div className="mt-3">
-                <button className="text-blue-600 hover:text-blue-800 text-sm" onClick={() => { setSelectedVolunteer(v); setIsVolunteerModalOpen(true); }}>
-                  View details
-                </button>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-400">Email:</p>
+                    <p className="text-white">{volunteer.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">WhatsApp:</p>
+                    <p className="text-white">{volunteer.whatsappNumber}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">Team Choices:</p>
+                  <div className="space-y-1">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      1st: {volunteer.firstChoice}
+                    </span>
+                    {volunteer.secondChoice && volunteer.secondChoice !== "I don't want to choose any more teams" && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-2">
+                        2nd: {volunteer.secondChoice}
+                      </span>
+                    )}
+                    {volunteer.thirdChoice && volunteer.thirdChoice !== "I don't want to choose any more teams" && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 ml-2">
+                        3rd: {volunteer.thirdChoice}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-400">Arrival:</p>
+                    <p className="text-white">{new Date(volunteer.dateOfArrival).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">Departure:</p>
+                    <p className="text-white">{new Date(volunteer.dateOfDeparture).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
+                <div className="text-sm text-gray-400">
+                  Submitted: {new Date(volunteer.createdAt).toLocaleDateString()}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        {filteredVolunteers.length === 0 && volunteers.length === 0 && (
-          <div className="text-center py-12">
-            <User className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No volunteer applications found</h3>
-            <p className="text-gray-500">New applications will appear here as they are submitted.</p>
+        {/* Volunteer Details Modal */}
+        {isVolunteerModalOpen && selectedVolunteer && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-gray-900 rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-700">
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <h3 className="text-xl font-semibold text-white">
+                  Volunteer Details - {selectedVolunteer.fullName}
+                </h3>
+                <button 
+                  onClick={closeVolunteerDetails}
+                  className="text-gray-400 hover:text-white text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                {/* Basic Information */}
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-blue-400 mb-3">Basic Information</h4>
+                  <div className="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-400">Full Name:</p>
+                      <p className="text-white">{selectedVolunteer.fullName}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Email:</p>
+                      <p className="text-white">{selectedVolunteer.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">WhatsApp:</p>
+                      <p className="text-white">{selectedVolunteer.whatsappNumber}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">University:</p>
+                      <p className="text-white">{selectedVolunteer.university}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">GIMSOC Member:</p>
+                      <p className="text-white">{selectedVolunteer.isGimsocMember ? "Yes" : "No"}</p>
+                    </div>
+                    {selectedVolunteer.gimsocMembershipId && (
+                      <div>
+                        <p className="text-gray-400">Membership ID:</p>
+                        <p className="text-white">{selectedVolunteer.gimsocMembershipId}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Team Choices */}
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-blue-400 mb-3">Team Choices</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        1st Choice: {selectedVolunteer.firstChoice}
+                      </span>
+                    </div>
+                    {selectedVolunteer.secondChoice && selectedVolunteer.secondChoice !== "I don't want to choose any more teams" && (
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                          2nd Choice: {selectedVolunteer.secondChoice}
+                        </span>
+                      </div>
+                    )}
+                    {selectedVolunteer.thirdChoice && selectedVolunteer.thirdChoice !== "I don't want to choose any more teams" && (
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                          3rd Choice: {selectedVolunteer.thirdChoice}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Availability */}
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-blue-400 mb-3">Availability</h4>
+                  <div className="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-400">Date of Arrival:</p>
+                      <p className="text-white">{new Date(selectedVolunteer.dateOfArrival).toLocaleDateString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Date of Departure:</p>
+                      <p className="text-white">{new Date(selectedVolunteer.dateOfDeparture).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Personal Questions */}
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-blue-400 mb-3">Personal Questions</h4>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-gray-400 mb-1">What makes you unique?</p>
+                      <p className="text-white whitespace-pre-wrap">{selectedVolunteer.whatMakesYouUnique}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 mb-1">How do you handle constructive criticism?</p>
+                      <p className="text-white whitespace-pre-wrap">{selectedVolunteer.handleConstructiveCriticism}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Role-Specific Responses */}
+                {renderRoleResponses(selectedVolunteer.logisticsResponses, "Logistics Team Responses")}
+                {renderRoleResponses(selectedVolunteer.prMarketingResponses, "PR & Marketing Team Responses")}
+                {renderRoleResponses(selectedVolunteer.organizationResponses, "Organization & Programme Planning Responses")}
+                {renderRoleResponses(selectedVolunteer.workshopResponses, "Workshop Team Responses")}
+                {renderRoleResponses(selectedVolunteer.registrationResponses, "Registration & Attendees Services Responses")}
+                {renderRoleResponses(selectedVolunteer.itTechResponses, "IT & Tech Support Responses")}
+
+                {/* Application Meta */}
+                <div className="bg-gray-800/50 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-blue-400 mb-3">Application Details</h4>
+                  <div className="text-sm text-gray-300">
+                    <p>Submitted: {new Date(selectedVolunteer.createdAt).toLocaleString()}</p>
+                    <p>Application ID: {selectedVolunteer._id}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end p-6 border-t border-gray-700">
+                <button
+                  onClick={closeVolunteerDetails}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         )}
-      </>
-    )
-  }
+      </div>
+    );
+  };
+
+  const openVolunteerDetails = (volunteer) => {
+    setSelectedVolunteer(volunteer);
+    setIsVolunteerModalOpen(true);
+  };
+
+  const closeVolunteerDetails = () => {
+    setIsVolunteerModalOpen(false);
+    setSelectedVolunteer(null);
+  };
+
+  const renderRoleResponses = (responses, teamName) => {
+    if (!responses || Object.keys(responses).length === 0) return null;
+    
+    return (
+      <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
+        <h4 className="text-lg font-semibold text-blue-400 mb-3">{teamName}</h4>
+        <div className="space-y-3">
+          {Object.entries(responses).map(([key, value]) => (
+            <div key={key} className="border-l-2 border-blue-500 pl-3">
+              <p className="text-sm text-gray-400 capitalize">
+                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:
+              </p>
+              <p className="text-white">{value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   if (isLoading) {
     return (

@@ -56,38 +56,92 @@ const VolunteerApplication = () => {
   const validateStep3 = () => {
     if (!formData.firstChoice) return false;
     
-    // Check if required responses exist for the selected team
-    const team = formData.firstChoice;
-    if (team === "LOGISTICS TEAM - Volunteer") {
+    // Check if required responses exist for all selected teams
+    let allValid = true;
+    
+    // Validate first choice
+    if (formData.firstChoice === "LOGISTICS TEAM - Volunteer") {
       const required = ['comfortablePhysicalTasks', 'sessionBehindSchedule', 'problemSolving', 
                        'handleStress', 'teamDisagreement', 'pastExperience', 'technicalSetup', 'smoothGuestExperience'];
-      return required.every(field => formData.logisticsResponses?.[field]);
-    }
-    if (team === "PR and MARKETING TEAM - Volunteer") {
+      allValid = allValid && required.every(field => formData.logisticsResponses?.[field]);
+    } else if (formData.firstChoice === "PR and MARKETING TEAM - Volunteer") {
       const required = ['cameraType', 'visualConsistency', 'capturePlan', 'engagementStrategy', 'hasExperience'];
-      return required.every(field => formData.prMarketingResponses?.[field]);
-    }
-    if (team === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+      allValid = allValid && required.every(field => formData.prMarketingResponses?.[field]);
+    } else if (formData.firstChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
       const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
                        'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
-      return required.every(field => formData.organizationResponses?.[field]);
-    }
-    if (team === "WORKSHOP TEAM - Volunteer") {
+      allValid = allValid && required.every(field => formData.organizationResponses?.[field]);
+    } else if (formData.firstChoice === "WORKSHOP TEAM - Volunteer") {
       const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
                        'flexibleRoles', 'equipmentFailure', 'underPressure', 'basicSetup'];
-      return required.every(field => formData.workshopResponses?.[field]);
-    }
-    if (team === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+      allValid = allValid && required.every(field => formData.workshopResponses?.[field]);
+    } else if (formData.firstChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
       const required = ['universityCommitment', 'physicalTasks', 'handleFrustration', 'canva', 
                        'googleSkills', 'mixup', 'confident', 'prioritize'];
-      return required.every(field => formData.registrationResponses?.[field]);
-    }
-    if (team === "IT and TECH SUPPORT TEAM - Volunteer" || team === "IT and TECH SUPPORT TEAM -  Volunteer") {
+      allValid = allValid && required.every(field => formData.registrationResponses?.[field]);
+    } else if (formData.firstChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.firstChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
       const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
                        'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
-      return required.every(field => formData.itTechResponses?.[field]);
+      allValid = allValid && required.every(field => formData.itTechResponses?.[field]);
     }
-    return true;
+    
+    // Validate second choice if selected
+    if (formData.secondChoice && formData.secondChoice !== "I don't want to choose any more teams") {
+      if (formData.secondChoice === "LOGISTICS TEAM - Volunteer") {
+        const required = ['comfortablePhysicalTasks', 'sessionBehindSchedule', 'problemSolving', 
+                         'handleStress', 'teamDisagreement', 'pastExperience', 'technicalSetup', 'smoothGuestExperience'];
+        allValid = allValid && required.every(field => formData.logisticsResponses?.[field]);
+      } else if (formData.secondChoice === "PR and MARKETING TEAM - Volunteer") {
+        const required = ['cameraType', 'visualConsistency', 'capturePlan', 'engagementStrategy', 'hasExperience'];
+        allValid = allValid && required.every(field => formData.prMarketingResponses?.[field]);
+      } else if (formData.secondChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+        const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
+                         'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
+        allValid = allValid && required.every(field => formData.organizationResponses?.[field]);
+      } else if (formData.secondChoice === "WORKSHOP TEAM - Volunteer") {
+        const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
+                         'flexibleRoles', 'equipmentFailure', 'underPressure', 'basicSetup'];
+        allValid = allValid && required.every(field => formData.workshopResponses?.[field]);
+      } else if (formData.secondChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+        const required = ['universityCommitment', 'physicalTasks', 'handleFrustration', 'canva', 
+                         'googleSkills', 'mixup', 'confident', 'prioritize'];
+        allValid = allValid && required.every(field => formData.registrationResponses?.[field]);
+      } else if (formData.secondChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.secondChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+        const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
+                         'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
+        allValid = allValid && required.every(field => formData.itTechResponses?.[field]);
+      }
+    }
+    
+    // Validate third choice if selected
+    if (formData.thirdChoice && formData.thirdChoice !== "I don't want to choose any more teams") {
+      if (formData.thirdChoice === "LOGISTICS TEAM - Volunteer") {
+        const required = ['comfortablePhysicalTasks', 'sessionBehindSchedule', 'problemSolving', 
+                         'handleStress', 'teamDisagreement', 'pastExperience', 'technicalSetup', 'smoothGuestExperience'];
+        allValid = allValid && required.every(field => formData.logisticsResponses?.[field]);
+      } else if (formData.thirdChoice === "PR and MARKETING TEAM - Volunteer") {
+        const required = ['cameraType', 'visualConsistency', 'capturePlan', 'engagementStrategy', 'hasExperience'];
+        allValid = allValid && required.every(field => formData.prMarketingResponses?.[field]);
+      } else if (formData.thirdChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+        const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
+                         'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
+        allValid = allValid && required.every(field => formData.organizationResponses?.[field]);
+      } else if (formData.thirdChoice === "WORKSHOP TEAM - Volunteer") {
+        const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
+                         'flexibleRoles', 'equipmentFailure', 'underPressure', 'basicSetup'];
+        allValid = allValid && required.every(field => formData.workshopResponses?.[field]);
+      } else if (formData.thirdChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+        const required = ['universityCommitment', 'physicalTasks', 'handleFrustration', 'canva', 
+                         'googleSkills', 'mixup', 'confident', 'prioritize'];
+        allValid = allValid && required.every(field => formData.registrationResponses?.[field]);
+      } else if (formData.thirdChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.thirdChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+        const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
+                         'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
+        allValid = allValid && required.every(field => formData.itTechResponses?.[field]);
+      }
+    }
+    
+    return allValid;
   };
 
   const canProceedToNext = () => {
@@ -231,6 +285,409 @@ const VolunteerApplication = () => {
       setError(error.response?.data?.message || "Failed to submit application");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const renderTeamQuestions = (team, step) => {
+    switch (team) {
+      case "LOGISTICS TEAM - Volunteer":
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                The logistics roles often involve physical tasks. Are you comfortable in performing such tasks? *
+              </label>
+              <select
+                name={`logisticsResponses.comfortablePhysicalTasks`}
+                value={formData.logisticsResponses?.comfortablePhysicalTasks || ""}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                required
+              >
+                <option value="">Select your answer</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                A session is running behind schedule while you're expected to help the information booth. How would you prioritize and manage this situation? *
+              </label>
+              <textarea
+                name={`logisticsResponses.sessionBehindSchedule`}
+                value={formData.logisticsResponses?.sessionBehindSchedule || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Describe your approach..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Describe a time where you helped solve a problem *
+              </label>
+              <textarea
+                name={`logisticsResponses.problemSolving`}
+                value={formData.logisticsResponses?.problemSolving || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Share your experience..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Working in logistics can be hectic and high-pressure during an event. How do you typically handle stress in a fast-paced situation? *
+              </label>
+              <textarea
+                name={`logisticsResponses.handleStress`}
+                value={formData.logisticsResponses?.handleStress || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Explain your stress management approach..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                During the event, a fellow volunteer on your team disagrees with your approach in front of attendees. How would you handle the situation? *
+              </label>
+              <textarea
+                name={`logisticsResponses.teamDisagreement`}
+                value={formData.logisticsResponses?.teamDisagreement || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Describe your conflict resolution approach..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Do you have past experience? Describe your role and any tasks that are relevant to logistics *
+              </label>
+              <textarea
+                name={`logisticsResponses.pastExperience`}
+                value={formData.logisticsResponses?.pastExperience || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Share your relevant experience..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                Are you comfortable in handling basic technical setups? Or do you have your own transportation? *
+              </label>
+              <textarea
+                name={`logisticsResponses.technicalSetup`}
+                value={formData.logisticsResponses?.technicalSetup || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Describe your technical capabilities or transportation..."
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                How would you ensure a smooth guest experience — especially for faculty and international attendees? *
+              </label>
+              <textarea
+                name={`logisticsResponses.smoothGuestExperience`}
+                value={formData.logisticsResponses?.smoothGuestExperience || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="Explain your approach to guest service..."
+                required
+              />
+            </div>
+          </>
+        );
+      case "PR and MARKETING TEAM - Volunteer":
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Editing Tools (optional)</label>
+              <select name={`prMarketingResponses.editingTool`} value={formData.prMarketingResponses?.editingTool || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                <option value="">Select one</option>
+                <option value="CapCut">CapCut</option>
+                <option value="Canva">Canva</option>
+                <option value="Adobe Premiere Pro">Adobe Premiere Pro</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Camera Availability</label>
+              <select name={`prMarketingResponses.cameraType`} value={formData.prMarketingResponses?.cameraType || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Phone Camera">Phone Camera</option>
+                <option value="Professional Camera">Professional Camera</option>
+              </select>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Portfolio link or description</label>
+                <textarea name={`prMarketingResponses.portfolio`} value={formData.prMarketingResponses?.portfolio || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Ensure visual consistency with the event theme</label>
+                <textarea name={`prMarketingResponses.visualConsistency`} value={formData.prMarketingResponses?.visualConsistency || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Plan content capture without disrupting sessions</label>
+                <textarea name={`prMarketingResponses.capturePlan`} value={formData.prMarketingResponses?.capturePlan || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Increase attendee engagement (one creative strategy)</label>
+                <textarea name={`prMarketingResponses.engagementStrategy`} value={formData.prMarketingResponses?.engagementStrategy || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Prior experience in Advertising/Marketing?</label>
+                <select name={`prMarketingResponses.hasExperience`} value={formData.prMarketingResponses?.hasExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                  <option value="">Select one</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </>
+        );
+      case "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer":
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Past experience in organizing/planning events</label>
+              <textarea name={`organizationResponses.pastExperience`} value={formData.organizationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Handle hallway crowd block during transitions</label>
+              <textarea name={`organizationResponses.hallwayBlock`} value={formData.organizationResponses?.hallwayBlock || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Handle conflict with a team member during event</label>
+              <textarea name={`organizationResponses.conflict`} value={formData.organizationResponses?.conflict || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Available full duration (9AM-6PM)?</label>
+                <select name={`organizationResponses.fullEvent`} value={formData.organizationResponses?.fullEvent || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                  <option value="">Select one</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Available for pre-conference events?</label>
+                <select name={`organizationResponses.preConference`} value={formData.organizationResponses?.preConference || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                  <option value="">Select one</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Comfortable assisting speakers and guests?</label>
+              <select name={`organizationResponses.assistSpeakers`} value={formData.organizationResponses?.assistSpeakers || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">First-time attendee asks for help mid-task</label>
+              <textarea name={`organizationResponses.helpAttendee`} value={formData.organizationResponses?.helpAttendee || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Doctor is lost and team busy</label>
+              <textarea name={`organizationResponses.helpDoctor`} value={formData.organizationResponses?.helpDoctor || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Session moved rooms suddenly</label>
+              <textarea name={`organizationResponses.roomChange`} value={formData.organizationResponses?.roomChange || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Willing to follow protocols and adapt to changes?</label>
+              <select name={`organizationResponses.adaptability`} value={formData.organizationResponses?.adaptability || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </>
+        );
+      case "WORKSHOP TEAM - Volunteer":
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Available for mandatory pre-conference training and planning?</label>
+              <select name={`workshopResponses.trainingAvailability`} value={formData.workshopResponses?.trainingAvailability || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Describe a structured activity you organized/supported</label>
+              <textarea name={`workshopResponses.orgSupport`} value={formData.workshopResponses?.orgSupport || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Assist trainers with setup/time/engagement</label>
+              <select name={`workshopResponses.assistTrainers`} value={formData.workshopResponses?.assistTrainers || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Track and communicate responsibilities within a team</label>
+              <textarea name={`workshopResponses.teamCoordination`} value={formData.workshopResponses?.teamCoordination || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Open to behind-the-scenes and participant-facing tasks?</label>
+              <select name={`workshopResponses.flexibleRoles`} value={formData.workshopResponses?.flexibleRoles || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Trainer's equipment fails mid-session</label>
+              <textarea name={`workshopResponses.equipmentFailure`} value={formData.workshopResponses?.equipmentFailure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Perform under pressure with multiple tasks</label>
+              <textarea name={`workshopResponses.underPressure`} value={formData.workshopResponses?.underPressure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Comfortable setting up basic workshop equipment?</label>
+              <select name={`workshopResponses.basicSetup`} value={formData.workshopResponses?.basicSetup || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </>
+        );
+      case "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer":
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Available to go to assigned universities for workshop registration?</label>
+              <select name={`registrationResponses.universityCommitment`} value={formData.registrationResponses?.universityCommitment || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Willing to assist in physical tasks before the conference?</label>
+              <select name={`registrationResponses.physicalTasks`} value={formData.registrationResponses?.physicalTasks || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Assist a frustrated/ confused attendee about registration/location</label>
+              <textarea name={`registrationResponses.handleFrustration`} value={formData.registrationResponses?.handleFrustration || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Comfortable with Canva or similar platforms?</label>
+              <select name={`registrationResponses.canva`} value={formData.registrationResponses?.canva || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Google Sheets & Forms Proficiency (1-5)</label>
+              <input type="number" min={1} max={5} name={`registrationResponses.googleSkills`} value={formData.registrationResponses?.googleSkills || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Resolve a registration mix-up with Workshop Team</label>
+              <textarea name={`registrationResponses.mixup`} value={formData.registrationResponses?.mixup || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Confident answering attendee questions and directing them?</label>
+              <select name={`registrationResponses.confident`} value={formData.registrationResponses?.confident || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Prioritize tasks when working on multiple items</label>
+              <textarea name={`registrationResponses.prioritize`} value={formData.registrationResponses?.prioritize || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Prior experience in registration/welcome/logistics</label>
+              <textarea name={`registrationResponses.pastExperience`} value={formData.registrationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            </div>
+          </>
+        );
+      case "IT and TECH SUPPORT TEAM -  Volunteer" || "IT and TECH SUPPORT TEAM - Volunteer":
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Experience with AV equipment (mics, projectors, speakers, laptops)?</label>
+              <select name={`itTechResponses.avExperience`} value={formData.itTechResponses?.avExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Mic stops working mid-session — your response?</label>
+              <textarea name={`itTechResponses.micIssue`} value={formData.itTechResponses?.micIssue || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Experience with Zoom/Meet live setup?</label>
+              <select name={`itTechResponses.virtualPlatform`} value={formData.itTechResponses?.virtualPlatform || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Staying calm and efficient during sudden failures</label>
+              <textarea name={`itTechResponses.stayCalm`} value={formData.itTechResponses?.stayCalm || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Troubleshoot screen freezing/audio/connectivity?</label>
+              <select name={`itTechResponses.troubleshootCommon`} value={formData.itTechResponses?.troubleshootCommon || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Presenter needs laptop help while teammate handles sound elsewhere</label>
+              <textarea name={`itTechResponses.prioritization`} value={formData.itTechResponses?.prioritization || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Previous event tech/AV experience (describe)</label>
+              <textarea name={`itTechResponses.pastExperience`} value={formData.itTechResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Manage live presentation and simultaneous virtual broadcast</label>
+              <textarea name={`itTechResponses.liveAndVirtual`} value={formData.itTechResponses?.liveAndVirtual || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
+            </div>
+          </>
+        );
+      default:
+        return null;
     }
   };
 
@@ -833,28 +1290,75 @@ const VolunteerApplication = () => {
                     <span className="text-sm text-blue-300">
                       {(() => {
                         if (!formData.firstChoice) return "0/0 questions";
-                        const team = formData.firstChoice;
+                        
                         let totalQuestions = 0;
                         let completedQuestions = 0;
                         
-                        if (team === "LOGISTICS TEAM - Volunteer") {
-                          totalQuestions = 8;
-                          completedQuestions = Object.keys(formData.logisticsResponses || {}).length;
-                        } else if (team === "PR and MARKETING TEAM - Volunteer") {
-                          totalQuestions = 5;
-                          completedQuestions = Object.keys(formData.prMarketingResponses || {}).length;
-                        } else if (team === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
-                          totalQuestions = 10;
-                          completedQuestions = Object.keys(formData.organizationResponses || {}).length;
-                        } else if (team === "WORKSHOP TEAM - Volunteer") {
-                          totalQuestions = 8;
-                          completedQuestions = Object.keys(formData.workshopResponses || {}).length;
-                        } else if (team === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
-                          totalQuestions = 8;
-                          completedQuestions = Object.keys(formData.registrationResponses || {}).length;
-                        } else if (team === "IT and TECH SUPPORT TEAM - Volunteer" || team === "IT and TECH SUPPORT TEAM -  Volunteer") {
-                          totalQuestions = 7;
-                          completedQuestions = Object.keys(formData.itTechResponses || {}).length;
+                        // Count questions for all selected teams
+                        if (formData.firstChoice) {
+                          if (formData.firstChoice === "LOGISTICS TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.logisticsResponses || {}).length;
+                          } else if (formData.firstChoice === "PR and MARKETING TEAM - Volunteer") {
+                            totalQuestions += 5;
+                            completedQuestions += Object.keys(formData.prMarketingResponses || {}).length;
+                          } else if (formData.firstChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                            totalQuestions += 10;
+                            completedQuestions += Object.keys(formData.organizationResponses || {}).length;
+                          } else if (formData.firstChoice === "WORKSHOP TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                          } else if (formData.firstChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.registrationResponses || {}).length;
+                          } else if (formData.firstChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.firstChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                            totalQuestions += 7;
+                            completedQuestions += Object.keys(formData.itTechResponses || {}).length;
+                          }
+                        }
+                        
+                        if (formData.secondChoice && formData.secondChoice !== "I don't want to choose any more teams") {
+                          if (formData.secondChoice === "LOGISTICS TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.logisticsResponses || {}).length;
+                          } else if (formData.secondChoice === "PR and MARKETING TEAM - Volunteer") {
+                            totalQuestions += 5;
+                            completedQuestions += Object.keys(formData.prMarketingResponses || {}).length;
+                          } else if (formData.secondChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                            totalQuestions += 10;
+                            completedQuestions += Object.keys(formData.organizationResponses || {}).length;
+                          } else if (formData.secondChoice === "WORKSHOP TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                          } else if (formData.secondChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.registrationResponses || {}).length;
+                          } else if (formData.secondChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.secondChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                            totalQuestions += 7;
+                            completedQuestions += Object.keys(formData.itTechResponses || {}).length;
+                          }
+                        }
+                        
+                        if (formData.thirdChoice && formData.thirdChoice !== "I don't want to choose any more teams") {
+                          if (formData.thirdChoice === "LOGISTICS TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.logisticsResponses || {}).length;
+                          } else if (formData.thirdChoice === "PR and MARKETING TEAM - Volunteer") {
+                            totalQuestions += 5;
+                            completedQuestions += Object.keys(formData.prMarketingResponses || {}).length;
+                          } else if (formData.thirdChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                            totalQuestions += 10;
+                            completedQuestions += Object.keys(formData.organizationResponses || {}).length;
+                          } else if (formData.thirdChoice === "WORKSHOP TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                          } else if (formData.thirdChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                            totalQuestions += 8;
+                            completedQuestions += Object.keys(formData.registrationResponses || {}).length;
+                          } else if (formData.thirdChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.thirdChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                            totalQuestions += 7;
+                            completedQuestions += Object.keys(formData.itTechResponses || {}).length;
+                          }
                         }
                         
                         return `${completedQuestions}/${totalQuestions} questions completed`;
@@ -867,28 +1371,75 @@ const VolunteerApplication = () => {
                       style={{ 
                         width: `${(() => {
                           if (!formData.firstChoice) return "0%";
-                          const team = formData.firstChoice;
+                          
                           let totalQuestions = 0;
                           let completedQuestions = 0;
                           
-                          if (team === "LOGISTICS TEAM - Volunteer") {
-                            totalQuestions = 8;
-                            completedQuestions = Object.keys(formData.logisticsResponses || {}).length;
-                          } else if (team === "PR and MARKETING TEAM - Volunteer") {
-                            totalQuestions = 5;
-                            completedQuestions = Object.keys(formData.prMarketingResponses || {}).length;
-                          } else if (team === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
-                            totalQuestions = 10;
-                            completedQuestions = Object.keys(formData.organizationResponses || {}).length;
-                          } else if (team === "WORKSHOP TEAM - Volunteer") {
-                            totalQuestions = 8;
-                            completedQuestions = Object.keys(formData.workshopResponses || {}).length;
-                          } else if (team === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
-                            totalQuestions = 8;
-                            completedQuestions = Object.keys(formData.registrationResponses || {}).length;
-                          } else if (team === "IT and TECH SUPPORT TEAM - Volunteer" || team === "IT and TECH SUPPORT TEAM -  Volunteer") {
-                            totalQuestions = 7;
-                            completedQuestions = Object.keys(formData.itTechResponses || {}).length;
+                          // Count questions for all selected teams
+                          if (formData.firstChoice) {
+                            if (formData.firstChoice === "LOGISTICS TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.logisticsResponses || {}).length;
+                            } else if (formData.firstChoice === "PR and MARKETING TEAM - Volunteer") {
+                              totalQuestions += 5;
+                              completedQuestions += Object.keys(formData.prMarketingResponses || {}).length;
+                            } else if (formData.firstChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                              totalQuestions += 10;
+                              completedQuestions += Object.keys(formData.organizationResponses || {}).length;
+                            } else if (formData.firstChoice === "WORKSHOP TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                            } else if (formData.firstChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.registrationResponses || {}).length;
+                            } else if (formData.firstChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.firstChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                              totalQuestions += 7;
+                              completedQuestions += Object.keys(formData.itTechResponses || {}).length;
+                            }
+                          }
+                          
+                          if (formData.secondChoice && formData.secondChoice !== "I don't want to choose any more teams") {
+                            if (formData.secondChoice === "LOGISTICS TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.logisticsResponses || {}).length;
+                            } else if (formData.secondChoice === "PR and MARKETING TEAM - Volunteer") {
+                              totalQuestions += 5;
+                              completedQuestions += Object.keys(formData.prMarketingResponses || {}).length;
+                            } else if (formData.secondChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                              totalQuestions += 10;
+                              completedQuestions += Object.keys(formData.organizationResponses || {}).length;
+                            } else if (formData.secondChoice === "WORKSHOP TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                            } else if (formData.secondChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.registrationResponses || {}).length;
+                            } else if (formData.secondChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.secondChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                              totalQuestions += 7;
+                              completedQuestions += Object.keys(formData.itTechResponses || {}).length;
+                            }
+                          }
+                          
+                          if (formData.thirdChoice && formData.thirdChoice !== "I don't want to choose any more teams") {
+                            if (formData.thirdChoice === "LOGISTICS TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                            } else if (formData.thirdChoice === "PR and MARKETING TEAM - Volunteer") {
+                              totalQuestions += 5;
+                              completedQuestions += Object.keys(formData.prMarketingResponses || {}).length;
+                            } else if (formData.thirdChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
+                              totalQuestions += 10;
+                              completedQuestions += Object.keys(formData.organizationResponses || {}).length;
+                            } else if (formData.thirdChoice === "WORKSHOP TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.workshopResponses || {}).length;
+                            } else if (formData.thirdChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer") {
+                              totalQuestions += 8;
+                              completedQuestions += Object.keys(formData.registrationResponses || {}).length;
+                            } else if (formData.thirdChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.thirdChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
+                              totalQuestions += 7;
+                              completedQuestions += Object.keys(formData.itTechResponses || {}).length;
+                            }
                           }
                           
                           return totalQuestions > 0 ? `${(completedQuestions / totalQuestions) * 100}%` : "0%";
@@ -899,434 +1450,35 @@ const VolunteerApplication = () => {
                 </div>
 
                 <div className="space-y-8">
-                  {/* Logistics Team Questions */}
-                  {formData.firstChoice === "LOGISTICS TEAM - Volunteer" && (
-                    <div className="space-y-6">
-                      <h3 className="text-2xl font-semibold text-blue-400 mb-4">
-                        Logistics Team - Volunteer Role
+                  {/* First Choice Team Questions */}
+                  {formData.firstChoice && (
+                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6">
+                      <h3 className="text-xl font-semibold text-blue-400 mb-4">
+                        📋 {formData.firstChoice} Questions
                       </h3>
-                      <p className="text-gray-300 mb-6">
-                        As a volunteer of the Logistics Team, your role includes coordination of event logistics, 
-                        venue setup, equipment management, information booth management, crowd control, and 
-                        audience communication.
-                      </p>
-                      
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            The logistics roles often involve physical tasks. Are you comfortable in performing such tasks? *
-                          </label>
-                          <select
-                            name="logisticsResponses.comfortablePhysicalTasks"
-                            value={formData.logisticsResponses?.comfortablePhysicalTasks || ""}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            required
-                          >
-                            <option value="">Select your answer</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            A session is running behind schedule while you're expected to help the information booth. How would you prioritize and manage this situation? *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.sessionBehindSchedule"
-                            value={formData.logisticsResponses?.sessionBehindSchedule || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Describe your approach..."
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            Describe a time where you helped solve a problem *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.problemSolving"
-                            value={formData.logisticsResponses?.problemSolving || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Share your experience..."
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            Working in logistics can be hectic and high-pressure during an event. How do you typically handle stress in a fast-paced situation? *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.handleStress"
-                            value={formData.logisticsResponses?.handleStress || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Explain your stress management approach..."
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            During the event, a fellow volunteer on your team disagrees with your approach in front of attendees. How would you handle the situation? *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.teamDisagreement"
-                            value={formData.logisticsResponses?.teamDisagreement || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Describe your conflict resolution approach..."
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            Do you have past experience? Describe your role and any tasks that are relevant to logistics *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.pastExperience"
-                            value={formData.logisticsResponses?.pastExperience || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Share your relevant experience..."
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            Are you comfortable in handling basic technical setups? Or do you have your own transportation? *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.technicalSetup"
-                            value={formData.logisticsResponses?.technicalSetup || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Describe your technical capabilities or transportation..."
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            How would you ensure a smooth guest experience — especially for faculty and international attendees? *
-                          </label>
-                          <textarea
-                            name="logisticsResponses.smoothGuestExperience"
-                            value={formData.logisticsResponses?.smoothGuestExperience || ""}
-                            onChange={handleInputChange}
-                            rows={3}
-                            className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                            placeholder="Explain your approach to guest service..."
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* PR and Marketing Team */}
-                  {formData.firstChoice === "PR and MARKETING TEAM - Volunteer" && (
-                    <div className="space-y-6">
-                      <h3 className="text-2xl font-semibold text-pink-400 mb-4">PR and Marketing Team - Volunteer</h3>
-                      <p className="text-gray-300 mb-6">Assist on-site with photography and videography. Editing is optional if skilled.</p>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Editing Tools (optional)</label>
-                          <select name="prMarketingResponses.editingTool" value={formData.prMarketingResponses?.editingTool || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-                            <option value="">Select one</option>
-                            <option value="CapCut">CapCut</option>
-                            <option value="Canva">Canva</option>
-                            <option value="Adobe Premiere Pro">Adobe Premiere Pro</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Camera Availability</label>
-                          <select name="prMarketingResponses.cameraType" value={formData.prMarketingResponses?.cameraType || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Phone Camera">Phone Camera</option>
-                            <option value="Professional Camera">Professional Camera</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Portfolio link or description</label>
-                          <textarea name="prMarketingResponses.portfolio" value={formData.prMarketingResponses?.portfolio || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Ensure visual consistency with the event theme</label>
-                          <textarea name="prMarketingResponses.visualConsistency" value={formData.prMarketingResponses?.visualConsistency || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Plan content capture without disrupting sessions</label>
-                          <textarea name="prMarketingResponses.capturePlan" value={formData.prMarketingResponses?.capturePlan || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Increase attendee engagement (one creative strategy)</label>
-                          <textarea name="prMarketingResponses.engagementStrategy" value={formData.prMarketingResponses?.engagementStrategy || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Prior experience in Advertising/Marketing?</label>
-                          <select name="prMarketingResponses.hasExperience" value={formData.prMarketingResponses?.hasExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                      </div>
+                      {renderTeamQuestions(formData.firstChoice, 1)}
                     </div>
                   )}
 
-                  {/* Organization & Programme Planning */}
-                  {formData.firstChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer" && (
-                    <div className="space-y-6">
-                      <h3 className="text-2xl font-semibold text-amber-400 mb-4">Organization & Programme Planning</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Past experience in organizing/planning events</label>
-                          <textarea name="organizationResponses.pastExperience" value={formData.organizationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Handle hallway crowd block during transitions</label>
-                          <textarea name="organizationResponses.hallwayBlock" value={formData.organizationResponses?.hallwayBlock || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Handle conflict with a team member during event</label>
-                          <textarea name="organizationResponses.conflict" value={formData.organizationResponses?.conflict || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div>
-                            <label className="block text-sm font-medium text-white mb-2">Available full duration (9AM-6PM)?</label>
-                            <select name="organizationResponses.fullEvent" value={formData.organizationResponses?.fullEvent || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                              <option value="">Select one</option>
-                              <option value="Yes">Yes</option>
-                              <option value="No">No</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-white mb-2">Available for pre-conference events?</label>
-                            <select name="organizationResponses.preConference" value={formData.organizationResponses?.preConference || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                              <option value="">Select one</option>
-                              <option value="Yes">Yes</option>
-                              <option value="No">No</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Comfortable assisting speakers and guests?</label>
-                          <select name="organizationResponses.assistSpeakers" value={formData.organizationResponses?.assistSpeakers || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">First-time attendee asks for help mid-task</label>
-                          <textarea name="organizationResponses.helpAttendee" value={formData.organizationResponses?.helpAttendee || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Doctor is lost and team busy</label>
-                          <textarea name="organizationResponses.helpDoctor" value={formData.organizationResponses?.helpDoctor || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Session moved rooms suddenly</label>
-                          <textarea name="organizationResponses.roomChange" value={formData.organizationResponses?.roomChange || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Willing to follow protocols and adapt to changes?</label>
-                          <select name="organizationResponses.adaptability" value={formData.organizationResponses?.adaptability || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                      </div>
+                  {/* Second Choice Team Questions */}
+                  {formData.secondChoice && formData.secondChoice !== "I don't want to choose any more teams" && (
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6">
+                      <h3 className="text-xl font-semibold text-green-400 mb-4">
+                        📋 {formData.secondChoice} Questions
+                      </h3>
+                      {renderTeamQuestions(formData.secondChoice, 2)}
                     </div>
                   )}
 
-                  {/* Workshops */}
-                  {formData.firstChoice === "WORKSHOP TEAM - Volunteer" && (
-                    <div className="space-y-6">
-                      <h3 className="text-2xl font-semibold text-green-400 mb-4">Workshops Team</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Available for mandatory pre-conference training and planning?</label>
-                          <select name="workshopResponses.trainingAvailability" value={formData.workshopResponses?.trainingAvailability || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Describe a structured activity you organized/supported</label>
-                          <textarea name="workshopResponses.orgSupport" value={formData.workshopResponses?.orgSupport || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Assist trainers with setup/time/engagement</label>
-                          <select name="workshopResponses.assistTrainers" value={formData.workshopResponses?.assistTrainers || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Track and communicate responsibilities within a team</label>
-                          <textarea name="workshopResponses.teamCoordination" value={formData.workshopResponses?.teamCoordination || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Open to behind-the-scenes and participant-facing tasks?</label>
-                          <select name="workshopResponses.flexibleRoles" value={formData.workshopResponses?.flexibleRoles || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Trainer's equipment fails mid-session</label>
-                          <textarea name="workshopResponses.equipmentFailure" value={formData.workshopResponses?.equipmentFailure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Perform under pressure with multiple tasks</label>
-                          <textarea name="workshopResponses.underPressure" value={formData.workshopResponses?.underPressure || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Comfortable setting up basic workshop equipment?</label>
-                          <select name="workshopResponses.basicSetup" value={formData.workshopResponses?.basicSetup || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                      </div>
+                  {/* Third Choice Team Questions */}
+                  {formData.thirdChoice && formData.thirdChoice !== "I don't want to choose any more teams" && (
+                    <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
+                      <h3 className="text-xl font-semibold text-purple-400 mb-4">
+                        📋 {formData.thirdChoice} Questions
+                      </h3>
+                      {renderTeamQuestions(formData.thirdChoice, 3)}
                     </div>
                   )}
-
-                  {/* Registration & Attendees Services */}
-                  {formData.firstChoice === "REGISTRATION and ATTENDEES SERVICES TEAM - Volunteer" && (
-                    <div className="space-y-6">
-                      <h3 className="text-2xl font-semibold text-cyan-400 mb-4">Registration & Attendees Services</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Available to go to assigned universities for workshop registration?</label>
-                          <select name="registrationResponses.universityCommitment" value={formData.registrationResponses?.universityCommitment || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Willing to assist in physical tasks before the conference?</label>
-                          <select name="registrationResponses.physicalTasks" value={formData.registrationResponses?.physicalTasks || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Assist a frustrated/ confused attendee about registration/location</label>
-                          <textarea name="registrationResponses.handleFrustration" value={formData.registrationResponses?.handleFrustration || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Comfortable with Canva or similar platforms?</label>
-                          <select name="registrationResponses.canva" value={formData.registrationResponses?.canva || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Google Sheets & Forms Proficiency (1-5)</label>
-                          <input type="number" min={1} max={5} name="registrationResponses.googleSkills" value={formData.registrationResponses?.googleSkills || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Resolve a registration mix-up with Workshop Team</label>
-                          <textarea name="registrationResponses.mixup" value={formData.registrationResponses?.mixup || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Confident answering attendee questions and directing them?</label>
-                          <select name="registrationResponses.confident" value={formData.registrationResponses?.confident || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Prioritize tasks when working on multiple items</label>
-                          <textarea name="registrationResponses.prioritize" value={formData.registrationResponses?.prioritize || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Prior experience in registration/welcome/logistics</label>
-                          <textarea name="registrationResponses.pastExperience" value={formData.registrationResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* IT & Tech Support */}
-                  {formData.firstChoice === "IT and TECH SUPPORT TEAM -  Volunteer" || formData.firstChoice === "IT and TECH SUPPORT TEAM - Volunteer" ? (
-                    <div className="space-y-6">
-                      <h3 className="text-2xl font-semibold text-indigo-400 mb-4">IT & Tech Support</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Experience with AV equipment (mics, projectors, speakers, laptops)?</label>
-                          <select name="itTechResponses.avExperience" value={formData.itTechResponses?.avExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Mic stops working mid-session — your response?</label>
-                          <textarea name="itTechResponses.micIssue" value={formData.itTechResponses?.micIssue || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Experience with Zoom/Meet live setup?</label>
-                          <select name="itTechResponses.virtualPlatform" value={formData.itTechResponses?.virtualPlatform || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Staying calm and efficient during sudden failures</label>
-                          <textarea name="itTechResponses.stayCalm" value={formData.itTechResponses?.stayCalm || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Troubleshoot screen freezing/audio/connectivity?</label>
-                          <select name="itTechResponses.troubleshootCommon" value={formData.itTechResponses?.troubleshootCommon || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                            <option value="">Select one</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Presenter needs laptop help while teammate handles sound elsewhere</label>
-                          <textarea name="itTechResponses.prioritization" value={formData.itTechResponses?.prioritization || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Previous event tech/AV experience (describe)</label>
-                          <textarea name="itTechResponses.pastExperience" value={formData.itTechResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">Manage live presentation and simultaneous virtual broadcast</label>
-                          <textarea name="itTechResponses.liveAndVirtual" value={formData.itTechResponses?.liveAndVirtual || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required />
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
                 </div>
                 
                 <div className="flex justify-between mt-8">
