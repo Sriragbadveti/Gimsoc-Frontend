@@ -137,6 +137,23 @@ export default function Hero() {
                 🎯 Join as Volunteer
               </motion.button>
             </motion.div>
+            
+            {/* Abstract Submission Button - Mobile Only */}
+            <motion.div
+              className="mt-3 sm:hidden flex justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.4, duration: 0.5 }}
+            >
+              <motion.button
+                onClick={() => navigate("/abstract")}
+                className="w-full max-w-xs rounded-md bg-gradient-to-br from-[#ec4899] to-[#be185d] px-6 py-3 text-sm font-semibold text-white shadow-xs hover:opacity-90 hover:scale-105 transition-transform duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ec4899] cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                📝 Submit Abstract
+              </motion.button>
+            </motion.div>
           </div>
         </div>
       </div>

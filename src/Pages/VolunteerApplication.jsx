@@ -69,7 +69,7 @@ const VolunteerApplication = () => {
       allValid = allValid && required.every(field => formData.prMarketingResponses?.[field]);
     } else if (formData.firstChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
       const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
-                       'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
+                       'assistSpeakers', 'teamCoordination', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
       allValid = allValid && required.every(field => formData.organizationResponses?.[field]);
     } else if (formData.firstChoice === "WORKSHOP TEAM - Volunteer") {
       const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
@@ -80,8 +80,7 @@ const VolunteerApplication = () => {
                        'googleSkills', 'mixup', 'confident', 'prioritize'];
       allValid = allValid && required.every(field => formData.registrationResponses?.[field]);
     } else if (formData.firstChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.firstChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
-      const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
-                       'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
+      const required = ['avExperience', 'micIssue', 'troubleshootCommon', 'prioritization'];
       allValid = allValid && required.every(field => formData.itTechResponses?.[field]);
     }
     
@@ -96,7 +95,7 @@ const VolunteerApplication = () => {
         allValid = allValid && required.every(field => formData.prMarketingResponses?.[field]);
       } else if (formData.secondChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
         const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
-                         'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
+                         'assistSpeakers', 'teamCoordination', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
         allValid = allValid && required.every(field => formData.organizationResponses?.[field]);
       } else if (formData.secondChoice === "WORKSHOP TEAM - Volunteer") {
         const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
@@ -107,8 +106,7 @@ const VolunteerApplication = () => {
                          'googleSkills', 'mixup', 'confident', 'prioritize'];
         allValid = allValid && required.every(field => formData.registrationResponses?.[field]);
       } else if (formData.secondChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.secondChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
-        const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
-                         'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
+        const required = ['avExperience', 'micIssue', 'troubleshootCommon', 'prioritization'];
         allValid = allValid && required.every(field => formData.itTechResponses?.[field]);
       }
     }
@@ -124,7 +122,7 @@ const VolunteerApplication = () => {
         allValid = allValid && required.every(field => formData.prMarketingResponses?.[field]);
       } else if (formData.thirdChoice === "ORGANIZATION and PROGRAMME PLANNING TEAM - Volunteer") {
         const required = ['pastExperience', 'hallwayBlock', 'conflict', 'fullEvent', 'preConference', 
-                         'assistSpeakers', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
+                         'assistSpeakers', 'teamCoordination', 'helpAttendee', 'helpDoctor', 'roomChange', 'adaptability'];
         allValid = allValid && required.every(field => formData.organizationResponses?.[field]);
       } else if (formData.thirdChoice === "WORKSHOP TEAM - Volunteer") {
         const required = ['trainingAvailability', 'orgSupport', 'assistTrainers', 'teamCoordination', 
@@ -135,8 +133,7 @@ const VolunteerApplication = () => {
                          'googleSkills', 'mixup', 'confident', 'prioritize'];
         allValid = allValid && required.every(field => formData.registrationResponses?.[field]);
       } else if (formData.thirdChoice === "IT and TECH SUPPORT TEAM - Volunteer" || formData.thirdChoice === "IT and TECH SUPPORT TEAM -  Volunteer") {
-        const required = ['avExperience', 'micIssue', 'virtualPlatform', 'stayCalm', 
-                         'troubleshootCommon', 'prioritization', 'liveAndVirtual'];
+        const required = ['avExperience', 'micIssue', 'troubleshootCommon', 'prioritization'];
         allValid = allValid && required.every(field => formData.itTechResponses?.[field]);
       }
     }
@@ -272,7 +269,6 @@ const VolunteerApplication = () => {
 
     try {
       const response = await axios.post(
-        
         "https://gimsoc-backend.onrender.com/api/volunteer/submit",
         formData
       );
@@ -282,7 +278,13 @@ const VolunteerApplication = () => {
       }
     } catch (error) {
       console.error("Error submitting application:", error);
-      setError(error.response?.data?.message || "Failed to submit application");
+      
+      // Check for duplicate email error
+      if (error.response?.status === 409) {
+        setError("An application with this email address already exists. Each email can only submit one volunteer application.");
+      } else {
+        setError(error.response?.data?.message || "Failed to submit application");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -895,7 +897,7 @@ const VolunteerApplication = () => {
             
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                Are you comfortable and have experience handling AV equipment such as microphones, projectors, speakers, and laptops? *
+                Are you comfortable handling AV equipment such as microphones, projectors, speakers and laptops? *
               </label>
               <select name={`itTechResponses.avExperience`} value={formData.itTechResponses?.avExperience || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
@@ -906,32 +908,14 @@ const VolunteerApplication = () => {
             
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                A microphone stops working mid-session. Describe how you would respond to fix the issue while minimizing disruption. *
+                A microphone stopped mid session describe how would you respond to it *
               </label>
               <textarea name={`itTechResponses.micIssue`} value={formData.itTechResponses?.micIssue || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
             
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                Experience with Zoom/Meet live setup? *
-              </label>
-              <select name={`itTechResponses.virtualPlatform`} value={formData.itTechResponses?.virtualPlatform || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
-                <option value="">Select one</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Staying calm and efficient during sudden failures *
-              </label>
-              <textarea name={`itTechResponses.stayCalm`} value={formData.itTechResponses?.stayCalm || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Troubleshoot screen freezing/audio/connectivity? *
+                Do you know how to troubleshoot common tech problems such as screen freezing, audio issues, or connectivity problems? *
               </label>
               <select name={`itTechResponses.troubleshootCommon`} value={formData.itTechResponses?.troubleshootCommon || ""} onChange={handleInputChange} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
                 <option value="">Select one</option>
@@ -942,23 +926,16 @@ const VolunteerApplication = () => {
             
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                Presenter needs laptop help while teammate handles sound elsewhere *
+                A presenter needs help with their laptop while your teammate is dealing with a sound issue in another hall. How would you handle prioritization and communication? *
               </label>
               <textarea name={`itTechResponses.prioritization`} value={formData.itTechResponses?.prioritization || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
             </div>
             
             <div>
               <label className="block text-sm font-medium text-white mb-2">
-                Previous event tech/AV experience (describe)
+                Have you previously worked or volunteered in an event where you handled any form of tech/AV support? Describe your responsibilities.
               </label>
-              <textarea name={`itTechResponses.pastExperience`} value={formData.itTechResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:border-transparent transition-all" placeholder="Describe your experience..." />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                Manage live presentation and simultaneous virtual broadcast *
-              </label>
-              <textarea name={`itTechResponses.liveAndVirtual`} value={formData.itTechResponses?.liveAndVirtual || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your approach..." required />
+              <textarea name={`itTechResponses.pastExperience`} value={formData.itTechResponses?.pastExperience || ""} onChange={handleInputChange} rows={3} className="w-full px-4 py-3 bg-white/90 text-gray-800 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Describe your experience..." />
             </div>
           </>
         );
@@ -1269,6 +1246,9 @@ const VolunteerApplication = () => {
                       placeholder="Enter your professional email address"
                       required
                     />
+                    <p className="text-yellow-300 text-xs mt-1">
+                      ⚠️ Each email address can only submit one volunteer application
+                    </p>
                     {formData.email && !isFieldValid('email') && (
                       <p className="text-red-400 text-xs mt-1">Please enter a valid email address</p>
                     )}
