@@ -18,7 +18,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import CreditCardAnimation from "../Components/CreditCardAnimation"
 import LoadingAnimation from "../Components/LoadingAnimation"
-import LoadingBar from "../Components/LoadingBar"
+// LoadingBar import removed - using LoadingAnimation instead
 
 // Success Animation Component
 const SuccessAnimation = ({ onComplete }) => {
@@ -376,12 +376,9 @@ export default function DoctorTicket() {
       >
         {showSuccessAnimation && <SuccessAnimation />}
         {showLoading && <LoadingAnimation isVisible={showLoading} onComplete={() => setShowLoading(false)} />}
-        <LoadingBar 
+        <LoadingAnimation 
           isVisible={isSubmitting} 
-          message="Booking your ticket..." 
-          currentStep={loadingStep}
-          totalSteps={5}
-          fileUploadProgress={fileUploadProgress}
+          onComplete={() => setIsSubmitting(false)}
         />
 
         {/* Floating particles background */}

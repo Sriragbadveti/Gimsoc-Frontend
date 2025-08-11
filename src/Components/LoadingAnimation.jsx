@@ -57,20 +57,20 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
   if (!isVisible) return null
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 max-w-md w-full mx-4 border border-white/20">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 w-full max-w-sm md:max-w-md mx-4 border border-white/20">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Loader2 className="w-8 h-8 text-white animate-spin" />
+        <div className="text-center mb-6 md:mb-8">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 animate-pulse">
+            <Loader2 className="w-6 h-6 md:w-8 md:h-8 text-white animate-spin" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Booking Your Ticket</h2>
-          <p className="text-gray-300">Please wait while we process your registration...</p>
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Booking Your Ticket</h2>
+          <p className="text-gray-300 text-sm md:text-base">Please wait while we process your registration...</p>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex justify-between text-sm text-gray-400 mb-2">
+        <div className="mb-6 md:mb-8">
+          <div className="flex justify-between text-xs md:text-sm text-gray-400 mb-2">
             <span>Progress</span>
             <span>{progress}%</span>
           </div>
@@ -83,7 +83,7 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
         </div>
 
         {/* Current Step */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {steps.map((step, index) => {
             const Icon = step.icon
             const isActive = index === currentStep
@@ -92,7 +92,7 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
             return (
               <div 
                 key={index}
-                className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
+                className={`flex items-center space-x-2 md:space-x-3 p-2 md:p-3 rounded-lg transition-all duration-300 ${
                   isActive 
                     ? 'bg-white/20 border border-white/30' 
                     : isCompleted 
@@ -100,7 +100,7 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
                     : 'bg-gray-700/50 border border-gray-600/30'
                 }`}
               >
-                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                <div className={`flex-shrink-0 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
                   isActive 
                     ? 'bg-blue-500 animate-pulse' 
                     : isCompleted 
@@ -108,12 +108,12 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
                     : 'bg-gray-600'
                 }`}>
                   {isActive ? (
-                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                    <Loader2 className="w-3 h-3 md:w-4 md:h-4 text-white animate-spin" />
                   ) : (
-                    <Icon className={`w-4 h-4 text-white ${step.color}`} />
+                    <Icon className={`w-3 h-3 md:w-4 md:h-4 text-white ${step.color}`} />
                   )}
                 </div>
-                <span className={`text-sm font-medium ${
+                <span className={`text-xs md:text-sm font-medium ${
                   isActive 
                     ? 'text-white' 
                     : isCompleted 
@@ -142,6 +142,18 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
           ))}
         </div>
       </div>
+      
+      {/* Mobile-specific styles */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @media (max-width: 768px) {
+            .fixed.inset-0 {
+              z-index: 9999 !important;
+              background-color: rgba(0, 0, 0, 0.95) !important;
+            }
+          }
+        `
+      }} />
     </div>
   )
 }

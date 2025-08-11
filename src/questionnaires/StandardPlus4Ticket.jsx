@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import CreditCardAnimation from "../Components/CreditCardAnimation"
 import { StatefulButton } from "../Components/StatefulButton"
 import LoadingAnimation from "../Components/LoadingAnimation"
-import LoadingBar from "../Components/LoadingBar"
+// LoadingBar import removed - using LoadingAnimation instead
 
 // Success Animation Component
 const SuccessAnimation = ({ onComplete }) => {
@@ -708,12 +708,9 @@ export default function StandardPlus4Ticket() {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
       {showSuccessAnimation && <SuccessAnimation />}
-              <LoadingBar 
+              <LoadingAnimation 
           isVisible={isSubmitting} 
-          message="Booking your ticket..." 
-          currentStep={loadingStep}
-          totalSteps={5}
-          fileUploadProgress={fileUploadProgress}
+          onComplete={() => setIsSubmitting(false)}
         />
       {errorBooking && (
         <div className="fixed top-0 left-0 w-full z-50">

@@ -23,7 +23,7 @@ import { StatefulButton } from "../Components/StatefulButton"
 import { useGalaAvailability } from "../Components/GalaAvailabilityHook"
 import ErrorAnimation from "../Components/ErrorAnimation"
 import LoadingAnimation from "../Components/LoadingAnimation"
-import LoadingBar from "../Components/LoadingBar"
+// LoadingBar import removed - using LoadingAnimation instead
 
 // Balloon Animation Component
 const BalloonAnimation = ({ onComplete }) => {
@@ -651,12 +651,9 @@ export default function AllInclusiveTicket() {
       >
         {showBalloons && <BalloonAnimation />}
         {showLoading && <LoadingAnimation isVisible={showLoading} onComplete={() => setShowLoading(false)} />}
-        <LoadingBar 
+        <LoadingAnimation 
           isVisible={isSubmitting} 
-          message="Booking your ticket..." 
-          currentStep={loadingStep}
-          totalSteps={5}
-          fileUploadProgress={fileUploadProgress}
+          onComplete={() => setIsSubmitting(false)}
         />
 
         {/* Floating particles background - reduced for performance */}
