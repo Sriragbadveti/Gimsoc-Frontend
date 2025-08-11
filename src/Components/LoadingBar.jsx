@@ -7,16 +7,20 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
   const [progress, setProgress] = useState(0)
   const [dots, setDots] = useState("")
   const [isMobile, setIsMobile] = useState(false)
+  const [forceMobile, setForceMobile] = useState(false)
 
   // Debug logging
   useEffect(() => {
-    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress, "Step:", currentStep, "FileUploadProgress:", fileUploadProgress)
-  }, [isVisible, progress, currentStep, fileUploadProgress])
+    console.log("🔄 LoadingBar isVisible:", isVisible, "Progress:", progress, "Step:", currentStep, "FileUploadProgress:", fileUploadProgress, "isMobile:", isMobile, "forceMobile:", forceMobile)
+  }, [isVisible, progress, currentStep, fileUploadProgress, isMobile, forceMobile])
 
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      // Force mobile view on small screens to ensure visibility
+      setForceMobile(mobile || window.innerWidth < 1024)
     }
     
     checkMobile()
@@ -63,6 +67,21 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
 
   if (!isVisible) return null
 
+  // Ensure the modal is always visible on mobile devices
+  const mobileStyles = forceMobile ? {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 9999,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1rem'
+  } : {}
+
   // Define steps with icons and descriptions
   const steps = [
     { icon: User, text: "Validating information...", color: "text-blue-500" },
@@ -74,26 +93,31 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
   ]
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center">
-      <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 max-w-md w-full mx-4 border border-white/20 shadow-2xl">
+    <div 
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+      style={forceMobile ? mobileStyles : {}}
+    >
+      <div className={`bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 w-full mx-4 border border-white/20 shadow-2xl ${
+        forceMobile ? 'max-w-sm' : 'max-w-md'
+      } ${forceMobile ? 'mobile-loading-bar' : ''}`}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Loader2 className="w-8 h-8 text-white animate-spin" />
+        <div className="text-center mb-6 md:mb-8">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 animate-pulse">
+            <Loader2 className="w-6 h-6 md:w-8 md:h-8 text-white animate-spin" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Booking Your Ticket</h2>
-          <p className="text-gray-300">Please wait while we process your registration...</p>
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Booking Your Ticket</h2>
+          <p className="text-gray-300 text-sm md:text-base">Please wait while we process your registration...</p>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex justify-between text-sm text-gray-400 mb-2">
+        <div className="mb-6 md:mb-8">
+          <div className="flex justify-between text-xs md:text-sm text-gray-400 mb-2">
             <span>Progress</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-3">
+          <div className="w-full bg-gray-700 rounded-full h-2 md:h-3">
             <div 
-              className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-300 ease-out relative overflow-hidden"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 md:h-3 rounded-full transition-all duration-300 ease-out relative overflow-hidden"
               style={{ width: `${progress}%` }}
             >
               {/* Shimmer effect on progress bar */}
@@ -108,7 +132,7 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
         </div>
 
         {/* Current Step */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 md:space-y-4 mb-6">
           {steps.map((step, index) => {
             const Icon = step.icon
             const isActive = index === currentStep
@@ -117,7 +141,7 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
             return (
               <div 
                 key={index}
-                className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
+                className={`flex items-center space-x-2 md:space-x-3 p-2 md:p-3 rounded-lg transition-all duration-300 ${
                   isActive 
                     ? 'bg-white/20 border border-white/30' 
                     : isCompleted 
@@ -125,7 +149,7 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
                     : 'bg-gray-700/50 border border-gray-600/30'
                 }`}
               >
-                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                <div className={`flex-shrink-0 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
                   isActive 
                     ? 'bg-blue-500 animate-pulse' 
                     : isCompleted 
@@ -133,12 +157,12 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
                     : 'bg-gray-600'
                 }`}>
                   {isActive ? (
-                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                    <Loader2 className="w-3 h-3 md:w-4 md:h-4 text-white animate-spin" />
                   ) : (
-                    <Icon className={`w-4 h-4 text-white ${step.color}`} />
+                    <Icon className={`w-3 h-3 md:w-4 md:h-4 text-white ${step.color}`} />
                   )}
                 </div>
-                <span className={`text-sm font-medium ${
+                <span className={`text-xs md:text-sm font-medium ${
                   isActive 
                     ? 'text-white' 
                     : isCompleted 
@@ -155,7 +179,7 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
         {/* File Upload Progress (if applicable) */}
         {fileUploadProgress > 0 && currentStep === 2 && (
           <div className="mb-6">
-            <div className="flex justify-between text-sm text-gray-400 mb-2">
+            <div className="flex justify-between text-xs md:text-sm text-gray-400 mb-2">
               <span>File Upload</span>
               <span>{Math.round(fileUploadProgress)}%</span>
             </div>
@@ -171,8 +195,8 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
         {/* Message */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2">
-            <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
-            <span className="text-white font-semibold text-lg">
+            <Loader2 className="w-4 h-4 md:w-5 md:h-5 text-blue-400 animate-spin" />
+            <span className="text-white font-semibold text-base md:text-lg">
               {message}{dots}
             </span>
           </div>
@@ -198,6 +222,19 @@ const LoadingBar = ({ isVisible, message = "Booking your ticket...", currentStep
             @keyframes shimmer {
               0% { transform: translateX(-100%); }
               100% { transform: translateX(100%); }
+            }
+            
+            .mobile-loading-bar {
+              transform: scale(1.05);
+              box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            }
+            
+            @media (max-width: 768px) {
+              .mobile-loading-bar {
+                transform: scale(1.02);
+                margin: 0.5rem;
+                max-width: calc(100vw - 1rem);
+              }
             }
           `
         }} />
