@@ -66,6 +66,10 @@ export default function AdminDashboard() {
   const [failedRegistrations, setFailedRegistrations] = useState([])
   const [failedRegistrationsLoading, setFailedRegistrationsLoading] = useState(false)
 
+  // Volunteers detail modal state
+  const [selectedVolunteer, setSelectedVolunteer] = useState(null)
+  const [isVolunteerModalOpen, setIsVolunteerModalOpen] = useState(false)
+
   // Tickets state
   const [tickets, setTickets] = useState([])
   const [ticketsLoading, setTicketsLoading] = useState(true)
@@ -99,6 +103,52 @@ export default function AdminDashboard() {
   
   // Google Sheets export state
   const [exportingToSheets, setExportingToSheets] = useState(false)
+
+  // Volunteers state
+  const [volunteers, setVolunteers] = useState([])
+  const [volunteersLoading, setVolunteersLoading] = useState(false)
+  const [volunteersError, setVolunteersError] = useState(null)
+  const [volunteerSearchQuery, setVolunteerSearchQuery] = useState("")
+
+  // Fetch volunteers
+  const fetchVolunteers = async () => {
+    try {
+      setVolunteersLoading(true)
+      setVolunteersError(null)
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/admin/getallvolunteers", {
+        headers: getAuthHeaders(),
+      })
+      setVolunteers(response.data)
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      setVolunteersError(err.response?.data?.message || err.message || "Failed to fetch volunteers.")
+    } finally {
+      setVolunteersLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated && activeTab === "volunteers") {
+      fetchVolunteers()
+    }
+  }, [activeTab, isAuthenticated])
+
+  const filteredVolunteers = useMemo(() => {
+    const q = volunteerSearchQuery.trim().toLowerCase()
+    if (!q) return volunteers
+    return volunteers.filter(v =>
+      (v.fullName || '').toLowerCase().includes(q) ||
+      (v.email || '').toLowerCase().includes(q) ||
+      (v.university || '').toLowerCase().includes(q) ||
+      (v.firstChoice || '').toLowerCase().includes(q)
+    )
+  }, [volunteers, volunteerSearchQuery])
 
   // Helper function to get auth headers
   const getAuthHeaders = () => {
@@ -2266,6 +2316,254 @@ export default function AdminDashboard() {
     )
   }
 
+  const renderVolunteersTab = () => {
+    if (volunteersLoading) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
+            <p className="text-gray-600">Loading volunteers...</p>
+          </div>
+        </div>
+      )
+    }
+    if (volunteersError) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+            <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-500" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Volunteers</h2>
+            <p className="text-red-600 mb-6 text-sm">{volunteersError}</p>
+            <button onClick={fetchVolunteers} className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">Try Again</button>
+          </div>
+        </div>
+      )
+    }
+    return (
+      <>
+        {/* Modal */}
+        {isVolunteerModalOpen && selectedVolunteer && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-4 border-b">
+                <h3 className="text-lg font-semibold">Volunteer Details - {selectedVolunteer.fullName}</h3>
+                <button onClick={() => setIsVolunteerModalOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
+              </div>
+              <div className="p-4 space-y-4 text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-gray-500">Email</div>
+                    <div className="font-medium">{selectedVolunteer.email}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500">WhatsApp</div>
+                    <div className="font-medium">{selectedVolunteer.whatsappNumber}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500">University</div>
+                    <div className="font-medium">{selectedVolunteer.university}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500">GIMSOC Member</div>
+                    <div className="font-medium">{selectedVolunteer.isGimsocMember ? 'Yes' : 'No'}</div>
+                  </div>
+                  {selectedVolunteer.gimsocMembershipId && (
+                    <div>
+                      <div className="text-gray-500">Membership ID</div>
+                      <div className="font-medium">{selectedVolunteer.gimsocMembershipId}</div>
+                    </div>
+                  )}
+                  <div>
+                    <div className="text-gray-500">Arrival</div>
+                    <div className="font-medium">{formatDate(selectedVolunteer.dateOfArrival)}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500">Departure</div>
+                    <div className="font-medium">{formatDate(selectedVolunteer.dateOfDeparture)}</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <div className="text-gray-500">1st Choice</div>
+                    <div className="font-medium">{selectedVolunteer.firstChoice}</div>
+                  </div>
+                  {selectedVolunteer.secondChoice && (
+                    <div>
+                      <div className="text-gray-500">2nd Choice</div>
+                      <div className="font-medium">{selectedVolunteer.secondChoice}</div>
+                    </div>
+                  )}
+                  {selectedVolunteer.thirdChoice && (
+                    <div>
+                      <div className="text-gray-500">3rd Choice</div>
+                      <div className="font-medium">{selectedVolunteer.thirdChoice}</div>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <div className="text-gray-500 mb-1">What makes you unique?</div>
+                  <div className="font-medium whitespace-pre-wrap">{selectedVolunteer.whatMakesYouUnique}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500 mb-1">Handling constructive criticism</div>
+                  <div className="font-medium whitespace-pre-wrap">{selectedVolunteer.handleConstructiveCriticism}</div>
+                </div>
+
+                {/* Role-specific blocks */}
+                {selectedVolunteer.logisticsResponses && (
+                  <div>
+                    <div className="text-gray-500 mb-2">Logistics Responses</div>
+                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.logisticsResponses, null, 2)}</pre>
+                  </div>
+                )}
+                {selectedVolunteer.prMarketingResponses && (
+                  <div>
+                    <div className="text-gray-500 mb-2">PR & Marketing Responses</div>
+                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.prMarketingResponses, null, 2)}</pre>
+                  </div>
+                )}
+                {selectedVolunteer.organizationResponses && (
+                  <div>
+                    <div className="text-gray-500 mb-2">Organization & Programme Responses</div>
+                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.organizationResponses, null, 2)}</pre>
+                  </div>
+                )}
+                {selectedVolunteer.workshopResponses && (
+                  <div>
+                    <div className="text-gray-500 mb-2">Workshops Responses</div>
+                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.workshopResponses, null, 2)}</pre>
+                  </div>
+                )}
+                {selectedVolunteer.registrationResponses && (
+                  <div>
+                    <div className="text-gray-500 mb-2">Registration Responses</div>
+                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.registrationResponses, null, 2)}</pre>
+                  </div>
+                )}
+                {selectedVolunteer.itTechResponses && (
+                  <div>
+                    <div className="text-gray-500 mb-2">IT & Tech Responses</div>
+                    <pre className="bg-gray-50 p-3 rounded border overflow-x-auto whitespace-pre-wrap">{JSON.stringify(selectedVolunteer.itTechResponses, null, 2)}</pre>
+                  </div>
+                )}
+
+                <div className="flex justify-end pt-2 border-t">
+                  <button onClick={() => setIsVolunteerModalOpen(false)} className="px-4 py-2 text-sm bg-gray-800 text-white rounded hover:bg-gray-700">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Filter className="h-5 w-5 text-gray-500" />
+              <h3 className="text-lg font-medium text-gray-900">Volunteers</h3>
+            </div>
+            <button onClick={fetchVolunteers} disabled={volunteersLoading} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              {volunteersLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              {volunteersLoading ? "Refreshing..." : "Refresh"}
+            </button>
+          </div>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by name, email, university or first choice..."
+                value={volunteerSearchQuery}
+                onChange={(e) => setVolunteerSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Table */}
+        <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applicant</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Choices</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredVolunteers.map((v) => (
+                  <tr key={v._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{v.fullName}</div>
+                        <div className="text-sm text-gray-500">{v.email}</div>
+                        <div className="text-xs text-gray-400">{v.whatsappNumber}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{v.university}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">1st: {v.firstChoice}</div>
+                      {v.secondChoice && <div className="text-xs text-gray-500">2nd: {v.secondChoice}</div>}
+                      {v.thirdChoice && <div className="text-xs text-gray-500">3rd: {v.thirdChoice}</div>}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(v.createdAt)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800" onClick={() => { setSelectedVolunteer(v); setIsVolunteerModalOpen(true); }}>
+                        <Eye className="h-4 w-4" />
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="lg:hidden space-y-4">
+          {filteredVolunteers.map((v) => (
+            <div key={v._id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <h3 className="font-medium text-gray-900">{v.fullName}</h3>
+                  <p className="text-sm text-gray-500">{v.email}</p>
+                  <p className="text-xs text-gray-400">{v.whatsappNumber}</p>
+                </div>
+                <span className="text-xs text-gray-500">{formatDate(v.createdAt)}</span>
+              </div>
+              <div className="text-sm text-gray-700">{v.university}</div>
+              <div className="mt-2 text-sm">
+                <div>1st: {v.firstChoice}</div>
+                {v.secondChoice && <div className="text-gray-600">2nd: {v.secondChoice}</div>}
+                {v.thirdChoice && <div className="text-gray-600">3rd: {v.thirdChoice}</div>}
+              </div>
+              <div className="mt-3">
+                <button className="text-blue-600 hover:text-blue-800 text-sm" onClick={() => { setSelectedVolunteer(v); setIsVolunteerModalOpen(true); }}>
+                  View details
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredVolunteers.length === 0 && volunteers.length === 0 && (
+          <div className="text-center py-12">
+            <User className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No volunteer applications found</h3>
+            <p className="text-gray-500">New applications will appear here as they are submitted.</p>
+          </div>
+        )}
+      </>
+    )
+  }
+
   if (isLoading) {
     return (
       <div className="flex h-screen bg-gray-50 items-center justify-center">
@@ -2409,6 +2707,24 @@ export default function AdminDashboard() {
                   )}
                 </div>
               </button>
+              <button
+                onClick={() => setActiveTab("volunteers")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === "volunteers"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Volunteers
+                  {volunteers.length > 0 && (
+                    <span className="bg-gray-100 text-gray-900 py-0.5 px-2 rounded-full text-xs font-medium">
+                      {volunteers.length}
+                    </span>
+                  )}
+                </div>
+              </button>
             </nav>
           </div>
         </div>
@@ -2419,6 +2735,7 @@ export default function AdminDashboard() {
         {activeTab === "email-audit" && renderEmailAuditTab()}
         {activeTab === "user-search" && renderUserSearchTab()}
         {activeTab === "failed-registrations" && renderFailedRegistrationsTab()}
+        {activeTab === "volunteers" && renderVolunteersTab()}
       </div>
     </div>
   )
