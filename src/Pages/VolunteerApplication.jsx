@@ -863,33 +863,116 @@ const VolunteerApplication = () => {
                 <h2 className="text-3xl font-bold text-white mb-6 text-center">
                   Basic Information
                 </h2>
+
+                {/* Conference Overview & Volunteer Information */}
+                <div className="mb-8 space-y-6">
+                  {/* Main Conference Info */}
+                  <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-xl p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-semibold text-blue-300">MEDCON'25 Volunteer Program</h3>
+                    </div>
+                    <p className="text-gray-200 leading-relaxed mb-4">
+                      We are thrilled to open applications for volunteers to be part of the Volunteers Team for <span className="font-semibold text-blue-300">MEDCON'25</span>, the 3rd Annual International Medical Conference hosted by GIMSOC. This flagship event unites Medical Students, Healthcare Professionals, and Global Leaders dedicated to advancing clinical knowledge, innovation, and collaboration.
+                    </p>
+                    <p className="text-gray-200 leading-relaxed">
+                      As a Volunteer, you will play a key role in ensuring the smooth operation of this prestigious event. With a variety of departments to be part of, you'll gain hands-on experience, develop professional skills and contribute to the success of one of the largest student-led medical conference in Tbilisi, Georgia.
+                    </p>
+                  </div>
+
+                  {/* Volunteer Perks */}
+                  <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-semibold text-green-300">Volunteer Perks</h3>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-gray-200">Volunteer Certificate</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-gray-200">CPD Points</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-gray-200">Headshot taken by Trident</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-gray-200">Feature on MEDCON Instagram</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-gray-200">MEDCON Website Mention</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-gray-200">Exclusive Digital Sticker Pack</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Why Join Section */}
+                  <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-semibold text-purple-300">🎓 Why Join?</h3>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                        <span className="text-gray-200">Gain hands-on experience at a leading international medical conference</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                        <span className="text-gray-200">Collaborate with an international team of students and professionals</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                        <span className="text-gray-200">Enhance skills in public speaking, event planning, and networking</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                        <span className="text-gray-200">Earn official recognition and certification for your contribution</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                        <span className="text-gray-200">Be part of one of the largest student-led conferences in the region</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
                 {/* Step 1 Progress Indicator */}
                 <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-blue-200">Step 1 Progress</span>
                     <span className="text-sm text-blue-300">
-                      {[
-                        !!formData.email,
-                        !!formData.fullName,
-                        !!formData.whatsappNumber,
-                        !!formData.university,
-                        !formData.isGimsocMember || !!formData.gimsocMembershipId
-                      ].filter(Boolean).length}/5 fields completed
+                      {step1Progress.completed}/{step1Progress.total} fields completed
                     </span>
                   </div>
                   <div className="w-full bg-blue-500/20 rounded-full h-2">
                     <div 
                       className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${([
-                          !!formData.email,
-                          !!formData.fullName,
-                          !!formData.whatsappNumber,
-                          !!formData.university,
-                          !formData.isGimsocMember || !!formData.gimsocMembershipId
-                        ].filter(Boolean).length / 5) * 100}%`
-                      }}
+                      style={{ width: `${step1Progress.percentage}%` }}
                     />
                   </div>
                 </div>
