@@ -6,6 +6,7 @@ import { Loader2, CheckCircle, CreditCard, Upload, User } from "lucide-react"
 const LoadingAnimation = ({ isVisible, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   const steps = [
     { icon: User, text: "Validating your information...", color: "text-blue-500" },
@@ -14,6 +15,18 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
     { icon: CheckCircle, text: "Confirming your ticket...", color: "text-yellow-500" },
     { icon: CheckCircle, text: "Ticket booked successfully!", color: "text-green-500" }
   ]
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     if (!isVisible) {
@@ -56,8 +69,11 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
 
   if (!isVisible) return null
 
+  // Debug logging for mobile visibility
+  console.log("🔄 LoadingAnimation:", { isVisible, isMobile, currentStep, progress })
+
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className={`fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 ${isMobile ? 'mobile-loading-animation' : ''}`}>
       <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 w-full max-w-sm md:max-w-md mx-4 border border-white/20">
         {/* Header */}
         <div className="text-center mb-6 md:mb-8">
@@ -151,6 +167,40 @@ const LoadingAnimation = ({ isVisible, onComplete }) => {
               z-index: 9999 !important;
               background-color: rgba(0, 0, 0, 0.95) !important;
             }
+            
+            /* Ensure LoadingAnimation is always visible on mobile */
+            .fixed.inset-0.bg-black\/90 {
+              position: fixed !important;
+              top: 0 !important;
+              left: 0 !important;
+              right: 0 !important;
+              bottom: 0 !important;
+              z-index: 9999 !important;
+              background-color: rgba(0, 0, 0, 0.95) !important;
+            }
+          }
+          
+          /* Force high z-index for all screen sizes */
+          .fixed.inset-0.bg-black\/90 {
+            z-index: 9999 !important;
+          }
+          
+          /* Mobile-specific loading animation styles */
+          .mobile-loading-animation {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 9999 !important;
+            background-color: rgba(0, 0, 0, 0.98) !important;
+            backdrop-filter: blur(10px) !important;
+          }
+          
+          .mobile-loading-animation .bg-white\/10 {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5) !important;
           }
         `
       }} />
