@@ -102,6 +102,7 @@ export default function AdminDashboard() {
   
   // Google Sheets export state
   const [exportingToSheets, setExportingToSheets] = useState(false)
+  const [exportingVolunteersToSheets, setExportingVolunteersToSheets] = useState(false)
 
   // Volunteers state
   const [volunteers, setVolunteers] = useState([])
@@ -749,6 +750,48 @@ export default function AdminDashboard() {
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingToSheets(false)
+    }
+  }
+
+  const exportVolunteersToGoogleSheets = async () => {
+    console.log("🚀 exportVolunteersToGoogleSheets called!");
+    console.log("📊 Current volunteers:", volunteers);
+    console.log("📊 Current state:", { 
+      exportingVolunteersToSheets, 
+      volunteersLength: volunteers.length,
+      activeTab 
+    });
+    
+    try {
+      setExportingVolunteersToSheets(true)
+      console.log("📊 Starting volunteer Google Sheets export...")
+      
+      const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/export-volunteers-to-sheets', {
+        volunteers: volunteers,
+        date: new Date().toISOString().split('T')[0] // Today's date
+      }, {
+        headers: getAuthHeaders(),
+        timeout: 30000 // 30 second timeout
+      })
+      
+      if (response.data.success) {
+        alert(`✅ Successfully exported ${response.data.exportedCount} volunteers to Google Sheets!\n\nSheet URL: ${response.data.sheetUrl}`)
+      } else {
+        alert(`❌ Export failed: ${response.data.message}`)
+      }
+    } catch (error) {
+      console.error("❌ Error exporting volunteers to Google Sheets:", error)
+      if (error.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
+    } finally {
+      setExportingVolunteersToSheets(false)
     }
   }
 
@@ -2314,6 +2357,14 @@ export default function AdminDashboard() {
   }
 
   const renderVolunteersTab = () => {
+    console.log("🔍 renderVolunteersTab called");
+    console.log("📊 Volunteers state:", { 
+      volunteers: volunteers.length, 
+      loading: volunteersLoading, 
+      error: volunteersError,
+      activeTab: activeTab 
+    });
+    
     if (volunteersLoading) {
       return (
         <div className="flex justify-center items-center py-8">
@@ -2346,6 +2397,20 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
+        {/* TEST EXPORT BUTTON - TOP OF SECTION */}
+        <div className="bg-yellow-100 border-2 border-yellow-400 rounded-lg p-4">
+          <h3 className="text-lg font-bold text-yellow-800 mb-2">🧪 TEST EXPORT BUTTON</h3>
+          <button
+            onClick={exportVolunteersToGoogleSheets}
+            className="px-6 py-3 text-lg font-bold bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors border-2 border-yellow-700 shadow-lg"
+          >
+            🚀 TEST EXPORT VOLUNTEERS TO SHEETS
+          </button>
+          <p className="text-sm text-yellow-700 mt-2">
+            This button should be visible at the top of the volunteers section. If you can see this, the export function is working.
+          </p>
+        </div>
+        
         {/* Search and Refresh */}
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
           <div className="relative flex-1 max-w-md">
@@ -2360,15 +2425,48 @@ export default function AdminDashboard() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <button
-            onClick={fetchVolunteers}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-          >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Refresh
-          </button>
+          
+          {/* Debug Info */}
+          <div className="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded">
+            Volunteers: {volunteers.length} | Loading: {volunteersLoading.toString()} | Error: {volunteersError || 'None'}
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <button
+              onClick={fetchVolunteers}
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
+            
+            {/* Export Button - Made More Prominent */}
+            <button
+              onClick={exportVolunteersToGoogleSheets}
+              disabled={exportingVolunteersToSheets}
+              className="px-6 py-3 text-base font-semibold bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 border-2 border-red-700 shadow-lg"
+              style={{ minWidth: '180px' }}
+            >
+              {exportingVolunteersToSheets ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-5 w-5" />
+                  EXPORT TO SHEETS
+                </>
+              )}
+            </button>
+            
+            {/* Additional Debug Info */}
+            <div className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded border border-red-300">
+              Button Visible: ✅ | Function: {typeof exportVolunteersToGoogleSheets}
+            </div>
+          </div>
         </div>
 
         {/* Desktop Table View */}
