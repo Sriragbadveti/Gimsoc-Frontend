@@ -31,7 +31,6 @@ const TICKET_TYPES = [
   "Standard+4", 
   "Individual", 
   "Group", 
-  "International", 
   "Doctor", 
   "Executive", 
   "All-Inclusive",
@@ -249,9 +248,7 @@ export default function AdminDashboard() {
         // Handle special cases for partial matching
         let matches = false;
         
-        if (filterType === "International" && ticketType.includes("International")) {
-          matches = true;
-        } else if (filterType === "Doctor" && ticketType.includes("Doctor")) {
+        if (filterType === "Doctor" && ticketType.includes("Doctor")) {
           matches = true;
         } else if (filterType === "Executive" && ticketType.includes("Executive")) {
           matches = true;
@@ -959,22 +956,22 @@ export default function AdminDashboard() {
                   <div>
                     <h4 className="font-semibold text-blue-900">Standard+2</h4>
                     <p className="text-sm text-blue-700">
-                      {ticketCounts.standardPlus2} / 150 sold
+                      {ticketCounts.standardPlus2} / 200 sold
                     </p>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-blue-900">
-                      {Math.round((ticketCounts.standardPlus2 / 150) * 100)}%
+                      {Math.round((ticketCounts.standardPlus2 / 200) * 100)}%
                     </div>
                     <div className="text-xs text-blue-600">
-                      {150 - ticketCounts.standardPlus2} remaining
+                      {200 - ticketCounts.standardPlus2} remaining
                     </div>
                   </div>
                 </div>
                 <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
                   <div 
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min((ticketCounts.standardPlus2 / 150) * 100, 100)}%` }}
+                    style={{ width: `${Math.min((ticketCounts.standardPlus2 / 200) * 100, 100)}%` }}
                   ></div>
                 </div>
               </div>
@@ -1058,7 +1055,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* International Tickets */}
-              <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200">
+              {/* <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-semibold text-yellow-900">International</h4>
@@ -1081,7 +1078,7 @@ export default function AdminDashboard() {
                     style={{ width: `${Math.min((ticketCounts.international / 50) * 100, 100)}%` }}
                   ></div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Subtype Limits */}
               <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">

@@ -117,7 +117,7 @@ const App = () => {
           {/* <Route path="/tsu-ticket" element={<TsuTicket/>}/> */}
           <Route path="/allinclusive-ticket" element={<AllInclusiveTicket/>}/>
           {/* <Route path="/tsuallinclusive-ticket" element={<TsuAllInclusiveTicket/>}/> */}
-          <Route path="/international-ticket" element={<InternationalTicket/>}/>
+          {/* <Route path="/international-ticket" element={<InternationalTicket/>}/> */}
           <Route path="/doctor-ticket" element={<DoctorTicket/>} />
           <Route path="/attendeedashboard" element={<AttendeeDashboard/>}/>
           <Route path="/adminpage" element={<AdminTicketDashboard/>}/>
