@@ -102,7 +102,6 @@ export default function TicketsSoon() {
             <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-4 tracking-tight">
               Tickets
             </h1>
-            <h2 className="text-4xl md:text-6xl font-light text-white mb-6 tracking-wide">Coming Soon</h2>
             <div className="w-32 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"></div>
           </div>
 
