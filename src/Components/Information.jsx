@@ -1,6 +1,9 @@
-import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { CalendarDaysIcon, MapPinIcon, AcademicCapIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 export default function Information() {
+  const navigate = useNavigate();
+  
   return (
     <div className="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -59,6 +62,23 @@ export default function Information() {
                 <dd className="mt-1 text-base text-gray-400">
                   Ivane Javakhishvili Tbilisi State University (1 Ilia
                   Chavchavadze Avenue, Tbilisi 0179, Georgia) TSU Main Campus
+                </dd>
+              </div>
+            </div>
+            <div className="flex items-start gap-x-4">
+              <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
+                <AcademicCapIcon aria-hidden="true" className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <dt className="text-base font-semibold text-white">Pre-Conference Workshops</dt>
+                <dd className="mt-1 text-base text-gray-400">
+                  Join our exclusive workshops covering USMLE preparation, gut health, research methodology, and more. 
+                  <button 
+                    onClick={() => navigate("/workshops")}
+                    className="ml-2 text-indigo-400 hover:text-indigo-300 underline font-medium"
+                  >
+                    Register now →
+                  </button>
                 </dd>
               </div>
             </div>

@@ -69,6 +69,15 @@ export default function AdminDashboard() {
   const [selectedVolunteer, setSelectedVolunteer] = useState(null)
   const [isVolunteerModalOpen, setIsVolunteerModalOpen] = useState(false)
 
+  // Workshop states
+  const [workshopRegistrations, setWorkshopRegistrations] = useState([])
+  const [workshopLoading, setWorkshopLoading] = useState(true)
+  const [workshopError, setWorkshopError] = useState(null)
+  const [workshopStats, setWorkshopStats] = useState(null)
+  const [expandedWorkshops, setExpandedWorkshops] = useState(new Set())
+  const [workshopFilter, setWorkshopFilter] = useState("All")
+  const [workshopStatusFilter, setWorkshopStatusFilter] = useState("All")
+
   // Tickets state
   const [tickets, setTickets] = useState([])
   const [ticketsLoading, setTicketsLoading] = useState(true)
@@ -138,6 +147,40 @@ export default function AdminDashboard() {
       fetchVolunteers()
     }
   }, [activeTab, isAuthenticated])
+
+  // Fetch workshop registrations
+  const fetchWorkshopRegistrations = async () => {
+    try {
+      setWorkshopLoading(true)
+      setWorkshopError(null)
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/workshop/registrations", {
+        headers: getAuthHeaders(),
+        params: {
+          workshopId: workshopFilter === "All" ? undefined : workshopFilter,
+          status: workshopStatusFilter === "All" ? undefined : workshopStatusFilter
+        }
+      })
+      setWorkshopRegistrations(response.data.registrations || [])
+      setWorkshopStats(response.data.workshopStats || [])
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      setWorkshopError(err.response?.data?.message || err.message || "Failed to fetch workshop registrations.")
+    } finally {
+      setWorkshopLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated && activeTab === "workshops") {
+      fetchWorkshopRegistrations()
+    }
+  }, [activeTab, isAuthenticated, workshopFilter, workshopStatusFilter])
 
   const filteredVolunteers = useMemo(() => {
     const q = volunteerSearchQuery.trim().toLowerCase()
@@ -2796,6 +2839,210 @@ export default function AdminDashboard() {
     )
   }
 
+  const renderWorkshopsTab = () => {
+    if (workshopLoading) {
+      return (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (workshopError) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-red-500 mb-4">{workshopError}</p>
+          <button
+            onClick={fetchWorkshopRegistrations}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        {/* Workshop Statistics */}
+        {workshopStats && workshopStats.length > 0 && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Workshop Statistics</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {workshopStats.map((stat, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm text-gray-600 truncate">{stat.workshopTitle}</p>
+                  <p className="text-2xl font-bold text-blue-600">{stat.count}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Filters */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Workshop</label>
+              <select
+                value={workshopFilter}
+                onChange={(e) => setWorkshopFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="All">All Workshops</option>
+                <option value="amboss">AMBOSS Compass</option>
+                <option value="biome">Biome - Gut Health</option>
+                <option value="scientific-series">Scientific Series</option>
+                <option value="project-img">Project IMG</option>
+                <option value="vaccine-voices">Vaccine Voices</option>
+                <option value="silent-siege">Silent Siege</option>
+                <option value="uae-licensing">UAE Licensing</option>
+                <option value="linkedin-proficiency">LinkedIn Proficiency</option>
+              </select>
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+              <select
+                value={workshopStatusFilter}
+                onChange={(e) => setWorkshopStatusFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="All">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div className="flex items-end">
+              <button
+                onClick={fetchWorkshopRegistrations}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Workshop Registrations Table */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Workshop Registrations ({workshopRegistrations.length})
+            </h3>
+          </div>
+          
+          {workshopRegistrations.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500 text-lg">No workshop registrations found.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Workshop
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Registrant
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      University
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Registration Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {workshopRegistrations.map((registration) => (
+                    <tr key={registration._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {registration.workshopTitle}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {registration.workshopId}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {registration.fullName}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {registration.email}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {registration.whatsapp}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {registration.university}
+                        </div>
+                        {registration.otherUniversity && (
+                          <div className="text-sm text-gray-500">
+                            Other: {registration.otherUniversity}
+                          </div>
+                        )}
+                        <div className="text-sm text-gray-500">
+                          Semester: {registration.currentSemester}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          registration.status === 'confirmed' 
+                            ? 'bg-green-100 text-green-800'
+                            : registration.status === 'cancelled'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {registration.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatDate(registration.registrationDate)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => {
+                            const newStatus = registration.status === 'confirmed' ? 'pending' : 'confirmed';
+                            // Here you would call an API to update the status
+                            console.log('Update status to:', newStatus);
+                          }}
+                          className="text-blue-600 hover:text-blue-900 mr-3"
+                        >
+                          {registration.status === 'confirmed' ? 'Unconfirm' : 'Confirm'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            // Here you would call an API to cancel the registration
+                            console.log('Cancel registration');
+                          }}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Cancel
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   if (!isAuthenticated) {
     return null
   }
@@ -2946,6 +3193,24 @@ export default function AdminDashboard() {
                   )}
                 </div>
               </button>
+              <button
+                onClick={() => setActiveTab("workshops")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === "workshops"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  Workshops
+                  {workshopRegistrations.length > 0 && (
+                    <span className="bg-gray-100 text-gray-900 py-0.5 px-2 rounded-full text-xs font-medium">
+                      {workshopRegistrations.length}
+                    </span>
+                  )}
+                </div>
+              </button>
             </nav>
           </div>
         </div>
@@ -2957,6 +3222,7 @@ export default function AdminDashboard() {
         {activeTab === "user-search" && renderUserSearchTab()}
         {activeTab === "failed-registrations" && renderFailedRegistrationsTab()}
         {activeTab === "volunteers" && renderVolunteersTab()}
+        {activeTab === "workshops" && renderWorkshopsTab()}
       </div>
     </div>
   )

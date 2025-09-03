@@ -40,6 +40,7 @@ import AdminLogin from "./Pages/AdminLogin"
 import FAQ from "./Pages/FAQ"
 import TermsAndConditions from "./Pages/TermsAndConditions"
 import VolunteerApplication from "./Pages/VolunteerApplication"
+import WorkshopRegistrationPage from "./Pages/WorkshopRegistrationPage"
 
 
 const HomePage = () => (
@@ -138,6 +139,7 @@ const App = () => {
           <Route path="/faq" element={<FAQ/>}/>
           <Route path="/terms" element={<TermsAndConditions/>}/>
           <Route path="/volunteer" element={<VolunteerApplication/>} />
+          <Route path="/workshops" element={<WorkshopRegistrationPage/>} />
         </Routes>
       )}
     </div>
