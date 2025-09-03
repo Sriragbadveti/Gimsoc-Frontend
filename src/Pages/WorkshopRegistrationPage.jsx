@@ -35,7 +35,6 @@ const WORKSHOP_OPTIONS = [
     id: "amboss",
     title: "The AMBOSS Compass: Navigating the USMLE Pathway",
     date: "22nd October 2025",
-    time: "N/A",
     platform: "Online",
     speaker: "Margherita",
     organization: "AMBOSS",
@@ -49,11 +48,9 @@ const WORKSHOP_OPTIONS = [
     id: "biome",
     title: "Biome - Leading Minds in Gut Health",
     date: "7th September, 2025",
-    time: "11:00 AM – 12:30 PM",
     platform: "Online",
     venue: "New Vision University (NVU) Health Hub",
     speaker: "Dr. Segenet Bizuneh",
-    organization: "Biome",
     description: "Gut health has quickly become one of the most fascinating and impactful areas of modern medicine, and this session will dive deep into its mysteries.",
     icon: Heart,
     color: "from-green-500 to-emerald-600",
@@ -64,7 +61,6 @@ const WORKSHOP_OPTIONS = [
     id: "scientific-series",
     title: "From Curiosity to Conference -- The Researcher's Toolkit",
     date: "Multiple dates (Sept 14, 21, 28)",
-    time: "Various times",
     platform: "Online",
     speaker: "Multiple speakers",
     organization: "INSPECT-LB, MEDICA-RI, Scientific Department",
@@ -79,7 +75,6 @@ const WORKSHOP_OPTIONS = [
     id: "project-img",
     title: "From Isolation to Solidarity: Social Impacts of Infectious Disease",
     date: "1st October 2025",
-    time: "N/A",
     platform: "Online",
     speaker: "Mr. Michael Hermoisa",
     organization: "Project IMG",
@@ -93,7 +88,6 @@ const WORKSHOP_OPTIONS = [
     id: "vaccine-voices",
     title: "Vaccine Voices: Addressing Hesitancy, Protecting Futures",
     date: "5th October, 2025",
-    time: "N/A",
     platform: "Offline",
     venue: "New Vision University (NVU) Audimax",
     speaker: "Dr. Giorgi Derevenskikh, Dr. Nino Didbaridze",
@@ -108,10 +102,8 @@ const WORKSHOP_OPTIONS = [
     id: "silent-siege",
     title: "Silent Siege: Navigating AMR and Mold Epidemics",
     date: "12th October, 2025",
-    time: "N/A",
-    platform: "Online/Offline",
+    platform: "Offline",
     speaker: "Dr. Brandon (pharmacologist, AMR survivor), Dr. Natia Shavgulidze",
-    organization: "The CDC",
     description: "Join us for an exciting and impactful event exploring the urgent challenge of antibiotic resistance and the hidden dangers of mold toxicity. Dive into the 'Antimicrobial Resistance Arena,' a high-energy simulation where you'll take on roles like healthcare providers, policy-makers, and pathogens.",
     icon: Zap,
     color: "from-red-500 to-pink-600",
@@ -122,10 +114,8 @@ const WORKSHOP_OPTIONS = [
     id: "uae-licensing",
     title: "Pathway to Practice – UAE Medical Licensing",
     date: "15th October, 2025",
-    time: "N/A",
     platform: "Online",
     speaker: "Dr. Nayab Mustafa (Licensed in UAE)",
-    organization: "UAE Medical Licensing",
     description: "Are you ready to build a secure and thriving medical career—regardless of global uncertainties? In a time of shifting visa policies and career challenges, the UAE is fast becoming a top destination for ambitious international medical graduates.",
     icon: Star,
     color: "from-yellow-500 to-amber-600",
@@ -136,11 +126,9 @@ const WORKSHOP_OPTIONS = [
     id: "linkedin-proficiency",
     title: "Career Snap 360 - Your Guide to LinkedIn Proficiency",
     date: "21st October, 2025",
-    time: "3:00 PM - 5:30 PM",
     platform: "Offline",
     venue: "New Vision University (NVU) Health Hub",
     speaker: "Toyin Dairo, Arun Venkiteswaran, Dr. Tamar Didbaridze",
-    organization: "Career Development",
     description: "Ready to supercharge your career path in medicine? In today's competitive landscape, your professional online presence is as crucial as your clinical skills. Don't just study medicine; strategically build your future!",
     icon: Sparkles,
     color: "from-indigo-500 to-purple-600",
@@ -374,7 +362,7 @@ export default function WorkshopRegistrationPage() {
               className="inline-block"
             >
               <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-                MEDCON'25 Workshops
+                MEDCON'25 Pre-Conference Events
               </h1>
             </motion.div>
             <motion.p 
@@ -383,8 +371,8 @@ export default function WorkshopRegistrationPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Join our exclusive pre-conference workshops and gain valuable insights from industry experts. 
-              <span className="text-blue-600 font-semibold"> Select a workshop below to begin your registration.</span>
+              Join our exclusive pre-conference events and gain valuable insights from industry experts. 
+              <span className="text-blue-600 font-semibold"> Select a pre-conference below to begin registration.</span>
             </motion.p>
           </motion.div>
 
@@ -455,7 +443,7 @@ export default function WorkshopRegistrationPage() {
                           <Calendar className="w-4 h-4 text-blue-500" />
                           <span className="font-medium">{workshop.date}</span>
                         </motion.div>
-                        {workshop.time !== "N/A" && (
+                        {workshop.time && (
                           <motion.div 
                             className="flex items-center gap-3"
                             whileHover={{ x: 5 }}
@@ -487,9 +475,11 @@ export default function WorkshopRegistrationPage() {
                         <p className="text-xs text-gray-500 mb-1">
                           <span className="font-semibold text-gray-700">Speaker:</span> {workshop.speaker}
                         </p>
-                        <p className="text-xs text-gray-500">
-                          <span className="font-semibold text-gray-700">Organization:</span> {workshop.organization}
-                        </p>
+                        {workshop.organization && (
+                          <p className="text-xs text-gray-500">
+                            <span className="font-semibold text-gray-700">Organization:</span> {workshop.organization}
+                          </p>
+                        )}
                       </div>
 
                       {/* Hover Arrow */}
@@ -574,7 +564,7 @@ export default function WorkshopRegistrationPage() {
                       <Calendar className="w-4 h-4" />
                       <span className="font-medium">{selectedWorkshop.date}</span>
                     </motion.div>
-                    {selectedWorkshop.time !== "N/A" && (
+                    {selectedWorkshop.time && (
                       <motion.div 
                         className="flex items-center gap-2 bg-white bg-opacity-20 px-3 py-2 rounded-lg backdrop-blur-sm"
                         whileHover={{ scale: 1.05 }}
