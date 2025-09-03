@@ -70,11 +70,11 @@ export default function Information() {
                 <AcademicCapIcon aria-hidden="true" className="h-6 w-6 text-white" />
               </div>
               <div>
-                <dt className="text-base font-semibold text-white">Pre-Conference Workshops</dt>
+                <dt className="text-base font-semibold text-white">Pre-Conference Events</dt>
                 <dd className="mt-1 text-base text-gray-400">
-                  Join our exclusive workshops covering USMLE preparation, gut health, research methodology, and more. 
+                  Join our exclusive pre-conference events covering USMLE preparation, gut health, research methodology, and more. 
                   <button 
-                    onClick={() => navigate("/workshops")}
+                    onClick={() => navigate("/pre-conference")}
                     className="ml-2 text-indigo-400 hover:text-indigo-300 underline font-medium"
                   >
                     Register now →

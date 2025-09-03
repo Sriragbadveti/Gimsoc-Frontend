@@ -155,7 +155,7 @@ export default function Hero() {
               </motion.button>
             </motion.div>
             
-            {/* Workshops Button - Mobile Only */}
+            {/* Pre-Conference Button - Mobile Only */}
             <motion.div
               className="mt-3 sm:hidden flex justify-center"
               initial={{ opacity: 0, y: 20 }}
@@ -163,12 +163,12 @@ export default function Hero() {
               transition={{ delay: 2.6, duration: 0.5 }}
             >
               <motion.button
-                onClick={() => navigate("/workshops")}
+                onClick={() => navigate("/pre-conference")}
                 className="w-full max-w-xs rounded-md bg-gradient-to-br from-[#f59e0b] to-[#d97706] px-6 py-3 text-sm font-semibold text-white shadow-xs hover:opacity-90 hover:scale-105 transition-transform duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f59e0b] cursor-pointer"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                🎓 Join Workshops
+                🎓 Pre-Conference Events
               </motion.button>
             </motion.div>
           </div>

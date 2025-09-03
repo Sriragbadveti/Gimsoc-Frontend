@@ -10,7 +10,7 @@ import Cookies from "js-cookie"
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Register for MEDCON", href: "/comingsoon" },
-  { name: "Workshops", href: "/workshops" },
+  { name: "Pre-Conference", href: "/pre-conference" },
   { name: "Volunteer Applications", href: "/volunteer" },
   {
     name: "About Us",

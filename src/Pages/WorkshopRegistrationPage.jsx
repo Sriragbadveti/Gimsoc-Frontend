@@ -32,24 +32,10 @@ import {
 
 const WORKSHOP_OPTIONS = [
   {
-    id: "amboss",
-    title: "The AMBOSS Compass: Navigating the USMLE Pathway",
-    date: "22nd October 2025",
-    platform: "Online",
-    speaker: "Margherita",
-    organization: "AMBOSS",
-    description: "This offline event session is designed to guide medical students through the USMLE journey, offering strategies, preparation insights, and resources to excel in this important career milestone.",
-    icon: GraduationCap,
-    color: "from-blue-500 to-indigo-600",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-200"
-  },
-  {
     id: "biome",
     title: "Biome - Leading Minds in Gut Health",
     date: "7th September, 2025",
     platform: "Online",
-    venue: "New Vision University (NVU) Health Hub",
     speaker: "Dr. Segenet Bizuneh",
     description: "Gut health has quickly become one of the most fascinating and impactful areas of modern medicine, and this session will dive deep into its mysteries.",
     icon: Heart,
@@ -125,7 +111,7 @@ const WORKSHOP_OPTIONS = [
   {
     id: "linkedin-proficiency",
     title: "Career Snap 360 - Your Guide to LinkedIn Proficiency",
-    date: "21st October, 2025",
+    date: "18th October, 2025",
     platform: "Offline",
     venue: "New Vision University (NVU) Health Hub",
     speaker: "Toyin Dairo, Arun Venkiteswaran, Dr. Tamar Didbaridze",
@@ -134,6 +120,19 @@ const WORKSHOP_OPTIONS = [
     color: "from-indigo-500 to-purple-600",
     bgColor: "bg-indigo-50",
     borderColor: "border-indigo-200"
+  },
+  {
+    id: "amboss",
+    title: "The AMBOSS Compass: Navigating the USMLE Pathway",
+    date: "22nd October 2025",
+    platform: "Online",
+    speaker: "Margherita",
+    organization: "AMBOSS",
+    description: "This offline event session is designed to guide medical students through the USMLE journey, offering strategies, preparation insights, and resources to excel in this important career milestone.",
+    icon: GraduationCap,
+    color: "from-blue-500 to-indigo-600",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-200"
   }
 ]
 
@@ -606,7 +605,8 @@ export default function WorkshopRegistrationPage() {
               </div>
             </div>
 
-            {/* Enhanced Form */}
+            {/* Enhanced Form - only for Biome */}
+            {selectedWorkshop.id === "biome" ? (
             <motion.form 
               onSubmit={handleSubmit} 
               className="p-8"
@@ -929,6 +929,22 @@ export default function WorkshopRegistrationPage() {
               </div>
             </div>
                       </motion.form>
+            ) : (
+              <div className="p-8">
+                <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg">
+                  Registration for this pre-conference is not open online. Please check back later.
+                </div>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedWorkshop(null)}
+                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Back to Pre-Conference Selection
+                  </button>
+                </div>
+              </div>
+            )}
           </motion.div>
         </div>
       </motion.div>
