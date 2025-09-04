@@ -910,7 +910,7 @@ export default function WorkshopRegistrationPage() {
                   onClick={() => setSelectedWorkshop(null)}
                   className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Back to Workshop Selection
+                  Back to Pre-conference Page
                 </button>
                 <button
                   type="submit"
