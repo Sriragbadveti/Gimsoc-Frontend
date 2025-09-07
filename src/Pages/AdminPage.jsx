@@ -112,6 +112,7 @@ export default function AdminDashboard() {
   // Google Sheets export state
   const [exportingToSheets, setExportingToSheets] = useState(false)
   const [exportingVolunteersToSheets, setExportingVolunteersToSheets] = useState(false)
+  const [exportingWorkshopsToSheets, setExportingWorkshopsToSheets] = useState(false)
 
   // Volunteers state
   const [volunteers, setVolunteers] = useState([])
@@ -835,6 +836,48 @@ export default function AdminDashboard() {
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingVolunteersToSheets(false)
+    }
+  }
+
+  const exportWorkshopsToGoogleSheets = async () => {
+    console.log("🚀 exportWorkshopsToGoogleSheets called!");
+    console.log("📊 Current workshop registrations:", workshopRegistrations);
+    console.log("📊 Current state:", { 
+      exportingWorkshopsToSheets, 
+      registrationsLength: workshopRegistrations.length,
+      activeTab 
+    });
+    
+    try {
+      setExportingWorkshopsToSheets(true)
+      console.log("📊 Starting workshop registrations Google Sheets export...")
+      
+      const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/export-workshops-to-sheets', {
+        workshopRegistrations: workshopRegistrations,
+        date: new Date().toISOString().split('T')[0] // Today's date
+      }, {
+        headers: getAuthHeaders(),
+        timeout: 30000 // 30 second timeout
+      })
+      
+      if (response.data.success) {
+        alert(`✅ Successfully exported ${response.data.exportedCount} workshop registrations to Google Sheets!\n\nSheet URL: ${response.data.sheetUrl}`)
+      } else {
+        alert(`❌ Export failed: ${response.data.message}`)
+      }
+    } catch (error) {
+      console.error("❌ Error exporting workshop registrations to Google Sheets:", error)
+      if (error.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
+    } finally {
+      setExportingWorkshopsToSheets(false)
     }
   }
 
@@ -2913,15 +2956,33 @@ export default function AdminDashboard() {
                 <option value="cancelled">Cancelled</option>
               </select>
             </div>
-            <div className="flex items-end">
-              <button
-                onClick={fetchWorkshopRegistrations}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-              >
-                <RefreshCw className="h-4 w-4" />
-                Refresh
-              </button>
-            </div>
+             <div className="flex items-end gap-2">
+               <button
+                 onClick={fetchWorkshopRegistrations}
+                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+               >
+                 <RefreshCw className="h-4 w-4" />
+                 Refresh
+               </button>
+               
+               <button
+                 onClick={exportWorkshopsToGoogleSheets}
+                 disabled={exportingWorkshopsToSheets || workshopRegistrations.length === 0}
+                 className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+               >
+                 {exportingWorkshopsToSheets ? (
+                   <>
+                     <Loader2 className="h-4 w-4 animate-spin" />
+                     Exporting...
+                   </>
+                 ) : (
+                   <>
+                     <Upload className="h-4 w-4" />
+                     Export to Sheets
+                   </>
+                 )}
+               </button>
+             </div>
           </div>
         </div>
 
