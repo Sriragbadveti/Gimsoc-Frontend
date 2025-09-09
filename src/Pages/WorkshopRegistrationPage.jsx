@@ -947,6 +947,7 @@ export default function WorkshopRegistrationPage() {
                   )}
                 </button>
               </div>
+            </div>
             </motion.form>
             ) : (
               <div className="p-8">
