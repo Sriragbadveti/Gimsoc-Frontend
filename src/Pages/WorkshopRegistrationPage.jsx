@@ -174,6 +174,8 @@ const SCIENTIFIC_SERIES_OPTIONS = [
 
 export default function WorkshopRegistrationPage() {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null)
+  const [ssStep, setSsStep] = useState("email")
+  const [ssEligible, setSsEligible] = useState(null)
   
   // Add CSS animations
   useEffect(() => {
@@ -397,6 +399,10 @@ export default function WorkshopRegistrationPage() {
                   onClick={() => {
                     if (workshop.closed) return;
                     setSelectedWorkshop(workshop)
+                    if (workshop.id === "scientific-series") {
+                      setSsStep("email")
+                      setSsEligible(null)
+                    }
                   }}
                 >
                   <div className={`relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border-2 ${workshop.borderColor} hover:border-opacity-100 overflow-hidden`}>
@@ -610,7 +616,7 @@ export default function WorkshopRegistrationPage() {
               </div>
             </div>
 
-            {/* Enhanced Form - only for Biome */}
+            {/* Biome closed; Scientific Series email gate; Others default */}
             {selectedWorkshop.id === "biome" ? (
             <div className="p-8">
               <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg">
@@ -626,7 +632,47 @@ export default function WorkshopRegistrationPage() {
                 </button>
               </div>
             </div>
-            ) : selectedWorkshop.id === "scientific-series" ? (
+            ) : selectedWorkshop.id === "scientific-series" && ssStep === "email" ? (
+            <div className="p-8">
+              <div className="max-w-md">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Enter your email to continue</label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="you@example.com"
+                />
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!formData.email || !formData.email.includes('@')) {
+                      alert('Please enter a valid email');
+                      return;
+                    }
+                    try {
+                      const resp = await fetch(`https://gimsoc-backend.onrender.com/api/workshop/eligibility?email=${encodeURIComponent(formData.email)}`);
+                      const data = await resp.json();
+                      if (data.success) {
+                        setSsEligible(!!data.eligible);
+                        setSsStep('form');
+                      } else {
+                        alert(data.message || 'Eligibility check failed');
+                      }
+                    } catch (e) {
+                      alert('Eligibility check failed');
+                    }
+                  }}
+                  className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Continue
+                </button>
+                {ssEligible === false && (
+                  <p className="mt-3 text-sm text-yellow-700">No MEDCON ticket found for this email. Payment will be required.</p>
+                )}
+              </div>
+            </div>
+            ) : selectedWorkshop.id === "scientific-series" && ssStep === "form" ? (
             <motion.form 
               onSubmit={handleSubmit} 
               className="p-8"
@@ -865,7 +911,7 @@ export default function WorkshopRegistrationPage() {
               )}
 
               {/* Payment Proof Upload (for paid events) */}
-              {selectedWorkshop.hasPayment && formData.selectedScientificSeries && (
+              {selectedWorkshop.id === "scientific-series" && ssEligible === false && formData.selectedScientificSeries && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Proof of Payment *
