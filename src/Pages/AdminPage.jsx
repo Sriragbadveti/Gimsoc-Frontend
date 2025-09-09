@@ -2934,7 +2934,7 @@ export default function AdminDashboard() {
               >
                 <option value="All">All Workshops</option>
                 <option value="amboss">AMBOSS Compass</option>
-                <option value="biome">Biome - Gut Health</option>
+                <option value="biome" disabled>Biome - Gut Health (Closed)</option>
                 <option value="scientific-series">Scientific Series</option>
                 <option value="project-img">Project IMG</option>
                 <option value="vaccine-voices">Vaccine Voices</option>

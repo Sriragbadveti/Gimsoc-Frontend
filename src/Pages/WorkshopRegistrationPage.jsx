@@ -31,6 +31,7 @@ import {
 } from "lucide-react"
 
 const WORKSHOP_OPTIONS = [
+  // BIOME shown but disabled/closed
   {
     id: "biome",
     title: "Biome - Leading Minds in Gut Health",
@@ -41,7 +42,8 @@ const WORKSHOP_OPTIONS = [
     icon: Heart,
     color: "from-green-500 to-emerald-600",
     bgColor: "bg-green-50",
-    borderColor: "border-green-200"
+    borderColor: "border-green-200",
+    closed: true
   },
   {
     id: "scientific-series",
@@ -391,8 +393,11 @@ export default function WorkshopRegistrationPage() {
                     transition: { duration: 0.3 }
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className="group cursor-pointer"
-                  onClick={() => setSelectedWorkshop(workshop)}
+                  className={`group ${workshop.closed ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+                  onClick={() => {
+                    if (workshop.closed) return;
+                    setSelectedWorkshop(workshop)
+                  }}
                 >
                   <div className={`relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border-2 ${workshop.borderColor} hover:border-opacity-100 overflow-hidden`}>
                     {/* Gradient Header */}
@@ -408,14 +413,14 @@ export default function WorkshopRegistrationPage() {
                         >
                           <IconComponent className="w-6 h-6" />
                         </motion.div>
-                        {workshop.hasPayment && (
+                        {(workshop.hasPayment || workshop.closed) && (
                           <motion.span 
-                            className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow-md"
+                            className={`text-white text-xs px-3 py-1 rounded-full font-semibold shadow-md ${workshop.closed ? 'bg-red-600' : 'bg-gradient-to-r from-yellow-400 to-orange-500'}`}
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ delay: index * 0.1 + 0.5 }}
                           >
-                            💰 Paid Event
+                            {workshop.closed ? 'Closed' : '💰 Paid Event'}
                           </motion.span>
                         )}
                       </div>
@@ -607,6 +612,21 @@ export default function WorkshopRegistrationPage() {
 
             {/* Enhanced Form - only for Biome */}
             {selectedWorkshop.id === "biome" ? (
+            <div className="p-8">
+              <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg">
+                Registration for this pre-conference is closed.
+              </div>
+              <div className="mt-6">
+                <button
+                  type="button"
+                  onClick={() => setSelectedWorkshop(null)}
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Back to Pre-Conference Selection
+                </button>
+              </div>
+            </div>
+            ) : selectedWorkshop.id === "scientific-series" ? (
             <motion.form 
               onSubmit={handleSubmit} 
               className="p-8"
@@ -927,8 +947,7 @@ export default function WorkshopRegistrationPage() {
                   )}
                 </button>
               </div>
-            </div>
-                      </motion.form>
+            </motion.form>
             ) : (
               <div className="p-8">
                 <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg">
