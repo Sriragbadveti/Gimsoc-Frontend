@@ -176,6 +176,7 @@ export default function WorkshopRegistrationPage() {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null)
   const [ssStep, setSsStep] = useState("email")
   const [ssEligible, setSsEligible] = useState(null)
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
   
   // Add CSS animations
   useEffect(() => {
@@ -234,13 +235,18 @@ export default function WorkshopRegistrationPage() {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0]
-    if (file && file.type === "application/pdf") {
+    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size must be less than 5MB.")
+        return
+      }
       setFormData(prev => ({
         ...prev,
         paymentProof: file
       }))
     } else {
-      alert("Please upload a PDF file only.")
+      alert("Please upload a JPEG or PNG image file only.")
     }
   }
 
@@ -302,6 +308,9 @@ export default function WorkshopRegistrationPage() {
 
   const resetForm = () => {
     setSelectedWorkshop(null)
+    setSsStep("email")
+    setSsEligible(null)
+    setIsVerifyingEmail(false)
     setFormData({
       fullName: "",
       email: "",
@@ -402,6 +411,7 @@ export default function WorkshopRegistrationPage() {
                     if (workshop.id === "scientific-series") {
                       setSsStep("email")
                       setSsEligible(null)
+                      setIsVerifyingEmail(false)
                     }
                   }}
                 >
@@ -640,7 +650,8 @@ export default function WorkshopRegistrationPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={isVerifyingEmail}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="you@example.com"
                 />
                 <button
@@ -650,6 +661,7 @@ export default function WorkshopRegistrationPage() {
                       alert('Please enter a valid email');
                       return;
                     }
+                    setIsVerifyingEmail(true);
                     try {
                       const resp = await fetch(`https://gimsoc-backend.onrender.com/api/workshop/eligibility?email=${encodeURIComponent(formData.email)}`);
                       const data = await resp.json();
@@ -661,14 +673,27 @@ export default function WorkshopRegistrationPage() {
                       }
                     } catch (e) {
                       alert('Eligibility check failed');
+                    } finally {
+                      setIsVerifyingEmail(false);
                     }
                   }}
-                  className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  disabled={isVerifyingEmail}
+                  className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Continue
+                  {isVerifyingEmail ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Verifying with backend...
+                    </>
+                  ) : (
+                    'Continue'
+                  )}
                 </button>
                 {ssEligible === false && (
                   <p className="mt-3 text-sm text-yellow-700">No MEDCON ticket found for this email. Payment will be required.</p>
+                )}
+                {ssEligible === true && (
+                  <p className="mt-3 text-sm text-green-700">✅ MEDCON ticket found! This Scientific Series is FREE for you.</p>
                 )}
               </div>
             </div>
@@ -907,6 +932,29 @@ export default function WorkshopRegistrationPage() {
                       </label>
                     ))}
                   </div>
+                  
+                  {/* Show eligibility status */}
+                  {ssEligible === true && (
+                    <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                        <span className="text-green-800 font-medium">
+                          🎉 Great! You have a valid MEDCON ticket. This Scientific Series is FREE for you!
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {ssEligible === false && (
+                    <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <div className="flex items-center">
+                        <AlertCircle className="w-5 h-5 text-yellow-600 mr-2" />
+                        <span className="text-yellow-800 font-medium">
+                          No MEDCON ticket found for this email. Payment will be required.
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -916,36 +964,57 @@ export default function WorkshopRegistrationPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Proof of Payment *
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  
+                  {/* Payment Proof Examples */}
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-600 mb-4">Please upload a clear screenshot of your payment confirmation. Examples:</p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                        <img 
+                          src="/ab8cedda-965c-424e-9ba4-18e837fcaadf.JPG" 
+                          alt="Bank Transfer Example 1" 
+                          className="w-full h-auto rounded-lg shadow-lg"
+                        />
+                        <p className="text-sm text-gray-500 mt-2 text-center">Payment Order Example</p>
+                      </div>
+                      <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                        <img 
+                          src="/1fedc4b1-f480-44cf-9351-b43895491c94.JPG" 
+                          alt="Bank Transfer Example 2" 
+                          className="w-full h-auto rounded-lg shadow-lg"
+                        />
+                        <p className="text-sm text-gray-500 mt-2 text-center">External Transfer Example</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors bg-gray-50">
                     <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600 mb-2">
-                      Please upload a PDF of your bank transfer confirmation
-                    </p>
                     <input
                       type="file"
-                      accept=".pdf"
+                      accept=".jpg,.jpeg,.png"
                       onChange={handleFileUpload}
                       className="hidden"
                       id="payment-upload"
                       required
                     />
-                    <label
-                      htmlFor="payment-upload"
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors"
-                    >
-                      Choose PDF File
+                    <label htmlFor="payment-upload" className="cursor-pointer">
+                      <span className="text-blue-600 hover:text-blue-500 font-medium">Click to upload</span>
+                      <span className="text-gray-500"> or drag and drop</span>
                     </label>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Upload the exact payment receipt as a JPEG or PNG, not a PDF. Screenshots must clearly show full transaction details as shown in the examples
+                    </p>
+                    <p className="text-xs text-red-500 mt-1">⚠️ Maximum file size: 5MB</p>
                     {formData.paymentProof && (
-                      <p className="text-sm text-green-600 mt-2">
-                        ✓ {formData.paymentProof.name}
-                      </p>
+                      <p className="text-sm text-green-600 mt-2">✓ File selected: {formData.paymentProof.name}</p>
                     )}
                   </div>
                 </div>
               )}
 
               {/* Bank Details (for paid events) */}
-              {selectedWorkshop.hasPayment && (
+              {selectedWorkshop.id === "scientific-series" && ssEligible === false && (
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">Payment Information</h3>
                   <div className="space-y-4 text-sm">
