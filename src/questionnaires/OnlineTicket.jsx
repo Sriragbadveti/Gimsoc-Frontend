@@ -152,7 +152,7 @@ export default function OnlineTicket() {
       // Add ticket type
       formDataToSend.append('ticketType', ticketType)
       formDataToSend.append('ticketCategory', 'Online')
-      formDataToSend.append('memberType', formData.isGimsocMember === "Yes" ? "GIMSOC" : "Non-GIMSOC")
+      formDataToSend.append('subType', formData.isGimsocMember === "Yes" ? "GIMSOC" : "Non-GIMSOC")
       formDataToSend.append('price', price)
       
       const response = await fetch('https://gimsoc-backend.onrender.com/api/form/submit', {
