@@ -32,6 +32,10 @@ import AboutusMain from "./Pages/AboutusMain"
 import StandardPlus4Ticket from "./questionnaires/StandardPlus4Ticket"
 import StandardPlus3Ticket from "./questionnaires/StandardPlus3Ticket"
 import StandardPlus2Ticket from "./questionnaires/StandardPlus2Ticket"
+import GimsocMemberOnlineTicket from "./questionnaires/GimsocMemberOnlineTicket"
+import NonGimsocMemberOnlineTicket from "./questionnaires/NonGimsocMemberOnlineTicket"
+import GimsocMemberBasicTicket from "./questionnaires/GimsocMemberBasicTicket"
+import NonGimsocMemberBasicTicket from "./questionnaires/NonGimsocMemberBasicTicket"
 import TicketQRPage from "./Pages/TicketQRPage"
 import SoldOut from "./Pages/SoldOut"
 import DashboardLogin from "./Pages/DashboardLogin"
@@ -131,6 +135,10 @@ const App = () => {
           <Route path="/standard-plus-4" element={<StandardPlus4Ticket/>}/>
           <Route path="/standard-plus-3" element={<StandardPlus3Ticket/>}/>
           <Route path="/standard-plus-2" element={<StandardPlus2Ticket/>}/>
+          <Route path="/gimsoc-member-online" element={<GimsocMemberOnlineTicket/>}/>
+          <Route path="/non-gimsoc-member-online" element={<NonGimsocMemberOnlineTicket/>}/>
+          <Route path="/gimsoc-member-basic" element={<GimsocMemberBasicTicket/>}/>
+          <Route path="/non-gimsoc-member-basic" element={<NonGimsocMemberBasicTicket/>}/>
           <Route path="/ticket-qr/:ticketId" element={<TicketQRPage/>}/>
           <Route path="/soldout" element={<SoldOut/>}/>
           <Route path="/dashboard-login" element={<DashboardLogin/>}/>
