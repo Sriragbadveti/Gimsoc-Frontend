@@ -285,6 +285,11 @@ export default function BasicTicket() {
     // Convert form data according to schema
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
+        // Skip ticket classification fields as they're handled separately
+        if (["ticketType", "ticketCategory", "subType"].includes(key)) {
+          return;
+        }
+        
         // Boolean conversions
         if (["infoAccurate", "policies", "emailConsent", "whatsappConsent"].includes(key)) {
           const boolValue = value === true || value === "true" || value === "Yes"
