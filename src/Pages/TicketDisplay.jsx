@@ -87,73 +87,41 @@ const ticketTiers = [
   },
   
   {
-    name: "GIMSOC Member Online Ticket",
-    id: "tier-gimsoc-online",
-    href: "/gimsoc-member-online",
-    price: "14 USD / 30 GEL / 1000 INR",
+    name: "Online Ticket",
+    id: "tier-online",
+    href: "/online-ticket",
+    price: "14-16 USD / 30-35 GEL / 1000-1150 INR",
     description: [
       "Online access to speaker sessions",
       "Poster/oral presentations access",
-      "GIMSOC member discount",
+      "GIMSOC member discount available",
       "Certificate of attendance",
       "Digital conference materials",
       "Live Q&A sessions",
-      "Recording access post-event"
+      "Recording access post-event",
+      "Price varies by membership status"
     ],
     featured: false,
     color: "blue",
   },
   
   {
-    name: "Non-GIMSOC Member Online Ticket",
-    id: "tier-non-gimsoc-online",
-    href: "/non-gimsoc-member-online",
-    price: "16 USD / 35 GEL / 1150 INR",
-    description: [
-      "Online access to speaker sessions",
-      "Poster/oral presentations access",
-      "Certificate of attendance",
-      "Digital conference materials",
-      "Live Q&A sessions",
-      "Recording access post-event"
-    ],
-    featured: false,
-    color: "indigo",
-  },
-  
-  {
-    name: "GIMSOC Member Basic Ticket",
-    id: "tier-gimsoc-basic",
-    href: "/gimsoc-member-basic",
-    price: "30 GEL / 1000 INR",
+    name: "Basic Ticket",
+    id: "tier-basic",
+    href: "/basic-ticket",
+    price: "30-40 GEL / 1000-1320 INR",
     description: [
       "Access to speakers and presentations",
       "Limited access to fairs and booths",
-      "GIMSOC member discount",
+      "GIMSOC member discount available",
       "Certificate of attendance",
       "Meals and refreshments",
       "Goodie bag with merchandise",
-      "Note: Workshops not included"
+      "Note: Workshops not included",
+      "Price varies by membership status"
     ],
     featured: false,
     color: "green",
-  },
-  
-  {
-    name: "Non-GIMSOC Member Basic Ticket",
-    id: "tier-non-gimsoc-basic",
-    href: "/non-gimsoc-member-basic",
-    price: "40 GEL / 1320 INR",
-    description: [
-      "Access to speakers and presentations",
-      "Limited access to fairs and booths",
-      "Certificate of attendance",
-      "Meals and refreshments",
-      "Goodie bag with merchandise",
-      "Note: Workshops not included"
-    ],
-    featured: false,
-    color: "purple",
   },
   
   // {

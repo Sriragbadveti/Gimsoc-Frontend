@@ -36,10 +36,8 @@ const TICKET_TYPES = [
   "All-Inclusive",
   "TSU", 
   "TSU All Inclusive",
-  "GIMSOC Member Online",
-  "Non-GIMSOC Member Online",
-  "GIMSOC Member Basic",
-  "Non-GIMSOC Member Basic"
+  "Online",
+  "Basic"
 ]
 const PAYMENT_STATUSES = ["All", "pending", "completed"]
 const ABSTRACT_CATEGORIES = [
@@ -317,13 +315,9 @@ export default function AdminDashboard() {
           matches = true;
         } else if (filterType === "Group" && ticketType.includes("Group")) {
           matches = true;
-        } else if (filterType === "GIMSOC Member Online" && ticketType === "GIMSOC Member Online") {
+        } else if (filterType === "Online" && (ticketType === "GIMSOC Member Online" || ticketType === "Non-GIMSOC Member Online")) {
           matches = true;
-        } else if (filterType === "Non-GIMSOC Member Online" && ticketType === "Non-GIMSOC Member Online") {
-          matches = true;
-        } else if (filterType === "GIMSOC Member Basic" && ticketType === "GIMSOC Member Basic") {
-          matches = true;
-        } else if (filterType === "Non-GIMSOC Member Basic" && ticketType === "Non-GIMSOC Member Basic") {
+        } else if (filterType === "Basic" && (ticketType === "GIMSOC Member Basic" || ticketType === "Non-GIMSOC Member Basic")) {
           matches = true;
         }
         
@@ -1195,106 +1189,60 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* GIMSOC Member Online Tickets */}
+              {/* Online Tickets (Combined) */}
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-blue-900">GIMSOC Member Online</h4>
+                    <h4 className="font-semibold text-blue-900">Online Tickets</h4>
                     <p className="text-sm text-blue-700">
-                      {ticketCounts.gimsocMemberOnline || 0} / 500 sold
+                      {((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0))} / 1000 sold
+                    </p>
+                    <p className="text-xs text-blue-600">
+                      GIMSOC: {ticketCounts.gimsocMemberOnline || 0} | Non-GIMSOC: {ticketCounts.nonGimsocMemberOnline || 0}
                     </p>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-blue-900">
-                      {Math.round(((ticketCounts.gimsocMemberOnline || 0) / 500) * 100)}%
+                      {Math.round((((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0)) / 1000) * 100)}%
                     </div>
                     <div className="text-xs text-blue-600">
-                      {500 - (ticketCounts.gimsocMemberOnline || 0)} remaining
+                      {1000 - ((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0))} remaining
                     </div>
                   </div>
                 </div>
                 <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
                   <div 
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(((ticketCounts.gimsocMemberOnline || 0) / 500) * 100, 100)}%` }}
+                    style={{ width: `${Math.min((((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0)) / 1000) * 100, 100)}%` }}
                   ></div>
                 </div>
               </div>
 
-              {/* Non-GIMSOC Member Online Tickets */}
-              <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 p-4 rounded-lg border border-indigo-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-indigo-900">Non-GIMSOC Member Online</h4>
-                    <p className="text-sm text-indigo-700">
-                      {ticketCounts.nonGimsocMemberOnline || 0} / 500 sold
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-indigo-900">
-                      {Math.round(((ticketCounts.nonGimsocMemberOnline || 0) / 500) * 100)}%
-                    </div>
-                    <div className="text-xs text-indigo-600">
-                      {500 - (ticketCounts.nonGimsocMemberOnline || 0)} remaining
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-2 w-full bg-indigo-200 rounded-full h-2">
-                  <div 
-                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(((ticketCounts.nonGimsocMemberOnline || 0) / 500) * 100, 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* GIMSOC Member Basic Tickets */}
+              {/* Basic Tickets (Combined) */}
               <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-green-900">GIMSOC Member Basic</h4>
+                    <h4 className="font-semibold text-green-900">Basic Tickets</h4>
                     <p className="text-sm text-green-700">
-                      {ticketCounts.gimsocMemberBasic || 0} / 200 sold
+                      {((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0))} / 400 sold
+                    </p>
+                    <p className="text-xs text-green-600">
+                      GIMSOC: {ticketCounts.gimsocMemberBasic || 0} | Non-GIMSOC: {ticketCounts.nonGimsocMemberBasic || 0}
                     </p>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-green-900">
-                      {Math.round(((ticketCounts.gimsocMemberBasic || 0) / 200) * 100)}%
+                      {Math.round((((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0)) / 400) * 100)}%
                     </div>
                     <div className="text-xs text-green-600">
-                      {200 - (ticketCounts.gimsocMemberBasic || 0)} remaining
+                      {400 - ((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0))} remaining
                     </div>
                   </div>
                 </div>
                 <div className="mt-2 w-full bg-green-200 rounded-full h-2">
                   <div 
                     className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(((ticketCounts.gimsocMemberBasic || 0) / 200) * 100, 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* Non-GIMSOC Member Basic Tickets */}
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-purple-900">Non-GIMSOC Member Basic</h4>
-                    <p className="text-sm text-purple-700">
-                      {ticketCounts.nonGimsocMemberBasic || 0} / 200 sold
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-purple-900">
-                      {Math.round(((ticketCounts.nonGimsocMemberBasic || 0) / 200) * 100)}%
-                    </div>
-                    <div className="text-xs text-purple-600">
-                      {200 - (ticketCounts.nonGimsocMemberBasic || 0)} remaining
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-2 w-full bg-purple-200 rounded-full h-2">
-                  <div 
-                    className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(((ticketCounts.nonGimsocMemberBasic || 0) / 200) * 100, 100)}%` }}
+                    style={{ width: `${Math.min((((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0)) / 400) * 100, 100)}%` }}
                   ></div>
                 </div>
               </div>

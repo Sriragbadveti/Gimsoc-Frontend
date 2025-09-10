@@ -76,7 +76,7 @@ const FOOD_OPTIONS = [
   "Non-Vegetarian (Halal)"
 ]
 
-export default function GimsocMemberBasicTicket() {
+export default function BasicTicket() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -90,6 +90,7 @@ export default function GimsocMemberBasicTicket() {
     foodPreference: "",
     dietaryRestrictions: "",
     accessibilityNeeds: "",
+    isGimsocMember: "",
     gimsocCode: "",
     declarationAccurate: false,
     mediaConsent: "",
@@ -163,11 +164,15 @@ export default function GimsocMemberBasicTicket() {
         }
       })
 
+      // Determine ticket type based on GIMSOC membership
+      const ticketType = formData.isGimsocMember === "Yes" ? "GIMSOC Member Basic" : "Non-GIMSOC Member Basic"
+      const price = formData.isGimsocMember === "Yes" ? "30 GEL / 1000 INR" : "40 GEL / 1320 INR"
+      
       // Add ticket type
-      formDataToSend.append('ticketType', 'GIMSOC Member Basic')
+      formDataToSend.append('ticketType', ticketType)
       formDataToSend.append('ticketCategory', 'Basic')
-      formDataToSend.append('memberType', 'GIMSOC')
-      formDataToSend.append('price', '30 GEL / 1000 INR')
+      formDataToSend.append('memberType', formData.isGimsocMember === "Yes" ? "GIMSOC" : "Non-GIMSOC")
+      formDataToSend.append('price', price)
       
       const response = await fetch('https://gimsoc-backend.onrender.com/api/tickets/register', {
         method: 'POST',
@@ -204,6 +209,7 @@ export default function GimsocMemberBasicTicket() {
       foodPreference: "",
       dietaryRestrictions: "",
       accessibilityNeeds: "",
+      isGimsocMember: "",
       gimsocCode: "",
       declarationAccurate: false,
       mediaConsent: "",
@@ -216,6 +222,15 @@ export default function GimsocMemberBasicTicket() {
     setSubmitStatus(null)
   }
 
+  const getPriceDisplay = () => {
+    if (formData.isGimsocMember === "Yes") {
+      return "30 GEL / 1000 INR"
+    } else if (formData.isGimsocMember === "No") {
+      return "40 GEL / 1320 INR"
+    }
+    return "Select membership status to see price"
+  }
+
   if (submitStatus === "success") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -223,7 +238,7 @@ export default function GimsocMemberBasicTicket() {
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Registration Successful!</h2>
           <p className="text-gray-600 mb-6">
-            Thank you for registering for MEDCON'25 Basic (GIMSOC Member). 
+            Thank you for registering for MEDCON'25 Basic Ticket. 
             You will receive a confirmation email shortly.
           </p>
           <button
@@ -262,8 +277,8 @@ export default function GimsocMemberBasicTicket() {
                   <Users className="w-8 h-8" />
                 </motion.div>
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">GIMSOC Member Basic Ticket</h1>
-                  <p className="text-white text-opacity-90 text-sm">30 GEL / 1000 INR</p>
+                  <h1 className="text-3xl font-bold mb-2">Basic Ticket</h1>
+                  <p className="text-white text-opacity-90 text-sm">{getPriceDisplay()}</p>
                 </div>
               </div>
               
@@ -329,6 +344,60 @@ export default function GimsocMemberBasicTicket() {
                       placeholder="This will be used to send important updates before and during the conference"
                     />
                   </div>
+                </div>
+              </section>
+
+              {/* GIMSOC Membership */}
+              <section className="space-y-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 bg-yellow-100 rounded-xl">
+                    <Shield className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <h2 className="text-2xl font-semibold text-gray-800">GIMSOC Membership</h2>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">Are you a GIMSOC member? *</label>
+                    <div className="flex gap-6">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="isGimsocMember"
+                          value="Yes"
+                          checked={formData.isGimsocMember === "Yes"}
+                          onChange={(e) => handleInputChange("isGimsocMember", e.target.value)}
+                          className="mr-2"
+                        />
+                        Yes (30 GEL / 1000 INR)
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="isGimsocMember"
+                          value="No"
+                          checked={formData.isGimsocMember === "No"}
+                          onChange={(e) => handleInputChange("isGimsocMember", e.target.value)}
+                          className="mr-2"
+                        />
+                        No (40 GEL / 1320 INR)
+                      </label>
+                    </div>
+                  </div>
+
+                  {formData.isGimsocMember === "Yes" && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Please enter your GIMSOC membership Code *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.gimsocCode}
+                        onChange={(e) => handleInputChange("gimsocCode", e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="Enter your GIMSOC membership code"
+                      />
+                    </div>
+                  )}
                 </div>
               </section>
 
@@ -501,28 +570,6 @@ export default function GimsocMemberBasicTicket() {
                       rows="3"
                     />
                   </div>
-                </div>
-              </section>
-
-              {/* GIMSOC Membership */}
-              <section className="space-y-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 bg-yellow-100 rounded-xl">
-                    <Shield className="w-6 h-6 text-yellow-600" />
-                  </div>
-                  <h2 className="text-2xl font-semibold text-gray-800">GIMSOC Membership</h2>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Please enter your GIMSOC membership Code *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.gimsocCode}
-                    onChange={(e) => handleInputChange("gimsocCode", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                    placeholder="Enter your GIMSOC membership code"
-                  />
                 </div>
               </section>
 
