@@ -9,10 +9,48 @@ import LightRays from '../Components/LightRays'
 
 const ticketTiers = [
   {
+    name: "Online Ticket",
+    id: "tier-online",
+    href: "/online-ticket",
+    
+    description: [
+      "Online access to speaker sessions",
+      "Poster/oral presentations access",
+      "Live streaming of keynotes",
+      "Digital conference materials",
+      "Certificate of attendance",
+      "Access to online networking",
+      "GIMSOC Member: 30 GEL / 1000 INR",
+      "Non-GIMSOC: 35 GEL / 1150 INR"
+    ],
+    featured: false,
+    color: "blue",
+  },
+  
+  {
+    name: "Basic Ticket",
+    id: "tier-basic",
+    href: "/basic-ticket",
+    
+    description: [
+      "Access to speakers and presentations",
+      "Limited access to fairs and booths",
+      "Meals and refreshments",
+      "Academic, research and activities fair",
+      "Goodie bag with exclusive MEDCON merchandise",
+      "Certificate of attendance",
+      "GIMSOC Member: 30 GEL / 1000 INR",
+      "Non-GIMSOC: 40 GEL / 1320 INR"
+    ],
+    featured: false,
+    color: "orange",
+  },
+  
+  {
     name: "Standard +2 Workshops Ticket",
     id: "tier-standard",
     href: "/standard-plus-2",
-    price: "150₾ / 5000 INR",
+    
     description: [
       "Full MEDCON access + 2 workshops",
       "All keynote sessions",
@@ -32,7 +70,7 @@ const ticketTiers = [
     name: "Standard +3 Workshops Ticket",
     id: "tier-allinclusive",
     href: "/standard-plus-3",
-    price: "180₾ / 6000 INR",
+    
     description: [
       "Full MEDCON access + 3 workshops",
       "All keynote sessions",
@@ -52,7 +90,7 @@ const ticketTiers = [
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
     href: "/standard-plus-4",
-    price: "210₾ / 7000 INR",
+    
     description: [
       "Full MEDCON access + 4 workshops",
       "All keynote sessions",
@@ -71,7 +109,7 @@ const ticketTiers = [
     name: "Doctor Ticket",
     id: "tier-doctor",
     href: "/doctor-ticket",
-    price: "200₾ / 6700 INR",
+    
     description: [
       "Academic-focused access for medical professionals",
       "Full conference access",
@@ -84,44 +122,6 @@ const ticketTiers = [
     ],
     featured: false,
     color: "teal",
-  },
-  
-  {
-    name: "Online Ticket",
-    id: "tier-online",
-    href: "/online-ticket",
-    price: "14-16 USD / 30-35 GEL / 1000-1150 INR",
-    description: [
-      "Online access to speaker sessions",
-      "Poster/oral presentations access",
-      "GIMSOC member discount available",
-      "Certificate of attendance",
-      "Digital conference materials",
-      "Live Q&A sessions",
-      "Recording access post-event",
-      "Price varies by membership status"
-    ],
-    featured: false,
-    color: "blue",
-  },
-  
-  {
-    name: "Basic Ticket",
-    id: "tier-basic",
-    href: "/basic-ticket",
-    price: "30-40 GEL / 1000-1320 INR",
-    description: [
-      "Access to speakers and presentations",
-      "Limited access to fairs and booths",
-      "GIMSOC member discount available",
-      "Certificate of attendance",
-      "Meals and refreshments",
-      "Goodie bag with merchandise",
-      "Note: Workshops not included",
-      "Price varies by membership status"
-    ],
-    featured: false,
-    color: "green",
   },
   
   // {

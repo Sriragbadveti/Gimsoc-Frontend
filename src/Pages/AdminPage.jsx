@@ -35,9 +35,7 @@ const TICKET_TYPES = [
   "Executive", 
   "All-Inclusive",
   "TSU", 
-  "TSU All Inclusive",
-  "Online",
-  "Basic"
+  "TSU All Inclusive"
 ]
 const PAYMENT_STATUSES = ["All", "pending", "completed"]
 const ABSTRACT_CATEGORIES = [
@@ -314,10 +312,6 @@ export default function AdminDashboard() {
         } else if (filterType === "Individual" && ticketType.includes("Individual")) {
           matches = true;
         } else if (filterType === "Group" && ticketType.includes("Group")) {
-          matches = true;
-        } else if (filterType === "Online" && (ticketType === "GIMSOC Member Online" || ticketType === "Non-GIMSOC Member Online")) {
-          matches = true;
-        } else if (filterType === "Basic" && (ticketType === "GIMSOC Member Basic" || ticketType === "Non-GIMSOC Member Basic")) {
           matches = true;
         }
         
@@ -1185,64 +1179,6 @@ export default function AdminDashboard() {
                   <div 
                     className="bg-red-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min((ticketCounts.doctor / 30) * 100, 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* Online Tickets (Combined) */}
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-blue-900">Online Tickets</h4>
-                    <p className="text-sm text-blue-700">
-                      {((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0))} / 1000 sold
-                    </p>
-                    <p className="text-xs text-blue-600">
-                      GIMSOC: {ticketCounts.gimsocMemberOnline || 0} | Non-GIMSOC: {ticketCounts.nonGimsocMemberOnline || 0}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-blue-900">
-                      {Math.round((((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0)) / 1000) * 100)}%
-                    </div>
-                    <div className="text-xs text-blue-600">
-                      {1000 - ((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0))} remaining
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min((((ticketCounts.gimsocMemberOnline || 0) + (ticketCounts.nonGimsocMemberOnline || 0)) / 1000) * 100, 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* Basic Tickets (Combined) */}
-              <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-green-900">Basic Tickets</h4>
-                    <p className="text-sm text-green-700">
-                      {((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0))} / 400 sold
-                    </p>
-                    <p className="text-xs text-green-600">
-                      GIMSOC: {ticketCounts.gimsocMemberBasic || 0} | Non-GIMSOC: {ticketCounts.nonGimsocMemberBasic || 0}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-green-900">
-                      {Math.round((((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0)) / 400) * 100)}%
-                    </div>
-                    <div className="text-xs text-green-600">
-                      {400 - ((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0))} remaining
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-2 w-full bg-green-200 rounded-full h-2">
-                  <div 
-                    className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min((((ticketCounts.gimsocMemberBasic || 0) + (ticketCounts.nonGimsocMemberBasic || 0)) / 400) * 100, 100)}%` }}
                   ></div>
                 </div>
               </div>

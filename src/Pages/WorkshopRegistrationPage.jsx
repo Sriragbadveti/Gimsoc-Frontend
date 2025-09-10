@@ -51,7 +51,7 @@ const WORKSHOP_OPTIONS = [
     date: "Multiple dates (Sept 14, 21, 28)",
     platform: "Online",
     speaker: "Multiple speakers",
-    organization: "INSPECT-LB, Scientific Department",
+    organization: "INSPECT-LB, MEDICA-RI, Scientific Department",
     description: "A 3-part webinar designed to equip students with foundational and field-specific skills in scientific research, cross-sectional study design, scientific writing, and R programming.",
     hasPayment: true,
     icon: BookOpen,
@@ -167,8 +167,9 @@ const SEMESTER_OPTIONS = [
 
 const SCIENTIFIC_SERIES_OPTIONS = [
   "INSPECT- LB webinar (5 GEL)/ 170 INR",
+  "MEDICA webinar (5 GEL)/ 170 INR", 
   "Scientific department Webinar (5 GEL)/ 170 INR",
-  "The whole scientific series (2 webinars) (10 GEL) /340 INR"
+  "The whole scientific series (3 webinars) (10 GEL) /340 INR"
 ]
 
 export default function WorkshopRegistrationPage() {
