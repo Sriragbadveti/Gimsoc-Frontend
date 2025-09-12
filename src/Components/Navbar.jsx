@@ -35,7 +35,6 @@ const navigation = [
       },
     ],
   },
-  { name: "Abstract Submission", href: "/abstract" },
 ]
 
 const Navbar = () => {
