@@ -22,6 +22,7 @@ import {
   UserSearch,
   XCircle,
   Clock,
+  FileSpreadsheet,
 } from "lucide-react"
 
 const TICKET_TYPES = [
@@ -113,6 +114,7 @@ export default function AdminDashboard() {
   const [exportingToSheets, setExportingToSheets] = useState(false)
   const [exportingVolunteersToSheets, setExportingVolunteersToSheets] = useState(false)
   const [exportingWorkshopsToSheets, setExportingWorkshopsToSheets] = useState(false)
+  const [exportingAbstracts, setExportingAbstracts] = useState(false)
 
   // Volunteers state
   const [volunteers, setVolunteers] = useState([])
@@ -878,6 +880,48 @@ export default function AdminDashboard() {
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingWorkshopsToSheets(false)
+    }
+  }
+
+  const handleExportAbstracts = async () => {
+    console.log("🚀 handleExportAbstracts called!");
+    console.log("📊 Current abstracts:", abstracts);
+    console.log("📊 Current state:", { 
+      exportingAbstracts, 
+      abstractsLength: abstracts.length,
+      activeTab 
+    });
+    
+    try {
+      setExportingAbstracts(true)
+      console.log("📊 Starting abstracts Google Sheets export...")
+      
+      const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/export-abstracts-to-sheets', {
+        abstracts: abstracts,
+        date: new Date().toISOString().split('T')[0] // Today's date
+      }, {
+        headers: getAuthHeaders(),
+        timeout: 30000 // 30 second timeout
+      })
+      
+      if (response.data.success) {
+        alert(`✅ Successfully exported ${response.data.data.count} abstracts to Google Sheets!\n\nSheet URL: ${response.data.data.sheetUrl}`)
+      } else {
+        alert(`❌ Export failed: ${response.data.message}`)
+      }
+    } catch (error) {
+      console.error("❌ Error exporting abstracts to Google Sheets:", error)
+      if (error.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
+    } finally {
+      setExportingAbstracts(false)
     }
   }
 
@@ -1811,9 +1855,23 @@ export default function AdminDashboard() {
       <>
         {/* Abstracts Filter Bar */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Filter className="h-5 w-5 text-gray-500" />
-            <h3 className="text-lg font-medium text-gray-900">Filters</h3>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Filter className="h-5 w-5 text-gray-500" />
+              <h3 className="text-lg font-medium text-gray-900">Filters</h3>
+            </div>
+            <button
+              onClick={handleExportAbstracts}
+              disabled={exportingAbstracts}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {exportingAbstracts ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <FileSpreadsheet className="h-4 w-4" />
+              )}
+              {exportingAbstracts ? "Exporting..." : "Export to Sheets"}
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
