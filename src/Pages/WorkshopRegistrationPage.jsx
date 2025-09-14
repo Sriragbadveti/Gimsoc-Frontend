@@ -47,17 +47,18 @@ const WORKSHOP_OPTIONS = [
   },
   {
     id: "scientific-series",
-    title: "From Curiosity to Conference -- The Researcher's Toolkit",
-    date: "Multiple dates (Sept 14, 21, 28)",
+    title: "From Curiosity to Conference: The Researcher's Toolkit",
+    date: "24th & 28th September, 2025",
     platform: "Online",
-    speaker: "Multiple speakers",
+    speaker: "Dr. Hashim Siraj MD, Ms. Nikhila Aby, Ms. Mennah Emam",
     organization: "INSPECT-LB, MEDICA-RI, Scientific Department",
-    description: "A 3-part webinar designed to equip students with foundational and field-specific skills in scientific research, cross-sectional study design, scientific writing, and R programming.",
+    description: "Join our 2-part webinar series designed to equip participants with essential research skills. Covering study design, literature review, poster creation, and data application, the series bridges the gap between curiosity and conference-level presentation.",
     hasPayment: true,
     icon: BookOpen,
     color: "from-purple-500 to-violet-600",
     bgColor: "bg-purple-50",
-    borderColor: "border-purple-200"
+    borderColor: "border-purple-200",
+    closed: false
   },
   {
     id: "project-img",
@@ -138,6 +139,15 @@ const WORKSHOP_OPTIONS = [
   }
 ]
 
+const SEMESTER_OPTIONS = [
+  "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "Graduated"
+]
+
+const SCIENTIFIC_SERIES_OPTIONS = [
+  "5 GEL / 175 INR – GIMSOC Member",
+  "7 GEL / 240 INR – Non-Member"
+]
+
 const UNIVERSITIES = [
   "Tbilisi State Medical University (TSMU)",
   "David Tvildiani Medical University (DTMU)",
@@ -158,18 +168,8 @@ const UNIVERSITIES = [
   "Georgian National University (SEU)",
   "Akaki Tsereteli State University (ATSU – Faculty of Medicine)",
   "BAU International University, Batumi (BAU)",
-  "Batumi Shota Rustaveli State University (BSU – Faculty of Medicine)"
-]
-
-const SEMESTER_OPTIONS = [
-  "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "Graduated"
-]
-
-const SCIENTIFIC_SERIES_OPTIONS = [
-  "INSPECT- LB webinar (5 GEL)/ 170 INR",
-  "MEDICA webinar (5 GEL)/ 170 INR", 
-  "Scientific department Webinar (5 GEL)/ 170 INR",
-  "The whole scientific series (3 webinars) (10 GEL) /340 INR"
+  "Batumi Shota Rustaveli State University (BSU – Faculty of Medicine)",
+  "Other"
 ]
 
 export default function WorkshopRegistrationPage() {
@@ -644,57 +644,106 @@ export default function WorkshopRegistrationPage() {
             </div>
             ) : selectedWorkshop.id === "scientific-series" && ssStep === "email" ? (
             <div className="p-8">
-              <div className="max-w-md">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Enter your email to continue</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  disabled={isVerifyingEmail}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder="you@example.com"
-                />
-                <button
-                  type="button"
-                  onClick={async () => {
-                    if (!formData.email || !formData.email.includes('@')) {
-                      alert('Please enter a valid email');
-                      return;
-                    }
-                    setIsVerifyingEmail(true);
-                    try {
-                      const resp = await fetch(`https://gimsoc-backend.onrender.com/api/workshop/eligibility?email=${encodeURIComponent(formData.email)}`);
-                      const data = await resp.json();
-                      if (data.success) {
-                        setSsEligible(!!data.eligible);
-                        setSsStep('form');
-                      } else {
-                        alert(data.message || 'Eligibility check failed');
-                      }
-                    } catch (e) {
-                      alert('Eligibility check failed');
-                    } finally {
-                      setIsVerifyingEmail(false);
-                    }
-                  }}
-                  disabled={isVerifyingEmail}
-                  className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isVerifyingEmail ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Verifying with backend...
-                    </>
-                  ) : (
-                    'Continue'
+              <div className="max-w-2xl">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">Registration Check</h3>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Are you a registered MEDCON'25 attendee?
+                    </label>
+                    <div className="space-y-3">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="isMedconAttendee"
+                          value="Yes"
+                          checked={formData.isMedconAttendee === "Yes"}
+                          onChange={(e) => handleInputChange("isMedconAttendee", e.target.value)}
+                          className="mr-3"
+                        />
+                        <span>Yes – I already have a MEDCON'25 ticket (Complimentary access)</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="isMedconAttendee"
+                          value="No"
+                          checked={formData.isMedconAttendee === "No"}
+                          onChange={(e) => handleInputChange("isMedconAttendee", e.target.value)}
+                          className="mr-3"
+                        />
+                        <span>No – I do not have a MEDCON'25 ticket (Payment required)</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  {formData.isMedconAttendee === "Yes" && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Please provide your email address so we can verify your registration status:
+                      </label>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your email address"
+                      />
+                    </div>
                   )}
-                </button>
-                {ssEligible === false && (
-                  <p className="mt-3 text-sm text-yellow-700">No MEDCON ticket found for this email. Payment will be required.</p>
-                )}
-                {ssEligible === true && (
-                  <p className="mt-3 text-sm text-green-700">✅ MEDCON ticket found! This Scientific Series is FREE for you.</p>
-                )}
+                  
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!formData.isMedconAttendee) {
+                        alert('Please select whether you are a MEDCON\'25 attendee');
+                        return;
+                      }
+                      
+                      if (formData.isMedconAttendee === "Yes") {
+                        if (!formData.email || !formData.email.includes('@')) {
+                          alert('Please enter a valid email');
+                          return;
+                        }
+                        setIsVerifyingEmail(true);
+                        try {
+                          const resp = await fetch(`https://gimsoc-backend.onrender.com/api/workshop/eligibility?email=${encodeURIComponent(formData.email)}`);
+                          const data = await resp.json();
+                          if (data.success) {
+                            setSsEligible(!!data.eligible);
+                            setSsStep('form');
+                          } else {
+                            alert(data.message || 'Eligibility check failed');
+                          }
+                        } catch (e) {
+                          alert('Eligibility check failed');
+                        } finally {
+                          setIsVerifyingEmail(false);
+                        }
+                      } else {
+                        setSsEligible(false);
+                        setSsStep('form');
+                      }
+                    }}
+                    disabled={isVerifyingEmail}
+                    className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isVerifyingEmail ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Verifying with backend...
+                      </>
+                    ) : (
+                      'Continue'
+                    )}
+                  </button>
+                  {ssEligible === false && (
+                    <p className="mt-3 text-sm text-yellow-700">No MEDCON ticket found for this email. Payment will be required.</p>
+                  )}
+                  {ssEligible === true && (
+                    <p className="mt-3 text-sm text-green-700">✅ MEDCON ticket found! This Scientific Series is FREE for you.</p>
+                  )}
+                </div>
               </div>
             </div>
             ) : selectedWorkshop.id === "scientific-series" && ssStep === "form" ? (
@@ -911,11 +960,33 @@ export default function WorkshopRegistrationPage() {
                 )}
               </div>
 
+              {/* Webinar Session Details (only for scientific series) */}
+              {selectedWorkshop.id === "scientific-series" && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Webinar Session Details</h4>
+                  <div className="space-y-4">
+                    <div className="border-l-4 border-purple-500 pl-4">
+                      <h5 className="font-semibold text-gray-900">Session 1 – Unlocking CDC WONDER: Tools, Trends & Research Opportunities</h5>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 24 September 2025, 5:30–7:30 pm GST</p>
+                      <p className="text-sm text-gray-600">Speaker: Dr. Hashim Siraj MD</p>
+                      <p className="text-sm text-gray-700 mt-2">Learn to navigate and extract U.S. public health datasets, generate tables/graphs, and apply data to your own research.</p>
+                    </div>
+                    <div className="border-l-4 border-purple-500 pl-4">
+                      <h5 className="font-semibold text-gray-900">Session 2 – From Literature Mastery to Poster: Essential Tools for Scientific Research</h5>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 28 September 2025, 2:00–5:00 pm GST</p>
+                      <p className="text-sm text-gray-600">Speakers: Ms. Nikhila Aby & Ms. Mennah Emam</p>
+                      <p className="text-sm text-gray-700 mt-2">Part 1: Cross-Sectional Study Design & Literature Review Mastery</p>
+                      <p className="text-sm text-gray-700">Part 2: PosterPath – Designing Effective Scientific Posters</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Scientific Series Selection (only for scientific series) */}
               {selectedWorkshop.id === "scientific-series" && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    I would like to attend: *
+                    Select Fee Category: *
                   </label>
                   <div className="space-y-2">
                     {SCIENTIFIC_SERIES_OPTIONS.map((option) => (
@@ -1037,6 +1108,20 @@ export default function WorkshopRegistrationPage() {
                   </div>
                 </div>
               )}
+
+              {/* Consent & Submission */}
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <label className="flex items-start">
+                  <input
+                    type="checkbox"
+                    required
+                    className="mt-1 mr-3"
+                  />
+                  <span className="text-sm text-gray-700">
+                    I confirm that the information provided is accurate and I agree to receive event-related communications.
+                  </span>
+                </label>
+              </div>
 
               {/* Submit Button */}
               <div className="flex gap-4 pt-6">
