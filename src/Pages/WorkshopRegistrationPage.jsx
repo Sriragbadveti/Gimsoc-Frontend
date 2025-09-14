@@ -51,7 +51,7 @@ const WORKSHOP_OPTIONS = [
     date: "24th & 28th September, 2025",
     platform: "Online",
     speaker: "Dr. Hashim Siraj MD, Ms. Nikhila Aby, Ms. Mennah Emam",
-    organization: "INSPECT-LB, MEDICA-RI, Scientific Department",
+    organization: "Scientific Department",
     description: "Join our 2-part webinar series designed to equip participants with essential research skills. Covering study design, literature review, poster creation, and data application, the series bridges the gap between curiosity and conference-level presentation.",
     hasPayment: true,
     icon: BookOpen,
