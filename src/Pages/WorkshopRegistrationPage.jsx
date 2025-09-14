@@ -982,8 +982,8 @@ export default function WorkshopRegistrationPage() {
                 </div>
               )}
 
-              {/* Scientific Series Selection (only for scientific series) */}
-              {selectedWorkshop.id === "scientific-series" && (
+              {/* Scientific Series Selection (only for scientific series and non-eligible users) */}
+              {selectedWorkshop.id === "scientific-series" && ssEligible === false && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Select Fee Category: *
@@ -1003,8 +1003,12 @@ export default function WorkshopRegistrationPage() {
                       </label>
                     ))}
                   </div>
-                  
-                  {/* Show eligibility status */}
+                </div>
+              )}
+
+              {/* Show eligibility status for all scientific series users */}
+              {selectedWorkshop.id === "scientific-series" && (
+                <>
                   {ssEligible === true && (
                     <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                       <div className="flex items-center">
@@ -1026,7 +1030,7 @@ export default function WorkshopRegistrationPage() {
                       </div>
                     </div>
                   )}
-                </div>
+                </>
               )}
 
               {/* Payment Proof Upload (for paid events) */}
