@@ -255,6 +255,12 @@ export default function WorkshopRegistrationPage() {
     setIsSubmitting(true)
     
     try {
+      // Validate scientific series selection for non-eligible users
+      if (selectedWorkshop.id === "scientific-series" && ssEligible === false && !formData.selectedScientificSeries) {
+        alert('Please select a fee category to continue.')
+        setIsSubmitting(false)
+        return
+      }
       // Prepare form data
       const formDataToSend = new FormData()
       
@@ -277,8 +283,15 @@ export default function WorkshopRegistrationPage() {
       if (formData.gimsocCode) {
         formDataToSend.append('gimsocCode', formData.gimsocCode)
       }
-      if (formData.selectedScientificSeries) {
-        formDataToSend.append('selectedScientificSeries', formData.selectedScientificSeries)
+      // Handle scientific series selection - only required for non-eligible users
+      if (selectedWorkshop.id === "scientific-series") {
+        if (ssEligible === true) {
+          // MEDCON ticket holders get free access
+          formDataToSend.append('selectedScientificSeries', 'Free Access - MEDCON Ticket Holder')
+        } else if (formData.selectedScientificSeries) {
+          // Non-eligible users must select a fee category
+          formDataToSend.append('selectedScientificSeries', formData.selectedScientificSeries)
+        }
       }
       if (formData.paymentProof) {
         formDataToSend.append('paymentProof', formData.paymentProof)
