@@ -3262,20 +3262,17 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {registration.paymentProof ? (
-                          <button
-                            onClick={() =>
-                              handleDownload(
-                                registration.paymentProof?.startsWith("http")
-                                  ? registration.paymentProof + (registration.paymentProof.includes("cloudinary.com") ? "?fl_attachment" : "")
-                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${registration.paymentProof}`,
-                                `workshop-payment-${registration.fullName}.jpg`
-                              )
-                            }
+                          <a
+                            href={registration.paymentProof?.startsWith("http")
+                              ? registration.paymentProof
+                              : `https://gimsoc-backend.onrender.com${registration.paymentProof}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
                           >
                             <FileText className="h-3 w-3" />
                             View Proof
-                          </button>
+                          </a>
                         ) : registration.selectedScientificSeries === 'Free Access - MEDCON Ticket Holder' ? (
                           <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-600 bg-green-50 rounded-full">
                             <CheckCircle className="h-3 w-3" />
