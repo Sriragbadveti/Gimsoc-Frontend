@@ -1227,6 +1227,58 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
+              {/* Online Tickets */}
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-blue-900">Online</h4>
+                    <p className="text-sm text-blue-700">
+                      {ticketCounts.online || 0} / 500 sold
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-blue-900">
+                      {Math.round(((ticketCounts.online || 0) / 500) * 100)}%
+                    </div>
+                    <div className="text-xs text-blue-600">
+                      {500 - (ticketCounts.online || 0)} remaining
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${Math.min(((ticketCounts.online || 0) / 500) * 100, 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Basic Tickets */}
+              <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-orange-900">Basic</h4>
+                    <p className="text-sm text-orange-700">
+                      {ticketCounts.basic || 0} / 300 sold
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-orange-900">
+                      {Math.round(((ticketCounts.basic || 0) / 300) * 100)}%
+                    </div>
+                    <div className="text-xs text-orange-600">
+                      {300 - (ticketCounts.basic || 0)} remaining
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 w-full bg-orange-200 rounded-full h-2">
+                  <div 
+                    className="bg-orange-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${Math.min(((ticketCounts.basic || 0) / 300) * 100, 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+
               {/* International Tickets */}
               {/* <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200">
                 <div className="flex items-center justify-between">
@@ -3074,6 +3126,9 @@ export default function AdminDashboard() {
                       Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Payment Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Registration Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -3126,6 +3181,21 @@ export default function AdminDashboard() {
                         }`}>
                           {registration.status}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {registration.selectedScientificSeries === 'Free Access - MEDCON Ticket Holder' ? (
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                            FREE (MEDCON Ticket)
+                          </span>
+                        ) : registration.selectedScientificSeries ? (
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                            PAID ({registration.selectedScientificSeries})
+                          </span>
+                        ) : (
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                            N/A
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(registration.registrationDate)}
