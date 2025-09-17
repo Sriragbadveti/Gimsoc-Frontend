@@ -3262,15 +3262,18 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {registration.paymentProof ? (
-                          <a
-                            href={registration.paymentProof}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={() => {
+                              const proofUrl = registration.paymentProof.startsWith('/uploads') 
+                                ? `https://gimsoc-backend.onrender.com${registration.paymentProof}`
+                                : registration.paymentProof;
+                              window.open(proofUrl, '_blank');
+                            }}
                             className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
                           >
                             <FileText className="h-3 w-3" />
                             View Proof
-                          </a>
+                          </button>
                         ) : registration.selectedScientificSeries === 'Free Access - MEDCON Ticket Holder' ? (
                           <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-600 bg-green-50 rounded-full">
                             <CheckCircle className="h-3 w-3" />
