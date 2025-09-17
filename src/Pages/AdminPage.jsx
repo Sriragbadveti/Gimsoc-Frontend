@@ -23,6 +23,7 @@ import {
   XCircle,
   Clock,
   FileSpreadsheet,
+  CheckCircle,
 } from "lucide-react"
 
 const TICKET_TYPES = [
@@ -3188,6 +3189,9 @@ export default function AdminDashboard() {
                       Payment Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Payment Proof
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Registration Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -3253,6 +3257,29 @@ export default function AdminDashboard() {
                         ) : (
                           <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
                             N/A
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {registration.paymentProof ? (
+                          <a
+                            href={registration.paymentProof}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
+                          >
+                            <FileText className="h-3 w-3" />
+                            View Proof
+                          </a>
+                        ) : registration.selectedScientificSeries === 'Free Access - MEDCON Ticket Holder' ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-600 bg-green-50 rounded-full">
+                            <CheckCircle className="h-3 w-3" />
+                            Not Required
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-500 bg-gray-50 rounded-full">
+                            <XCircle className="h-3 w-3" />
+                            Not Provided
                           </span>
                         )}
                       </td>
