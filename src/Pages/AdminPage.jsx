@@ -3264,10 +3264,10 @@ export default function AdminDashboard() {
                         {registration.paymentProof ? (
                           <button
                             onClick={() => {
-                              const proofUrl = registration.paymentProof.startsWith('/uploads') 
-                                ? `https://gimsoc-backend.onrender.com${registration.paymentProof}`
-                                : registration.paymentProof;
-                              window.open(proofUrl, '_blank');
+                              // Extract filename from path
+                              const filename = registration.paymentProof.split('/').pop();
+                              const downloadUrl = `https://gimsoc-backend.onrender.com/api/admin/download-workshop-file/${filename}`;
+                              window.open(downloadUrl, '_blank');
                             }}
                             className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
                           >
