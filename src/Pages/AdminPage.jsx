@@ -3263,12 +3263,14 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {registration.paymentProof ? (
                           <button
-                            onClick={() => {
-                              // Extract filename from path
-                              const filename = registration.paymentProof.split('/').pop();
-                              const downloadUrl = `https://gimsoc-backend.onrender.com/api/admin/download-workshop-file/${filename}`;
-                              window.open(downloadUrl, '_blank');
-                            }}
+                            onClick={() =>
+                              handleDownload(
+                                registration.paymentProof?.startsWith("http")
+                                  ? registration.paymentProof + (registration.paymentProof.includes("cloudinary.com") ? "?fl_attachment" : "")
+                                  : `${import.meta.env.VITE_SERVER_URL || "https://gimsoc-backend.onrender.com"}${registration.paymentProof}`,
+                                `workshop-payment-${registration.fullName}.jpg`
+                              )
+                            }
                             className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
                           >
                             <FileText className="h-3 w-3" />
