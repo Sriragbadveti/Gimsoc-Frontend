@@ -115,6 +115,7 @@ export default function AdminDashboard() {
   const [exportingVolunteersToSheets, setExportingVolunteersToSheets] = useState(false)
   const [exportingWorkshopsToSheets, setExportingWorkshopsToSheets] = useState(false)
   const [exportingAbstracts, setExportingAbstracts] = useState(false)
+  const [migratingWorkshopPayments, setMigratingWorkshopPayments] = useState(false)
 
   // Volunteers state
   const [volunteers, setVolunteers] = useState([])
@@ -922,6 +923,46 @@ export default function AdminDashboard() {
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingAbstracts(false)
+    }
+  }
+
+  const migrateWorkshopPaymentStatus = async () => {
+    console.log("🚀 migrateWorkshopPaymentStatus called!");
+    
+    if (!window.confirm("Are you sure you want to migrate workshop payment status for existing registrations? This will update the database.")) {
+      return;
+    }
+    
+    try {
+      setMigratingWorkshopPayments(true)
+      console.log("🔄 Starting workshop payment status migration...")
+      
+      const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/migrate-workshop-payment-status', {}, {
+        headers: getAuthHeaders(),
+        timeout: 60000 // 60 second timeout for migration
+      })
+      
+      if (response.data.success) {
+        const { totalProcessed, recordsUpdated, freeAccessCount, paidAccessCount } = response.data.data;
+        alert(`✅ Migration completed successfully!\n\nSummary:\n- Total processed: ${totalProcessed}\n- Records updated: ${recordsUpdated}\n- Free access (MEDCON): ${freeAccessCount}\n- Paid access: ${paidAccessCount}`)
+        // Refresh the workshop registrations to show updated data
+        fetchWorkshopRegistrations()
+      } else {
+        alert(`❌ Migration failed: ${response.data.message}`)
+      }
+    } catch (error) {
+      console.error("❌ Error migrating workshop payment status:", error)
+      if (error.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert(`❌ Migration failed: ${error.response?.data?.message || error.message}`)
+    } finally {
+      setMigratingWorkshopPayments(false)
     }
   }
 
@@ -3089,6 +3130,24 @@ export default function AdminDashboard() {
                    <>
                      <Upload className="h-4 w-4" />
                      Export to Sheets
+                   </>
+                 )}
+               </button>
+               
+               <button
+                 onClick={migrateWorkshopPaymentStatus}
+                 disabled={migratingWorkshopPayments}
+                 className="px-4 py-2 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+               >
+                 {migratingWorkshopPayments ? (
+                   <>
+                     <Loader2 className="h-4 w-4 animate-spin" />
+                     Migrating...
+                   </>
+                 ) : (
+                   <>
+                     <RefreshCw className="h-4 w-4" />
+                     Migrate Payment Status
                    </>
                  )}
                </button>
