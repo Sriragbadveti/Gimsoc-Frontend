@@ -12,6 +12,7 @@ import Information from "./Components/Information"
 import About from "./Components/About"
 import FeaturedSpeakers from "./Components/FeaturedSpeakers"
 import FAQSection from "./Components/FaqSection"
+import Sponsors from "./Components/Sponsors"
 import Footer from "./Components/Footer"
 import TicketDisplay from "./Pages/TicketDisplay"
 // import IndividualTicket from "./questionnaires/IndividualTicket"
@@ -65,6 +66,10 @@ const HomePage = () => (
 
     <ScrollReveal animation="fadeInRight" delay={0.2}>
       <FAQSection />
+    </ScrollReveal>
+
+    <ScrollReveal animation="zoomIn" delay={0.1}>
+      <Sponsors />
     </ScrollReveal>
 
     <ScrollReveal animation="fadeIn" delay={0.3}>
