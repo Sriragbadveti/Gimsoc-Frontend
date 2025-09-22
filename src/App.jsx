@@ -12,7 +12,6 @@ import Information from "./Components/Information"
 import About from "./Components/About"
 import FeaturedSpeakers from "./Components/FeaturedSpeakers"
 import FAQSection from "./Components/FaqSection"
-import Sponsors from "./Components/Sponsors"
 import Footer from "./Components/Footer"
 import TicketDisplay from "./Pages/TicketDisplay"
 // import IndividualTicket from "./questionnaires/IndividualTicket"
@@ -44,6 +43,7 @@ import FAQ from "./Pages/FAQ"
 import TermsAndConditions from "./Pages/TermsAndConditions"
 import VolunteerApplication from "./Pages/VolunteerApplication"
 import WorkshopRegistrationPage from "./Pages/WorkshopRegistrationPage"
+import SponsorsPage from "./Pages/SponsorsPage"
 
 
 const HomePage = () => (
@@ -66,10 +66,6 @@ const HomePage = () => (
 
     <ScrollReveal animation="fadeInRight" delay={0.2}>
       <FAQSection />
-    </ScrollReveal>
-
-    <ScrollReveal animation="zoomIn" delay={0.1}>
-      <Sponsors />
     </ScrollReveal>
 
     <ScrollReveal animation="fadeIn" delay={0.3}>
@@ -149,6 +145,7 @@ const App = () => {
           <Route path="/terms" element={<TermsAndConditions/>}/>
           <Route path="/volunteer" element={<VolunteerApplication/>} />
           <Route path="/pre-conference" element={<WorkshopRegistrationPage/>} />
+          <Route path="/sponsors" element={<SponsorsPage/>} />
         </Routes>
       )}
     </div>

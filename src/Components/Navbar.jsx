@@ -12,6 +12,7 @@ const navigation = [
   { name: "Register for MEDCON", href: "/comingsoon" },
   { name: "Pre-Conference", href: "/pre-conference" },
   { name: "Volunteer Applications", href: "/volunteer" },
+  { name: "Sponsors", href: "/sponsors" },
   {
     name: "About Us",
     href: "#",
@@ -104,6 +105,14 @@ const Navbar = () => {
     }
   }
 
+  // Handle main navigation clicks
+  const handleNavClick = (item, closeMobile = false) => {
+    if (closeMobile) {
+      setMobileMenuOpen(false)
+    }
+    navigate(item.href)
+  }
+
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -167,9 +176,13 @@ const Navbar = () => {
                   )}
                 </div>
               ) : (
-                <a key={item.name} href={item.href} className="text-sm font-semibold text-white">
+                <button 
+                  key={item.name} 
+                  onClick={() => handleNavClick(item)}
+                  className="text-sm font-semibold text-white hover:text-blue-200 transition-colors duration-200"
+                >
                   {item.name}
-                </a>
+                </button>
               ),
             )}
           </div>
@@ -276,14 +289,13 @@ const Navbar = () => {
                         )}
                       </div>
                     ) : (
-                      <a
+                      <button
                         key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={() => handleNavClick(item, true)}
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 text-left w-full"
                       >
                         {item.name}
-                      </a>
+                      </button>
                     ),
                   )}
                 </div>
