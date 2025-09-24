@@ -80,6 +80,18 @@ export default function Information() {
                     Register now →
                   </button>
                 </dd>
+                <div className="mt-4 rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-4">
+                  <div className="inline-flex items-center gap-2 mb-2">
+                    <span className="inline-block h-2 w-2 rounded-full bg-indigo-400"></span>
+                    <span className="text-sm font-semibold text-indigo-300">CPD Highlight</span>
+                  </div>
+                  <p className="text-indigo-100 leading-relaxed">
+                    Continuing Professional Development (CPD) is the internationally recognized standard for maintaining and enhancing professional skills.
+                  </p>
+                  <p className="text-indigo-100 leading-relaxed mt-2">
+                    By attending CPD-accredited events, healthcare professionals and students gain structured, verifiable learning hours that count toward their professional development requirements and career advancement.
+                  </p>
+                </div>
               </div>
             </div>
           </dl>

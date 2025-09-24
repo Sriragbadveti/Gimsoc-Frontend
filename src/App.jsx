@@ -44,6 +44,8 @@ import TermsAndConditions from "./Pages/TermsAndConditions"
 import VolunteerApplication from "./Pages/VolunteerApplication"
 import WorkshopRegistrationPage from "./Pages/WorkshopRegistrationPage"
 import SponsorsPage from "./Pages/SponsorsPage"
+import ConferenceProgram from "./Pages/ConferenceProgram"
+import Testimonials from "./Components/Testimonials"
 
 
 const HomePage = () => (
@@ -62,6 +64,10 @@ const HomePage = () => (
 
     <ScrollReveal animation="zoomIn" delay={0.1}>
       <FeaturedSpeakers />
+    </ScrollReveal>
+
+    <ScrollReveal animation="fadeInUp" delay={0.15}>
+      <Testimonials />
     </ScrollReveal>
 
     <ScrollReveal animation="fadeInRight" delay={0.2}>
@@ -146,6 +152,7 @@ const App = () => {
           <Route path="/volunteer" element={<VolunteerApplication/>} />
           <Route path="/pre-conference" element={<WorkshopRegistrationPage/>} />
           <Route path="/sponsors" element={<SponsorsPage/>} />
+          <Route path="/conference-program" element={<ConferenceProgram/>} />
         </Routes>
       )}
     </div>

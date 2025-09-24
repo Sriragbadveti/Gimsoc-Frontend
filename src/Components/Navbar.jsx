@@ -13,6 +13,7 @@ const navigation = [
   { name: "Pre-Conference", href: "/pre-conference" },
   { name: "Volunteer Applications", href: "/volunteer" },
   { name: "Sponsors", href: "/sponsors" },
+  { name: "Conference Program", href: "/conference-program" },
   {
     name: "About Us",
     href: "#",

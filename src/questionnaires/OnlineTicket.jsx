@@ -22,6 +22,7 @@ import CreditCardAnimation from "../Components/CreditCardAnimation"
 import { StatefulButton } from "../Components/StatefulButton"
 import ErrorAnimation from "../Components/ErrorAnimation"
 import LoadingAnimation from "../Components/LoadingAnimation"
+import PaypalButton from "../Components/PaypalButton"
 
 // Success Animation Component
 const SuccessAnimation = ({ onComplete }) => {
@@ -87,11 +88,21 @@ export default function OnlineTicket() {
   const [errorMessage, setErrorMessage] = useState("")
   const [bankTransferKey, setBankTransferKey] = useState(0)
   const [errorType, setErrorType] = useState("general")
+  const [paypalPaid, setPaypalPaid] = useState(false)
+  const [paypalOrderId, setPaypalOrderId] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
     setFadeIn(true)
   }, [])
+
+  // Reset PayPal payment status when payment method changes
+  useEffect(() => {
+    if (formData.paymentMethod !== "Credit/Debit Card") {
+      setPaypalPaid(false)
+      setPaypalOrderId(null)
+    }
+  }, [formData.paymentMethod])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -170,22 +181,22 @@ export default function OnlineTicket() {
   const getINRPrice = () => {
     switch (memberType) {
       case "GIMSOC":
-        return 1000 // GIMSOC Members - 1000 INR
+        return 1150 // GIMSOC Members - 1150 INR (approx 14 USD)
       case "Non-GIMSOC":
-        return 1150 // Non-GIMSOC Members - 1150 INR
+        return 1320 // Non-GIMSOC Members - 1320 INR (approx 16 USD)
       default:
-        return 1150 // Default to Non-GIMSOC price
+        return 1320 // Default to Non-GIMSOC price
     }
   }
 
   const calculatePrice = () => {
     switch (memberType) {
       case "GIMSOC":
-        return 30 // GIMSOC Members - 30 GEL
+        return 14 // GIMSOC Members - 14 USD
       case "Non-GIMSOC":
-        return 35 // Non-GIMSOC Members - 35 GEL
+        return 16 // Non-GIMSOC Members - 16 USD
       default:
-        return 35 // Default to Non-GIMSOC price
+        return 16 // Default to Non-GIMSOC price
     }
   }
 
@@ -213,6 +224,14 @@ export default function OnlineTicket() {
     setShowLoading(true)
     setEmailUsed(false)
     setErrorMessage("")
+
+    // Check if PayPal payment is required but not completed
+    if (formData.paymentMethod === "Credit/Debit Card" && !paypalPaid) {
+      alert("Please complete the PayPal payment before submitting your registration.")
+      setIsSubmitting(false)
+      setShowLoading(false)
+      return
+    }
 
     // Comprehensive validation for all required fields
     const requiredFields = {
@@ -317,6 +336,11 @@ export default function OnlineTicket() {
 
     // Add required fields
     form.append("isGimsocMember", (memberType === "GIMSOC").toString())
+    
+    // Add PayPal order ID if payment was made via PayPal
+    if (paypalOrderId) {
+      form.append("paypalOrderId", paypalOrderId)
+    }
 
     try {
       const response = await axios.post("https://gimsoc-backend.onrender.com/api/form/submit", form, {
@@ -400,7 +424,7 @@ export default function OnlineTicket() {
                     <h3 className="text-xl font-bold text-white mb-2">GIMSOC Member</h3>
                     <p className="text-white mb-4">Active GIMSOC membership required</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-400">30 GEL / 1000 INR</span>
+                      <span className="text-2xl font-bold text-green-400">14 USD / 1150 INR</span>
                       <div className="text-sm text-gray-400">GIMSOC member price</div>
                     </div>
                   </div>
@@ -419,7 +443,7 @@ export default function OnlineTicket() {
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-blue-600">35 GEL / 1150 INR</span>
+                      <span className="text-2xl font-bold text-blue-600">16 USD / 1320 INR</span>
                       <div className="text-sm text-gray-400">Regular price</div>
                     </div>
                   </div>
@@ -453,7 +477,7 @@ export default function OnlineTicket() {
               {/* Dynamic Price Display */}
               <div className="inline-block bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
                 <span className="text-white text-lg font-medium">Total Price: </span>
-                <span className="text-white text-3xl font-bold">{calculatePrice()} GEL / {getINRPrice()} INR</span>
+                <span className="text-white text-3xl font-bold">{calculatePrice()} USD / {getINRPrice()} INR</span>
               </div>
             </div>
           </div>
@@ -751,6 +775,30 @@ export default function OnlineTicket() {
                   </div>
                 </div>
 
+                {formData.paymentMethod === "Credit/Debit Card" && (
+                  <div className="mt-4">
+                    {!paypalPaid ? (
+                      <PaypalButton
+                        key={`paypal-${memberType}-${formData.paymentMethod}`}
+                        amount={calculatePrice().toString() + ".00"}
+                        onSuccess={(data) => {
+                          setPaypalPaid(true)
+                          setPaypalOrderId(data.orderID)
+                          alert("Payment successful! You can now complete your registration.")
+                        }}
+                        onError={(error) => {
+                          console.error("❌ PayPal payment failed:", error)
+                          alert("PayPal payment failed. Please try again.")
+                        }}
+                      />
+                    ) : (
+                      <div className="text-green-500 font-semibold text-center p-4 bg-green-100 rounded-lg">
+                        ✅ Payment successful! You can now complete registration.
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {formData.paymentMethod === "Bank Transfer" && (
                   <div key={`bank-transfer-${bankTransferKey}`} className="space-y-6">
                     {/* Bank Details */}
@@ -932,7 +980,7 @@ export default function OnlineTicket() {
                 disabled={isSubmitting || emailUsed}
                 className="w-full py-4 px-8 rounded-xl font-semibold text-lg"
               >
-                Complete Registration - {calculatePrice()} GEL / {getINRPrice()} INR
+                Complete Registration - {calculatePrice()} USD / {getINRPrice()} INR
               </StatefulButton>
             </div>
           </form>
