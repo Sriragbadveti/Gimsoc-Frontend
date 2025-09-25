@@ -1,13 +1,13 @@
 export default function About() {
     return (
-      <div className="bg-gray-50 py-24 sm:py-32">
+      <div className="bg-gradient-to-b from-gray-950/90 via-black/90 to-black py-24 sm:py-32">
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
           <h2 className="text-center text-base/7 font-semibold text-indigo-600"></h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">
+          <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
             About MEDCON'25
           </p>
           <div className="mx-auto mt-8 max-w-2xl text-center">
-            <p className="text-lg font-medium text-gray-500 sm:text-xl/8 tracking-tight">
+            <p className="text-lg font-medium text-gray-300 sm:text-xl/8 tracking-tight">
               Centered around Infectious Diseases, this Conference offers a blend of new speakers, new innovations, bigger connections. Providing CPD accreditations, MEDCON’25 will bring together over 30 healthcare professionals, from USA, UK, UAE, South Africa, Georgia, India etc exploring the latest advancements, from Outbreaks to Breakthroughs in Infectious Diseases. Highlights include keynote sessions from notable speakers, hands-on workshops, and discussions on emerging therapies — offering an excellent opportunity for students and Healthcare professionals to engage directly with leading experts and practitioners.
 
 
@@ -20,7 +20,7 @@ export default function About() {
             {/* Card 1 - Networking */}
 <div className="relative">
   <div className="flex flex-col items-center p-6 bg-gradient-to-br from-[#4aa053] to-[#1e4923] rounded-lg border border-gray-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
-    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white mb-4">
+    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-800/50 backdrop-blur-sm border border-white/20 mb-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -48,7 +48,7 @@ export default function About() {
 {/* Card 2 - Workshops */}
 <div className="relative">
   <div className="flex flex-col items-center p-6 bg-gradient-to-br from-[#c43410] to-[#461307] rounded-lg border border-gray-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
-    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white mb-4">
+    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-800/50 backdrop-blur-sm border border-white/20 mb-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -73,7 +73,7 @@ export default function About() {
             {/* Card 3 - Research */}
             <div className="relative md:col-span-2 lg:col-span-1">
               <div className="flex flex-col items-center p-6 bg-gradient-to-br from-[#4aa053] to-[#1e4923] rounded-lg border border-gray-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
-                <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white mb-4">
+                <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-800/50 backdrop-blur-sm border border-white/20 mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

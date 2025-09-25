@@ -120,15 +120,15 @@ export default function Footer() {
           onClick={closeContactModal}
         >
           <div
-            className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto relative"
+            className="bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto relative border border-gray-600/50"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-lg">
-              <h3 className="text-lg font-semibold text-gray-900">Contact Us</h3>
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-600/50 sticky top-0 bg-gray-700/50 rounded-t-lg">
+              <h3 className="text-lg font-semibold text-white">Contact Us</h3>
               <button
                 onClick={closeContactModal}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+                className="text-gray-400 hover:text-gray-300 transition-colors p-1 rounded-full hover:bg-gray-700/50"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -138,14 +138,14 @@ export default function Footer() {
 
             {/* Modal Body */}
             <div className="p-4 sm:p-6">
-              <p className="text-gray-600 mb-4 text-sm sm:text-base">Get in touch with our team for any inquiries:</p>
+              <p className="text-gray-300 mb-4 text-sm sm:text-base">Get in touch with our team for any inquiries:</p>
               <div className="space-y-4">
                 {contactEmails.map((contact, index) => (
                   <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
-                    <h4 className="font-medium text-gray-900 capitalize text-sm sm:text-base">{contact.department}</h4>
+                    <h4 className="font-medium text-white capitalize text-sm sm:text-base">{contact.department}</h4>
                     <a
                       href={`mailto:${contact.email}`}
-                      className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm break-all transition-colors block mt-1"
+                      className="text-blue-400 hover:text-blue-300 text-xs sm:text-sm break-all transition-colors block mt-1"
                     >
                       {contact.email}
                     </a>
@@ -155,10 +155,10 @@ export default function Footer() {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-4 sm:px-6 py-4 bg-gray-50 rounded-b-lg sticky bottom-0">
+            <div className="px-4 sm:px-6 py-4 bg-gray-700/50 rounded-b-lg sticky bottom-0">
               <button
                 onClick={closeContactModal}
-                className="w-full bg-gray-900 text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors text-sm sm:text-base"
+                className="w-full bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-500 transition-colors text-sm sm:text-base"
               >
                 Close
               </button>

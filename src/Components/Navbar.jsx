@@ -115,7 +115,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
@@ -163,12 +163,12 @@ const Navbar = () => {
                     </svg>
                   </button>
                   {aboutDropdownOpen && (
-                    <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <div className="absolute left-0 mt-2 w-48 bg-gray-800/90 backdrop-blur-sm border border-gray-600/50 rounded-md shadow-lg z-50">
                       {item.subItems.map((subItem) => (
                         <button
                           key={subItem.name}
                           onClick={() => handleSubItemClick(subItem)}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700/50"
                         >
                           {subItem.name}
                         </button>
@@ -237,7 +237,7 @@ const Navbar = () => {
         {/* Mobile Dialog */}
         <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
           <div className="fixed inset-0 z-50" />
-          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-800/90 backdrop-blur-sm px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-600/50">
             <div className="flex items-center justify-between">
               <a href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
@@ -260,7 +260,7 @@ const Navbar = () => {
                       <div key={item.name} className="space-y-1">
                         <button
                           onClick={() => setMobileAboutDropdownOpen(!mobileAboutDropdownOpen)}
-                          className="flex items-center justify-between w-full px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 rounded-lg"
+                          className="flex items-center justify-between w-full px-3 py-2 text-base font-semibold text-white hover:bg-gray-700/50 rounded-lg"
                         >
                           <span>{item.name}</span>
                           <svg
@@ -281,7 +281,7 @@ const Navbar = () => {
                               <button
                                 key={subItem.name}
                                 onClick={() => handleSubItemClick(subItem, true)}
-                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 rounded-md"
                               >
                                 {subItem.name}
                               </button>
@@ -293,7 +293,7 @@ const Navbar = () => {
                       <button
                         key={item.name}
                         onClick={() => handleNavClick(item, true)}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 text-left w-full"
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-700/50 text-left w-full"
                       >
                         {item.name}
                       </button>
@@ -314,7 +314,7 @@ const Navbar = () => {
                           disabled={!hasAccess}
                           className={`-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold ${
                             hasAccess
-                              ? "text-gray-900 hover:bg-gray-50 cursor-pointer"
+                              ? "text-white hover:bg-gray-700/50 cursor-pointer"
                               : "text-gray-400 cursor-not-allowed opacity-50"
                           }`}
                           title={!hasAccess ? "Dashboard access will be available after ticket booking" : ""}
@@ -334,7 +334,7 @@ const Navbar = () => {
                           setMobileMenuOpen(false)
                           handleLogout()
                         }}
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-700/50"
                       >
                         Logout
                       </button>

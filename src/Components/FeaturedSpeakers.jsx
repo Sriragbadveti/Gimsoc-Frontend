@@ -118,13 +118,13 @@ export default function FeaturedSpeakers() {
   const allSpeakers = [...speakers, ...speakers];
 
   return (
-    <div className="bg-gray-50 py-24 sm:py-32">
+    <div className="bg-gradient-to-b from-gray-950/90 via-black/90 to-black py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             Featured Speakers
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-gray-300">
             Learn from world-renowned medical professionals and researchers.
           </p>
         </div>
@@ -141,11 +141,11 @@ export default function FeaturedSpeakers() {
                       className="w-full h-full object-cover object-center"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 text-center">
+                  <h3 className="text-xl font-semibold text-white text-center">
                     {speaker.name}
                   </h3>
-                  <p className="text-sm text-gray-600 text-center">{speaker.title}</p>
-                  <p className="text-sm text-gray-600 text-center">{speaker.institution}</p>
+                  <p className="text-sm text-gray-300 text-center">{speaker.title}</p>
+                  <p className="text-sm text-gray-300 text-center">{speaker.institution}</p>
                 </div>
               </div>
             ))}
