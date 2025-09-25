@@ -17,7 +17,7 @@ const SoldOut = () => {
       <Navbar />
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+      <div className="relative z-0 flex items-center justify-center min-h-screen px-4 pt-32">
         <div className="max-w-4xl mx-auto text-center">
           {/* Animated Icon */}
           <motion.div
