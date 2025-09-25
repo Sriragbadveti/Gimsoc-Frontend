@@ -91,6 +91,9 @@ export default function Information() {
                   <p className="text-indigo-100 leading-relaxed mt-2">
                     By attending CPD-accredited events, healthcare professionals and students gain structured, verifiable learning hours that count toward their professional development requirements and career advancement.
                   </p>
+                  <p className="text-indigo-100 leading-relaxed mt-2">
+                    MEDCON’25 is officially CPD accredited, adding even greater value to your participation in this premier medical conference. MEDCON’25 is offering a total of <span className="font-semibold text-indigo-200">16 CPD points</span> — <span className="font-medium text-indigo-200">8 points</span> for Day 1 and <span className="font-medium text-indigo-200">8 points</span> for Day 2.
+                  </p>
                 </div>
               </div>
             </div>

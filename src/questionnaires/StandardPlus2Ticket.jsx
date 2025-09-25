@@ -42,6 +42,13 @@ const SuccessAnimation = ({ onComplete }) => {
 
 
 export default function StandardPlus2Ticket() {
+  const navigate = useNavigate()
+  
+  // Redirect to soldout page immediately
+  React.useEffect(() => {
+    navigate("/soldout")
+  }, [navigate])
+
   const [memberType, setMemberType] = useState("")
   const [formData, setFormData] = useState({
     // Member Type
