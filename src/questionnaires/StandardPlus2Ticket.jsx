@@ -42,13 +42,6 @@ const SuccessAnimation = ({ onComplete }) => {
 
 
 export default function StandardPlus2Ticket() {
-  const navigate = useNavigate()
-  
-  // Redirect to soldout page immediately
-  React.useEffect(() => {
-    navigate("/soldout")
-  }, [navigate])
-
   const [memberType, setMemberType] = useState("")
   const [formData, setFormData] = useState({
     // Member Type
@@ -121,6 +114,11 @@ export default function StandardPlus2Ticket() {
   const [loadingStep, setLoadingStep] = useState(0)
   const [fileUploadProgress, setFileUploadProgress] = useState(0)
   const navigate = useNavigate()
+  
+  // Redirect to soldout page immediately
+  useEffect(() => {
+    navigate("/soldout")
+  }, [navigate])
   
   // Gala availability hook
   const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
