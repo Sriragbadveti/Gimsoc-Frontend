@@ -166,7 +166,7 @@ export default function Tickets() {
         position: 'absolute',
         top: 0,
         left: 0,
-        zIndex: 1
+        zIndex: 0
       }}>
         <LightRays
           raysOrigin="top-center"
@@ -186,7 +186,7 @@ export default function Tickets() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-50 px-6 py-24 sm:py-32 lg:px-8">
+      <div className="relative z-10 px-6 py-24 sm:py-32 lg:px-8">
 
         <ScrollReveal animation="fadeInUp">
           <div className="mx-auto max-w-4xl text-center">
@@ -206,7 +206,7 @@ export default function Tickets() {
               <div
                 className={classNames(
                   tier.featured
-                    ? "ring-2 ring-blue-400 scale-105 shadow-xl z-10 hover:ring-blue-300 bg-black/20 backdrop-blur-md border border-blue-400/30"
+                    ? "ring-2 ring-blue-400 scale-105 shadow-xl hover:ring-blue-300 bg-black/20 backdrop-blur-md border border-blue-400/30"
                     : "ring-1 ring-white/20 hover:ring-2 hover:ring-blue-400 bg-black/10 backdrop-blur-md border border-white/20",
                   "rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
                 )}

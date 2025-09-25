@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 
 const SponsorsPage = () => {
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
+
+  const gimsocEmail = "medconconferencegimsoc@gmail.com";
+
+  const openContactModal = () => setIsContactModalOpen(true);
+  const closeContactModal = () => {
+    setIsContactModalOpen(false);
+    setEmailCopied(false);
+  };
+
+  const copyEmailToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(gimsocEmail);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+    }
+  };
   
   const sponsors = [
     {
@@ -235,16 +256,139 @@ const SponsorsPage = () => {
             Join our prestigious list of sponsors and support the medical community. 
             Get in touch with us to explore sponsorship opportunities for MEDCON'25.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-500 hover:to-purple-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 border border-blue-500/30">
+          <div className="flex justify-center">
+            <button 
+              onClick={openContactModal}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-500 hover:to-purple-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 border border-blue-500/30"
+            >
               Contact Us
-            </button>
-            <button className="border-2 border-gray-600 text-gray-300 px-8 py-4 rounded-full font-bold text-lg hover:border-blue-400 hover:text-blue-400 hover:bg-blue-600/10 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
-              Download Sponsorship Kit
             </button>
           </div>
         </div>
       </div>
+
+      {/* Animated Contact Modal */}
+      <AnimatePresence>
+        {isContactModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={closeContactModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 50 }}
+              transition={{ 
+                type: "spring", 
+                damping: 25, 
+                stiffness: 300,
+                duration: 0.4 
+              }}
+              className="bg-gray-800/90 backdrop-blur-sm rounded-3xl p-8 max-w-md w-full mx-4 border border-gray-600/50 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={closeContactModal}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-700/50"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Modal Content */}
+              <div className="text-center">
+                {/* Icon */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring", damping: 15 }}
+                  className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </motion.div>
+
+                {/* Title */}
+                <motion.h3
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-2xl font-bold text-white mb-4"
+                >
+                  Contact GIMSOC
+                </motion.h3>
+
+                {/* Description */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-gray-300 mb-6"
+                >
+                  Get in touch with us for sponsorship opportunities and partnerships.
+                </motion.p>
+
+                {/* Email Display */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="bg-gray-700/50 rounded-xl p-4 mb-6 border border-gray-600/50"
+                >
+                  <p className="text-sm text-gray-400 mb-2">Email Address:</p>
+                  <p className="text-lg font-mono text-blue-400 break-all">{gimsocEmail}</p>
+                </motion.div>
+
+                {/* Copy Button */}
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  onClick={copyEmailToClipboard}
+                  className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    emailCopied
+                      ? 'bg-green-600 text-white'
+                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500'
+                  }`}
+                >
+                  {emailCopied ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Email Copied!
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      Copy Email Address
+                    </div>
+                  )}
+                </motion.button>
+
+                {/* Additional Info */}
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                  className="text-xs text-gray-500 mt-4"
+                >
+                  We'll get back to you within 24 hours
+                </motion.p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>
