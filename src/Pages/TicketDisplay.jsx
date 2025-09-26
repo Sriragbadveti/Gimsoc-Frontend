@@ -20,8 +20,8 @@ const ticketTiers = [
       "Digital conference materials",
       "Certificate of attendance",
       "Access to online networking",
-      "GIMSOC Member: 30 GEL / 1000 INR",
-      "Non-GIMSOC: 35 GEL / 1150 INR"
+      "GIMSOC Member: 30 GEL / 1000 INR / 14 USD",
+      "Non-GIMSOC: 35 GEL / 1150 INR / 16 USD"
     ],
     featured: false,
     color: "blue",
