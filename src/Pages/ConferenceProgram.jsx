@@ -153,14 +153,14 @@ const ConferenceProgram = () => {
               speakers={[
                 "Dr. Iuri Migrauli (Georgia | Vice Dean at David Tvildiani Medical University | Training and Simulation Teaching Center Manager at Alte University | Invited Professor and Manager of Quality Assurance for the Program of Medicine at University of Georgia)",
                 "Dr. Tatia Maglaperidze MD (Georgia | Researcher at National Center for Tuberculosis and Lung Diseases | Phthisiology-Pulmonology Residency at TSMU | M2 Master’s program | Invited lecturer at Tbilisi State Medical University, University of Georgia)",
-                "Dr. Mariam Dadiani, MD (Georgia | Internal Medicine Physician at Eliava Phage Therapy Center & American Hospital Tbilisi | Specialist in phage therapy, infectious diseases, and internal medicine | Graduate of Tbilisi State Medical University)",
+                
                 "Dr. Maia Butsashvili, MD, Phd (Georgia | Managing Director at Health Research Union (HRU) | Infectious Disease Epidemiologist | Expert in HIV, Hepatitis, Tuberculosis, and Public Health | Author of 140+ scientific publications)",
                 "Dr. Otar Chokoshvili MD, PhD (Georgia | PhD, CDC-Certified Epidemiologist | Head of Epidemiology at Infectious Diseases, AIDS & Clinical Immunology Research Center | Expert in HIV, AMR, and outbreak response with 28+ peer-reviewed publications)",
               ]}
               accent="blue"
             />
 
-            <TimelineItem time="10:30 AM - 10:45 AM" title="Opening Speech by Kay Esteemed TSU Dean" accent="purple" />
+            <TimelineItem time="10:30 AM - 10:45 AM" title="Opening Speech by Ms. Kay Mamphoka" subtitle="Co-Chair of GIMSOC, 2025" accent="purple" />
 
             <TimelineItem
               time="10:45 AM - 11:05 AM"
@@ -180,7 +180,7 @@ const ConferenceProgram = () => {
 
             <TimelineItem time="11:40 AM - 12:10 PM" title="Poster Presentations + Coffee Break" accent="emerald" />
 
-            <TimelineItem time="12:10 PM - 12:15 PM" title="Buffer + videos by Geomedi, Sketchy" accent="purple" />
+            <TimelineItem time="12:10 PM - 12:15 PM" title="Sponsors Showcase" accent="purple" />
 
             <TimelineItem time="12:15 PM - 12:30 PM" title="Oral Student Presenter 2" accent="rose" />
 
@@ -192,7 +192,7 @@ const ConferenceProgram = () => {
                 "Dr. Nino Didbaridze MD (Georgia | Preventive Medical Doctor of General Practice Diploma | Invited Professor at BAU International University, European Teaching University, Tbilisi State Medical University)",
                 "Dr. Tamar Didbaridze MD (Georgia | Professor and Head of Microbiology Department of TSMU, Clinical Microbiologist at TSMU The First University Clinic | Member of Microbiology Society | Member of National Antimicrobial Resistance and Hospital Acquired Infections (AMR/HAI) Surveillance)",
                 "Dr. Mariam Acharadze, MD (Georgia | Department of Infectious Diseases, First University Clinic of Tbilisi State Medical University | Affiliated with the University of Georgia | Contributor to medical case research in infectious diseases and public health)",
-                "Dr. Giorgi Mgeladze, MD (Georgia | Professor and Clinical Microbiologist at Georgian American University)",
+                "Dr. Giorgi Mgeladze, MD (Georgia | Lecturer in Microbiology & Gastroenterology at Georgian American University | Gastroenterologist at TEST imp | Former Microbiologist at Richard Lugar Research Center | PhD Candidate in Microbiology & Immunology)",
               ]}
               accent="blue"
             />
@@ -205,7 +205,7 @@ const ConferenceProgram = () => {
             />
 
             <TimelineItem time="1:20 PM - 1:35 PM" title="Oral Student Presenter 3" accent="rose" />
-            <TimelineItem time="1:35 PM - 1:45 PM" title="Closing Speech by Toyin Dairo" accent="purple" />
+            <TimelineItem time="1:35 PM - 1:45 PM" title="Closing Speech by Toyin Dairo" subtitle="Former Co-Chair GIMSOC, 2024" accent="purple" />
 
             <Divider />
 
@@ -242,7 +242,7 @@ const ConferenceProgram = () => {
 
           <div className="grid grid-cols-1 gap-6">
             <TimelineItem time="9:00 AM - 9:50 AM" title="Registration" accent="emerald" />
-            <TimelineItem time="9:50 AM - 10:00 AM" title="Opening Speech by Co-Chair Radha Jaiswal" accent="purple" />
+            <TimelineItem time="9:50 AM - 10:00 AM" title="Opening Speech by Ms. Radha Jaiswal" subtitle="Co-Chair of GIMSOC, 2025" accent="purple" />
 
             <TimelineItem
               time="10:00 AM - 10:30 AM"
@@ -251,8 +251,8 @@ const ConferenceProgram = () => {
               speakers={[
                 "Joseph Aby (United Arab Emirates | Academician | Forensic Science Consultant | CSI & Forensic Facility Designer | Forensic Technical Assessor | Molecular Biologist (Forensic DNA) | PhD Candidate (Forensic QMS) | Assistant Professor at Amity University, Dubai)",
                 "Dr. Mariam Khurashvili MD (Georgia | Neurologist | Addiction Psychiatry Resident | Junior Doctor at Medical Holding Georgia 2022 | Invited Lecturer at GAU, SEU, CIU)",
-                "Dr. Tatia Malaperidze (Georgia | Researcher at National Center for Tuberculosis and Lung Diseases | Phthisiology-Pulmonology Residency at TSMU | M2 Master’s program | Invited lecturer at Tbilisi State Medical University, University of Georgia)",
-                "Dr. Akaki Abutidze (Georgia | M.D Infectious Disease, Assistant Professor at TSU Infectious disease Faculty)",
+                "Dr. Tatia Malaperidze (Georgia | Researcher at National Center for Tuberculosis and Lung Diseases | Phthisiology-Pulmonology Residency at TSMU | M2 Master's program | Invited lecturer at Tbilisi State Medical University, University of Georgia)",
+                "Dr. Akaki Abutidze (Georgia | M.D Infectious Disease | Deputy Director for Research at Infectious Diseases, AIDS & Clinical Immunology Research Center | Associate Professor at Tbilisi State University | Member of National Hepatitis C Elimination Clinical Group | Researcher in HIV and Viral Hepatitis)",
               ]}
               accent="blue"
             />
@@ -261,6 +261,7 @@ const ConferenceProgram = () => {
               time="10:30 AM - 10:50 AM"
               title="Keynote Speaker 4: Dr. Annam Jan MD"
               subtitle="Topic: Gut-Brain-Infection Axis: How Microbes Influence Mental and Neurological Health"
+              speakers={["Dr. Annam Jan MD (Georgia | MD, Medical Lecturer at The University of Georgia & Georgian National University (SEU) | Chairperson of the CBL-PBL Committee | Academic Neuroscience Researcher and Medical Educator)"]}
               accent="amber"
             />
 
@@ -268,26 +269,30 @@ const ConferenceProgram = () => {
               time="10:50 AM - 11:10 AM"
               title="Keynote Speaker 5: Dr. Abhishek Ray"
               subtitle="Topic: Fecal Transplants for Multidrug-Resistant GI Infections Beyond C. diff: Trials of FMT in eradicating carbapenemase-producing Enterobacteriaceae or vancomycin-resistant Enterococci"
+              speakers={["Dr. Abhishek Ray (UK | Diploma in UK Medical Practice, Specialty Registrar Gastroenterology and Hepatology ST5/ST6, NHS faculty, MRCP PACES Instructor)"]}
               accent="amber"
             />
+
+            <TimelineItem time="11:10 AM - 11:25 AM" title="Oral Student Presenter 4" accent="rose" />
+
+            <TimelineItem time="11:25 AM - 11:55 AM" title="Poster Presentations + Networking" accent="emerald" />
+            <TimelineItem time="11:55 AM - 12:05 PM" title="Sponsors' Spotlight session" speakers={["Speaker: Michael E. Hermosa (Project IMG)"]} accent="purple" />
+
+            <TimelineItem time="12:05 PM - 12:20 PM" title="Oral Student Presenter 5" accent="rose" />
 
             <TimelineItem
-              time="11:10 AM - 11:30 AM"
+              time="12:20 PM - 12:40 PM"
               title="Keynote Speaker 6: Dr. Aleksandra Barnovi MD"
               subtitle="Topic: Rise of non-TB mycobacterial lung infections (NTM) in developed countries: An underdiagnosed threat"
+              speakers={["Dr. Aleksandra Barnovi MD (Georgia | MD, Invited Lecturer in Biochemistry and Microbiology | USMLE Step 1 Certified | Clinician-Educator with international training in cardiology and medical education)"]}
               accent="amber"
             />
 
-            <TimelineItem time="11:30 AM - 12:00 AM" title="Poster Presentations + Networking" accent="emerald" />
-            <TimelineItem time="12:00 AM - 12:10 AM" title="Sponsors’ Spotlight session" speakers={["Speaker: Michael E. Hermosa (Project IMG)"]} accent="purple" />
-
-            <TimelineItem time="12:10 PM - 12:25 PM" title="Oral Student Presenter 4" accent="rose" />
-            <TimelineItem time="12:25 PM - 12:40 PM" title="Oral Student Presenter 5" accent="rose" />
             <TimelineItem time="12:40 PM - 12:55 PM" title="Oral Student Presenter 6" accent="rose" />
 
             <TimelineItem
               time="12:55 PM - 1:40 PM"
-              title="The Changemakers’ Lounge"
+              title="The Changemakers' Lounge"
               subtitle="Topics: Forensic medicine, Hospital administration, medical journalism"
               speakers={[
                 "Dr. Sesil Tsirekidze MD (Georgia | Obstetrician-gynecologist at Gudushauri National Medical Centre | MBA in Healthcare Management | Invited lecturer at TSMU for clinical skills and multidisciplinary simulation centre | Drug Registration manager at Pharmaceutical company Iberi+ 2017)",
@@ -296,7 +301,7 @@ const ConferenceProgram = () => {
               accent="blue"
             />
 
-            <TimelineItem time="1:40 PM - 1:45 PM" title="Prize announcement" subtitle="Jury members will be called on stage to distribute prizes to winners of the Scientific Oral & Poster Presentation." accent="purple" />
+            <TimelineItem time="1:40 PM - 1:45 PM" title="Prize announcement" subtitle="The top three winners of Scientific Oral & Poster Presentations, will be awarded onstage." accent="purple" />
 
             <TimelineItem time="1:45 PM - 1:55 PM" title="Closing Ceremony by Conference Director" accent="purple" />
 
