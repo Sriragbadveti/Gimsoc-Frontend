@@ -421,7 +421,7 @@ export default function WorkshopRegistrationPage() {
                   onClick={() => {
                     if (workshop.closed) return;
                     setSelectedWorkshop(workshop)
-                    if (workshop.id === "scientific-series") {
+                    if (workshop.id === "scientific-series" || workshop.id === "project-img") {
                       setSsStep("email")
                       setSsEligible(null)
                       setIsVerifyingEmail(false)
@@ -639,7 +639,7 @@ export default function WorkshopRegistrationPage() {
               </div>
             </div>
 
-            {/* Biome closed; Scientific Series email gate; Others default */}
+            {/* Biome closed; Scientific Series & Project IMG email gate; Others default */}
             {selectedWorkshop.id === "biome" ? (
             <div className="p-8">
               <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg">
@@ -655,7 +655,7 @@ export default function WorkshopRegistrationPage() {
                 </button>
               </div>
             </div>
-            ) : selectedWorkshop.id === "scientific-series" && ssStep === "email" ? (
+            ) : (selectedWorkshop.id === "scientific-series" || selectedWorkshop.id === "project-img") && ssStep === "email" ? (
             <div className="p-8">
               <div className="max-w-2xl">
                 <h3 className="text-xl font-semibold text-gray-900 mb-6">Registration Check</h3>
@@ -759,7 +759,7 @@ export default function WorkshopRegistrationPage() {
                 </div>
               </div>
             </div>
-            ) : selectedWorkshop.id === "scientific-series" && ssStep === "form" ? (
+            ) : (selectedWorkshop.id === "scientific-series" || selectedWorkshop.id === "project-img") && ssStep === "form" ? (
             <motion.form 
               onSubmit={handleSubmit} 
               className="p-8"
@@ -995,6 +995,21 @@ export default function WorkshopRegistrationPage() {
                 </div>
               )}
 
+              {/* Project IMG Workshop Details (only for project-img) */}
+              {selectedWorkshop.id === "project-img" && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Workshop Details</h4>
+                  <div className="space-y-4">
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <h5 className="font-semibold text-gray-900">From Isolation to Solidarity: Social Impacts of Infectious Disease</h5>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 1st October 2025, Online</p>
+                      <p className="text-sm text-gray-600">Speaker: Mr. Michael Hermosa (Project IMG)</p>
+                      <p className="text-sm text-gray-700 mt-2">This workshop explores how disease outbreaks transform community relationships and health behaviors, examining the social dynamics that emerge during infectious disease crises.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Scientific Series Selection (only for scientific series and non-eligible users) */}
               {selectedWorkshop.id === "scientific-series" && ssEligible === false && (
                 <div>
@@ -1019,15 +1034,15 @@ export default function WorkshopRegistrationPage() {
                 </div>
               )}
 
-              {/* Show eligibility status for all scientific series users */}
-              {selectedWorkshop.id === "scientific-series" && (
+              {/* Show eligibility status for all workshop users */}
+              {(selectedWorkshop.id === "scientific-series" || selectedWorkshop.id === "project-img") && (
                 <>
                   {ssEligible === true && (
                     <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                       <div className="flex items-center">
                         <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
                         <span className="text-green-800 font-medium">
-                          🎉 Great! You have a valid MEDCON ticket. This Scientific Series is FREE for you!
+                          🎉 Great! You have a valid MEDCON ticket. This workshop is FREE for you!
                         </span>
                       </div>
                     </div>
@@ -1047,7 +1062,7 @@ export default function WorkshopRegistrationPage() {
               )}
 
               {/* Payment Proof Upload (for paid events) */}
-              {selectedWorkshop.id === "scientific-series" && ssEligible === false && formData.selectedScientificSeries && (
+              {((selectedWorkshop.id === "scientific-series" && ssEligible === false && formData.selectedScientificSeries) || (selectedWorkshop.id === "project-img" && ssEligible === false)) && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Proof of Payment *
