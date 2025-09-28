@@ -670,7 +670,7 @@ export default function WorkshopRegistrationPage() {
                 </button>
               </div>
             </div>
-            ) : (selectedWorkshop.id === "scientific-series" || selectedWorkshop.id === "project-img") && ssStep === "email" ? (
+            ) : selectedWorkshop.id === "scientific-series" && ssStep === "email" ? (
             <div className="p-8">
               <div className="max-w-2xl">
                 <h3 className="text-xl font-semibold text-gray-900 mb-6">Registration Check</h3>
@@ -774,7 +774,7 @@ export default function WorkshopRegistrationPage() {
                 </div>
               </div>
             </div>
-            ) : (selectedWorkshop.id === "scientific-series" || selectedWorkshop.id === "project-img") && ssStep === "form" ? (
+            ) : selectedWorkshop.id === "scientific-series" && ssStep === "form" ? (
             <motion.form 
               onSubmit={handleSubmit} 
               className="p-8"
@@ -1195,6 +1195,272 @@ export default function WorkshopRegistrationPage() {
                 </button>
               </div>
             </div>
+            </motion.form>
+            ) : selectedWorkshop.id === "project-img" ? (
+            <motion.form 
+              onSubmit={handleSubmit} 
+              className="p-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <div className="space-y-8">
+                {/* Full Name */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <User className="w-4 h-4 text-blue-500" />
+                    Full Name *
+                  </label>
+                  <motion.input
+                    type="text"
+                    required
+                    value={formData.fullName}
+                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    placeholder="Enter your full name"
+                    whileFocus={{ scale: 1.02 }}
+                  />
+                </motion.div>
+
+                {/* Email */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-green-500" />
+                    Email Address *
+                  </label>
+                  <motion.input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    placeholder="Enter a valid email address for all official communication"
+                    whileFocus={{ scale: 1.02 }}
+                  />
+                </motion.div>
+
+                {/* WhatsApp */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-emerald-500" />
+                    WhatsApp Contact *
+                  </label>
+                  <motion.input
+                    type="text"
+                    required
+                    value={formData.whatsapp}
+                    onChange={(e) => handleInputChange("whatsapp", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    placeholder="Please include the country code in brackets"
+                    whileFocus={{ scale: 1.02 }}
+                  />
+                </motion.div>
+
+                {/* Country */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-purple-500" />
+                    Country *
+                  </label>
+                  <motion.input
+                    type="text"
+                    required
+                    value={formData.country}
+                    onChange={(e) => handleInputChange("country", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    placeholder="Which country are you joining from?"
+                    whileFocus={{ scale: 1.02 }}
+                  />
+                </motion.div>
+
+                {/* University */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Building className="w-4 h-4 text-indigo-500" />
+                    University Name *
+                  </label>
+                  <motion.select
+                    required
+                    value={formData.university}
+                    onChange={(e) => handleInputChange("university", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    whileFocus={{ scale: 1.02 }}
+                  >
+                    <option value="">Please select the name of your current university</option>
+                    {UNIVERSITIES.map((uni) => (
+                      <option key={uni} value={uni}>{uni}</option>
+                    ))}
+                    <option value="Other">Other</option>
+                  </motion.select>
+                  {formData.university === "Other" && (
+                    <motion.input
+                      type="text"
+                      required
+                      value={formData.otherUniversity}
+                      onChange={(e) => handleInputChange("otherUniversity", e.target.value)}
+                      className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 bg-gray-50 focus:bg-white mt-3"
+                      placeholder="Please specify your university"
+                      whileFocus={{ scale: 1.02 }}
+                    />
+                  )}
+                </motion.div>
+
+                {/* Current Semester */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.9 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <School className="w-4 h-4 text-teal-500" />
+                    Current Semester *
+                  </label>
+                  <motion.select
+                    required
+                    value={formData.currentSemester}
+                    onChange={(e) => handleInputChange("currentSemester", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    whileFocus={{ scale: 1.02 }}
+                  >
+                    <option value="">Mention your current academic semester</option>
+                    {SEMESTER_OPTIONS.map((sem) => (
+                      <option key={sem} value={sem}>{sem}</option>
+                    ))}
+                  </motion.select>
+                </motion.div>
+
+                {/* GIMSOC Membership */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 1.0 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-amber-500" />
+                    Are you a member of GIMSOC? *
+                  </label>
+                  <div className="flex gap-6">
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="isGimsocMember"
+                        value="Yes"
+                        checked={formData.isGimsocMember === "Yes"}
+                        onChange={(e) => handleInputChange("isGimsocMember", e.target.value)}
+                        className="mr-3 w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-gray-700">Yes</span>
+                    </label>
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="isGimsocMember"
+                        value="No"
+                        checked={formData.isGimsocMember === "No"}
+                        onChange={(e) => handleInputChange("isGimsocMember", e.target.value)}
+                        className="mr-3 w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-gray-700">No</span>
+                    </label>
+                  </div>
+                  {formData.isGimsocMember === "Yes" && (
+                    <motion.input
+                      type="text"
+                      required
+                      value={formData.gimsocCode}
+                      onChange={(e) => handleInputChange("gimsocCode", e.target.value)}
+                      className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 bg-gray-50 focus:bg-white mt-3"
+                      placeholder="Please enter your GIMSOC membership code"
+                      whileFocus={{ scale: 1.02 }}
+                    />
+                  )}
+                </motion.div>
+
+                {/* Project IMG Workshop Details */}
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Workshop Details</h4>
+                  <div className="space-y-4">
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <h5 className="font-semibold text-gray-900">From Isolation to Solidarity: Social Impacts of Infectious Disease</h5>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 1st October 2025, Online</p>
+                      <p className="text-sm text-gray-600">Speaker: Dr. Tehseen Siddiqui (Specialist at Chicago Infectious Disease Physicians)</p>
+                      <p className="text-sm text-gray-700 mt-2">This workshop explores how disease outbreaks transform community relationships and health behaviors, examining the social dynamics that emerge during infectious disease crises.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Free Event Notice */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <div className="flex items-center">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                    <span className="text-green-800 font-medium">
+                      🎉 This is a FREE workshop! No payment required.
+                    </span>
+                  </div>
+                </div>
+
+                {/* Consent & Submission */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <label className="flex items-start">
+                    <input
+                      type="checkbox"
+                      required
+                      className="mt-1 mr-3"
+                    />
+                    <span className="text-sm text-gray-700">
+                      I confirm that the information provided is accurate and I agree to receive event-related communications.
+                    </span>
+                  </label>
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex gap-4 pt-6">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedWorkshop(null)}
+                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Back to Pre-conference Page
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white px-6 py-3 rounded-lg hover:from-orange-600 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        Register for Free Workshop
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             </motion.form>
             ) : (
               <div className="p-8">
