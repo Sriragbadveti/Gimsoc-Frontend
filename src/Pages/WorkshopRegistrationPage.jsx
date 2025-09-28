@@ -274,7 +274,14 @@ export default function WorkshopRegistrationPage() {
       formDataToSend.append('university', formData.university)
       formDataToSend.append('currentSemester', formData.currentSemester)
       formDataToSend.append('isGimsocMember', formData.isGimsocMember)
-      formDataToSend.append('isMedconAttendee', formData.isMedconAttendee)
+      
+      // Handle MEDCON attendee status - only required for scientific series
+      if (selectedWorkshop.id === "scientific-series") {
+        formDataToSend.append('isMedconAttendee', formData.isMedconAttendee)
+      } else {
+        // For other workshops, set default value to "No"
+        formDataToSend.append('isMedconAttendee', 'No')
+      }
       
       // Add optional fields
       if (formData.otherUniversity) {
