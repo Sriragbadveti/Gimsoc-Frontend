@@ -58,14 +58,14 @@ const WORKSHOP_OPTIONS = [
     color: "from-purple-500 to-violet-600",
     bgColor: "bg-purple-50",
     borderColor: "border-purple-200",
-    closed: false
+    closed: true
   },
   {
     id: "project-img",
     title: "From Isolation to Solidarity: Social Impacts of Infectious Disease",
     date: "1st October 2025",
     platform: "Online",
-    speaker: "Mr. Michael Hermoisa",
+    speaker: "Dr. Tehseen Siddiqui (Specialist at Chicago Infectious Disease Physicians) ",
     organization: "Project IMG",
     description: "Explores how disease outbreaks transform community relationships and health behaviors.",
     icon: Users,
@@ -641,6 +641,21 @@ export default function WorkshopRegistrationPage() {
 
             {/* Biome closed; Scientific Series & Project IMG email gate; Others default */}
             {selectedWorkshop.id === "biome" ? (
+            <div className="p-8">
+              <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg">
+                Registration for this pre-conference is closed.
+              </div>
+              <div className="mt-6">
+                <button
+                  type="button"
+                  onClick={() => setSelectedWorkshop(null)}
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Back to Pre-Conference Selection
+                </button>
+              </div>
+            </div>
+            ) : selectedWorkshop.id === "scientific-series" ? (
             <div className="p-8">
               <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg">
                 Registration for this pre-conference is closed.
