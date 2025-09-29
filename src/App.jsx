@@ -32,6 +32,7 @@ import AboutusMain from "./Pages/AboutusMain"
 import StandardPlus4Ticket from "./questionnaires/StandardPlus4Ticket"
 import StandardPlus3Ticket from "./questionnaires/StandardPlus3Ticket"
 import StandardPlus2Ticket from "./questionnaires/StandardPlus2Ticket"
+import GalaAddonTicket from "./questionnaires/GalaAddonTicket"
 import OnlineTicket from "./questionnaires/OnlineTicket"
 import BasicTicket from "./questionnaires/BasicTicket"
 import TicketQRPage from "./Pages/TicketQRPage"
@@ -140,6 +141,7 @@ const App = () => {
           <Route path="/standard-plus-4" element={<StandardPlus4Ticket/>}/>
           <Route path="/standard-plus-3" element={<StandardPlus3Ticket/>}/>
           <Route path="/standard-plus-2" element={<StandardPlus2Ticket/>}/>
+          <Route path="/gala-addon" element={<GalaAddonTicket/>}/>
           <Route path="/online-ticket" element={<OnlineTicket/>}/>
           <Route path="/basic-ticket" element={<BasicTicket/>}/>
           <Route path="/ticket-qr/:ticketId" element={<TicketQRPage/>}/>
