@@ -24,6 +24,7 @@ export default function GalaAddonTicket() {
     hasOtherTicket: "",
     otherTicketType: "",
     paymentMethod: "",
+    headshot: null,
     paymentProof: null,
     infoAccurate: false,
     emailConsent: false,
@@ -60,7 +61,8 @@ export default function GalaAddonTicket() {
       e.target.value = ""
       return
     }
-    setFormData((p) => ({ ...p, paymentProof: file }))
+    const name = e.target.name || "paymentProof"
+    setFormData((p) => ({ ...p, [name]: file }))
   }
 
   const getMemberTypeDisplay = () => {
@@ -109,7 +111,7 @@ export default function GalaAddonTicket() {
       setIsSubmitting(true)
       const form = new FormData()
       // Ticket classification for backend parity with Standard+2
-      form.append("ticketCategory", "Add-On")
+      form.append("ticketCategory", "Standard")
       form.append("subType", memberType)
       form.append("ticketType", "Gala Add-On")
       // Base fields
@@ -121,6 +123,7 @@ export default function GalaAddonTicket() {
       form.append("hasOtherTicket", formData.hasOtherTicket || "")
       form.append("otherTicketType", formData.otherTicketType || "")
       form.append("paymentMethod", formData.paymentMethod)
+      if (formData.headshot) form.append("headshot", formData.headshot)
       form.append("paymentProof", formData.paymentProof)
       form.append("infoAccurate", String(!!formData.infoAccurate))
       form.append("emailConsent", String(!!formData.emailConsent))
@@ -199,6 +202,19 @@ export default function GalaAddonTicket() {
           </div>
 
           <div className="p-8 space-y-8">
+            {/* Identification (Headshot) */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3 mb-2"><Users className="w-6 h-6 text-blue-400"/><h2 className="text-xl text-white font-semibold">Identification</h2></div>
+              <div>
+                <label className="block text-sm text-white mb-2">Upload a Headshot for ID (PNG/JPEG) *</label>
+                <div className="border-2 border-dashed border-white/30 rounded-xl p-6 text-center bg-white/10">
+                  <input id="headshot" name="headshot" type="file" accept=".jpg,.jpeg,.png" onChange={handleFileChange} className="hidden" />
+                  <label htmlFor="headshot" className="text-blue-300 cursor-pointer">Click to upload</label>
+                  {formData.headshot && <div className="text-green-400 mt-2">✓ {formData.headshot.name}</div>}
+                </div>
+              </div>
+            </section>
+
             {/* Personal Information */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 mb-2"><User className="w-6 h-6 text-blue-400"/><h2 className="text-xl text-white font-semibold">Personal Information</h2></div>
