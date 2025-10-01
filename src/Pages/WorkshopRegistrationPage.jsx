@@ -77,9 +77,8 @@ const WORKSHOP_OPTIONS = [
     id: "vaccine-voices",
     title: "Vaccine Voices: Addressing Hesitancy, Protecting Futures",
     date: "5th October, 2025",
-    platform: "Offline",
-    venue: "New Vision University (NVU) Audimax",
-    speaker: "Dr. Giorgi Derevenskikh, Dr. Nino Didbaridze",
+    
+    speaker: "Dr. Giorgi Derevenskikh (US), Dr. Nino Didbaridze (Georgia) , Dr. Shyamshree Das (India)",
     organization: "Doctors for a Cause (DFC)",
     description: "Focuses on the resurgence of measles, vaccine hesitancy, and the critical role of healthcare advocacy.",
     icon: Shield,

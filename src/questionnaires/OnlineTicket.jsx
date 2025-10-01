@@ -181,22 +181,22 @@ export default function OnlineTicket() {
   const getINRPrice = () => {
     switch (memberType) {
       case "GIMSOC":
-        return 1150 // GIMSOC Members - 1150 INR (approx 14 USD)
+        return 1320 // GIMSOC Members - 1320 INR
       case "Non-GIMSOC":
-        return 1320 // Non-GIMSOC Members - 1320 INR (approx 16 USD)
+        return 1480 // Non-GIMSOC Members - 1480 INR
       default:
-        return 1320 // Default to Non-GIMSOC price
+        return 1480 // Default to Non-GIMSOC price
     }
   }
 
   const calculatePrice = () => {
     switch (memberType) {
       case "GIMSOC":
-        return 14 // GIMSOC Members - 14 USD
+        return 16 // GIMSOC Members - 16 USD
       case "Non-GIMSOC":
-        return 16 // Non-GIMSOC Members - 16 USD
+        return 18 // Non-GIMSOC Members - 18 USD
       default:
-        return 16 // Default to Non-GIMSOC price
+        return 18 // Default to Non-GIMSOC price
     }
   }
 
@@ -424,7 +424,7 @@ export default function OnlineTicket() {
                     <h3 className="text-xl font-bold text-white mb-2">GIMSOC Member</h3>
                     <p className="text-white mb-4">Active GIMSOC membership required</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-green-400">14 USD / 1150 INR</span>
+                      <span className="text-2xl font-bold text-green-400">16 USD / 1320 INR</span>
                       <div className="text-sm text-gray-400">GIMSOC member price</div>
                     </div>
                   </div>
@@ -443,7 +443,7 @@ export default function OnlineTicket() {
                     <h3 className="text-xl font-bold text-white mb-2">Non-GIMSOC Member</h3>
                     <p className="text-white mb-4">Standard registration</p>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-blue-600">16 USD / 1320 INR</span>
+                      <span className="text-2xl font-bold text-blue-600">18 USD / 1480 INR</span>
                       <div className="text-sm text-gray-400">Regular price</div>
                     </div>
                   </div>

@@ -20,8 +20,8 @@ const ticketTiers = [
       "Digital conference materials",
       "Certificate of attendance",
       "Access to online networking",
-      "GIMSOC Member: 30 GEL / 1000 INR / 14 USD",
-      "Non-GIMSOC: 35 GEL / 1150 INR / 16 USD"
+      "GIMSOC Member: 16 USD / 40 GEL / 1320 INR",
+      "Non-GIMSOC: 18 USD / 45 GEL / 1480 INR"
     ],
     featured: false,
     color: "blue",
@@ -124,6 +124,23 @@ const ticketTiers = [
     color: "teal",
   },
   
+  {
+    name: "Gala Add-On Ticket",
+    id: "tier-gala",
+    href: "/gala-addon",
+    
+    description: [
+      "Exclusive access to Gala Dinner",
+      "Premium dining experience",
+      "Networking opportunities",
+      "Entertainment and performances",
+      "Certificate of attendance",
+      "Price: 40 GEL"
+    ],
+    featured: false,
+    color: "gold",
+  },
+  
   // {
   //   name: "International Delegate Package",
   //   id: "tier-international",
@@ -194,6 +211,19 @@ export default function Tickets() {
             <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Choose your MEDCON'25 Ticket
             </p>
+            
+            {/* Animated "Hurry up" message */}
+            <div className="mt-6 mb-4">
+              <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-400/30 rounded-full backdrop-blur-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+                  <span className="text-red-300 font-semibold text-lg animate-pulse">
+                    ⚡ Hurry up, Only few tickets left! ⚡
+                  </span>
+                  <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </div>
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-300">
             Select the perfect ticket option that fits your needs and budget. 
@@ -243,11 +273,13 @@ export default function Tickets() {
                   className={classNames(
                     tier.featured
                       ? "bg-blue-500 text-black shadow-sm hover:bg-blue-400 font-bold"
+                      : tier.color === "gold"
+                      ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-black shadow-sm hover:from-yellow-400 hover:to-amber-400 font-bold"
                       : "text-white ring-1 ring-inset ring-white/30 hover:ring-blue-400 hover:bg-blue-500/20",
                     "mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 transition-all duration-300",
                   )}
                 >
-                  {tier.featured ? "Register Now" : "Get Started"}
+                  {tier.featured ? "Register Now" : tier.color === "gold" ? "Book Gala Access" : "Get Started"}
                 </Link>
               </div>
             </ScrollReveal>
