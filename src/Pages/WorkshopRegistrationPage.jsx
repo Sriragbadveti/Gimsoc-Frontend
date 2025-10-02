@@ -427,6 +427,21 @@ export default function WorkshopRegistrationPage() {
                   onClick={() => {
                     if (workshop.closed) return;
                     setSelectedWorkshop(workshop)
+                    // Reset form data when selecting a workshop
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      whatsapp: "",
+                      country: "",
+                      university: "",
+                      otherUniversity: "",
+                      currentSemester: "",
+                      isGimsocMember: "",
+                      gimsocCode: "",
+                      isMedconAttendee: "",
+                      selectedScientificSeries: "",
+                      paymentProof: null
+                    })
                     if (workshop.id === "scientific-series" || workshop.id === "project-img") {
                       setSsStep("email")
                       setSsEligible(null)
@@ -1640,15 +1655,27 @@ export default function WorkshopRegistrationPage() {
                     </label>
                   </div>
                   {formData.isGimsocMember === "Yes" && (
-                    <motion.input
-                      type="text"
-                      required
-                      value={formData.gimsocCode}
-                      onChange={(e) => handleInputChange("gimsocCode", e.target.value)}
-                      className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 bg-gray-50 focus:bg-white mt-3"
-                      placeholder="Please enter your GIMSOC membership code"
-                      whileFocus={{ scale: 1.02 }}
-                    />
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-4"
+                    >
+                      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <span className="text-amber-500">🔑</span>
+                        GIMSOC Membership Code *
+                      </label>
+                      <motion.input
+                        type="text"
+                        required
+                        value={formData.gimsocCode}
+                        onChange={(e) => handleInputChange("gimsocCode", e.target.value)}
+                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                        placeholder="Enter your GIMSOC membership code"
+                        whileFocus={{ scale: 1.02 }}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Please enter the code provided when you joined GIMSOC</p>
+                    </motion.div>
                   )}
                 </motion.div>
 
