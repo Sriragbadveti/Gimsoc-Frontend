@@ -108,11 +108,6 @@ export default function StandardPlus4Ticket() {
     setFadeIn(true)
   }, [])
 
-  // Redirect to soldout page immediately
-  useEffect(() => {
-    navigate("/soldout")
-  }, [navigate])
-
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     

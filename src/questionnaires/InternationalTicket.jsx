@@ -99,11 +99,6 @@ export default function InternationalTicket() {
     setFadeIn(true)
   }, [])
 
-  // Redirect to soldout page immediately
-  useEffect(() => {
-    navigate("/soldout")
-  }, [navigate])
-
   // Reset PayPal payment status when payment method changes
   useEffect(() => {
     if (formData.paymentMethod !== "Credit/Debit Card") {

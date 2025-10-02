@@ -83,11 +83,6 @@ export default function DoctorTicket() {
     setFadeIn(true)
   }, [])
 
-  // Redirect to soldout page immediately
-  useEffect(() => {
-    navigate("/soldout")
-  }, [navigate])
-
   // Debug payment method changes
   useEffect(() => {
     console.log("🎯 Payment method changed:", formData.paymentMethod)

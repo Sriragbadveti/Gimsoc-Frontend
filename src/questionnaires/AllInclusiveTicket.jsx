@@ -173,12 +173,6 @@ export default function AllInclusiveTicket() {
   const [errorBooking, setErrorBooking] = useState(false)
   const [showLoading, setShowLoading] = useState(false)
   const navigate = useNavigate()
-  
-  // Redirect to soldout page immediately
-  useEffect(() => {
-    navigate("/soldout")
-  }, [navigate])
-  
   const [soldOut, setSoldOut] = useState(false)
   const [emailUsed, setEmailUsed] = useState(false)
   const [galaSoldOut, setGalaSoldOut] = useState(false)
