@@ -30,7 +30,7 @@ const ticketTiers = [
   {
     name: "Basic Ticket",
     id: "tier-basic",
-    href: "/basic-ticket",
+    href: "/soldout",
     
     description: [
       "Access to speakers and presentations",
@@ -49,7 +49,7 @@ const ticketTiers = [
   {
     name: "Standard +2 Workshops Ticket",
     id: "tier-standard",
-    href: "/standard-plus-2",
+    href: "/soldout",
     
     description: [
       "Full MEDCON access + 2 workshops",
@@ -69,7 +69,7 @@ const ticketTiers = [
   {
     name: "Standard +3 Workshops Ticket",
     id: "tier-allinclusive",
-    href: "/standard-plus-3",
+    href: "/soldout",
     
     description: [
       "Full MEDCON access + 3 workshops",
@@ -89,7 +89,7 @@ const ticketTiers = [
   {
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
-    href: "/standard-plus-4",
+    href: "/soldout",
     
     description: [
       "Full MEDCON access + 4 workshops",
@@ -108,7 +108,7 @@ const ticketTiers = [
   {
     name: "Doctor Ticket",
     id: "tier-doctor",
-    href: "/doctor-ticket",
+    href: "/soldout",
     
     description: [
       "Academic-focused access for medical professionals",
