@@ -1347,6 +1347,44 @@ export default function WorkshopRegistrationPage() {
                   </motion.select>
                 </motion.div>
 
+                {/* GIMSOC Membership */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.9 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-pink-500" />
+                    Are you a GIMSOC Member? *
+                  </label>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all">
+                      <input
+                        type="radio"
+                        name="isGimsocMember"
+                        value="Yes"
+                        checked={formData.isGimsocMember === "Yes"}
+                        onChange={(e) => handleInputChange("isGimsocMember", e.target.value)}
+                        className="text-pink-600 focus:ring-pink-500"
+                        required
+                      />
+                      <span className="text-gray-700 font-medium">Yes, I am a GIMSOC member</span>
+                    </label>
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all">
+                      <input
+                        type="radio"
+                        name="isGimsocMember"
+                        value="No"
+                        checked={formData.isGimsocMember === "No"}
+                        onChange={(e) => handleInputChange("isGimsocMember", e.target.value)}
+                        className="text-pink-600 focus:ring-pink-500"
+                        required
+                      />
+                      <span className="text-gray-700 font-medium">No, I am not a GIMSOC member</span>
+                    </label>
+                  </div>
+                </motion.div>
+
                 {/* Vaccine Voices Workshop Details */}
                 <div className="bg-teal-50 border border-teal-200 rounded-lg p-6 mb-6">
                   <h4 className="text-lg font-semibold text-gray-900 mb-4">Workshop Details</h4>
