@@ -1274,11 +1274,32 @@ export default function WorkshopRegistrationPage() {
                   />
                 </motion.div>
 
+                {/* Country */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.65 }}
+                >
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-emerald-500" />
+                    Country *
+                  </label>
+                  <motion.input
+                    type="text"
+                    required
+                    value={formData.country}
+                    onChange={(e) => handleInputChange("country", e.target.value)}
+                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                    placeholder="Enter your country"
+                    whileFocus={{ scale: 1.02 }}
+                  />
+                </motion.div>
+
                 {/* University */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.7 }}
+                  transition={{ duration: 0.5, delay: 0.75 }}
                 >
                   <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
                     <Building className="w-4 h-4 text-orange-500" />
@@ -1304,7 +1325,7 @@ export default function WorkshopRegistrationPage() {
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
+                  transition={{ duration: 0.5, delay: 0.85 }}
                 >
                   <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
                     <School className="w-4 h-4 text-indigo-500" />
