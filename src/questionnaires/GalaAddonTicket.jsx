@@ -332,23 +332,6 @@ export default function GalaAddonTicket() {
                       </div>
                     </div>
 
-                    {/* INR Transfer Details */}
-                    <div>
-                      <h4 className="text-md font-semibold text-green-300 mb-3">FOR INR TRANSFER (INDIAN RUPEES)</h4>
-                      <div className="bg-white/10 rounded-lg p-4 space-y-2">
-                        <p className="text-sm text-gray-300"><strong>UPI ID:</strong> divyeshkadiyala@ybl</p>
-                        <p className="text-sm text-gray-300"><strong>Phone Number:</strong> +91 8971224430</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* PhonePe Image Section */}
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-white mb-4 text-center">💳 PhonePe Payment Option</h3>
-                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                      <img src="/phonepe.jpg" alt="PhonePe Payment" className="w-full h-auto rounded-lg shadow-lg" />
-                      <p className="text-sm text-gray-300 mt-2 text-center">Scan QR code or use UPI ID for payment</p>
-                    </div>
                   </div>
 
                   {/* Payment Proof Examples */}
