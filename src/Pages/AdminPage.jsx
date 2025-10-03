@@ -1399,6 +1399,35 @@ export default function AdminDashboard() {
                   <strong>Note:</strong> Includes automatic gala access for All-Inclusive Doctor tickets
                 </div>
               </div>
+
+              {/* Gala Access Tickets */}
+              <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 p-4 rounded-lg border border-indigo-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-indigo-900">GALA Access Tickets</h4>
+                    <p className="text-sm text-indigo-700">
+                      {ticketCounts.galaAccessTickets} / {ticketCounts.galaAccessLimit} sold
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-indigo-900">
+                      {Math.round((ticketCounts.galaAccessTickets / ticketCounts.galaAccessLimit) * 100)}%
+                    </div>
+                    <div className="text-xs text-indigo-600">
+                      {ticketCounts.galaAccessLimit - ticketCounts.galaAccessTickets} remaining
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 w-full bg-indigo-200 rounded-full h-2">
+                  <div 
+                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${Math.min((ticketCounts.galaAccessTickets / ticketCounts.galaAccessLimit) * 100, 100)}%` }}
+                  ></div>
+                </div>
+                <div className="mt-2 text-xs text-indigo-600">
+                  <strong>Note:</strong> Access-only tickets for GALA event separate from dinner tickets
+                </div>
+              </div>
             </div>
 
             {/* Summary Stats */}
