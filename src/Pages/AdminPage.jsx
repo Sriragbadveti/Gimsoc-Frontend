@@ -85,6 +85,7 @@ export default function AdminDashboard() {
   const [ticketsLoading, setTicketsLoading] = useState(true)
   const [ticketsError, setTicketsError] = useState(null)
   const [approvingTickets, setApprovingTickets] = useState(new Set())
+  const [deletingTickets, setDeletingTickets] = useState(new Set())
   const [expandedGroups, setExpandedGroups] = useState(new Set())
   const [expandedTickets, setExpandedTickets] = useState(new Set())
 
@@ -520,6 +521,53 @@ export default function AdminDashboard() {
       alert("Failed to reject ticket. Please try again.")
     } finally {
       setApprovingTickets((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(ticketId)
+        return newSet
+      })
+    }
+  }
+
+  const deleteTicket = async (ticketId) => {
+    const ticket = tickets.find(t => t._id === ticketId)
+    const confirmMessage = `Are you sure you want to permanently delete the ticket for ${ticket?.fullName} (${ticket?.ticketType})?\n\nThis action cannot be undone and will remove the ticket from the database completely.`
+    
+    if (!confirm(confirmMessage)) {
+      return
+    }
+
+    try {
+      setDeletingTickets((prev) => new Set([...prev, ticketId]))
+      console.log("Deleting ticket:", ticketId)
+      
+      await axios.delete(
+        `https://gimsoc-backend.onrender.com/api/admin/deleteticket/${ticketId}`,
+        { headers: getAuthHeaders() }
+      )
+      
+      console.log("Ticket deleted successfully on backend")
+      
+      // Remove ticket from local state
+      setTickets((prevTickets) => 
+        prevTickets.filter((ticket) => ticket._id !== ticketId)
+      )
+      
+      // Refresh ticket counts after deletion
+      fetchTicketCounts()
+      alert(`Ticket deleted successfully! The ticket for ${ticket?.fullName} has been permanently removed from the database.`)
+    } catch (err) {
+      console.error("Error deleting ticket:", err)
+      if (err.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert("Failed to delete ticket. Please try again.")
+    } finally {
+      setDeletingTickets((prev) => {
         const newSet = new Set(prev)
         newSet.delete(ticketId)
         return newSet
@@ -1481,6 +1529,9 @@ export default function AdminDashboard() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Details
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -1536,25 +1587,6 @@ export default function AdminDashboard() {
                           >
                             {ticket.paymentStatus || "pending"}
                           </span>
-                          {(ticket.paymentStatus === "pending" || !ticket.paymentStatus) && (
-                            <>
-                            {console.log("Showing buttons for ticket:", ticket._id, "Status:", ticket.paymentStatus)}
-                            <button
-                              onClick={() => approveTicket(ticket._id)}
-                              disabled={approvingTickets.has(ticket._id)}
-                              className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {approvingTickets.has(ticket._id) ? "Approving..." : "Approve"}
-                            </button>
-                              <button
-                                onClick={() => rejectTicket(ticket._id)}
-                                disabled={approvingTickets.has(ticket._id)}
-                                className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed ml-2"
-                              >
-                                {approvingTickets.has(ticket._id) ? "Rejecting..." : "Reject"}
-                              </button>
-                            </>
-                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -1624,11 +1656,40 @@ export default function AdminDashboard() {
                           Details
                         </button>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          {(ticket.paymentStatus === "pending" || !ticket.paymentStatus) && (
+                            <>
+                              <button
+                                onClick={() => approveTicket(ticket._id)}
+                                disabled={approvingTickets.has(ticket._id) || deletingTickets.has(ticket._id)}
+                                className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {approvingTickets.has(ticket._id) ? "Approving..." : "Approve"}
+                              </button>
+                              <button
+                                onClick={() => rejectTicket(ticket._id)}
+                                disabled={approvingTickets.has(ticket._id) || deletingTickets.has(ticket._id)}
+                                className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {approvingTickets.has(ticket._id) ? "Rejecting..." : "Reject"}
+                              </button>
+                            </>
+                          )}
+                          <button
+                            onClick={() => deleteTicket(ticket._id)}
+                            disabled={approvingTickets.has(ticket._id) || deletingTickets.has(ticket._id)}
+                            className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {deletingTickets.has(ticket._id) ? "Deleting..." : "Delete"}
+                          </button>
+                        </div>
+                      </td>
                     </tr>
 
                     {ticket.ticketType === "Group" && ticket.attendees && expandedGroups.has(ticket._id) && (
                       <tr>
-                        <td colSpan="6" className="px-6 py-4 bg-gray-50">
+                        <td colSpan="8" className="px-6 py-4 bg-gray-50">
                           <div className="ml-6">
                             <h4 className="text-sm font-medium text-gray-900 mb-3">Group Attendees</h4>
                             <div className="bg-white rounded border border-gray-200 overflow-hidden">
@@ -1831,20 +1892,27 @@ export default function AdminDashboard() {
                     {console.log("Mobile: Showing buttons for ticket:", ticket._id, "Status:", ticket.paymentStatus)}
                     <button
                       onClick={() => approveTicket(ticket._id)}
-                      disabled={approvingTickets.has(ticket._id)}
+                      disabled={approvingTickets.has(ticket._id) || deletingTickets.has(ticket._id)}
                       className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {approvingTickets.has(ticket._id) ? "Approving..." : "Approve"}
                     </button>
                       <button
                         onClick={() => rejectTicket(ticket._id)}
-                        disabled={approvingTickets.has(ticket._id)}
+                        disabled={approvingTickets.has(ticket._id) || deletingTickets.has(ticket._id)}
                         className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed ml-2"
                       >
                         {approvingTickets.has(ticket._id) ? "Rejecting..." : "Reject"}
                       </button>
                     </>
                   )}
+                  <button
+                    onClick={() => deleteTicket(ticket._id)}
+                    disabled={approvingTickets.has(ticket._id) || deletingTickets.has(ticket._id)}
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed ml-2"
+                  >
+                    {deletingTickets.has(ticket._id) ? "Deleting..." : "Delete"}
+                  </button>
                 </div>
               </div>
 
