@@ -1398,6 +1398,29 @@ export default function WorkshopRegistrationPage() {
                       <span className="text-gray-700 font-medium">No, I am not a GIMSOC member</span>
                     </label>
                   </div>
+                  {formData.isGimsocMember === "Yes" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-4"
+                    >
+                      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <span className="text-pink-500">🔑</span>
+                        GIMSOC Membership Code *
+                      </label>
+                      <motion.input
+                        type="text"
+                        required
+                        value={formData.gimsocCode}
+                        onChange={(e) => handleInputChange("gimsocCode", e.target.value)}
+                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 bg-gray-50 focus:bg-white"
+                        placeholder="Enter your GIMSOC membership code"
+                        whileFocus={{ scale: 1.02 }}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Please enter the code provided when you joined GIMSOC</p>
+                    </motion.div>
+                  )}
                 </motion.div>
 
                 {/* Vaccine Voices Workshop Details */}
