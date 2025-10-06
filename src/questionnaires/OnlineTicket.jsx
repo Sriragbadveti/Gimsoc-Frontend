@@ -238,6 +238,7 @@ export default function OnlineTicket() {
       email: formData.email,
       fullName: formData.fullName,
       whatsapp: formData.whatsapp,
+      dashboardPassword: formData.dashboardPassword,
       isStudent: formData.isStudent,
       countryOfResidence: formData.countryOfResidence,
       sourceOfInfo: formData.sourceOfInfo,
@@ -517,6 +518,20 @@ export default function OnlineTicket() {
                     placeholder="Enter a valid email address"
                     required
                   />
+                </div>
+
+                <div className="transform hover:scale-105 transition-transform duration-300">
+                  <label className="block text-sm font-medium text-white mb-2">Password for Dashboard *</label>
+                  <input
+                    type="password"
+                    name="dashboardPassword"
+                    value={formData.dashboardPassword}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/90 backdrop-blur-sm text-gray-800"
+                    placeholder="Create a password for dashboard access"
+                    required
+                  />
+                  <p className="text-xs text-gray-300 mt-1">You'll use this password to access your dashboard after ticket approval</p>
                 </div>
 
                 <div className="transform hover:scale-105 transition-transform duration-300">

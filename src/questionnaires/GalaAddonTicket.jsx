@@ -18,6 +18,7 @@ export default function GalaAddonTicket() {
     fullName: "",
     email: "",
     whatsapp: "",
+    dashboardPassword: "",
     universityName: "",
     foodPreference: "",
     gimsocMembershipCode: "",
@@ -82,6 +83,7 @@ export default function GalaAddonTicket() {
       "fullName",
       "email",
       "whatsapp",
+      "dashboardPassword",
       "universityName",
       "foodPreference",
       "paymentMethod",
@@ -117,6 +119,7 @@ export default function GalaAddonTicket() {
       // Base fields
       form.append("fullName", formData.fullName)
       form.append("email", formData.email)
+      form.append("dashboardPassword", formData.dashboardPassword)
       form.append("whatsapp", formData.whatsapp)
       form.append("universityName", formData.universityName)
       form.append("foodPreference", formData.foodPreference)
@@ -226,6 +229,11 @@ export default function GalaAddonTicket() {
                 <div>
                   <label className="block text-sm text-white mb-2">Email Address *</label>
                   <input type="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/90 text-gray-800" />
+                </div>
+                <div>
+                  <label className="block text-sm text-white mb-2">Password for Dashboard *</label>
+                  <input type="password" name="dashboardPassword" value={formData.dashboardPassword} onChange={handleInputChange} required className="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/90 text-gray-800" />
+                  <p className="text-xs text-gray-300 mt-1">You'll use this password to access your dashboard after ticket approval</p>
                 </div>
                 <div>
                   <label className="block text-sm text-white mb-2">WhatsApp Number (with country code) *</label>
