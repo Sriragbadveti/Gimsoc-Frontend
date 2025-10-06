@@ -34,7 +34,7 @@ const ticketTiers = [
     
     description: [
       "Access to speakers and presentations",
-      "Limited access to fairs and booths",
+      "Limited access to fairs and booths ",
       "Meals and refreshments",
       "Academic, research and activities fair",
       "Goodie bag with exclusive MEDCON merchandise",
