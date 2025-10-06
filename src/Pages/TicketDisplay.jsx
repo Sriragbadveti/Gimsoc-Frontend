@@ -30,7 +30,7 @@ const ticketTiers = [
   {
     name: "Basic Ticket",
     id: "tier-basic",
-    href: "/soldout",
+    href: "/basic-ticket",
     
     description: [
       "Access to speakers and presentations",
