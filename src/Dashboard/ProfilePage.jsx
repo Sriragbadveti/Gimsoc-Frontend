@@ -258,8 +258,8 @@ const ProfilePage = ({ userData }) => {
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 font-medium">Date & Time</p>
-                      <p className="text-sm font-semibold text-gray-900">October 24th, 2025</p>
-                      <p className="text-xs text-gray-600">8:00 PM - 12:00 AM</p>
+                      <p className="text-sm font-semibold text-gray-900">October 26th, 2025</p>
+                      <p className="text-xs text-gray-600">7:00 PM - 11:00 AM</p>
                     </div>
                   </div>
                 </div>
@@ -271,8 +271,8 @@ const ProfilePage = ({ userData }) => {
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 font-medium">Venue</p>
-                      <p className="text-sm font-semibold text-gray-900">Grand Ballroom</p>
-                      <p className="text-xs text-gray-600">Conference Center</p>
+                      <p className="text-sm font-semibold text-gray-900">Hotels & Preferences</p>
+                      <p className="text-xs text-gray-600">Hualing Tbilisi</p>
                     </div>
                   </div>
                 </div>
