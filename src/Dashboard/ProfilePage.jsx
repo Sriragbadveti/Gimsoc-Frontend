@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { Edit, Calendar, MapPin, Mail, Phone, Building, Globe, User } from "lucide-react"
+import { Edit, Calendar, MapPin, Mail, Phone, Building, Globe, User, Sparkles, Utensils, Wine, Music } from "lucide-react"
 import Card from "./Card"
 
 const ProfilePage = ({ userData }) => {
@@ -107,6 +107,12 @@ const ProfilePage = ({ userData }) => {
       </div>
     )
   }
+
+  // Check if user has Gala Dinner access
+  const hasGalaDinnerAccess = 
+    userProfile?.ticketType === "Gala Add-On" || 
+    userProfile?.galaDinner === "Yes, I would like to attend the Gala Dinner (+40 GEL)" ||
+    userProfile?.galaDinner === "Yes"
 
   return (
     <div className="space-y-6">
@@ -215,6 +221,146 @@ const ProfilePage = ({ userData }) => {
           </div>
         </Card>
       </div>
+
+      {/* Gala Dinner Access Card - Only show if user has access */}
+      {hasGalaDinnerAccess && (
+        <Card className="overflow-hidden">
+          <div className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-8">
+            {/* Decorative background elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-200/30 to-orange-200/30 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-yellow-200/30 to-amber-200/30 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10">
+              {/* Header with sparkle icon */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl shadow-lg">
+                    <Sparkles className="w-6 h-6 text-white animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900">Gala Dinner Access</h3>
+                    <p className="text-sm text-gray-600">You're invited to our exclusive evening event</p>
+                  </div>
+                </div>
+                <div className="hidden sm:block">
+                  <div className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold shadow-lg">
+                    ✨ VIP Access
+                  </div>
+                </div>
+              </div>
+
+              {/* Event Details */}
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-amber-100 rounded-lg">
+                      <Calendar className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Date & Time</p>
+                      <p className="text-sm font-semibold text-gray-900">October 24th, 2025</p>
+                      <p className="text-xs text-gray-600">8:00 PM - 12:00 AM</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-orange-100 rounded-lg">
+                      <MapPin className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Venue</p>
+                      <p className="text-sm font-semibold text-gray-900">Grand Ballroom</p>
+                      <p className="text-xs text-gray-600">Conference Center</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-yellow-100 rounded-lg">
+                      <Utensils className="w-5 h-5 text-yellow-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Dress Code</p>
+                      <p className="text-sm font-semibold text-gray-900">Formal Attire</p>
+                      <p className="text-xs text-gray-600">Business / Evening Wear</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Features Grid */}
+              <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 shadow-md">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Wine className="w-5 h-5 text-amber-600" />
+                  What to Expect
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1">
+                      <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Gourmet Dining</p>
+                      <p className="text-xs text-gray-600">Multi-course dinner with wine pairing</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Live Entertainment</p>
+                      <p className="text-xs text-gray-600">Music and performances throughout the evening</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Networking</p>
+                      <p className="text-xs text-gray-600">Connect with speakers and attendees</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1">
+                      <div className="w-2 h-2 bg-amber-600 rounded-full"></div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Special Recognition</p>
+                      <p className="text-xs text-gray-600">Awards ceremony and acknowledgments</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Food Preference Note */}
+              {userProfile.foodPreference && (
+                <div className="mt-6 bg-gradient-to-r from-amber-100 to-orange-100 border-l-4 border-amber-500 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <Utensils className="w-5 h-5 text-amber-700" />
+                    <div>
+                      <p className="text-sm font-semibold text-amber-900">Your Food Preference</p>
+                      <p className="text-sm text-amber-700">{userProfile.foodPreference}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Footer Note */}
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+                  <Music className="w-4 h-4 text-amber-600" />
+                  We look forward to seeing you at this special evening!
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
 
       
     </div>
