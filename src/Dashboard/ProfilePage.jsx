@@ -304,7 +304,7 @@ const ProfilePage = ({ userData }) => {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">Gourmet Dining</p>
-                      <p className="text-xs text-gray-600">Multi-course dinner with wine pairing</p>
+                      
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
