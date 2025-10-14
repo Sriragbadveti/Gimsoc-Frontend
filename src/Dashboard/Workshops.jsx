@@ -131,64 +131,98 @@ export default function Workshops({ userData }) {
   }, [selection])
 
   const toggle = (code, s) => {
-    // slot conflict: only one per slot per day
-    const slotKey = `${s.day}-${s.slot}`
-    const inSameSlot = sessions.filter(x => chosen.has(x.code) && `${x.day}-${x.slot}` === slotKey)
-    if (inSameSlot.length && !chosen.has(code)) {
-      alert("You’ve already chosen a workshop in this time slot.")
-      return
-    }
-
-    // linked mutual exclusion (NVU)
-    if (venue === "NVU" && s.linkedGroup) {
-      const inLinked = sessions.filter(x => chosen.has(x.code) && x.linkedGroup && x.linkedGroup === s.linkedGroup)
-      if (inLinked.length && !chosen.has(code)) {
-        alert("This session is linked with another — please select only one.")
-        return
-      }
-    }
-
-    const next = new Set(chosen)
-    if (next.has(code)) next.delete(code)
-    else {
+    // Check if we're adding or removing
+    const isRemoving = chosen.has(code)
+    
+    if (!isRemoving) {
+      // Check capacity
       if (s.reserved >= s.capacity) {
         alert("Sorry, this session is full.")
         return
       }
+
+      // Check time slot conflict: only one per slot per day
+      const slotKey = `${s.day}-${s.slot}`
+      const inSameSlot = effectiveSessions.filter(x => chosen.has(x.code) && `${x.day}-${x.slot}` === slotKey)
+      if (inSameSlot.length) {
+        alert("You've already chosen a workshop in this time slot.")
+        return
+      }
+
+      // Check max 2 workshops per day
+      const workshopsOnThisDay = effectiveSessions.filter(x => chosen.has(x.code) && x.day === s.day)
+      if (workshopsOnThisDay.length >= 2) {
+        alert("You can select a maximum of 2 workshops per day.")
+        return
+      }
+
+      // Check max 3 workshops total
+      if (chosen.size >= 3) {
+        alert("You can select a maximum of 3 workshops total.")
+        return
+      }
+
+      // Linked mutual exclusion (NVU)
+      if (venue === "NVU" && s.linkedGroup) {
+        const inLinked = effectiveSessions.filter(x => chosen.has(x.code) && x.linkedGroup && x.linkedGroup === s.linkedGroup)
+        if (inLinked.length) {
+          alert("This session is linked with another — please select only one.")
+          return
+        }
+      }
+    }
+
+    const next = new Set(chosen)
+    if (isRemoving) {
+      next.delete(code)
+    } else {
       next.add(code)
     }
     setChosen(next)
   }
 
   const handleSubmit = async () => {
-    // day counts
+    // Count workshops per day
     let d1 = 0, d2 = 0
-    for (const s of sessions) {
+    for (const s of effectiveSessions) {
       if (chosen.has(s.code)) {
         if (s.day === 1) d1++
         else if (s.day === 2) d2++
       }
     }
 
-    if (ticketType === "Standard+2") {
-      if (!(d1 === 1 && d2 === 1)) {
-        alert("Please ensure you have selected 1 workshop on each day before submitting.")
-        return
-      }
-    } else if (ticketType === "Standard+3") {
-      const total = d1 + d2
-      if (!(total === 3 && d1 >= 1 && d2 >= 1 && d1 <= 2 && d2 <= 2)) {
-        alert("Please ensure you’ve selected a minimum of one workshop per day.")
-        return
-      }
-    } else if (ticketType === "Standard+4") {
-      if (!(d1 === 2 && d2 === 2)) {
-        alert("You must select two workshops per day.")
-        return
-      }
-    } else {
-      alert("Workshops are available only for Standard+2/3/4 tickets.")
+    const total = d1 + d2
+
+    // General validation rules (applies to all ticket types)
+    // 1. Max 3 workshops total
+    if (total > 3) {
+      alert("You can select a maximum of 3 workshops total.")
       return
+    }
+
+    // 2. Min 1 workshop per day (both days must have at least 1)
+    if (d1 < 1 || d2 < 1) {
+      alert("Please select at least 1 workshop for each day.")
+      return
+    }
+
+    // 3. Max 2 workshops per day
+    if (d1 > 2 || d2 > 2) {
+      alert("You can select a maximum of 2 workshops per day.")
+      return
+    }
+
+    // 4. Time slot conflict check (redundant but safe)
+    const slotKeys = new Set()
+    for (const s of effectiveSessions) {
+      if (chosen.has(s.code)) {
+        const key = `${s.day}-${s.slot}`
+        if (slotKeys.has(key)) {
+          alert("You've already chosen a workshop in this time slot.")
+          return
+        }
+        slotKeys.add(key)
+      }
     }
 
     try {
@@ -230,11 +264,7 @@ export default function Workshops({ userData }) {
     <div className="mb-6">
       <h2 className="text-2xl font-bold text-gray-900">{venue === "TSU" ? "TSU Workshops (Standard Plus 2)" : "NVU Workshops (Standard Plus 3 & 4)"}</h2>
       <p className="text-gray-600 mt-1">
-        {venue === "TSU"
-          ? "Choose 2 workshops total — 1 on Day 1 and 1 on Day 2."
-          : ticketType === "Standard+3"
-            ? "Select 3 total (1–2 per day)."
-            : "Select 4 total (exactly 2 per day)."}
+        Select up to 3 workshops total. Requirements: Minimum 1 workshop per day, maximum 2 workshops per day. You cannot select more than one workshop in the same time slot.
       </p>
     </div>
   )

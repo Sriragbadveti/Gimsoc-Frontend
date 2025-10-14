@@ -71,11 +71,16 @@ export default function AdminDashboard() {
   const [selectedVolunteer, setSelectedVolunteer] = useState(null)
   const [isVolunteerModalOpen, setIsVolunteerModalOpen] = useState(false)
 
-  // Workshop states
+  // Workshop states (pre-conference)
   const [workshopRegistrations, setWorkshopRegistrations] = useState([])
   const [workshopLoading, setWorkshopLoading] = useState(true)
   const [workshopError, setWorkshopError] = useState(null)
   const [workshopStats, setWorkshopStats] = useState(null)
+
+  // Workshop Selections states (TSU/NVU attendee selections)
+  const [workshopSelections, setWorkshopSelections] = useState([])
+  const [wsSelectionsLoading, setWsSelectionsLoading] = useState(false)
+  const [wsSelectionsError, setWsSelectionsError] = useState(null)
   const [expandedWorkshops, setExpandedWorkshops] = useState(new Set())
   const [workshopFilter, setWorkshopFilter] = useState("All")
   const [workshopStatusFilter, setWorkshopStatusFilter] = useState("All")
@@ -187,6 +192,33 @@ export default function AdminDashboard() {
       fetchWorkshopRegistrations()
     }
   }, [activeTab, isAuthenticated, workshopFilter, workshopStatusFilter])
+
+  // Fetch workshop selections (TSU/NVU attendee picks)
+  const fetchWorkshopSelections = async () => {
+    try {
+      setWsSelectionsLoading(true)
+      setWsSelectionsError(null)
+      const response = await axios.get("https://gimsoc-backend.onrender.com/api/workshops/admin/list", {
+        headers: getAuthHeaders(),
+      })
+      setWorkshopSelections(response.data.data || [])
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        navigate("/admin-login")
+        return
+      }
+      setWsSelectionsError(err.response?.data?.message || err.message || "Failed to fetch workshop selections.")
+    } finally {
+      setWsSelectionsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated && activeTab === "workshop-selections") {
+      fetchWorkshopSelections()
+    }
+  }, [activeTab, isAuthenticated])
 
   const filteredVolunteers = useMemo(() => {
     const q = volunteerSearchQuery.trim().toLowerCase()
@@ -3417,6 +3449,105 @@ export default function AdminDashboard() {
     );
   };
 
+  const renderWorkshopSelectionsTab = () => {
+    if (wsSelectionsLoading) {
+      return (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (wsSelectionsError) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-red-500 mb-4">{wsSelectionsError}</p>
+          <button
+            onClick={fetchWorkshopSelections}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">TSU/NVU Workshop Selections</h3>
+            <button
+              onClick={fetchWorkshopSelections}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </button>
+          </div>
+
+          <p className="text-sm text-gray-600 mb-4">
+            Total selections: {workshopSelections.length}
+          </p>
+
+          {workshopSelections.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No workshop selections yet.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venue</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day 1</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day 2</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Workshop Details</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {workshopSelections.map((sel, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{sel.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{sel.user?.fullName || "-"}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sel.ticketType}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${sel.venue === "TSU" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
+                          {sel.venue}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sel.day1Count || 0}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sel.day2Count || 0}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        <ul className="list-disc ml-4 space-y-1">
+                          {(sel.selections || []).map((s, i) => (
+                            <li key={i}>
+                              <span className="font-medium">{s.code}</span> — {s.title || "N/A"}
+                              <span className="text-gray-500 text-xs ml-2">
+                                (Day {s.day} Slot {s.slot} {s.time})
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(sel.updatedAt || sel.createdAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return null
   }
@@ -3577,12 +3708,25 @@ export default function AdminDashboard() {
               >
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4" />
-                  Workshops
+                  Pre-Conference
                   {workshopRegistrations.length > 0 && (
                     <span className="bg-gray-100 text-gray-900 py-0.5 px-2 rounded-full text-xs font-medium">
                       {workshopRegistrations.length}
                     </span>
                   )}
+                </div>
+              </button>
+              <button
+                onClick={() => setActiveTab("workshop-selections")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === "workshop-selections"
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  Workshop Selections
                 </div>
               </button>
             </nav>
@@ -3597,6 +3741,7 @@ export default function AdminDashboard() {
         {activeTab === "failed-registrations" && renderFailedRegistrationsTab()}
         {activeTab === "volunteers" && renderVolunteersTab()}
         {activeTab === "workshops" && renderWorkshopsTab()}
+        {activeTab === "workshop-selections" && renderWorkshopSelectionsTab()}
       </div>
     </div>
   )
