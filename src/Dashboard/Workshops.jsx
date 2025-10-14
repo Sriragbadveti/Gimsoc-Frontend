@@ -44,9 +44,75 @@ export default function Workshops({ userData }) {
     init()
   }, [userData])
 
+  // Provide TSU fallback sessions (client-side) if backend returns none
+  const effectiveSessions = useMemo(() => {
+    const hasAny = Array.isArray(sessions) && sessions.length > 0
+    if (hasAny) return sessions
+
+    if (venue === "TSU") {
+      // Fallback TSU definitions per spec
+      const TSU_A = { day: 1, slot: "A", time: "2:00 PM – 3:30 PM", venue: "TSU" }
+      const TSU_B = { day: 1, slot: "B", time: "4:00 PM – 5:30 PM", venue: "TSU" }
+      const TSU_C = { day: 2, slot: "C", time: "2:00 PM – 3:30 PM", venue: "TSU" }
+      const TSU_D = { day: 2, slot: "D", time: "4:00 PM – 5:30 PM", venue: "TSU" }
+      return [
+        // Day 1 — Slot A
+        { code: "T1-A", title: "Foreign Object Removal + Suturing & Flap Closure", capacity: 40, reserved: 0, ...TSU_A },
+        { code: "T3-A", title: "Central Line Placement", capacity: 40, reserved: 0, ...TSU_A },
+        { code: "T4-A", title: "Incision & Drainage", capacity: 40, reserved: 0, ...TSU_A },
+        // Day 1 — Slot B
+        { code: "T1-B", title: "Foreign Object Removal + Suturing & Flap Closure", capacity: 40, reserved: 0, ...TSU_B },
+        { code: "T3-B", title: "Central Line Placement", capacity: 40, reserved: 0, ...TSU_B },
+        // Day 2 — Slot C
+        { code: "T1-C", title: "Foreign Object Removal + Suturing & Flap Closure", capacity: 40, reserved: 0, ...TSU_C },
+        { code: "T4-C", title: "Incision & Drainage", capacity: 40, reserved: 0, ...TSU_C },
+        // Day 2 — Slot D
+        { code: "T2-D", title: "AMBOSS: Bridging Textbooks & Clinics", capacity: 40, reserved: 0, ...TSU_D },
+        { code: "T3-D", title: "Central Line Placement", capacity: 40, reserved: 0, ...TSU_D },
+        { code: "T4-D", title: "Incision & Drainage", capacity: 40, reserved: 0, ...TSU_D },
+      ]
+    }
+
+    if (venue === "NVU") {
+      // Fallback NVU definitions per spec
+      const NVU_A = { day: 1, slot: "A", time: "3:00 PM – 4:30 PM", venue: "NVU" }
+      const NVU_B = { day: 1, slot: "B", time: "5:00 PM – 6:30 PM", venue: "NVU" }
+      const NVU_C = { day: 2, slot: "C", time: "3:00 PM – 4:30 PM", venue: "NVU" }
+      const NVU_D = { day: 2, slot: "D", time: "5:00 PM – 6:30 PM", venue: "NVU" }
+      return [
+        // Day 1 — Slot A
+        { code: "N1A-A", title: "From Swab to Solution: STI Cultures", capacity: 40, reserved: 0, linkedGroup: "N1", ...NVU_A },
+        { code: "N2A-A", title: "Wound Care & Drainage Management", capacity: 40, reserved: 0, linkedGroup: "N2", ...NVU_A },
+        { code: "N3-A", title: "Outbreak Management Simulation", capacity: 40, reserved: 0, linkedGroup: "N3", ...NVU_A },
+        { code: "N5-A", title: "Endotracheal Intubation", capacity: 40, reserved: 0, ...NVU_A },
+        { code: "N6-A", title: "Venepuncture & Blood Culture Collection", capacity: 40, reserved: 0, ...NVU_A },
+        // Day 1 — Slot B
+        { code: "N1B-B", title: "Nasal Swabbing & Respiratory Pathogen ID", capacity: 40, reserved: 0, linkedGroup: "N1", ...NVU_B },
+        { code: "N2B-B", title: "Wound Debridement & Suturing", capacity: 40, reserved: 0, linkedGroup: "N2", ...NVU_B },
+        { code: "N4-B", title: "PPE Safety Practices & Critical Decision", capacity: 40, reserved: 0, linkedGroup: "N4", ...NVU_B },
+        { code: "N5-B", title: "Endotracheal Intubation", capacity: 40, reserved: 0, ...NVU_B },
+        { code: "N6-B", title: "Venepuncture & Blood Culture Collection", capacity: 40, reserved: 0, ...NVU_B },
+        // Day 2 — Slot C
+        { code: "N1A-C", title: "From Swab to Solution: STI Cultures", capacity: 40, reserved: 0, linkedGroup: "N1", ...NVU_C },
+        { code: "N2A-C", title: "Wound Care & Drainage Management", capacity: 40, reserved: 0, linkedGroup: "N2", ...NVU_C },
+        { code: "N3-C", title: "Outbreak Management Simulation", capacity: 40, reserved: 0, linkedGroup: "N3", ...NVU_C },
+        { code: "N5-C", title: "Endotracheal Intubation", capacity: 40, reserved: 0, ...NVU_C },
+        { code: "N6-C", title: "Venepuncture & Blood Culture Collection", capacity: 40, reserved: 0, ...NVU_C },
+        // Day 2 — Slot D
+        { code: "N1B-D", title: "Nasal Swabbing & Respiratory Pathogen ID", capacity: 40, reserved: 0, linkedGroup: "N1", ...NVU_D },
+        { code: "N2B-D", title: "Wound Debridement & Suturing", capacity: 40, reserved: 0, linkedGroup: "N2", ...NVU_D },
+        { code: "N4-D", title: "PPE Safety Practices & Critical Decision", capacity: 40, reserved: 0, linkedGroup: "N4", ...NVU_D },
+        { code: "N5-D", title: "Endotracheal Intubation", capacity: 40, reserved: 0, ...NVU_D },
+        { code: "N6-D", title: "Venepuncture & Blood Culture Collection", capacity: 40, reserved: 0, ...NVU_D },
+      ]
+    }
+
+    return sessions
+  }, [sessions, venue])
+
   const grouped = useMemo(() => {
     const g = { day1: { A: [], B: [] }, day2: { C: [], D: [] } }
-    for (const s of sessions) {
+    for (const s of effectiveSessions) {
       if (s.day === 1) {
         if (s.slot === "A") g.day1.A.push(s)
         if (s.slot === "B") g.day1.B.push(s)
@@ -56,7 +122,7 @@ export default function Workshops({ userData }) {
       }
     }
     return g
-  }, [sessions])
+  }, [effectiveSessions])
 
   const [chosen, setChosen] = useState(new Set())
   useEffect(() => {
