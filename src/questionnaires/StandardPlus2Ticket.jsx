@@ -30,7 +30,7 @@ const SuccessAnimation = ({ onComplete }) => {
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="text-center bg-white rounded-2xl p-8 shadow-2xl max-w-md">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">🎉 Payment Successful! 🎉</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">🎉 Payment Successful!! 🎉</h2>
         <CreditCardAnimation className="mb-6" />
         <p className="text-gray-600 text-lg mb-4">Your ticket has been confirmed</p>
         <p className="text-gray-500 animate-pulse">Redirecting to success page...</p>
