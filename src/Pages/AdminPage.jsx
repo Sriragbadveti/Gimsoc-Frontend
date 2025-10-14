@@ -24,6 +24,7 @@ import {
   Clock,
   FileSpreadsheet,
   CheckCircle,
+  Trash2,
 } from "lucide-react"
 
 const TICKET_TYPES = [
@@ -3482,22 +3483,27 @@ export default function AdminDashboard() {
   const renderWorkshopSelectionsTab = () => {
     if (wsSelectionsLoading) {
       return (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex justify-center items-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            <p className="ml-4 text-gray-600">Loading workshop selections...</p>
+          </div>
         </div>
       );
     }
 
     if (wsSelectionsError) {
       return (
-        <div className="text-center py-8">
-          <p className="text-red-500 mb-4">{wsSelectionsError}</p>
-          <button
-            onClick={fetchWorkshopSelections}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-          >
-            Retry
-          </button>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-center py-8">
+            <p className="text-red-500 mb-4">{wsSelectionsError}</p>
+            <button
+              onClick={fetchWorkshopSelections}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       );
     }
@@ -3596,7 +3602,7 @@ export default function AdminDashboard() {
         </div>
       </div>
     );
-  }
+  };
 
   if (!isAuthenticated) {
     return null
