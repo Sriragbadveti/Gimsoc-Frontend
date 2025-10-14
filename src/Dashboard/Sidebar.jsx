@@ -9,6 +9,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
   const menuItems = [
     { id: "profile", label: "Profile", icon: "👤" },
     { id: "schedule", label: "Schedule", icon: "📅" },
+    { id: "workshops", label: "Workshops", icon: "🎓" },
     { id: "speakers", label: "Speakers", icon: "🎤" },
     { id: "live", label: "Live Sessions", icon: "🔴" },
     { id: "venue", label: "Venue Map", icon: "🗺️" },
