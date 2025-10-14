@@ -135,9 +135,9 @@ export default function Workshops({ userData }) {
     const isRemoving = chosen.has(code)
     
     if (!isRemoving) {
-      // Check capacity
+      // Check capacity (40 seats per workshop)
       if (s.reserved >= s.capacity) {
-        alert("Sorry, this session is full.")
+        alert(`❌ Sorry, this workshop is FULL!\n\n"${s.title}" has reached its capacity of ${s.capacity} attendees. Please select a different workshop.`)
         return
       }
 
@@ -145,20 +145,20 @@ export default function Workshops({ userData }) {
       const slotKey = `${s.day}-${s.slot}`
       const inSameSlot = effectiveSessions.filter(x => chosen.has(x.code) && `${x.day}-${x.slot}` === slotKey)
       if (inSameSlot.length) {
-        alert("You've already chosen a workshop in this time slot.")
+        alert("❌ You've already chosen a workshop in this time slot.\n\nPlease select a different time slot.")
         return
       }
 
       // Check max 2 workshops per day
       const workshopsOnThisDay = effectiveSessions.filter(x => chosen.has(x.code) && x.day === s.day)
       if (workshopsOnThisDay.length >= 2) {
-        alert("You can select a maximum of 2 workshops per day.")
+        alert("❌ You can select a maximum of 2 workshops per day.\n\nYou already have 2 workshops selected for this day.")
         return
       }
 
       // Check max 3 workshops total
       if (chosen.size >= 3) {
-        alert("You can select a maximum of 3 workshops total.")
+        alert("❌ You can select a maximum of 3 workshops total.\n\nYou have already selected 3 workshops. Please deselect one if you want to choose a different workshop.")
         return
       }
 
@@ -166,7 +166,7 @@ export default function Workshops({ userData }) {
       if (venue === "NVU" && s.linkedGroup) {
         const inLinked = effectiveSessions.filter(x => chosen.has(x.code) && x.linkedGroup && x.linkedGroup === s.linkedGroup)
         if (inLinked.length) {
-          alert("This session is linked with another — please select only one.")
+          alert("❌ This session is linked with another workshop you've already selected.\n\nPlease select only one workshop from this linked group.")
           return
         }
       }
@@ -260,30 +260,115 @@ export default function Workshops({ userData }) {
     )
   }
 
+  // If user has already submitted their selection, show congratulations message
+  if (selection && selection.selections && selection.selections.length > 0) {
+    const selectedWorkshops = effectiveSessions.filter(s => selection.selections.includes(s.code))
+    return (
+      <Card>
+        <div className="p-8">
+          <div className="text-center mb-6">
+            <CheckCircle2 className="w-16 h-16 text-green-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">🎉 Congratulations!</h2>
+            <p className="text-gray-600">You have successfully registered for your workshops.</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Registered on: {new Date(selection.updatedAt || selection.createdAt).toLocaleString()}
+            </p>
+          </div>
+          
+          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Your Selected Workshops:</h3>
+            <div className="space-y-3">
+              {selectedWorkshops.map(workshop => (
+                <div key={workshop.code} className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{workshop.title}</div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        <span className="font-medium">Day {workshop.day}</span> • {workshop.time} • {workshop.venue}
+                      </div>
+                    </div>
+                    <CheckCircle2 className="w-5 h-5 text-green-600 mt-1" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              ℹ️ A confirmation email has been sent to <strong>{email}</strong> with your workshop details.
+            </p>
+          </div>
+        </div>
+      </Card>
+    )
+  }
+
   const Title = () => (
     <div className="mb-6">
       <h2 className="text-2xl font-bold text-gray-900">{venue === "TSU" ? "TSU Workshops (Standard Plus 2)" : "NVU Workshops (Standard Plus 3 & 4)"}</h2>
       <p className="text-gray-600 mt-1">
         Select up to 3 workshops total. Requirements: Minimum 1 workshop per day, maximum 2 workshops per day. You cannot select more than one workshop in the same time slot.
       </p>
+      
+      {/* Capacity Info Box */}
+      <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5" />
+          <div className="flex-1">
+            <h4 className="text-sm font-semibold text-blue-900 mb-1">Workshop Capacity Information</h4>
+            <ul className="text-xs text-blue-800 space-y-1">
+              <li>• Each workshop has a maximum capacity of 40 attendees</li>
+              <li>• Workshops marked as <span className="text-red-600 font-medium">FULL</span> are unavailable and cannot be selected</li>
+              <li>• Workshops with <span className="text-orange-600 font-medium">Limited</span> seats (≤5 remaining) may fill up quickly</li>
+              <li>• Seats are reserved in real-time when you submit your selection</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   )
 
   const SessionCheckbox = ({ s }) => {
     const full = s.reserved >= s.capacity
     const checked = chosen.has(s.code)
+    const seatsLeft = Math.max(0, s.capacity - s.reserved)
+    const isAlmostFull = seatsLeft <= 5 && seatsLeft > 0
+    
     return (
-      <label className={`flex items-center gap-3 p-3 rounded-lg border ${checked ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white"} ${full ? "opacity-50" : ""}`}>
-        <input type="checkbox" disabled={full} checked={checked} onChange={() => toggle(s.code, s)} />
+      <label className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
+        full ? "border-red-300 bg-red-50 cursor-not-allowed opacity-60" : 
+        checked ? "border-blue-500 bg-blue-50" : 
+        "border-gray-200 bg-white hover:border-gray-300"
+      }`}>
+        <input 
+          type="checkbox" 
+          disabled={full && !checked} 
+          checked={checked} 
+          onChange={() => toggle(s.code, s)} 
+          className="w-4 h-4"
+        />
         <div className="flex-1">
           <div className="font-medium text-gray-900">{s.title}</div>
-          <div className="text-xs text-gray-600 flex items-center gap-2">
+          <div className="text-xs text-gray-600 flex items-center gap-2 mt-1">
             <Clock className="w-4 h-4" /> {s.time}
-            <Users className="w-4 h-4 ml-2" /> {Math.max(0, s.capacity - s.reserved)} seats left
+            <Users className={`w-4 h-4 ml-2 ${isAlmostFull ? 'text-orange-600' : ''}`} /> 
+            <span className={isAlmostFull ? 'text-orange-600 font-medium' : ''}>
+              {seatsLeft} seat{seatsLeft !== 1 ? 's' : ''} left
+            </span>
             {s.linkedGroup && venue === "NVU" && <span className="ml-2 text-amber-700 text-xs">Linked group</span>}
           </div>
         </div>
-        {full && <span className="text-xs text-red-600 flex items-center gap-1"><Lock className="w-3 h-3" /> Full</span>}
+        {full && (
+          <span className="text-xs text-red-600 flex items-center gap-1 font-medium">
+            <Lock className="w-4 h-4" /> FULL
+          </span>
+        )}
+        {isAlmostFull && !full && !checked && (
+          <span className="text-xs text-orange-600 flex items-center gap-1 font-medium">
+            <AlertTriangle className="w-4 h-4" /> Limited
+          </span>
+        )}
       </label>
     )
   }

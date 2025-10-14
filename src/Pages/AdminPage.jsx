@@ -84,6 +84,7 @@ export default function AdminDashboard() {
   const [expandedWorkshops, setExpandedWorkshops] = useState(new Set())
   const [workshopFilter, setWorkshopFilter] = useState("All")
   const [workshopStatusFilter, setWorkshopStatusFilter] = useState("All")
+  const [deletingWorkshopSelection, setDeletingWorkshopSelection] = useState(new Set())
 
   // Tickets state
   const [tickets, setTickets] = useState([])
@@ -211,6 +212,35 @@ export default function AdminDashboard() {
       setWsSelectionsError(err.response?.data?.message || err.message || "Failed to fetch workshop selections.")
     } finally {
       setWsSelectionsLoading(false)
+    }
+  }
+
+  // Delete workshop selection
+  const handleDeleteWorkshopSelection = async (email) => {
+    if (!confirm(`Are you sure you want to delete the workshop selection for ${email}? This will release their reserved seats and allow them to select again.`)) {
+      return
+    }
+
+    try {
+      setDeletingWorkshopSelection(prev => new Set(prev).add(email))
+      await axios.delete(`https://gimsoc-backend.onrender.com/api/workshops/admin/delete/${encodeURIComponent(email)}`, {
+        headers: getAuthHeaders(),
+      })
+      alert(`Workshop selection for ${email} has been deleted successfully. The user can now make new selections.`)
+      fetchWorkshopSelections() // Refresh the list
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminData')
+        navigate("/admin-login")
+        return
+      }
+      alert(err.response?.data?.message || "Failed to delete workshop selection")
+    } finally {
+      setDeletingWorkshopSelection(prev => {
+        const next = new Set(prev)
+        next.delete(email)
+        return next
+      })
     }
   }
 
@@ -3507,6 +3537,7 @@ export default function AdminDashboard() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day 2</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Workshop Details</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -3536,6 +3567,25 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(sel.updatedAt || sel.createdAt).toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <button
+                          onClick={() => handleDeleteWorkshopSelection(sel.email)}
+                          disabled={deletingWorkshopSelection.has(sel.email)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 text-xs font-medium transition-colors"
+                        >
+                          {deletingWorkshopSelection.has(sel.email) ? (
+                            <>
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                              Deleting...
+                            </>
+                          ) : (
+                            <>
+                              <Trash2 className="h-3.5 w-3.5" />
+                              Delete
+                            </>
+                          )}
+                        </button>
                       </td>
                     </tr>
                   ))}
