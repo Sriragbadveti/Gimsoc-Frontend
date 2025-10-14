@@ -156,9 +156,10 @@ export default function Workshops({ userData }) {
         return
       }
 
-      // Check max 3 workshops total
-      if (chosen.size >= 3) {
-        alert("❌ You can select a maximum of 3 workshops total.\n\nYou have already selected 3 workshops. Please deselect one if you want to choose a different workshop.")
+      // Check max workshops total (2 for st2, 3 for st3/st4)
+      const maxWorkshops = ticketType === "Standard+2" ? 2 : 3
+      if (chosen.size >= maxWorkshops) {
+        alert(`❌ You can select a maximum of ${maxWorkshops} workshops total.\n\nYou have already selected ${maxWorkshops} workshops. Please deselect one if you want to choose a different workshop.`)
         return
       }
 
@@ -193,23 +194,27 @@ export default function Workshops({ userData }) {
 
     const total = d1 + d2
 
-    // General validation rules (applies to all ticket types)
-    // 1. Max 3 workshops total
-    if (total > 3) {
-      alert("You can select a maximum of 3 workshops total.")
-      return
-    }
-
-    // 2. Min 1 workshop per day (both days must have at least 1)
-    if (d1 < 1 || d2 < 1) {
-      alert("Please select at least 1 workshop for each day.")
-      return
-    }
-
-    // 3. Max 2 workshops per day
-    if (d1 > 2 || d2 > 2) {
-      alert("You can select a maximum of 2 workshops per day.")
-      return
+    // Ticket-specific validation rules
+    if (ticketType === "Standard+2") {
+      // Standard+2 (TSU): Exactly 1 workshop per day (2 total)
+      if (d1 !== 1 || d2 !== 1) {
+        alert("You must select exactly 1 workshop for each day (2 workshops total).")
+        return
+      }
+    } else if (ticketType === "Standard+3" || ticketType === "Standard+4") {
+      // Standard+3 & Standard+4 (NVU): 1-2 workshops per day (3 total max)
+      if (total > 3) {
+        alert("You can select a maximum of 3 workshops total.")
+        return
+      }
+      if (d1 < 1 || d2 < 1) {
+        alert("Please select at least 1 workshop for each day.")
+        return
+      }
+      if (d1 > 2 || d2 > 2) {
+        alert("You can select a maximum of 2 workshops per day.")
+        return
+      }
     }
 
     // 4. Time slot conflict check (redundant but safe)
@@ -340,7 +345,7 @@ export default function Workshops({ userData }) {
           items: [
             "✅ You are registered under Standard Plus 4.",
             "All your workshops will be available at NVU",
-            "You must choose 4 workshops total — 2 on Day 1 and 2 on Day 2. (Total of 4 workshops)",
+            "You must choose 3 workshops total — 1 or 2 on Day 1 and 1 or 2 on Day 2. (Total of 3 workshops)",
             "You cannot select two workshops during same time slot.",
             "Workshops marked as FULL are unavailable and cannot be selected",
             "Certain workshops are linked (mutually exclusive), you can only pick one from each linked pair.",
