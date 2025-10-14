@@ -156,8 +156,12 @@ export default function Workshops({ userData }) {
         return
       }
 
-      // Check max workshops total (2 for st2, 3 for st3/st4)
-      const maxWorkshops = ticketType === "Standard+2" ? 2 : 3
+      // Check max workshops total based on ticket type
+      let maxWorkshops = 3
+      if (ticketType === "Standard+2") maxWorkshops = 2
+      else if (ticketType === "Standard+3") maxWorkshops = 3
+      else if (ticketType === "Standard+4") maxWorkshops = 4
+      
       if (chosen.size >= maxWorkshops) {
         alert(`❌ You can select a maximum of ${maxWorkshops} workshops total.\n\nYou have already selected ${maxWorkshops} workshops. Please deselect one if you want to choose a different workshop.`)
         return
@@ -201,14 +205,24 @@ export default function Workshops({ userData }) {
         alert("You must select exactly 1 workshop for each day (2 workshops total).")
         return
       }
-    } else if (ticketType === "Standard+3" || ticketType === "Standard+4") {
-      // Standard+3 & Standard+4 (NVU): 1-2 workshops per day (3 total max)
-      if (total > 3) {
-        alert("You can select a maximum of 3 workshops total.")
+    } else if (ticketType === "Standard+3") {
+      // Standard+3 (NVU): 1-2 workshops per day (3 total)
+      if (total !== 3) {
+        alert("You must select exactly 3 workshops total.")
         return
       }
       if (d1 < 1 || d2 < 1) {
         alert("Please select at least 1 workshop for each day.")
+        return
+      }
+      if (d1 > 2 || d2 > 2) {
+        alert("You can select a maximum of 2 workshops per day.")
+        return
+      }
+    } else if (ticketType === "Standard+4") {
+      // Standard+4 (NVU): Not more than 2 per day (4 total)
+      if (total !== 4) {
+        alert("You must select exactly 4 workshops total.")
         return
       }
       if (d1 > 2 || d2 > 2) {
@@ -318,7 +332,7 @@ export default function Workshops({ userData }) {
           items: [
             "✅ You are registered under Standard Plus 2 (TSU).",
             "All your workshops will be available at TSU",
-            "You must choose 2 workshops total — 1 on Day 1 and 1 on Day 2.",
+            "You must choose exactly 2 workshops total — 1 on Day 1 and 1 on Day 2.",
             "You cannot select two workshops on the same day.",
             "Workshops marked as FULL are unavailable and cannot be selected",
             "Workshops with Limited seats (≤5 remaining) may fill up quickly",
@@ -331,7 +345,7 @@ export default function Workshops({ userData }) {
           items: [
             "✅ You are registered under Standard Plus 3.",
             "All your workshops will be available at NVU",
-            "You must choose 3 workshops total — 1 or 2 on Day 1 and 1 or 2 on Day 2. (Total of 3 workshops)",
+            "You must choose 3 workshops total — at least 1 per day, not more than 2 workshops on any single day.",
             "You cannot select two workshops during same time slot.",
             "Workshops marked as FULL are unavailable and cannot be selected",
             "Certain workshops are linked (mutually exclusive), you can only pick one from each linked pair.",
@@ -345,7 +359,7 @@ export default function Workshops({ userData }) {
           items: [
             "✅ You are registered under Standard Plus 4.",
             "All your workshops will be available at NVU",
-            "You must choose 3 workshops total — 1 or 2 on Day 1 and 1 or 2 on Day 2. (Total of 3 workshops)",
+            "You must choose 4 workshops total — not more than 2 workshops on any single day.",
             "You cannot select two workshops during same time slot.",
             "Workshops marked as FULL are unavailable and cannot be selected",
             "Certain workshops are linked (mutually exclusive), you can only pick one from each linked pair.",
