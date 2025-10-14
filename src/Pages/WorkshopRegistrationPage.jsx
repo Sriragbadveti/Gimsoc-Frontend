@@ -173,7 +173,7 @@ const UNIVERSITIES = [
   "Other"
 ]
 
-export default function WorkshopRegistrationPage() {
+export default function WorkshopRegistrationPage({ initialId }) {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null)
   const [ssStep, setSsStep] = useState("email")
   const [ssEligible, setSsEligible] = useState(null)
@@ -225,6 +225,12 @@ export default function WorkshopRegistrationPage() {
     paymentProof: null
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  useEffect(() => {
+    if (initialId) {
+      const found = WORKSHOP_OPTIONS.find(w => w.id === initialId)
+      if (found) setSelectedWorkshop(found)
+    }
+  }, [initialId])
   const [submitStatus, setSubmitStatus] = useState(null)
 
   const handleInputChange = (field, value) => {
@@ -2039,6 +2045,205 @@ export default function WorkshopRegistrationPage() {
                       </>
                     )}
                   </button>
+                </div>
+              </div>
+            </motion.form>
+            ) : selectedWorkshop.id === "linkedin-proficiency" ? (
+            <motion.form 
+              onSubmit={handleSubmit} 
+              className="p-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <div className="space-y-8">
+                {/* Full Name */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Full Name *</label>
+                  <motion.input type="text" required value={formData.fullName} onChange={(e) => handleInputChange("fullName", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your full name" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* Email */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.5 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Email Address *</label>
+                  <motion.input type="email" required value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your email address" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* WhatsApp */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.6 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">WhatsApp Number (with country code) *</label>
+                  <motion.input type="tel" required value={formData.whatsapp} onChange={(e) => handleInputChange("whatsapp", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="e.g., +995 555 123 456" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* Country */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.65 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Country *</label>
+                  <motion.input type="text" required value={formData.country} onChange={(e) => handleInputChange("country", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your country" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* University */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.75 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">University/Institution *</label>
+                  <motion.select required value={formData.university} onChange={(e) => handleInputChange("university", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 bg-gray-50 focus:bg-white" whileFocus={{ scale: 1.02 }}>
+                    <option value="">Select your university</option>
+                    {UNIVERSITIES.map((university) => (<option key={university} value={university}>{university}</option>))}
+                  </motion.select>
+                </motion.div>
+
+                {/* Current Semester */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.85 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Current Semester *</label>
+                  <motion.select required value={formData.currentSemester} onChange={(e) => handleInputChange("currentSemester", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 bg-gray-50 focus:bg-white" whileFocus={{ scale: 1.02 }}>
+                    <option value="">Select your semester</option>
+                    {SEMESTER_OPTIONS.map((semester) => (<option key={semester} value={semester}>{semester}</option>))}
+                  </motion.select>
+                </motion.div>
+
+                {/* GIMSOC Membership */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.9 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Are you a GIMSOC Member? *</label>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all">
+                      <input type="radio" name="isGimsocMember" value="Yes" checked={formData.isGimsocMember === "Yes"} onChange={(e) => handleInputChange("isGimsocMember", e.target.value)} className="text-pink-600 focus:ring-pink-500" required />
+                      <span className="text-gray-700 font-medium">Yes, I am a GIMSOC member</span>
+                    </label>
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all">
+                      <input type="radio" name="isGimsocMember" value="No" checked={formData.isGimsocMember === "No"} onChange={(e) => handleInputChange("isGimsocMember", e.target.value)} className="text-pink-600 focus:ring-pink-500" required />
+                      <span className="text-gray-700 font-medium">No, I am not a GIMSOC member</span>
+                    </label>
+                  </div>
+                  {formData.isGimsocMember === "Yes" && (
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="mt-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">GIMSOC Membership Code *</label>
+                      <motion.input type="text" required value={formData.gimsocCode} onChange={(e) => handleInputChange("gimsocCode", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your GIMSOC membership code" whileFocus={{ scale: 1.02 }} />
+                    </motion.div>
+                  )}
+                </motion.div>
+
+                {/* Details */}
+                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Workshop Details</h4>
+                  <div className="space-y-2">
+                    <div className="border-l-4 border-indigo-500 pl-4">
+                      <h5 className="font-semibold text-gray-900">Career Snap 360 - Your Guide to LinkedIn Proficiency</h5>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 18th October, 2025, Offline</p>
+                      <p className="text-sm text-gray-600">Venue: New Vision University (NVU) Health Hub</p>
+                      <p className="text-sm text-gray-600">Speakers: Toyin Dairo, Arun Venkiteswaran, Dr. Tamar Didbaridze</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Consent */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <label className="flex items-start">
+                    <input type="checkbox" required className="mt-1 mr-3" />
+                    <span className="text-sm text-gray-700">I confirm that the information provided is accurate and I agree to receive event-related communications.</span>
+                  </label>
+                </div>
+
+                {/* Submit */}
+                <div className="flex gap-4 pt-6">
+                  <button type="button" onClick={() => setSelectedWorkshop(null)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Back to Pre-conference Page</button>
+                  <button type="submit" disabled={isSubmitting} className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">{isSubmitting ? "Submitting..." : "Register for Free Workshop"}</button>
+                </div>
+              </div>
+            </motion.form>
+            ) : selectedWorkshop.id === "amboss" ? (
+            <motion.form 
+              onSubmit={handleSubmit} 
+              className="p-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <div className="space-y-8">
+                {/* Full Name */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Full Name *</label>
+                  <motion.input type="text" required value={formData.fullName} onChange={(e) => handleInputChange("fullName", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your full name" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* Email */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.5 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Email Address *</label>
+                  <motion.input type="email" required value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your email address" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* WhatsApp */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.6 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">WhatsApp Number (with country code) *</label>
+                  <motion.input type="tel" required value={formData.whatsapp} onChange={(e) => handleInputChange("whatsapp", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="e.g., +995 555 123 456" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* Country */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.65 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Country *</label>
+                  <motion.input type="text" required value={formData.country} onChange={(e) => handleInputChange("country", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your country" whileFocus={{ scale: 1.02 }} />
+                </motion.div>
+
+                {/* University */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.75 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">University/Institution *</label>
+                  <motion.select required value={formData.university} onChange={(e) => handleInputChange("university", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 bg-gray-50 focus:bg-white" whileFocus={{ scale: 1.02 }}>
+                    <option value="">Select your university</option>
+                    {UNIVERSITIES.map((university) => (<option key={university} value={university}>{university}</option>))}
+                  </motion.select>
+                </motion.div>
+
+                {/* Current Semester */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.85 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Current Semester *</label>
+                  <motion.select required value={formData.currentSemester} onChange={(e) => handleInputChange("currentSemester", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 bg-gray-50 focus:bg-white" whileFocus={{ scale: 1.02 }}>
+                    <option value="">Select your semester</option>
+                    {SEMESTER_OPTIONS.map((semester) => (<option key={semester} value={semester}>{semester}</option>))}
+                  </motion.select>
+                </motion.div>
+
+                {/* GIMSOC Membership */}
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.9 }}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Are you a GIMSOC Member? *</label>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all">
+                      <input type="radio" name="isGimsocMember" value="Yes" checked={formData.isGimsocMember === "Yes"} onChange={(e) => handleInputChange("isGimsocMember", e.target.value)} className="text-pink-600 focus:ring-pink-500" required />
+                      <span className="text-gray-700 font-medium">Yes, I am a GIMSOC member</span>
+                    </label>
+                    <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all">
+                      <input type="radio" name="isGimsocMember" value="No" checked={formData.isGimsocMember === "No"} onChange={(e) => handleInputChange("isGimsocMember", e.target.value)} className="text-pink-600 focus:ring-pink-500" required />
+                      <span className="text-gray-700 font-medium">No, I am not a GIMSOC member</span>
+                    </label>
+                  </div>
+                  {formData.isGimsocMember === "Yes" && (
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="mt-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">GIMSOC Membership Code *</label>
+                      <motion.input type="text" required value={formData.gimsocCode} onChange={(e) => handleInputChange("gimsocCode", e.target.value)} className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your GIMSOC membership code" whileFocus={{ scale: 1.02 }} />
+                    </motion.div>
+                  )}
+                </motion.div>
+
+                {/* Details */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Workshop Details</h4>
+                  <div className="space-y-2">
+                    <div className="border-l-4 border-blue-500 pl-4">
+                      <h5 className="font-semibold text-gray-900">The AMBOSS Compass: Navigating the USMLE Pathway</h5>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 22nd October 2025, Online</p>
+                      <p className="text-sm text-gray-600">Organization: AMBOSS | Speaker: Margherita</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Consent */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <label className="flex items-start">
+                    <input type="checkbox" required className="mt-1 mr-3" />
+                    <span className="text-sm text-gray-700">I confirm that the information provided is accurate and I agree to receive event-related communications.</span>
+                  </label>
+                </div>
+
+                {/* Submit */}
+                <div className="flex gap-4 pt-6">
+                  <button type="button" onClick={() => setSelectedWorkshop(null)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Back to Pre-conference Page</button>
+                  <button type="submit" disabled={isSubmitting} className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">{isSubmitting ? "Submitting..." : "Register for Free Workshop"}</button>
                 </div>
               </div>
             </motion.form>
