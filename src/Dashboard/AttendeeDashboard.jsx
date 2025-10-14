@@ -12,11 +12,13 @@ import VenueMap from "./VenuePage"
 import Resources from "./ResourcesPage"
 import Booths from "./BoothsPage"
 import ContactUs from "./ContactPage"
+import Workshops from "./Workshops"
 
 // Navigation items
 const navItems = [
   { id: "profile", label: "Profile", icon: "User" },
   { id: "schedule", label: "Schedule", icon: "Calendar" },
+  { id: "workshops", label: "Workshops", icon: "GraduationCap" },
   { id: "speakers", label: "Speakers", icon: "Users" },
   { id: "live", label: "Live Features", icon: "Radio" },
   { id: "venue", label: "Venue", icon: "MapPin" },
@@ -101,6 +103,8 @@ function AttendeeDashboard() {
         return <UserProfile userData={userData} />
       case "schedule":
         return <PersonalizedSchedule scheduleData={[]} />
+      case "workshops":
+        return <Workshops userData={userData} />
       case "speakers":
         return <SpeakerInfo speakersData={[]} />
       case "live":
