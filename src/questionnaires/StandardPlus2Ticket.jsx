@@ -115,10 +115,7 @@ export default function StandardPlus2Ticket() {
   const [fileUploadProgress, setFileUploadProgress] = useState(0)
   const navigate = useNavigate()
   
-  // Redirect to soldout page immediately
-  useEffect(() => {
-    navigate("/soldout")
-  }, [navigate])
+  // Removed automatic redirect to soldout; allow access to the form
   
   // Gala availability hook
   const { isAvailable: galaAvailable, available: galaAvailableCount, isLoading: galaLoading } = useGalaAvailability()
