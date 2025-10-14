@@ -304,30 +304,79 @@ export default function Workshops({ userData }) {
     )
   }
 
-  const Title = () => (
-    <div className="mb-6">
-      <h2 className="text-2xl font-bold text-gray-900">{venue === "TSU" ? "TSU Workshops (Standard Plus 2)" : "NVU Workshops (Standard Plus 3 & 4)"}</h2>
-      <p className="text-gray-600 mt-1">
-        Select up to 3 workshops total. Requirements: Minimum 1 workshop per day, maximum 2 workshops per day. You cannot select more than one workshop in the same time slot.
-      </p>
-      
-      {/* Capacity Info Box */}
-      <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5" />
-          <div className="flex-1">
-            <h4 className="text-sm font-semibold text-blue-900 mb-1">Workshop Capacity Information</h4>
-            <ul className="text-xs text-blue-800 space-y-1">
-              <li>• Each workshop has a maximum capacity of 40 attendees</li>
-              <li>• Workshops marked as <span className="text-red-600 font-medium">FULL</span> are unavailable and cannot be selected</li>
-              <li>• Workshops with <span className="text-orange-600 font-medium">Limited</span> seats (≤5 remaining) may fill up quickly</li>
-              <li>• Seats are reserved in real-time when you submit your selection</li>
-            </ul>
+  const Title = () => {
+    // Instructions based on ticket type
+    const getInstructions = () => {
+      if (ticketType === "Standard+2") {
+        return {
+          title: "TSU Workshops (Standard Plus 2)",
+          items: [
+            "✅ You are registered under Standard Plus 2 (TSU).",
+            "All your workshops will be available at TSU",
+            "You must choose 2 workshops total — 1 on Day 1 and 1 on Day 2.",
+            "You cannot select two workshops on the same day.",
+            "Workshops marked as FULL are unavailable and cannot be selected",
+            "Workshops with Limited seats (≤5 remaining) may fill up quickly",
+            "Seats are reserved in real-time when you submit your selection"
+          ]
+        }
+      } else if (ticketType === "Standard+3") {
+        return {
+          title: "NVU Workshops (Standard Plus 3)",
+          items: [
+            "✅ You are registered under Standard Plus 3.",
+            "All your workshops will be available at NVU",
+            "You must choose 3 workshops total — 1 or 2 on Day 1 and 1 or 2 on Day 2. (Total of 3 workshops)",
+            "You cannot select two workshops during same time slot.",
+            "Workshops marked as FULL are unavailable and cannot be selected",
+            "Certain workshops are linked (mutually exclusive), you can only pick one from each linked pair.",
+            "Workshops with Limited seats (≤5 remaining) may fill up quickly",
+            "Seats are reserved in real-time when you submit your selection"
+          ]
+        }
+      } else if (ticketType === "Standard+4") {
+        return {
+          title: "NVU Workshops (Standard Plus 4)",
+          items: [
+            "✅ You are registered under Standard Plus 4.",
+            "All your workshops will be available at NVU",
+            "You must choose 4 workshops total — 2 on Day 1 and 2 on Day 2. (Total of 4 workshops)",
+            "You cannot select two workshops during same time slot.",
+            "Workshops marked as FULL are unavailable and cannot be selected",
+            "Certain workshops are linked (mutually exclusive), you can only pick one from each linked pair.",
+            "Workshops with Limited seats (≤5 remaining) may fill up quickly",
+            "Seats are reserved in real-time when you submit your selection"
+          ]
+        }
+      }
+      return { title: "Workshop Selection", items: [] }
+    }
+
+    const instructions = getInstructions()
+
+    return (
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">{instructions.title}</h2>
+        
+        {/* Instructions Box */}
+        <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-5">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-blue-900 mb-3">Instructions for Attendees</h4>
+              <ul className="text-sm text-blue-800 space-y-2">
+                {instructions.items.map((item, index) => (
+                  <li key={index} className={index === 0 ? "font-semibold" : ""}>
+                    {item.startsWith('✅') ? item : `• ${item}`}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   const SessionCheckbox = ({ s }) => {
     const full = s.reserved >= s.capacity
