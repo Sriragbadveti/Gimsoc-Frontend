@@ -201,11 +201,11 @@ const SpeakersPage = () => {
   const categories = [
     { id: "all", label: "All Speakers", count: speakers.length },
     { id: "keynote", label: "Keynote Speakers", count: speakers.filter((s) => s.category === "keynote").length },
-    { id: "research", label: "Research Experts", count: speakers.filter((s) => s.category === "research").length },
-    { id: "academic", label: "Academic Leaders", count: speakers.filter((s) => s.category === "academic").length },
-    { id: "clinical", label: "Clinical Specialists", count: speakers.filter((s) => s.category === "clinical").length },
-    { id: "specialist", label: "Medical Specialists", count: speakers.filter((s) => s.category === "specialist").length },
-    { id: "forensic", label: "Forensic Experts", count: speakers.filter((s) => s.category === "forensic").length },
+    { id: "research", label: "Research Panelists", count: speakers.filter((s) => s.category === "research").length },
+    { id: "academic", label: "Infectious Diseases Panelist", count: speakers.filter((s) => s.category === "academic").length },
+    { id: "clinical", label: "Jury Members", count: speakers.filter((s) => s.category === "clinical").length },
+    { id: "specialist", label: "Changemaker Speakers" , count: speakers.filter((s) => s.category === "specialist").length },
+    { id: "forensic", label: "Press Conference Panelists", count: speakers.filter((s) => s.category === "forensic").length },
   ]
 
   const filteredSpeakers =
