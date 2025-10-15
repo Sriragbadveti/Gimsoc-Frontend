@@ -26,6 +26,23 @@ const SponsorsPage = () => {
   };
   
   const sponsors = [
+    
+    {
+      name: "Project IMG",
+      logo: "projectimg.jpg",
+      description: "Project IMG is a global network uniting international medical students and graduates to promote equality in medical education and access to opportunity. ",
+      website: "https://projectimg.com/",
+      
+    },
+    {
+      name: "IMG Unity",
+      logo: "IMG UNITY logo.jpeg",
+      description: "IMG Unity provides medical imaging solutions and diagnostic technology to enhance patient care and medical diagnosis.",
+      website: "https://www.imgunity.com",
+      category: "Medical Imaging",
+      features: ["Medical Imaging", "Diagnostic Technology", "Patient Care"]
+    },
+
     {
       name: "AMBOSS",
       logo: "AMBOSS logo.jpg",
@@ -33,38 +50,6 @@ const SponsorsPage = () => {
       website: "https://www.amboss.com",
       category: "Medical Education",
       features: ["Clinical Knowledge", "Study Materials", "Medical Training"]
-    },
-    {
-      name: "Blackwells Scrubs",
-      logo: "blackwells scrubs LOGO.png",
-      description: "Blackwells Scrubs provides high-quality medical uniforms and scrubs for healthcare professionals, combining comfort with professional appearance.",
-      website: "https://www.blackwellsscrubs.com",
-      category: "Medical Apparel",
-      features: ["Professional Scrubs", "Medical Uniforms", "Healthcare Apparel"]
-    },
-    {
-      name: "ClinNova",
-      logo: "ClinNova logo.jpeg",
-      description: "ClinNova is a leading clinical research organization dedicated to advancing medical research and bringing innovative treatments to patients.",
-      website: "https://www.clinnova.com",
-      category: "Clinical Research",
-      features: ["Clinical Trials", "Medical Research", "Patient Care"]
-    },
-    {
-      name: "Compendium Medicine",
-      logo: "compendium medicine logo.jpeg",
-      description: "Compendium Medicine offers comprehensive medical reference materials and educational resources for healthcare professionals and students.",
-      website: "https://www.compendiummedicine.com",
-      category: "Medical Reference",
-      features: ["Medical References", "Educational Resources", "Clinical Guidelines"]
-    },
-    {
-      name: "DFC",
-      logo: "DFC logo.jpeg",
-      description: "DFC (Digital Health Foundation) focuses on digital health solutions and medical technology innovations to improve healthcare delivery.",
-      website: "https://www.dfc.com",
-      category: "Digital Health",
-      features: ["Digital Solutions", "Health Technology", "Medical Innovation"]
     },
     {
       name: "GEOMEDI",
@@ -75,6 +60,32 @@ const SponsorsPage = () => {
       features: ["Global Health", "Geographic Medicine", "Health Access"]
     },
     {
+      name: "SAS Geomedi",
+      logo: "SAS geomedi.jpeg",
+      description: "SAS Geomedi provides statistical analysis and research support for medical studies and clinical research projects.",
+      website: "https://www.sasgeomedi.com",
+      category: "Medical Statistics",
+      features: ["Statistical Analysis", "Research Support", "Clinical Studies"]
+    },
+
+    {
+      name: "ClinNova",
+      logo: "ClinNova logo.jpeg",
+      description: "ClinNova is a leading clinical research organization dedicated to advancing medical research and bringing innovative treatments to patients.",
+      website: "https://www.clinnova.com",
+      category: "Clinical Research",
+      features: ["Clinical Trials", "Medical Research", "Patient Care"]
+    },
+
+    {
+      name: "Walter E Dandy",
+      logo: "walter e dandy logo.jpeg",
+      description: "Named after the pioneering neurosurgeon, Walter E Dandy Foundation supports neurosurgical education and research initiatives.",
+      website: "https://www.walteredandy.org",
+      category: "Neurosurgery",
+      features: ["Neurosurgical Education", "Medical Research", "Surgical Innovation"]
+    },
+    {
       name: "GRAE",
       logo: "GREA logo.jpeg",
       description: "GRAE (Global Research and Education Alliance) promotes international collaboration in medical research and education.",
@@ -82,6 +93,7 @@ const SponsorsPage = () => {
       category: "Research Alliance",
       features: ["International Collaboration", "Medical Research", "Education"]
     },
+
     {
       name: "GSAOT",
       logo: "gsaot_logo.jpeg",
@@ -90,14 +102,7 @@ const SponsorsPage = () => {
       category: "Orthopedic Technology",
       features: ["Orthopedic Care", "Surgical Innovation", "Medical Technology"]
     },
-    {
-      name: "IMG Unity",
-      logo: "IMG UNITY logo.jpeg",
-      description: "IMG Unity provides medical imaging solutions and diagnostic technology to enhance patient care and medical diagnosis.",
-      website: "https://www.imgunity.com",
-      category: "Medical Imaging",
-      features: ["Medical Imaging", "Diagnostic Technology", "Patient Care"]
-    },
+
     {
       name: "INAMS",
       logo: "INAMS logo.jpeg",
@@ -106,30 +111,44 @@ const SponsorsPage = () => {
       category: "Medical Network",
       features: ["Professional Network", "Collaborative Learning", "Medical Studies"]
     },
+
     {
-      name: "MEDVENTURES",
-      logo: "MEDVENTURES logo.jpeg",
-      description: "MEDVENTURES focuses on medical entrepreneurship and innovation, supporting healthcare startups and medical technology ventures.",
-      website: "https://www.medventures.com",
-      category: "Medical Innovation",
-      features: ["Medical Entrepreneurship", "Healthcare Startups", "Innovation"]
+      name: "DFC",
+      logo: "DFC logo.jpeg",
+      description: "DFC (Digital Health Foundation) focuses on digital health solutions and medical technology innovations to improve healthcare delivery.",
+      website: "https://www.dfc.com",
+      category: "Digital Health",
+      features: ["Digital Solutions", "Health Technology", "Medical Innovation"]
     },
+
     {
-      name: "SAS Geomedi",
-      logo: "SAS geomedi.jpeg",
-      description: "SAS Geomedi provides statistical analysis and research support for medical studies and clinical research projects.",
-      website: "https://www.sasgeomedi.com",
-      category: "Medical Statistics",
-      features: ["Statistical Analysis", "Research Support", "Clinical Studies"]
+      name: "Compendium Medicine",
+      logo: "compendium medicine logo.jpeg",
+      description: "Compendium Medicine offers comprehensive medical reference materials and educational resources for healthcare professionals and students.",
+      website: "https://www.compendiummedicine.com",
+      category: "Medical Reference",
+      features: ["Medical References", "Educational Resources", "Clinical Guidelines"]
     },
+
     {
-      name: "Walter E Dandy",
-      logo: "walter e dandy logo.jpeg",
-      description: "Named after the pioneering neurosurgeon, Walter E Dandy Foundation supports neurosurgical education and research initiatives.",
-      website: "https://www.walteredandy.org",
-      category: "Neurosurgery",
-      features: ["Neurosurgical Education", "Medical Research", "Surgical Innovation"]
-    }
+      name: "Blackwells Scrubs",
+      logo: "blackwells scrubs LOGO.png",
+      description: "Blackwells Scrubs provides high-quality medical uniforms and scrubs for healthcare professionals, combining comfort with professional appearance.",
+      website: "https://www.blackwellsscrubs.com",
+      category: "Medical Apparel",
+      features: ["Professional Scrubs", "Medical Uniforms", "Healthcare Apparel"]
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+   
+    
+   
   ];
 
 

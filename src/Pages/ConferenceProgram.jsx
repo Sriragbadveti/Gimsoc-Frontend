@@ -144,49 +144,48 @@ const ConferenceProgram = () => {
           <SectionHeader day="Day 1: Friday" date="24th October" />
 
           <div className="grid grid-cols-1 gap-6">
-            <TimelineItem time="9:00 AM - 10:00 AM" title="Registration" accent="emerald" />
+            <TimelineItem time="8:30 AM - 9:30 AM" title="Registration" accent="emerald" />
 
             <TimelineItem
-              time="10:00 AM - 10:30 AM"
+              time="9:30 AM - 10:00 AM"
               title="Press Conference (Opening Ceremony)"
               subtitle="Title: The Global Continuum of Infection: Unified struggles, Unified solutions"
               speakers={[
                 "Dr. Iuri Migrauli (Georgia | Vice Dean at David Tvildiani Medical University | Training and Simulation Teaching Center Manager at Alte University | Invited Professor and Manager of Quality Assurance for the Program of Medicine at University of Georgia)",
-                "Dr. Tatia Maglaperidze MD (Georgia | Researcher at National Center for Tuberculosis and Lung Diseases | Phthisiology-Pulmonology Residency at TSMU | M2 Master’s program | Invited lecturer at Tbilisi State Medical University, University of Georgia)",
-                
+                "Dr. Tatia Maglaperidze MD (Georgia | Researcher at National Center for Tuberculosis and Lung Diseases | Phthisiology-Pulmonology Residency at TSMU | M2 Master's program | Invited lecturer at Tbilisi State Medical University, University of Georgia)",
                 "Dr. Maia Butsashvili, MD, Phd (Georgia | Managing Director at Health Research Union (HRU) | Infectious Disease Epidemiologist | Expert in HIV, Hepatitis, Tuberculosis, and Public Health | Author of 140+ scientific publications)",
                 "Dr. Otar Chokoshvili MD, PhD (Georgia | PhD, CDC-Certified Epidemiologist | Head of Epidemiology at Infectious Diseases, AIDS & Clinical Immunology Research Center | Expert in HIV, AMR, and outbreak response with 28+ peer-reviewed publications)",
               ]}
               accent="blue"
             />
 
-            <TimelineItem time="10:30 AM - 10:45 AM" title="Opening Speech by Ms. Kay Mamphoka" subtitle="Co-Chair of GIMSOC, 2025" accent="purple" />
+            <TimelineItem time="10:00 AM - 10:15 AM" title="Opening Speech by Ms. Kgothatso Mamphoka" subtitle="Co-Chair of GIMSOC, 2025 | East European University" accent="purple" />
 
             <TimelineItem
-              time="10:45 AM - 11:05 AM"
+              time="10:15 AM - 10:35 AM"
               title="Keynote Speaker 1: Dr. Otar Chokoshvili MD, PhD"
               subtitle="Topic: Understanding Antimicrobial Resistance in the Country of Georgia: Drivers and Hospital IPC Practices"
               accent="amber"
             />
 
             <TimelineItem
-              time="11:05 AM - 11:25 AM"
+              time="10:35 AM - 10:55 AM"
               title="Keynote Speaker 2: Dr. Malvina Javakhadze MD, PhD"
               subtitle="Topic: The Impact of Global Pandemics on the Epidemiology and Structure of Respiratory Viral Infections"
               accent="amber"
             />
 
-            <TimelineItem time="11:25 AM - 11:40 AM" title="Oral Student Presenter 1" accent="rose" />
+            <TimelineItem time="10:55 AM - 11:10 AM" title="Ms. Amy Elizabeth Mathew" subtitle="Rash in a Child with EBV Infection: A Pediatric Diagnostic Puzzle" accent="rose" />
 
-            <TimelineItem time="11:40 AM - 12:10 PM" title="Poster Presentations + Coffee Break" accent="emerald" />
+            <TimelineItem time="11:10 AM - 11:40 AM" title="Poster Presentations + Coffee Break" accent="emerald" />
 
-            <TimelineItem time="12:10 PM - 12:15 PM" title="Sponsors Showcase" accent="purple" />
+            <TimelineItem time="11:40 AM - 11:45 AM" title="Sponsor's showcase" subtitle="Geomedi University" accent="purple" />
 
-            <TimelineItem time="12:15 PM - 12:30 PM" title="Oral Student Presenter 2" accent="rose" />
+            <TimelineItem time="11:45 AM - 12:00 PM" title="Ms. Sidrah Siddiqui" subtitle="Rapid Molecular Diagnostics in Sepsis: Effect on Mortality and Length of Stay Compared with Conventional Testing - A Systematic Review and Meta-Analysis" accent="rose" />
 
             <TimelineItem
-              time="12:30 PM - 1:00 PM"
-              title="Infectious Disease Specialists’ Panel"
+              time="12:00 PM - 12:30 PM"
+              title="Infectious Disease Specialists' Panel"
               subtitle="Topic: The Rise of Antimicrobial Resistance (AMR): A Global Public Health Emergency"
               speakers={[
                 "Dr. Nino Didbaridze MD (Georgia | Preventive Medical Doctor of General Practice Diploma | Invited Professor at BAU International University, European Teaching University, Tbilisi State Medical University)",
@@ -198,21 +197,31 @@ const ConferenceProgram = () => {
             />
 
             <TimelineItem
-              time="1:00 PM - 1:20 PM"
+              time="12:30 PM - 12:50 PM"
               title="Keynote Speaker 3: Dr. Nana Chkhikvadze MD"
               subtitle="Topic: The Allergic March & Immune Dysregulation – From eczema to asthma to food allergies: understanding immune system misfiring"
               accent="amber"
             />
 
-            <TimelineItem time="1:20 PM - 1:35 PM" title="Oral Student Presenter 3" accent="rose" />
-            <TimelineItem time="1:35 PM - 1:45 PM" title="Closing Speech by Toyin Dairo" subtitle="Former Co-Chair GIMSOC, 2024" accent="purple" />
+            <TimelineItem time="12:50 PM - 1:00 PM" title="Closing Speech by Ms. Radha Jaiswal" subtitle="Co-Chair of GIMSOC, 2025 | Georgian National University" accent="purple" />
 
             <Divider />
 
-            <TimelineItem time="1:45 PM - 2:30 PM" title="LUNCH BREAK + Networking" accent="emerald" />
+            <TimelineItem time="1:00 PM - 2:00 PM" title="LUNCH BREAK + Networking" accent="emerald" />
 
-            
-            
+            <TimelineItem
+              time="2:30 PM - 6:00 PM"
+              title="Workshops"
+              speakers={[
+                "Foreign Object removal + suturing & flap closure",
+                "PPE safety practices & critical decision workshop",
+                "CSF collection and analysis in suspected meningitis",
+                "Endotracheal intubation",
+                "Outbreak management simulation",
+                "Wound care & drainage management"
+              ]}
+              accent="blue"
+            />
 
             <TimelineItem
               time="2:30 PM - 6:00 PM"
@@ -230,11 +239,12 @@ const ConferenceProgram = () => {
           <SectionHeader day="Day 2: Saturday" date="25th October" />
 
           <div className="grid grid-cols-1 gap-6">
-            <TimelineItem time="9:00 AM - 9:50 AM" title="Registration" accent="emerald" />
-            <TimelineItem time="9:50 AM - 10:00 AM" title="Opening Speech by Ms. Radha Jaiswal" subtitle="Co-Chair of GIMSOC, 2025" accent="purple" />
+            <TimelineItem time="8:30 AM - 9:30 AM" title="Registration" accent="emerald" />
+            
+            <TimelineItem time="9:30 AM - 9:40 AM" title="Opening Speech by Ms. Oluwatoyin Dairo" subtitle="Former Co-Chair GIMSOC, 2024 | New Vision University" accent="purple" />
 
             <TimelineItem
-              time="10:00 AM - 10:30 AM"
+              time="9:40 AM - 10:10 AM"
               title="Researcher Panel"
               subtitle="Topic: Research Without Borders: From Local Questions to Global Impact"
               speakers={[
@@ -247,7 +257,7 @@ const ConferenceProgram = () => {
             />
 
             <TimelineItem
-              time="10:30 AM - 10:50 AM"
+              time="10:10 AM - 10:30 AM"
               title="Keynote Speaker 4: Dr. Annam Jan MD"
               subtitle="Topic: Gut-Brain-Infection Axis: How Microbes Influence Mental and Neurological Health"
               speakers={["Dr. Annam Jan MD (Georgia | MD, Medical Lecturer at The University of Georgia & Georgian National University (SEU) | Chairperson of the CBL-PBL Committee | Academic Neuroscience Researcher and Medical Educator)"]}
@@ -255,33 +265,32 @@ const ConferenceProgram = () => {
             />
 
             <TimelineItem
-              time="10:50 AM - 11:10 AM"
+              time="10:30 AM - 10:50 AM"
               title="Keynote Speaker 5: Dr. Abhishek Ray"
               subtitle="Topic: Fecal Transplants for Multidrug-Resistant GI Infections Beyond C. diff: Trials of FMT in eradicating carbapenemase-producing Enterobacteriaceae or vancomycin-resistant Enterococci"
               speakers={["Dr. Abhishek Ray (UK | Diploma in UK Medical Practice, Specialty Registrar Gastroenterology and Hepatology ST5/ST6, NHS faculty, MRCP PACES Instructor)"]}
               accent="amber"
             />
 
-            <TimelineItem time="11:10 AM - 11:25 AM" title="Oral Student Presenter 4" accent="rose" />
+            <TimelineItem time="10:50 AM - 11:05 AM" title="Gisoo Farhani" subtitle="Latent TB Screening in Healthcare Workers: A Comparative Evaluation of IGRA and TST at Baseline and One-Year Follow-Up in a High Burden Setting" accent="rose" />
 
-            <TimelineItem time="11:25 AM - 11:55 AM" title="Poster Presentations + Networking" accent="emerald" />
-            <TimelineItem time="11:55 AM - 12:05 PM" title="Sponsors' Spotlight session" speakers={["Speaker: Michael E. Hermosa (Project IMG)"]} accent="purple" />
-
-            <TimelineItem time="12:05 PM - 12:20 PM" title="Oral Student Presenter 5" accent="rose" />
+            <TimelineItem time="11:05 AM - 11:35 AM" title="Poster Presentations + Networking" subtitle="Local & International Organizations' booths" accent="emerald" />
+            
+            <TimelineItem time="11:35 AM - 11:45 AM" title="Sponsors' Spotlight session" subtitle="Speaker: Mr. Michael Hermoisa (C.O.O - Project IMG)" accent="purple" />
 
             <TimelineItem
-              time="12:20 PM - 12:40 PM"
+              time="11:45 AM - 12:05 PM"
               title="Keynote Speaker 6: Dr. Aleksandra Barnovi MD"
               subtitle="Topic: Rise of non-TB mycobacterial lung infections (NTM) in developed countries: An underdiagnosed threat"
               speakers={["Dr. Aleksandra Barnovi MD (Georgia | MD, Invited Lecturer in Biochemistry and Microbiology | USMLE Step 1 Certified | Clinician-Educator with international training in cardiology and medical education)"]}
               accent="amber"
             />
 
-            <TimelineItem time="12:40 PM - 12:55 PM" title="Oral Student Presenter 6" accent="rose" />
+            <TimelineItem time="12:05 PM - 12:20 PM" title="Ms. Mariami Varazashvili" subtitle="Antibiotic Resistance Awareness Among Medical Students in Georgia: A Cross-Sectional Study" accent="rose" />
 
             <TimelineItem
-              time="12:55 PM - 1:40 PM"
-              title="The Changemakers' Lounge"
+              time="12:20 PM - 1:05 PM"
+              title="The Changemakers' Segment"
               subtitle="Topics: Forensic medicine, Hospital administration, medical journalism"
               speakers={[
                 "Dr. Sesil Tsirekidze MD (Georgia | Obstetrician-gynecologist at Gudushauri National Medical Centre | MBA in Healthcare Management | Invited lecturer at TSMU for clinical skills and multidisciplinary simulation centre | Drug Registration manager at Pharmaceutical company Iberi+ 2017)",
@@ -290,18 +299,26 @@ const ConferenceProgram = () => {
               accent="blue"
             />
 
-            <TimelineItem time="1:40 PM - 1:45 PM" title="Prize announcement" subtitle="The top three winners of Scientific Oral & Poster Presentations, will be awarded onstage." accent="purple" />
+            <TimelineItem time="1:05 PM - 1:10 PM" title="Prize announcement" subtitle="The top three winners of Scientific Oral & Poster Presentations, will be awarded onstage." accent="purple" />
 
-            <TimelineItem time="1:45 PM - 1:55 PM" title="Closing Ceremony by Conference Director" accent="purple" />
+            <TimelineItem time="1:10 PM - 1:20 PM" title="Closing Ceremony by Conference Director - Ms. Guncha Shaikh" subtitle="Geomedi University" accent="purple" />
 
             <Divider />
 
-            <TimelineItem time="1:55 PM - 2:30 PM" title="LUNCH + Networking" accent="emerald" />
+            <TimelineItem time="1:20 PM - 2:00 PM" title="LUNCH + Networking" accent="emerald" />
 
             <TimelineItem
               time="2:30 PM - 6:00 PM"
               title="Workshops"
-              
+              speakers={[
+                "Skin scraping & KOH preparation for fungal infections",
+                "Abscess drainage (Seldinger technique) & pig-tail catheter placement workshop",
+                "Lymph node biopsy techniques for suspected TB",
+                "Pus under pressure: Paronychia & felon drainage",
+                "Venepuncture and blood culture collection techniques",
+                "Fungi gone viral: When opportunists strike",
+                "Genital ulcer protocol simulation and lap interpretation"
+              ]}
               accent="blue"
             />
 

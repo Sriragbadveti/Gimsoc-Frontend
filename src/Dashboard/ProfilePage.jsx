@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { Edit, Calendar, MapPin, Mail, Phone, Building, Globe, User, Sparkles, Utensils, Wine, Music } from "lucide-react"
+import { Edit, Calendar, MapPin, Mail, Phone, Building, Globe, User, Sparkles, Utensils, Wine, Music, GraduationCap, Clock, MapPin as MapPinIcon } from "lucide-react"
 import Card from "./Card"
 
 const ProfilePage = ({ userData }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [workshopSelection, setWorkshopSelection] = useState(null)
+  const [workshopSessions, setWorkshopSessions] = useState([])
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -30,6 +32,9 @@ const ProfilePage = ({ userData }) => {
         
         console.log("✅ Profile data fetched:", response.data)
         setUserProfile(response.data.user)
+
+        // Fetch workshop selection data
+        await fetchWorkshopData(userEmail)
       } catch (error) {
         console.error("❌ Error fetching user profile:", error)
         // Fallback to basic userData if API fails
@@ -45,6 +50,27 @@ const ProfilePage = ({ userData }) => {
       setLoading(false)
     }
   }, [userData])
+
+  const fetchWorkshopData = async (email) => {
+    try {
+      console.log("🔍 Fetching workshop data for email:", email)
+      
+      // Check if user has workshop access (Standard+2, Standard+3, Standard+4)
+      const ticketType = userProfile?.ticketType || userData?.ticketType
+      if (!ticketType || !["Standard+2", "Standard+3", "Standard+4"].includes(ticketType)) {
+        console.log("ℹ️ User doesn't have workshop access")
+        return
+      }
+
+      const response = await axios.get(`https://gimsoc-backend.onrender.com/api/workshops/sessions?email=${encodeURIComponent(email)}`)
+      
+      console.log("✅ Workshop data fetched:", response.data)
+      setWorkshopSelection(response.data.selection)
+      setWorkshopSessions(response.data.sessions || [])
+    } catch (error) {
+      console.error("❌ Error fetching workshop data:", error)
+    }
+  }
 
   const handleSave = () => {
     setIsEditing(false)
@@ -362,6 +388,197 @@ const ProfilePage = ({ userData }) => {
         </Card>
       )}
 
+      {/* Workshop Selection Card - Only show if user has workshop access */}
+      {userProfile?.ticketType && ["Standard+2", "Standard+3", "Standard+4"].includes(userProfile.ticketType) && (
+        <Card className="overflow-hidden">
+          <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-8">
+            {/* Decorative background elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-200/30 to-blue-200/30 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10">
+              {/* Header with graduation cap icon */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl shadow-lg">
+                    <GraduationCap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900">Your Workshop Selection</h3>
+                    <p className="text-sm text-gray-600">Your registered workshops for the conference</p>
+                  </div>
+                </div>
+                <div className="hidden sm:block">
+                  <div className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-semibold shadow-lg">
+                    🎓 {userProfile.ticketType}
+                  </div>
+                </div>
+              </div>
+
+              {workshopSelection && workshopSelection.selections && workshopSelection.selections.length > 0 ? (
+                <div>
+                  {/* Registration Status */}
+                  <div className="mb-6 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Registration Status</p>
+                        <p className="text-lg font-semibold text-green-600 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          Workshop Selection Complete
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-gray-500">Registered on</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {new Date(workshopSelection.updatedAt || workshopSelection.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Selected Workshops */}
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Selected Workshops</h4>
+                    
+                    {/* Get selected workshop details */}
+                    {(() => {
+                      const selectedWorkshops = workshopSessions.filter(session => 
+                        workshopSelection.selections.includes(session.code)
+                      )
+                      
+                      // If no sessions found, use fallback data
+                      if (selectedWorkshops.length === 0) {
+                        const venue = userProfile.ticketType === "Standard+2" ? "TSU" : "NVU"
+                        
+                        // Fallback workshop data based on ticket type and venue
+                        const fallbackWorkshops = []
+                        
+                        if (venue === "TSU") {
+                          // TSU workshops fallback
+                          const TSU_A = { day: 1, slot: "A", time: "2:00 PM – 3:30 PM", venue: "TSU" }
+                          const TSU_B = { day: 1, slot: "B", time: "4:00 PM – 5:30 PM", venue: "TSU" }
+                          const TSU_C = { day: 2, slot: "C", time: "2:00 PM – 3:30 PM", venue: "TSU" }
+                          const TSU_D = { day: 2, slot: "D", time: "4:00 PM – 5:30 PM", venue: "TSU" }
+                          
+                          const tsuWorkshops = [
+                            { code: "T1-A", title: "Foreign Object Removal + Suturing & Flap Closure", ...TSU_A },
+                            { code: "T3-A", title: "Central Line Placement", ...TSU_A },
+                            { code: "T4-A", title: "Incision & Drainage", ...TSU_A },
+                            { code: "T1-B", title: "Foreign Object Removal + Suturing & Flap Closure", ...TSU_B },
+                            { code: "T3-B", title: "Central Line Placement", ...TSU_B },
+                            { code: "T1-C", title: "Foreign Object Removal + Suturing & Flap Closure", ...TSU_C },
+                            { code: "T4-C", title: "Incision & Drainage", ...TSU_C },
+                            { code: "T2-D", title: "AMBOSS: Bridging Textbooks & Clinics", ...TSU_D },
+                            { code: "T3-D", title: "Central Line Placement", ...TSU_D },
+                            { code: "T4-D", title: "Incision & Drainage", ...TSU_D },
+                          ]
+                          
+                          fallbackWorkshops.push(...tsuWorkshops.filter(w => workshopSelection.selections.includes(w.code)))
+                        } else {
+                          // NVU workshops fallback
+                          const NVU_A = { day: 1, slot: "A", time: "3:00 PM – 4:30 PM", venue: "NVU" }
+                          const NVU_B = { day: 1, slot: "B", time: "5:00 PM – 6:30 PM", venue: "NVU" }
+                          const NVU_C = { day: 2, slot: "C", time: "3:00 PM – 4:30 PM", venue: "NVU" }
+                          const NVU_D = { day: 2, slot: "D", time: "5:00 PM – 6:30 PM", venue: "NVU" }
+                          
+                          const nvuWorkshops = [
+                            { code: "N1A-A", title: "From Swab to Solution: STI Cultures", linkedGroup: "N1", ...NVU_A },
+                            { code: "N2A-A", title: "Wound Care & Drainage Management", linkedGroup: "N2", ...NVU_A },
+                            { code: "N3-A", title: "Outbreak Management Simulation", linkedGroup: "N3", ...NVU_A },
+                            { code: "N5-A", title: "Endotracheal Intubation", ...NVU_A },
+                            { code: "N6-A", title: "Venepuncture & Blood Culture Collection", ...NVU_A },
+                            { code: "N1B-B", title: "Nasal Swabbing & Respiratory Pathogen ID", linkedGroup: "N1", ...NVU_B },
+                            { code: "N2B-B", title: "Wound Debridement & Suturing", linkedGroup: "N2", ...NVU_B },
+                            { code: "N4-B", title: "PPE Safety Practices & Critical Decision", linkedGroup: "N4", ...NVU_B },
+                            { code: "N5-B", title: "Endotracheal Intubation", ...NVU_B },
+                            { code: "N6-B", title: "Venepuncture & Blood Culture Collection", ...NVU_B },
+                            { code: "N1A-C", title: "From Swab to Solution: STI Cultures", linkedGroup: "N1", ...NVU_C },
+                            { code: "N2A-C", title: "Wound Care & Drainage Management", linkedGroup: "N2", ...NVU_C },
+                            { code: "N3-C", title: "Outbreak Management Simulation", linkedGroup: "N3", ...NVU_C },
+                            { code: "N5-C", title: "Endotracheal Intubation", ...NVU_C },
+                            { code: "N6-C", title: "Venepuncture & Blood Culture Collection", ...NVU_C },
+                            { code: "N1B-D", title: "Nasal Swabbing & Respiratory Pathogen ID", linkedGroup: "N1", ...NVU_D },
+                            { code: "N2B-D", title: "Wound Debridement & Suturing", linkedGroup: "N2", ...NVU_D },
+                            { code: "N4-D", title: "PPE Safety Practices & Critical Decision", linkedGroup: "N4", ...NVU_D },
+                            { code: "N5-D", title: "Endotracheal Intubation", ...NVU_D },
+                            { code: "N6-D", title: "Venepuncture & Blood Culture Collection", ...NVU_D },
+                          ]
+                          
+                          fallbackWorkshops.push(...nvuWorkshops.filter(w => workshopSelection.selections.includes(w.code)))
+                        }
+                        
+                        return fallbackWorkshops
+                      }
+                      
+                      return selectedWorkshops
+                    })().map((workshop, index) => (
+                      <div key={index} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="p-2 bg-blue-100 rounded-lg">
+                                <GraduationCap className="w-5 h-5 text-blue-600" />
+                              </div>
+                              <div>
+                                <h5 className="text-lg font-semibold text-gray-900">{workshop.title}</h5>
+                                <p className="text-sm text-gray-600">Code: {workshop.code}</p>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                              <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm text-gray-600">Day {workshop.day}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Clock className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm text-gray-600">{workshop.time}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <MapPinIcon className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm text-gray-600">{workshop.venue}</span>
+                              </div>
+                            </div>
+                            
+                            {workshop.linkedGroup && (
+                              <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                Linked Group: {workshop.linkedGroup}
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="ml-4">
+                            <div className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                              ✓ Registered
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <GraduationCap className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">No Workshop Selection Yet</h4>
+                  <p className="text-gray-600 mb-4">You haven't selected your workshops yet.</p>
+                  <p className="text-sm text-gray-500">
+                    Visit the <strong>Workshops</strong> section to make your selections.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
       
     </div>
   )
