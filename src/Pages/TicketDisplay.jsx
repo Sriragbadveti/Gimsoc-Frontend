@@ -89,7 +89,7 @@ const ticketTiers = [
   {
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
-    href: "/soldout",
+    href: "/standard-plus-4",
     
     description: [
       "Full MEDCON access + 4 workshops",
