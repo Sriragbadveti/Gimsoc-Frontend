@@ -15,8 +15,12 @@ export default function Workshops({ userData }) {
   const [submitting, setSubmitting] = useState(false)
 
   const venue = useMemo(() => {
-    if (ticketType === "Standard+2") return "TSU"
-    if (ticketType === "Standard+3" || ticketType === "Standard+4") return "NVU"
+    // Normalize ticket type for comparison (handle various formats)
+    const normalizedTicketType = (ticketType || "").toLowerCase().replace(/[\s\-+]/g, "")
+    
+    if (normalizedTicketType.includes("standard2") || ticketType === "Standard+2") return "TSU"
+    if (normalizedTicketType.includes("standard3") || normalizedTicketType.includes("standard4") || 
+        ticketType === "Standard+3" || ticketType === "Standard+4") return "NVU"
     return null
   }, [ticketType])
 
@@ -34,7 +38,11 @@ export default function Workshops({ userData }) {
         const resp = await axios.get(`https://gimsoc-backend.onrender.com/api/workshops/sessions?email=${encodeURIComponent(e)}`)
         setSessions(resp.data.sessions || [])
         setSelection(resp.data.selection || null)
-        setTicketType(resp.data.user?.ticketType || userData?.ticketType)
+        const finalTicketType = resp.data.user?.ticketType || userData?.ticketType
+        console.log("🎫 Workshop access - Ticket type from backend:", resp.data.user?.ticketType)
+        console.log("🎫 Workshop access - Ticket type from userData:", userData?.ticketType)
+        console.log("🎫 Workshop access - Final ticket type:", finalTicketType)
+        setTicketType(finalTicketType)
       } catch (err) {
         setError(err.response?.data?.message || err.message)
       } finally {
@@ -158,9 +166,11 @@ export default function Workshops({ userData }) {
 
       // Check max workshops total based on ticket type
       let maxWorkshops = 3
-      if (ticketType === "Standard+2") maxWorkshops = 2
-      else if (ticketType === "Standard+3") maxWorkshops = 3
-      else if (ticketType === "Standard+4") maxWorkshops = 4
+      const normalizedTicketType = (ticketType || "").toLowerCase().replace(/[\s\-+]/g, "")
+      
+      if (normalizedTicketType.includes("standard2") || ticketType === "Standard+2") maxWorkshops = 2
+      else if (normalizedTicketType.includes("standard3") || ticketType === "Standard+3") maxWorkshops = 3
+      else if (normalizedTicketType.includes("standard4") || ticketType === "Standard+4") maxWorkshops = 4
       
       if (chosen.size >= maxWorkshops) {
         alert(`❌ You can select a maximum of ${maxWorkshops} workshops total.\n\nYou have already selected ${maxWorkshops} workshops. Please deselect one if you want to choose a different workshop.`)
@@ -199,13 +209,15 @@ export default function Workshops({ userData }) {
     const total = d1 + d2
 
     // Ticket-specific validation rules
-    if (ticketType === "Standard+2") {
+    const normalizedTicketType = (ticketType || "").toLowerCase().replace(/[\s\-+]/g, "")
+    
+    if (normalizedTicketType.includes("standard2") || ticketType === "Standard+2") {
       // Standard+2 (TSU): Exactly 1 workshop per day (2 total)
       if (d1 !== 1 || d2 !== 1) {
         alert("You must select exactly 1 workshop for each day (2 workshops total).")
         return
       }
-    } else if (ticketType === "Standard+3") {
+    } else if (normalizedTicketType.includes("standard3") || ticketType === "Standard+3") {
       // Standard+3 (NVU): 1-2 workshops per day (3 total)
       if (total !== 3) {
         alert("You must select exactly 3 workshops total.")
@@ -219,7 +231,7 @@ export default function Workshops({ userData }) {
         alert("You can select a maximum of 2 workshops per day.")
         return
       }
-    } else if (ticketType === "Standard+4") {
+    } else if (normalizedTicketType.includes("standard4") || ticketType === "Standard+4") {
       // Standard+4 (NVU): Not more than 2 per day (4 total)
       if (total !== 4) {
         alert("You must select exactly 4 workshops total.")
@@ -274,7 +286,15 @@ export default function Workshops({ userData }) {
   if (!venue) {
     return (
       <Card>
-        <div className="p-8 text-gray-700">Workshops are available for Standard+2/3/4 tickets only.</div>
+        <div className="p-8 text-gray-700">
+          <p>Workshops are available for Standard+2/3/4 tickets only.</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Current ticket type: "{ticketType || 'Not detected'}"
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            If you have a Standard+4 ticket and see this message, please contact support.
+          </p>
+        </div>
       </Card>
     )
   }
@@ -326,7 +346,9 @@ export default function Workshops({ userData }) {
   const Title = () => {
     // Instructions based on ticket type
     const getInstructions = () => {
-      if (ticketType === "Standard+2") {
+      const normalizedTicketType = (ticketType || "").toLowerCase().replace(/[\s\-+]/g, "")
+      
+      if (normalizedTicketType.includes("standard2") || ticketType === "Standard+2") {
         return {
           title: "TSU Workshops (Standard Plus 2)",
           items: [
@@ -339,7 +361,7 @@ export default function Workshops({ userData }) {
             "Seats are reserved in real-time when you submit your selection"
           ]
         }
-      } else if (ticketType === "Standard+3") {
+      } else if (normalizedTicketType.includes("standard3") || ticketType === "Standard+3") {
         return {
           title: "NVU Workshops (Standard Plus 3)",
           items: [
@@ -353,7 +375,7 @@ export default function Workshops({ userData }) {
             "Seats are reserved in real-time when you submit your selection"
           ]
         }
-      } else if (ticketType === "Standard+4") {
+      } else if (normalizedTicketType.includes("standard4") || ticketType === "Standard+4") {
         return {
           title: "NVU Workshops (Standard Plus 4)",
           items: [
