@@ -211,19 +211,8 @@ const ConferenceProgram = () => {
 
             <TimelineItem time="1:45 PM - 2:30 PM" title="LUNCH BREAK + Networking" accent="emerald" />
 
-            <TimelineItem
-              time="2:30 PM - 6:00 PM"
-              title="Workshops"
-              speakers={[
-                "1) Foreign Object removal + suturing & flap closure",
-                "2) PPE safety practices & critical decision workshop",
-                "3) CSF collection and analysis in suspected meningitis",
-                "4) Endotracheal intubation",
-                "5) Outbreak management simulation",
-                "6) Wound care & drainage management",
-              ]}
-              accent="blue"
-            />
+            
+            
 
             <TimelineItem
               time="2:30 PM - 6:00 PM"
@@ -312,15 +301,7 @@ const ConferenceProgram = () => {
             <TimelineItem
               time="2:30 PM - 6:00 PM"
               title="Workshops"
-              speakers={[
-                "1) Skin scraping & KOH preparation for fungal infections",
-                "2) Abscess drainage (Seldinger technique) & pig-tail catheter placement workshop",
-                "3) Lymph node biopsy techniques for suspected TB",
-                "4) Pus under pressure: Paronychia & felon drainage",
-                "5) Venepuncture and blood culture collection techniques",
-                "6) Fungi gone viral: When opportunists strike",
-                "7) Genital ulcer protocol simulation and lap interpretation",
-              ]}
+              
               accent="blue"
             />
 
