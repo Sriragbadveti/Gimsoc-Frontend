@@ -123,6 +123,7 @@ export default function AdminDashboard() {
   const [exportingToSheets, setExportingToSheets] = useState(false)
   const [exportingVolunteersToSheets, setExportingVolunteersToSheets] = useState(false)
   const [exportingWorkshopsToSheets, setExportingWorkshopsToSheets] = useState(false)
+  const [exportingWorkshopSelectionsToSheets, setExportingWorkshopSelectionsToSheets] = useState(false)
   const [exportingAbstracts, setExportingAbstracts] = useState(false)
   const [migratingWorkshopPayments, setMigratingWorkshopPayments] = useState(false)
 
@@ -993,6 +994,48 @@ export default function AdminDashboard() {
       alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
     } finally {
       setExportingWorkshopsToSheets(false)
+    }
+  }
+
+  const exportWorkshopSelectionsToGoogleSheets = async () => {
+    console.log("🚀 exportWorkshopSelectionsToGoogleSheets called!");
+    console.log("📊 Current workshop selections:", workshopSelections);
+    console.log("📊 Current state:", { 
+      exportingWorkshopSelectionsToSheets, 
+      selectionsLength: workshopSelections.length,
+      activeTab 
+    });
+    
+    try {
+      setExportingWorkshopSelectionsToSheets(true)
+      console.log("📊 Starting workshop selections Google Sheets export...")
+      
+      const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/export-workshop-selections-to-sheets', {
+        workshopSelections: workshopSelections,
+        date: new Date().toISOString().split('T')[0] // Today's date
+      }, {
+        headers: getAuthHeaders(),
+        timeout: 30000 // 30 second timeout
+      })
+      
+      if (response.data.success) {
+        alert(`✅ Successfully exported ${response.data.exportedCount} workshop selections to Google Sheets!\n\nSheet URL: ${response.data.sheetUrl}`)
+      } else {
+        alert(`❌ Export failed: ${response.data.message}`)
+      }
+    } catch (error) {
+      console.error("❌ Error exporting workshop selections to Google Sheets:", error)
+      if (error.response?.status === 401) {
+        console.log("❌ Unauthorized access, redirecting to admin login")
+        localStorage.removeItem('adminData')
+        localStorage.removeItem('adminEmail')
+        localStorage.removeItem('adminToken')
+        navigate("/admin-login")
+        return
+      }
+      alert(`❌ Export failed: ${error.response?.data?.message || error.message}`)
+    } finally {
+      setExportingWorkshopSelectionsToSheets(false)
     }
   }
 
@@ -3513,13 +3556,32 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">TSU/NVU Workshop Selections</h3>
-            <button
-              onClick={fetchWorkshopSelections}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={exportWorkshopSelectionsToGoogleSheets}
+                disabled={exportingWorkshopSelectionsToSheets || workshopSelections.length === 0}
+                className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {exportingWorkshopSelectionsToSheets ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Exporting...
+                  </>
+                ) : (
+                  <>
+                    <FileSpreadsheet className="h-4 w-4" />
+                    Export to Sheets
+                  </>
+                )}
+              </button>
+              <button
+                onClick={fetchWorkshopSelections}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </button>
+            </div>
           </div>
 
           <p className="text-sm text-gray-600 mb-4">
