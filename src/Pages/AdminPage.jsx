@@ -1011,7 +1011,6 @@ export default function AdminDashboard() {
       console.log("📊 Starting workshop selections Google Sheets export...")
       
       const response = await axios.post('https://gimsoc-backend.onrender.com/api/admin/export-workshop-selections-to-sheets', {
-        workshopSelections: workshopSelections,
         date: new Date().toISOString().split('T')[0] // Today's date
       }, {
         headers: getAuthHeaders(),
