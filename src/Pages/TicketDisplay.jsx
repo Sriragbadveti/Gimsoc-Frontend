@@ -11,7 +11,7 @@ const ticketTiers = [
   {
     name: "Online Ticket",
     id: "tier-online",
-    href: "/online-ticket",
+    href: "/soldout",
     
     description: [
       "Online access to speaker sessions",
@@ -89,7 +89,7 @@ const ticketTiers = [
   {
     name: "Standard +4 Workshops Ticket",
     id: "tier-standard-plus-4",
-    href: "/standard-plus-4",
+    href: "/soldout",
     
     description: [
       "Full MEDCON access + 4 workshops",
@@ -127,7 +127,7 @@ const ticketTiers = [
   {
     name: "Gala Add-On Ticket",
     id: "tier-gala",
-    href: "/gala-addon",
+    href: "/soldout",
     
     description: [
       "Exclusive access to Gala Dinner",

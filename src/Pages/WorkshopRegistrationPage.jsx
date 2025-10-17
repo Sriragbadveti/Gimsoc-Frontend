@@ -89,18 +89,6 @@ const WORKSHOP_OPTIONS = [
     closed: true
   },
   {
-    id: "silent-siege",
-    title: "Silent Siege: Navigating AMR and Mold Epidemics",
-    date: "12th October, 2025",
-    platform: "Offline",
-    speaker: "Dr. Brandon (pharmacologist, AMR survivor), Dr. Natia Shavgulidze",
-    description: "Join us for an exciting and impactful event exploring the urgent challenge of antibiotic resistance and the hidden dangers of mold toxicity. Dive into the 'Antimicrobial Resistance Arena,' a high-energy simulation where you'll take on roles like healthcare providers, policy-makers, and pathogens.",
-    icon: Zap,
-    color: "from-red-500 to-pink-600",
-    bgColor: "bg-red-50",
-    borderColor: "border-red-200"
-  },
-  {
     id: "uae-licensing",
     title: "Pathway to Practice – UAE Medical Licensing",
     date: "15th October, 2025",
@@ -110,7 +98,8 @@ const WORKSHOP_OPTIONS = [
     icon: Star,
     color: "from-yellow-500 to-amber-600",
     bgColor: "bg-yellow-50",
-    borderColor: "border-yellow-200"
+    borderColor: "border-yellow-200",
+    closed: true
   },
   {
     id: "linkedin-proficiency",

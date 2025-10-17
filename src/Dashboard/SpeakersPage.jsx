@@ -206,6 +206,7 @@ const SpeakersPage = () => {
     { id: "clinical", label: "Jury Members", count: speakers.filter((s) => s.category === "clinical").length },
     { id: "specialist", label: "Changemaker Speakers" , count: speakers.filter((s) => s.category === "specialist").length },
     { id: "forensic", label: "Press Conference Panelists", count: speakers.filter((s) => s.category === "forensic").length },
+    { id: "forensic", label: "Pre-Conference Speakers", count: speakers.filter((s) => s.category === "forensic").length },
   ]
 
   const filteredSpeakers =
