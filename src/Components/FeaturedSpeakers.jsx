@@ -108,7 +108,7 @@ export default function FeaturedSpeakers() {
     },
     {
       name: "Dr. Aby Joseph",
-      title: "Academician | Forensic Science Consultant | CSI & Forensic Facility Designer | Forensic Technical Assessor | Molecular Biologist (Forensic DNA) | PhD Candidate (Forensic QMS)",
+      title: "Professor & Forensic Science Consultant | Amity University , Dubai , UAE",
       institution: "",
       image: "/Aby.png",
     },
