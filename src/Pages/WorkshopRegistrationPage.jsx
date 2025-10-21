@@ -118,7 +118,8 @@ const WORKSHOP_OPTIONS = [
     id: "amboss",
     title: "The AMBOSS Compass: Navigating the USMLE Pathway",
     date: "22nd October 2025",
-    platform: "Online",
+    platform: "Offline",
+    venue: "NVU Health Hub",
     speaker: "Margherita",
     organization: "AMBOSS",
     description: "This offline event session is designed to guide medical students through the USMLE journey, offering strategies, preparation insights, and resources to excel in this important career milestone.",
@@ -2215,7 +2216,8 @@ export default function WorkshopRegistrationPage({ initialId }) {
                   <div className="space-y-2">
                     <div className="border-l-4 border-blue-500 pl-4">
                       <h5 className="font-semibold text-gray-900">The AMBOSS Compass: Navigating the USMLE Pathway</h5>
-                      <p className="text-sm text-gray-600 mt-1">Date & Time: 22nd October 2025, Online</p>
+                      <p className="text-sm text-gray-600 mt-1">Date & Time: 22nd October 2025, Offline</p>
+                      <p className="text-sm text-gray-600">Venue: NVU Health Hub</p>
                       <p className="text-sm text-gray-600">Organization: AMBOSS | Speaker: Margherita</p>
                     </div>
                   </div>
